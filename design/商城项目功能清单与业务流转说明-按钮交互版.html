@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商城项目功能清单与业务流转说明 - 按钮交互版</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #fff;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #d8dee8;
+      --head: #eef3f8;
+      --primary: #155e91;
+      --green: #14745f;
+      --yellow: #9a6816;
+      --red: #a33127;
+      --blue-soft: #edf6ff;
+      --green-soft: #ecf8f3;
+      --yellow-soft: #fff7e8;
+      --red-soft: #fff1f0;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.62;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      background: #111827;
+      color: #f8fafc;
+      padding: 22px 18px;
+    }
+
+    aside h1 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    aside p {
+      margin: 0 0 18px;
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .nav-title {
+      margin: 18px 8px 8px;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 6px;
+      color: #e5e7eb;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .nav a:hover { background: rgba(255, 255, 255, .08); }
+
+    header {
+      background: linear-gradient(135deg, #0f4f84, #155e91 45%, #14745f);
+      color: white;
+      padding: 32px 42px;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    header p {
+      margin: 10px 0 0;
+      max-width: 1040px;
+      color: rgba(255, 255, 255, .88);
+      font-size: 14px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      border: 1px solid rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, .13);
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+    }
+
+    main { min-width: 0; }
+    .content {
+      max-width: 1440px;
+      padding: 26px;
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+
+    .section-head {
+      padding: 18px 22px 12px;
+      background: #fbfcfe;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .body { padding: 20px 22px 22px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    th, td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #edf0f5;
+      border-right: 1px solid #edf0f5;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: var(--head);
+      color: #344054;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+    td:last-child, th:last-child { border-right: 0; }
+
+    .wide {
+      overflow-x: auto;
+      border-radius: 8px;
+    }
+
+    .wide table {
+      min-width: 1180px;
+    }
+
+    .flow {
+      display: grid;
+      gap: 10px;
+    }
+
+    .flow-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: white;
+      min-height: 90px;
+    }
+
+    .step b {
+      display: block;
+      margin-bottom: 5px;
+      color: #111827;
+      font-size: 14px;
+    }
+
+    .step span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid #cbdff2;
+      color: var(--primary);
+      background: var(--blue-soft);
+      white-space: nowrap;
+    }
+
+    .badge.green { color: var(--green); background: var(--green-soft); border-color: #c9eadf; }
+    .badge.yellow { color: var(--yellow); background: var(--yellow-soft); border-color: #f3d8a7; }
+    .badge.red { color: var(--red); background: var(--red-soft); border-color: #f0c2bd; }
+
+    .note {
+      border-left: 4px solid var(--primary);
+      background: var(--blue-soft);
+      color: #284661;
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: white;
+    }
+
+    .card b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .card span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .print {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(16, 24, 40, .18);
+    }
+
+    @media (max-width: 1000px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: static; height: auto; }
+      .nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 4px; }
+      header { padding: 26px 20px; }
+      .content { padding: 18px; }
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: white; }
+      .layout { display: block; }
+      aside, .print { display: none; }
+      header { background: white; color: #111827; padding: 0 0 18px; }
+      header p { color: #344054; }
+      .content { max-width: none; padding: 0; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <h1>功能清单与业务流转说明</h1>
+      <p>按钮交互 + 数据流转版</p>
+      <div class="nav-title">总览</div>
+      <nav class="nav">
+        <a href="#scope">范围说明</a>
+        <a href="#flow-overview">主业务流转</a>
+        <a href="#data-model">核心数据对象</a>
+        <a href="#status">状态流转</a>
+      </nav>
+      <div class="nav-title">按钮交互</div>
+      <nav class="nav">
+        <a href="#admin-master">后台基础资料</a>
+        <a href="#admin-product">商品与发布</a>
+        <a href="#admin-order">订单与售后</a>
+        <a href="#finance">分账与报表</a>
+        <a href="#user-mini">用户小程序</a>
+        <a href="#station-mini">自提点小程序</a>
+        <a href="#supplier-mini">供应商小程序</a>
+        <a href="#wms-inbound">WMS 入库</a>
+        <a href="#wms-outbound">WMS 出库</a>
+        <a href="#wms-inventory">库存盘点补货</a>
+        <a href="#system-jobs">系统任务</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header>
+        <h2>商城项目功能清单与业务流转说明</h2>
+        <p>本文件按“页面 - 按钮 - 点击交互 - 后端处理 - 数据流转 - 状态变化”的方式描述。文档中的每个功能按钮均给出交互和数据流转，适合作为产品原型、接口设计和开发拆分依据。</p>
+        <div class="chips">
+          <span class="chip">日期：2026-06-09</span>
+          <span class="chip">项目：商城 + 进销存配 + WMS</span>
+          <span class="chip">后端：Spring Boot / Spring Cloud / Java 18</span>
+          <span class="chip">前端：Vue 3 / TypeScript / Element Plus</span>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="scope">
+          <div class="section-head">
+            <h3>1. 范围说明</h3>
+            <p>按钮清单按当前业务范围定义，后续新增页面或按钮应按同一格式补充。</p>
+          </div>
+          <div class="body">
+            <div class="note">数据表名为建议命名，开发时可按实际数据库规范调整。关键要求是：每次按钮操作都要能落到明确的数据对象、状态变化、操作日志或消息事件。</div>
+            <div class="grid three">
+              <div class="card"><b>覆盖端口</b><span>运营后台、用户小程序、自提点小程序、供应商小程序、仓配小程序/H5、系统任务</span></div>
+              <div class="card"><b>覆盖流程</b><span>商品建档、发布、下单支付、采购入库、出库配送、售后退款、分账提现</span></div>
+              <div class="card"><b>数据原则</b><span>核心业务操作必须记录操作人、操作时间、前后状态、关联单据和消息事件</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="flow-overview">
+          <div class="section-head">
+            <h3>2. 主业务流转</h3>
+            <p>主流程从基础资料开始，到订单完成后分账结束。</p>
+          </div>
+          <div class="body flow">
+            <div class="flow-row">
+              <div class="step"><b>1. 基础资料</b><span>供应商、自提点、城市、仓库、采购员、类目、权限账号</span></div>
+              <div class="step"><b>2. 商品建档</b><span>商品、规格、库存规格、城市价格、联想词</span></div>
+              <div class="step"><b>3. 商品发布</b><span>发布模板、配送日、白名单、采购仓</span></div>
+              <div class="step"><b>4. 用户下单</b><span>购物车、优惠券、订单、支付流水</span></div>
+              <div class="step"><b>5. 采购入库</b><span>采购单、入库单、收货、质检、库存流水</span></div>
+            </div>
+            <div class="flow-row">
+              <div class="step"><b>6. 波次出库</b><span>销售单、出库单、拣货任务、复检、装车</span></div>
+              <div class="step"><b>7. 配送收货</b><span>司机配送、自提点收货、用户确认</span></div>
+              <div class="step"><b>8. 售后退款</b><span>仅退款、退货退款、退款流水、库存回退</span></div>
+              <div class="step"><b>9. 分账提现</b><span>订单完成、分账流水、佣金账户、提现审核</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="data-model">
+          <div class="section-head">
+            <h3>3. 核心数据对象</h3>
+            <p>所有按钮操作均围绕这些数据对象创建、修改、审核、删除或生成关联单据。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>领域</th><th>核心对象</th><th>建议数据表</th><th>关键字段</th><th>关联关系</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>基础资料</td><td>供应商、自提点、采购员、城市、仓库、账号</td><td>base_supplier、base_pickup_station、base_buyer、base_city、base_warehouse、sys_user</td><td>id、name、status、account_id、tenant_scope</td><td>账号绑定角色和数据权限</td></tr>
+                <tr><td>商品</td><td>商品、规格、库存规格、类目、城市价格、联想词</td><td>prd_product、prd_sku、prd_stock_sku、prd_category、prd_city_price、prd_suggest_word</td><td>product_id、sku_id、supplier_id、buyer_id、city_id、price</td><td>商品绑定供应商、采购员、类目、规格和城市价格</td></tr>
+                <tr><td>发布</td><td>发布模板、发布商品、售卖范围、配送日</td><td>sale_publish_template、sale_publish_product、sale_publish_scope</td><td>publish_id、sale_start_at、sale_end_at、delivery_date、warehouse_id</td><td>发布商品关联采购仓和售卖范围</td></tr>
+                <tr><td>订单</td><td>订单、订单明细、支付流水、优惠券使用</td><td>ord_order、ord_order_item、pay_trade、promo_coupon_use</td><td>order_id、status、pay_status、amount、station_id</td><td>订单关联用户、自提点、商品、支付流水</td></tr>
+                <tr><td>售后</td><td>售后单、退款流水、退货记录</td><td>afs_after_sale、afs_refund_trade、afs_return_record</td><td>after_sale_id、type、status、refund_amount</td><td>售后单关联订单明细和退款流水</td></tr>
+                <tr><td>采购入库</td><td>采购单、入库单、收货记录、质检文件</td><td>pur_purchase_order、wms_inbound_order、wms_receive_record、wms_quality_file</td><td>po_id、inbound_id、received_qty、warehouse_id</td><td>采购单审核后生成入库单</td></tr>
+                <tr><td>出库配送</td><td>销售单、出库单、拣货任务、复检单、装车单、配送单</td><td>wms_sales_order、wms_outbound_order、wms_pick_task、wms_recheck_order、wms_loading_order、log_delivery_order</td><td>outbound_id、task_id、route_id、driver_id、status</td><td>订单下放后生成出库作业链路</td></tr>
+                <tr><td>库存</td><td>库存、库存流水、库位、盘点、补货、报损</td><td>wms_inventory、wms_inventory_log、wms_location、wms_stocktake_order、wms_replenish_task、wms_loss_order</td><td>sku_id、batch_no、location_id、qty、biz_type</td><td>所有入库/出库/移库/盘点动作写流水</td></tr>
+                <tr><td>分账</td><td>佣金账户、分账流水、提现申请</td><td>fin_commission_account、fin_split_flow、fin_withdraw_apply</td><td>account_id、balance、frozen_amount、withdraw_status</td><td>订单完成后结算佣金，可提现</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="status">
+          <div class="section-head">
+            <h3>4. 状态流转说明</h3>
+            <p>状态变化必须由按钮操作、系统任务或支付/退款回调触发。</p>
+          </div>
+          <div class="body grid two">
+            <div class="wide">
+              <table>
+                <thead><tr><th>对象</th><th>状态流转</th><th>触发动作</th></tr></thead>
+                <tbody>
+                  <tr><td>订单</td><td>未支付 → 已付款待发货 → 已发货待收货 → 已收货已完成</td><td>提交订单、支付回调、出仓确认、确认收货</td></tr>
+                  <tr><td>取消订单</td><td>未支付 → 未支付取消；已付款待发货 → 已支付取消</td><td>取消按钮、超时任务、后台取消</td></tr>
+                  <tr><td>售后单</td><td>待审核 → 待退货/待退款 → 已退货待退款 → 退款成功/退款失败</td><td>提交售后、审核、确认退货、退款回调</td></tr>
+                  <tr><td>采购单</td><td>草稿 → 待审核 → 已审核 → 已入库/部分入库 → 完成</td><td>保存、提交审核、审核通过、收货完成</td></tr>
+                  <tr><td>出库单</td><td>待下放 → 待拣货 → 拣货中 → 待复检 → 待装车 → 已出仓</td><td>波次下放、接单、完成拣货、复检、装车确认</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="wide">
+              <table>
+                <thead><tr><th>对象</th><th>状态流转</th><th>触发动作</th></tr></thead>
+                <tbody>
+                  <tr><td>商品发布</td><td>草稿 → 已发布 → 已下架 → 已结束</td><td>保存草稿、发布、下架、销售结束任务</td></tr>
+                  <tr><td>优惠券</td><td>未开始 → 进行中 → 已领完/已结束/已停用</td><td>创建、领取、结束任务、停用</td></tr>
+                  <tr><td>库存</td><td>可用、锁定、出库、退回、报损</td><td>下单锁定、取消释放、出库扣减、退货回库、报损</td></tr>
+                  <tr><td>提现</td><td>待审核 → 审核通过/驳回 → 打款中 → 已打款/打款失败</td><td>提交提现、财务审核、打款回调</td></tr>
+                  <tr><td>账号</td><td>启用 → 禁用 → 删除</td><td>新增主体、禁用账号、删除或停用主体</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-master">
+          <div class="section-head">
+            <h3>5. 运营后台：基础资料按钮交互</h3>
+            <p>供应商、自提点、采购员、城市、仓库创建后生成可登录账号。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>供应商列表</td><td>供应商管理</td><td><span class="badge">新增供应商</span></td><td>打开新增弹窗，填写名称、联系人、手机号、结算信息</td><td>校验手机号唯一，创建供应商并生成账号</td><td>写入 base_supplier、sys_user、sys_user_role、sys_data_scope</td><td>默认启用；重复手机号不可保存</td></tr>
+                <tr><td>供应商列表</td><td>供应商管理</td><td><span class="badge">编辑</span></td><td>回显供应商资料，允许修改联系人、结算信息、状态</td><td>更新供应商资料，记录操作日志</td><td>更新 base_supplier，写 sys_operation_log</td><td>已有关联订单时不允许删除关键主体信息</td></tr>
+                <tr><td>供应商列表</td><td>供应商管理</td><td><span class="badge red">禁用</span></td><td>二次确认，提示禁用后供应商不可登录</td><td>禁用供应商账号和主体</td><td>base_supplier.status=disabled，sys_user.status=disabled</td><td>禁用后不能被新商品选择</td></tr>
+                <tr><td>自提点列表</td><td>自提点管理</td><td><span class="badge">新增自提点</span></td><td>打开弹窗，选择城市，填写地址、负责人、手机号</td><td>创建自提点并生成自提点账号</td><td>写 base_pickup_station、sys_user、sys_data_scope</td><td>必须绑定城市；手机号唯一</td></tr>
+                <tr><td>自提点列表</td><td>自提点管理</td><td><span class="badge yellow">休假设置</span></td><td>打开休假日历，选择休假日期范围</td><td>保存休假申请或后台直接设置休假</td><td>写 station_holiday_record，影响商品可售和配送排期</td><td>休假日期内用户不可选择该自提点下单</td></tr>
+                <tr><td>城市列表</td><td>城市管理</td><td><span class="badge">新增城市</span></td><td>选择上级城市，填写城市名称、等级、截团时间</td><td>创建城市节点</td><td>写 base_city</td><td>城市等级为一/二/三级；截团时间必填</td></tr>
+                <tr><td>城市列表</td><td>城市管理</td><td><span class="badge">编辑截团时间</span></td><td>弹出时间选择器，保存后提示影响后续商品售卖</td><td>更新城市截团时间</td><td>更新 base_city.cutoff_time，刷新 Redis 城市配置缓存</td><td>已发布商品不自动改销售结束时间，只影响新发布规则</td></tr>
+                <tr><td>仓库列表</td><td>仓库管理</td><td><span class="badge">新增仓库</span></td><td>填写仓库名称、地址、负责人、绑定城市</td><td>创建仓库和仓库登录账号</td><td>写 base_warehouse、sys_user、wms_area 默认库区</td><td>默认生成收货区、存储区、拣货区、退货区等库区</td></tr>
+                <tr><td>采购员列表</td><td>采购员管理</td><td><span class="badge">新增采购员</span></td><td>填写姓名、手机号、负责城市/类目</td><td>创建采购员和登录账号</td><td>写 base_buyer、sys_user、sys_data_scope</td><td>商品可绑定采购员；采购员仅查看负责商品</td></tr>
+                <tr><td>权限中心</td><td>角色权限</td><td><span class="badge">保存权限</span></td><td>勾选菜单、按钮、数据范围后保存</td><td>更新角色权限和数据权限</td><td>写 sys_role_menu、sys_role_button、sys_data_scope，刷新权限缓存</td><td>用户重新登录或刷新 token 后生效</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="admin-product">
+          <div class="section-head">
+            <h3>6. 运营后台：商品与发布按钮交互</h3>
+            <p>商品、类目、发布模板、搜索同步和售卖范围的核心交互。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>商品列表</td><td>商品管理</td><td><span class="badge">新增商品</span></td><td>进入商品编辑页，录入基础信息、供应商、采购员、类目、图片</td><td>保存商品主表，生成商品编码</td><td>写 prd_product；写 sys_operation_log</td><td>供应商、采购员、展示类目、统计类目必填</td></tr>
+                <tr><td>商品编辑</td><td>规格管理</td><td><span class="badge">新增规格</span></td><td>新增规格行，填写规格名、单位、售价、库存规格、转换系数</td><td>校验规格不重复，保存规格和换算关系</td><td>写 prd_sku、prd_stock_sku_relation</td><td>转换系数必须大于 0</td></tr>
+                <tr><td>商品编辑</td><td>城市价格</td><td><span class="badge">批量设置价格</span></td><td>选择城市层级，输入价格，批量覆盖或追加</td><td>生成/更新城市价格记录</td><td>写 prd_city_price</td><td>价格不能小于 0；三级城市未配置时继承上级规则</td></tr>
+                <tr><td>商品编辑</td><td>搜索词</td><td><span class="badge">生成联想词</span></td><td>点击后展示系统生成词，可手动增删</td><td>按商品名、别名、类目、规格生成联想词</td><td>写 prd_suggest_word，发送 MQ 商品同步事件</td><td>重复词自动去重</td></tr>
+                <tr><td>商品编辑</td><td>商品保存</td><td><span class="badge green">保存</span></td><td>校验表单，保存后返回列表或停留编辑页</td><td>事务保存商品、规格、价格、联想词</td><td>更新 prd_product 等表；发送 product.changed 事件；ES 异步更新</td><td>保存失败回滚全部修改</td></tr>
+                <tr><td>商品列表</td><td>上下架</td><td><span class="badge yellow">停用商品</span></td><td>二次确认，提示已发布商品不自动下架</td><td>修改商品基础状态</td><td>prd_product.status=disabled，发送 product.changed</td><td>停用后不能新发布</td></tr>
+                <tr><td>展示类目</td><td>类目维护</td><td><span class="badge">新增类目</span></td><td>选择父级类目，输入名称、排序、状态</td><td>保存类目树节点</td><td>写 prd_category(type=display)</td><td>父级停用时子级不可启用</td></tr>
+                <tr><td>统计类目</td><td>类目维护</td><td><span class="badge">新增类目</span></td><td>选择父级类目，输入名称、排序、状态</td><td>保存统计类目节点</td><td>写 prd_category(type=stat)</td><td>用于报表统计，不直接影响前台展示</td></tr>
+                <tr><td>发布模板</td><td>商品发布</td><td><span class="badge">新建发布</span></td><td>选择商品、销售时间、配送日、采购仓、售卖范围</td><td>创建发布模板草稿</td><td>写 sale_publish_template、sale_publish_product</td><td>配送日必须大于销售结束时间</td></tr>
+                <tr><td>发布模板</td><td>售卖范围</td><td><span class="badge">设置白名单</span></td><td>打开城市/自提点选择器，勾选可售范围</td><td>保存范围配置</td><td>写 sale_publish_scope(scope_type=city/station)</td><td>有白名单时仅白名单范围可见可买</td></tr>
+                <tr><td>发布模板</td><td>发布</td><td><span class="badge green">确认发布</span></td><td>二次确认，展示销售时间、配送日、采购仓</td><td>校验库存规格、价格、配送日、采购仓，发布商品</td><td>sale_publish_template.status=published；写 sale_publish_log；刷新 Redis 商品列表；发送 ES 同步事件</td><td>发布成功后用户小程序可见</td></tr>
+                <tr><td>发布列表</td><td>下架</td><td><span class="badge red">下架</span></td><td>输入下架原因并确认</td><td>修改发布状态，清理前台缓存</td><td>sale_publish_template.status=offline；写 sale_publish_log；刷新 Redis</td><td>下架后不可下单，已支付订单继续履约</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="admin-order">
+          <div class="section-head">
+            <h3>7. 运营后台：订单与售后按钮交互</h3>
+            <p>订单按钮必须严格受订单状态控制，避免重复支付、重复退款、发货后取消等问题。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>订单列表</td><td>查询</td><td><span class="badge">搜索</span></td><td>按订单号、用户、城市、自提点、状态、时间筛选</td><td>按当前用户数据权限查询</td><td>读取 ord_order、ord_order_item、pay_trade</td><td>供应商/自提点角色只能看自身数据</td></tr>
+                <tr><td>订单列表</td><td>详情</td><td><span class="badge">查看详情</span></td><td>进入订单详情页，展示商品、优惠、支付、配送、售后</td><td>聚合订单相关数据</td><td>读取订单、支付、优惠券、配送、售后、分账数据</td><td>无状态变化</td></tr>
+                <tr><td>订单详情</td><td>取消</td><td><span class="badge red">取消订单</span></td><td>二次确认，选择取消原因</td><td>判断状态；未支付直接取消，已支付未发货发起退款取消</td><td>更新 ord_order.status；释放库存锁定；写 ord_cancel_record；必要时写 afs_refund_trade</td><td>已发货订单不可取消，只能售后</td></tr>
+                <tr><td>订单详情</td><td>备注</td><td><span class="badge">添加备注</span></td><td>弹窗输入内部备注</td><td>保存备注并记录操作人</td><td>写 ord_order_remark、sys_operation_log</td><td>备注不影响订单状态</td></tr>
+                <tr><td>订单列表</td><td>导出</td><td><span class="badge">导出订单</span></td><td>选择导出字段和时间范围</td><td>创建导出任务，异步生成文件</td><td>写 sys_export_task，读取 ord_order 汇总</td><td>导出受数据权限控制</td></tr>
+                <tr><td>售后列表</td><td>审核</td><td><span class="badge green">审核通过</span></td><td>弹窗选择售后类型、退款金额、是否需要退货</td><td>校验退款金额和订单状态，更新售后状态</td><td>afs_after_sale.status=approved_wait_return 或 approved_wait_refund；写 afs_audit_log</td><td>退款金额不能超过可退金额</td></tr>
+                <tr><td>售后列表</td><td>审核</td><td><span class="badge red">审核驳回</span></td><td>输入驳回原因，确认后通知用户</td><td>更新售后状态为已驳回</td><td>afs_after_sale.status=rejected；写 afs_audit_log；发送公众号/小程序通知</td><td>已退款售后不可驳回</td></tr>
+                <tr><td>售后详情</td><td>退货</td><td><span class="badge yellow">确认退货</span></td><td>录入退货数量、收货仓库、退货备注</td><td>生成退货记录，必要时回补库存</td><td>写 afs_return_record；写 wms_inventory_log(return_in)；afs_after_sale.status=returned_wait_refund</td><td>退货退款必须先确认退货再退款</td></tr>
+                <tr><td>售后详情</td><td>退款</td><td><span class="badge green">确认退款</span></td><td>二次确认退款金额和退款账户</td><td>调用支付退款接口，创建退款流水</td><td>写 afs_refund_trade；退款回调更新 afs_after_sale 和 ord_order_refund_amount</td><td>防重复退款：同一售后只允许一笔进行中退款</td></tr>
+                <tr><td>售后详情</td><td>退款失败处理</td><td><span class="badge yellow">重新退款</span></td><td>展示失败原因，确认后重新发起退款</td><td>校验上一笔退款失败后重新创建退款请求</td><td>新增 afs_refund_trade；更新原失败流水关联</td><td>仅退款失败状态可重新退款</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="finance">
+          <div class="section-head">
+            <h3>8. 分账、营销与报表按钮交互</h3>
+            <p>分账在订单完成后执行，营销配置影响下单优惠和商品可见范围。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>分账账户</td><td>账户查看</td><td><span class="badge">查看流水</span></td><td>打开流水明细，按订单、时间、类型筛选</td><td>查询分账和提现流水</td><td>读取 fin_commission_account、fin_split_flow、fin_withdraw_apply</td><td>按分账方数据权限过滤</td></tr>
+                <tr><td>提现审核</td><td>提现处理</td><td><span class="badge green">审核通过</span></td><td>二次确认提现金额和账户</td><td>冻结金额转打款中，创建付款任务</td><td>fin_withdraw_apply.status=approved/paying；扣减冻结余额</td><td>可提现余额必须充足</td></tr>
+                <tr><td>提现审核</td><td>提现处理</td><td><span class="badge red">驳回</span></td><td>输入驳回原因</td><td>释放冻结金额，通知分账方</td><td>fin_withdraw_apply.status=rejected；回写账户余额</td><td>已打款申请不可驳回</td></tr>
+                <tr><td>优惠券列表</td><td>优惠券</td><td><span class="badge">新增优惠券</span></td><td>填写面额、门槛、领取时间、使用时间、数量</td><td>创建优惠券批次</td><td>写 promo_coupon_batch、promo_coupon_rule</td><td>发放数量、有效期、门槛必填</td></tr>
+                <tr><td>优惠券编辑</td><td>黑白名单</td><td><span class="badge">设置名单</span></td><td>选择城市、自提点、商品黑白名单</td><td>保存优惠券使用和发放范围</td><td>写 promo_coupon_scope</td><td>黑名单优先级高于白名单</td></tr>
+                <tr><td>优惠券列表</td><td>停用</td><td><span class="badge red">停用</span></td><td>二次确认，提示未使用优惠券将不可用</td><td>修改券批次状态</td><td>promo_coupon_batch.status=disabled；刷新优惠券缓存</td><td>已使用订单不受影响</td></tr>
+                <tr><td>活动页配置</td><td>活动商品</td><td><span class="badge">添加商品</span></td><td>打开商品选择器，支持排序</td><td>保存活动页商品关系</td><td>写 promo_activity_product；刷新活动页缓存</td><td>仅已发布商品可添加</td></tr>
+                <tr><td>推荐规则</td><td>商品推荐</td><td><span class="badge green">保存规则</span></td><td>配置用户偏好、类目权重、商品权重</td><td>保存推荐规则，刷新推荐缓存</td><td>写 promo_recommend_rule；更新 Redis</td><td>规则启用后影响首页推荐商品</td></tr>
+                <tr><td>报表中心</td><td>报表</td><td><span class="badge">查询</span></td><td>选择日期、城市、自提点、供应商、类目</td><td>聚合统计数据</td><td>读取订单、售后、分账、配送、库存数据</td><td>查询范围受数据权限控制</td></tr>
+                <tr><td>报表中心</td><td>报表</td><td><span class="badge">导出</span></td><td>选择导出字段，创建导出任务</td><td>异步生成 Excel</td><td>写 sys_export_task，生成文件地址</td><td>大数据量必须异步导出</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="user-mini">
+          <div class="section-head">
+            <h3>9. 用户小程序按钮交互</h3>
+            <p>用户端按钮直接影响购物车、订单、支付、售后、优惠券和公众号通知。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>首页</td><td>城市/自提点</td><td><span class="badge">切换城市</span></td><td>打开城市列表，选择后刷新首页商品</td><td>保存用户当前城市</td><td>更新 user_profile.current_city_id；重新读取 Redis 商品列表</td><td>城市切换后购物车需校验商品是否仍可售</td></tr>
+                <tr><td>首页</td><td>城市/自提点</td><td><span class="badge">切换自提点</span></td><td>打开当前城市自提点列表，选择后刷新商品</td><td>保存用户当前自提点</td><td>更新 user_profile.current_station_id；刷新商品和配送日</td><td>休假自提点不可选择</td></tr>
+                <tr><td>首页</td><td>优惠券</td><td><span class="badge green">领取优惠券</span></td><td>弹窗展示可领券，点击领取</td><td>校验领取范围、库存、次数</td><td>写 promo_coupon_user；扣减 coupon_batch.remain_qty</td><td>不符合城市/自提点名单不可领取</td></tr>
+                <tr><td>首页/活动页</td><td>商品浏览</td><td><span class="badge">查看商品</span></td><td>进入商品详情页</td><td>读取商品发布详情和当前城市价格</td><td>读取 sale_publish_product、prd_city_price、库存可售数据</td><td>已下架商品跳转失败并提示</td></tr>
+                <tr><td>商品详情</td><td>购物车</td><td><span class="badge">加入购物车</span></td><td>选择规格和数量后加入购物车</td><td>校验商品可售、库存、限购、配送日</td><td>写 cart_item；不锁库存</td><td>售罄时按钮置灰或显示“想要”</td></tr>
+                <tr><td>商品详情</td><td>提醒</td><td><span class="badge yellow">想要</span></td><td>点击后按钮变为已想要</td><td>记录用户想要商品</td><td>写 prd_want_record；商品上架后触发公众号通知</td><td>同一用户同一商品去重</td></tr>
+                <tr><td>商品详情</td><td>分享</td><td><span class="badge">分享</span></td><td>唤起微信分享，生成分享参数</td><td>记录分享来源</td><td>写 user_share_log，带 product_id/publish_id</td><td>分享不改变订单状态</td></tr>
+                <tr><td>购物车</td><td>数量</td><td><span class="badge">加/减数量</span></td><td>点击加减，实时刷新小计</td><td>校验可售数量和限购</td><td>更新 cart_item.qty</td><td>数量为 0 时提示是否删除</td></tr>
+                <tr><td>购物车</td><td>删除</td><td><span class="badge red">删除</span></td><td>二次确认后移除商品</td><td>删除购物车项</td><td>删除 cart_item 或标记 deleted</td><td>无状态流转</td></tr>
+                <tr><td>确认订单</td><td>优惠券</td><td><span class="badge">选择优惠券</span></td><td>打开可用优惠券列表，选择后重算金额</td><td>校验优惠券适用范围和商品</td><td>读取 promo_coupon_user、promo_coupon_scope；返回优惠金额</td><td>黑名单商品不可用</td></tr>
+                <tr><td>确认订单</td><td>下单</td><td><span class="badge green">提交订单</span></td><td>点击后锁定按钮，提交订单</td><td>事务创建订单、明细、优惠使用记录，锁定库存</td><td>写 ord_order、ord_order_item、promo_coupon_use；wms_inventory.lock_qty 增加</td><td>库存不足、截团超时、商品下架时失败</td></tr>
+                <tr><td>收银台</td><td>支付</td><td><span class="badge green">立即支付</span></td><td>拉起微信支付</td><td>创建支付单并返回支付参数</td><td>写 pay_trade(status=pending)；支付回调更新 order=paid</td><td>订单超时不可支付</td></tr>
+                <tr><td>订单详情</td><td>取消</td><td><span class="badge red">取消订单</span></td><td>未支付订单直接确认取消；已支付未发货申请取消退款</td><td>释放库存或发起退款</td><td>更新 ord_order.status；释放库存锁定；必要时写 afs_refund_trade</td><td>已发货不可取消</td></tr>
+                <tr><td>订单详情</td><td>确认收货</td><td><span class="badge green">确认收货</span></td><td>二次确认后订单完成</td><td>更新订单完成状态，触发分账</td><td>ord_order.status=completed；发送 order.completed MQ；生成 fin_split_flow</td><td>已发货状态才可确认收货</td></tr>
+                <tr><td>订单详情</td><td>售后</td><td><span class="badge yellow">申请售后</span></td><td>选择商品、数量、原因、退款类型，上传图片</td><td>创建售后单</td><td>写 afs_after_sale、afs_after_sale_file</td><td>超过售后期或已全额退款不可提交</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="station-mini">
+          <div class="section-head">
+            <h3>10. 自提点小程序按钮交互</h3>
+            <p>自提点端负责订单汇总、收退货、佣金提现、缺货和休假。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>工作台</td><td>汇总</td><td><span class="badge">今日订单</span></td><td>进入今日订单汇总页</td><td>查询当前自提点订单数据</td><td>读取 ord_order、ord_order_item，按 station_id 汇总</td><td>只看当前自提点数据</td></tr>
+                <tr><td>配送汇总</td><td>收货</td><td><span class="badge green">确认收货</span></td><td>确认收到司机配送商品</td><td>更新配送到达和自提点收货状态</td><td>log_delivery_order.status=station_received；写 station_receive_record</td><td>必须司机已到达后才能确认</td></tr>
+                <tr><td>配送汇总</td><td>缺货</td><td><span class="badge yellow">缺货标记</span></td><td>选择商品和缺货数量，填写原因</td><td>生成缺货记录并通知后台</td><td>写 station_shortage_record；发送 shortage.created MQ</td><td>缺货数量不能超过配送数量</td></tr>
+                <tr><td>售后处理</td><td>退货</td><td><span class="badge yellow">收退货</span></td><td>扫码或选择售后单，确认退货数量</td><td>更新售后退货状态</td><td>写 afs_return_record；afs_after_sale.status=returned_wait_refund</td><td>仅待退货售后可操作</td></tr>
+                <tr><td>佣金</td><td>明细</td><td><span class="badge">查看明细</span></td><td>按订单查看佣金来源</td><td>查询当前自提点佣金流水</td><td>读取 fin_split_flow、fin_commission_account</td><td>仅订单完成后佣金入账</td></tr>
+                <tr><td>提现</td><td>提现</td><td><span class="badge green">申请提现</span></td><td>输入提现金额，确认银行卡/账户</td><td>校验余额，冻结提现金额，生成提现申请</td><td>写 fin_withdraw_apply；fin_commission_account.frozen_amount 增加</td><td>金额不能超过可提现余额</td></tr>
+                <tr><td>休假</td><td>休假申请</td><td><span class="badge yellow">提交休假</span></td><td>选择休假日期和原因</td><td>保存休假申请，待后台审核或自动生效</td><td>写 station_holiday_apply</td><td>已存在配送任务的日期需后台审核</td></tr>
+                <tr><td>订单详情</td><td>取消/售后协助</td><td><span class="badge red">申请处理</span></td><td>选择订单问题类型并提交</td><td>生成自提点问题工单</td><td>写 station_order_issue；通知后台</td><td>不能直接越权修改用户订单状态</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="supplier-mini">
+          <div class="section-head">
+            <h3>11. 供应商小程序按钮交互</h3>
+            <p>供应商端只操作本供应商商品、售后、送货单、发票和提现。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>销售数据</td><td>统计</td><td><span class="badge">查询</span></td><td>选择日期、商品，查看销售数量和金额</td><td>按供应商权限聚合订单明细</td><td>读取 ord_order_item、prd_product、fin_split_flow</td><td>只看当前供应商商品</td></tr>
+                <tr><td>售后单</td><td>售后</td><td><span class="badge">查看售后</span></td><td>进入售后详情</td><td>查询供应商商品相关售后</td><td>读取 afs_after_sale、ord_order_item</td><td>供应商不能直接退款，只能查看或协同处理</td></tr>
+                <tr><td>商品信息</td><td>商品</td><td><span class="badge">查看商品</span></td><td>查看商品基础资料、规格、销售状态</td><td>读取商品资料</td><td>读取 prd_product、prd_sku、sale_publish_product</td><td>只读，不允许供应商直接改平台商品</td></tr>
+                <tr><td>送货单</td><td>送货</td><td><span class="badge">查看送货单</span></td><td>查看采购单关联送货明细</td><td>查询采购和入库需求</td><td>读取 pur_purchase_order、wms_inbound_order</td><td>只显示本供应商采购单</td></tr>
+                <tr><td>送货单</td><td>打印</td><td><span class="badge">打印送货单</span></td><td>打开打印预览</td><td>生成送货单模板数据</td><td>读取采购单、商品、仓库、供应商信息</td><td>无状态变化</td></tr>
+                <tr><td>发票</td><td>开票</td><td><span class="badge green">申请开票</span></td><td>选择订单/结算周期，填写发票信息</td><td>创建开票申请</td><td>写 supplier_invoice_apply</td><td>已申请金额不可重复申请</td></tr>
+                <tr><td>提现</td><td>提现</td><td><span class="badge green">申请提现</span></td><td>输入金额并确认账户</td><td>冻结余额，生成提现申请</td><td>写 fin_withdraw_apply，更新 fin_commission_account</td><td>金额不能超过可提现余额</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="wms-inbound">
+          <div class="section-head">
+            <h3>12. WMS：采购入库按钮交互</h3>
+            <p>采购单审核后生成入库单，收货完成后写库存流水。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>采购订单</td><td>创建</td><td><span class="badge">新增采购单</span></td><td>选择供应商、仓库、商品规格，录入数量和价格</td><td>生成采购单草稿</td><td>写 pur_purchase_order、pur_purchase_item</td><td>供应商和仓库必填</td></tr>
+                <tr><td>采购订单</td><td>保存</td><td><span class="badge">保存草稿</span></td><td>保存当前填写内容</td><td>保存草稿，不生成入库单</td><td>pur_purchase_order.status=draft</td><td>草稿可编辑</td></tr>
+                <tr><td>采购订单</td><td>审核</td><td><span class="badge green">审核通过</span></td><td>二次确认采购数量和金额</td><td>采购单锁定，生成入库单</td><td>pur_purchase_order.status=approved；写 wms_inbound_order、wms_inbound_item</td><td>审核后采购明细不可直接改</td></tr>
+                <tr><td>采购订单</td><td>驳回</td><td><span class="badge red">审核驳回</span></td><td>输入驳回原因</td><td>退回草稿或驳回状态</td><td>更新 pur_purchase_order.status=rejected；写审核日志</td><td>驳回后可修改再提交</td></tr>
+                <tr><td>入库任务池</td><td>接单</td><td><span class="badge green">接单</span></td><td>收货员点击接单，任务进入我的任务</td><td>锁定任务归属人</td><td>wms_inbound_order.receiver_id=current_user；status=receiving</td><td>已被他人接单不可重复接单</td></tr>
+                <tr><td>收货页</td><td>扫码</td><td><span class="badge">扫码商品</span></td><td>扫描商品码或手动选择 SKU</td><td>匹配入库单明细</td><td>读取 wms_inbound_item、prd_sku</td><td>非本单商品提示异常</td></tr>
+                <tr><td>收货页</td><td>收货</td><td><span class="badge green">确认收货</span></td><td>输入实收数量，确认</td><td>写收货记录，更新入库进度</td><td>写 wms_receive_record；更新 wms_inbound_item.received_qty</td><td>超收按配置决定是否允许</td></tr>
+                <tr><td>收货页</td><td>质检</td><td><span class="badge">上传质检</span></td><td>选择文件或拍照上传</td><td>保存质检附件</td><td>写 wms_quality_file</td><td>必检商品未上传不可完成入库</td></tr>
+                <tr><td>上架页</td><td>库位</td><td><span class="badge">推荐库位</span></td><td>点击后展示系统推荐库位</td><td>按历史库位、库区、容量推荐</td><td>读取 wms_location、wms_inventory；返回 location_id</td><td>库位禁用或容量不足不可选</td></tr>
+                <tr><td>上架页</td><td>完成</td><td><span class="badge green">完成入库</span></td><td>二次确认，完成入库单</td><td>写库存、库存流水、批次，更新入库单状态</td><td>更新 wms_inventory；写 wms_inventory_log(inbound)；wms_inbound_order.status=completed</td><td>全部明细处理完成才可完成</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="wms-outbound">
+          <div class="section-head">
+            <h3>13. WMS：出库配送按钮交互</h3>
+            <p>订单下放生成出库单和拣货任务，出仓时扣减库存。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>波次下放</td><td>预览</td><td><span class="badge">查询预览</span></td><td>选择配送日、仓库、线路，查看待下放订单</td><td>计算可用库存、缺货量、路线分组</td><td>读取 ord_order、ord_order_item、wms_inventory</td><td>库存不足项标红</td></tr>
+                <tr><td>波次下放</td><td>下放</td><td><span class="badge green">一键下放</span></td><td>二次确认下放范围</td><td>生成出库单、拣货任务，锁定/占用库存</td><td>写 wms_outbound_order、wms_pick_task；更新 wms_inventory.lock_qty；写 dispatch_batch</td><td>不可重复下放同一订单</td></tr>
+                <tr><td>拣货任务池</td><td>接单</td><td><span class="badge green">领取任务</span></td><td>拣货员领取任务</td><td>绑定拣货员，任务状态改为拣货中</td><td>wms_pick_task.picker_id=current_user；status=picking</td><td>已领取任务不可被别人领取</td></tr>
+                <tr><td>拣货页</td><td>库位确认</td><td><span class="badge">扫码库位</span></td><td>扫描库位码</td><td>校验是否为推荐库位或可替代库位</td><td>读取 wms_location、wms_inventory</td><td>错误库位提示确认或禁止</td></tr>
+                <tr><td>拣货页</td><td>拣货</td><td><span class="badge green">确认拣货</span></td><td>输入拣货数量，确认</td><td>记录拣货明细，更新任务进度</td><td>写 wms_pick_record；更新 wms_pick_task_item.picked_qty</td><td>不能超过应拣数量</td></tr>
+                <tr><td>拣货页</td><td>异常</td><td><span class="badge yellow">异常上报</span></td><td>选择缺货/破损原因，填写数量</td><td>生成异常记录，通知后台处理</td><td>写 wms_exception_record；必要时写 station_shortage_record</td><td>异常数量不能超过剩余应拣量</td></tr>
+                <tr><td>拣货页</td><td>完成</td><td><span class="badge green">完成拣货</span></td><td>二次确认完成任务</td><td>任务进入待复检</td><td>wms_pick_task.status=picked；wms_outbound_order.status=wait_recheck</td><td>存在未处理异常时不可完成</td></tr>
+                <tr><td>复检页</td><td>复检</td><td><span class="badge green">确认复检</span></td><td>扫描商品/箱码，核对数量</td><td>生成复检记录</td><td>写 wms_recheck_order、wms_recheck_record</td><td>数量不一致需异常处理</td></tr>
+                <tr><td>复检页</td><td>标签</td><td><span class="badge">打印箱标签</span></td><td>打开打印预览并打印</td><td>生成箱码和标签数据</td><td>写 wms_box，关联 outbound_id/station_id</td><td>未复检完成不可打印最终箱标</td></tr>
+                <tr><td>装车页</td><td>装车</td><td><span class="badge green">扫码装车</span></td><td>扫描箱码加入装车单</td><td>校验箱码和路线，记录装车明细</td><td>写 wms_loading_item；更新 wms_box.status=loaded</td><td>非当前路线箱码不可装车</td></tr>
+                <tr><td>装车页</td><td>出仓</td><td><span class="badge green">确认出仓</span></td><td>二次确认装车完成</td><td>扣减库存，生成库存流水，更新配送任务</td><td>wms_inventory.qty 扣减；wms_inventory.lock_qty 释放；写 wms_inventory_log(outbound)、log_delivery_order</td><td>出仓后订单状态变为已发货</td></tr>
+                <tr><td>司机配送</td><td>到达</td><td><span class="badge green">团点签到</span></td><td>司机到达团点后点击签到或扫码</td><td>更新配送到达状态</td><td>log_delivery_order.status=arrived；写 driver_sign_record</td><td>只能操作本人路线任务</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="wms-inventory">
+          <div class="section-head">
+            <h3>14. WMS：库存、盘点、补货按钮交互</h3>
+            <p>库存类操作必须全部写库存流水，便于追溯。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>页面</th><th>功能</th><th>按钮</th><th>点击交互</th><th>后端处理</th><th>数据流转</th><th>状态/校验</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>库存查询</td><td>查询</td><td><span class="badge">搜索</span></td><td>按仓库、库区、商品、批次查询</td><td>查询实时库存和库位分布</td><td>读取 wms_inventory、wms_location、prd_sku</td><td>受仓库/库区数据权限控制</td></tr>
+                <tr><td>移库</td><td>移库</td><td><span class="badge">发起移库</span></td><td>选择原库位、目标库位、商品、数量</td><td>校验库存和目标库位，生成移库单</td><td>写 wms_move_order、wms_move_item</td><td>数量不能超过可用库存</td></tr>
+                <tr><td>移库</td><td>确认</td><td><span class="badge green">确认移库</span></td><td>扫码目标库位后确认</td><td>扣减原库位，增加目标库位库存</td><td>更新 wms_inventory；写 wms_inventory_log(move_out/move_in)</td><td>目标库位禁用不可移入</td></tr>
+                <tr><td>报损</td><td>报损</td><td><span class="badge yellow">新增报损</span></td><td>选择商品、库位、数量、原因，上传图片</td><td>生成报损单</td><td>写 wms_loss_order、wms_loss_file</td><td>报损数量不能超过可用库存</td></tr>
+                <tr><td>报损</td><td>审核</td><td><span class="badge green">审核通过</span></td><td>二次确认报损数量</td><td>扣减库存并写流水</td><td>wms_inventory.qty 扣减；写 wms_inventory_log(loss)</td><td>审核后不可修改</td></tr>
+                <tr><td>盘点计划</td><td>创建</td><td><span class="badge">新建盘点</span></td><td>选择仓库、库区、商品范围、盘点模式</td><td>生成盘点计划</td><td>写 wms_stocktake_order、wms_stocktake_item</td><td>盘点范围不能为空</td></tr>
+                <tr><td>盘点执行</td><td>录入</td><td><span class="badge">录入实盘</span></td><td>扫码商品/库位，录入实盘数量</td><td>保存盘点明细</td><td>写 wms_stocktake_record</td><td>移动盘点必须先扫库位</td></tr>
+                <tr><td>盘点执行</td><td>提交</td><td><span class="badge green">提交盘点</span></td><td>确认提交盘点结果</td><td>计算差异，进入待审核</td><td>wms_stocktake_order.status=wait_audit；生成差异明细</td><td>提交后执行人不可修改</td></tr>
+                <tr><td>盘点审核</td><td>审核</td><td><span class="badge green">审核通过</span></td><td>查看差异，确认调整</td><td>按 FIFO 或指定批次调整库存</td><td>更新 wms_inventory；写 wms_inventory_log(stocktake_adjust)</td><td>审核通过后库存生效</td></tr>
+                <tr><td>补货策略</td><td>策略</td><td><span class="badge">保存策略</span></td><td>配置 SKU/库区最低库存阈值</td><td>保存补货规则</td><td>写 wms_replenish_rule</td><td>阈值必须大于等于 0</td></tr>
+                <tr><td>补货任务</td><td>执行</td><td><span class="badge green">领取补货</span></td><td>补货员领取任务</td><td>绑定执行人</td><td>wms_replenish_task.status=processing；executor_id=current_user</td><td>已领取任务不可重复领取</td></tr>
+                <tr><td>补货任务</td><td>完成</td><td><span class="badge green">完成补货</span></td><td>扫描来源和目标库位，确认数量</td><td>执行库存移动并完成任务</td><td>更新 wms_inventory；写 wms_inventory_log(replenish)</td><td>数量必须和任务要求匹配或填写差异原因</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="system-jobs">
+          <div class="section-head">
+            <h3>15. 系统任务与数据流转</h3>
+            <p>以下不是人工按钮，但属于按钮后续触发或业务自动流转的一部分。</p>
+          </div>
+          <div class="body wide">
+            <table>
+              <thead>
+                <tr><th>触发点</th><th>任务/事件</th><th>处理逻辑</th><th>数据流转</th><th>失败处理</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>商品保存/发布/下架</td><td>product.changed</td><td>RocketMQ 消费后同步 Elasticsearch，刷新 Redis 商品缓存</td><td>prd_product → MQ → Elasticsearch / Redis</td><td>失败重试，记录 mq_consume_log</td></tr>
+                <tr><td>提交订单</td><td>order.unpaid.timeout</td><td>15 分钟未支付自动取消订单</td><td>ord_order unpaid → cancelled；释放 wms_inventory.lock_qty</td><td>幂等校验订单仍未支付</td></tr>
+                <tr><td>提交订单 10 分钟后</td><td>pay.remind</td><td>最后 5 分钟公众号提醒用户支付</td><td>读取 ord_order，发送 wechat_template_message</td><td>发送失败记录通知日志</td></tr>
+                <tr><td>支付回调</td><td>pay.success</td><td>更新订单已付款，生成支付流水，通知自提点佣金预估</td><td>pay_trade → ord_order paid → commission_estimate</td><td>回调幂等，按 out_trade_no 防重复</td></tr>
+                <tr><td>确认出仓</td><td>order.shipped</td><td>订单状态变为已发货，用户不可取消，只能售后</td><td>wms_outbound_order → ord_order shipped</td><td>出仓失败回滚库存扣减</td></tr>
+                <tr><td>确认收货/自动完成</td><td>order.completed</td><td>订单完成后生成分账流水</td><td>ord_order completed → fin_split_flow → fin_commission_account</td><td>分账失败进入待重试队列</td></tr>
+                <tr><td>商品重新上架</td><td>want.notify</td><td>通知点击“想要”的用户</td><td>prd_want_record → wechat_template_message</td><td>已通知记录标记 notify_status</td></tr>
+                <tr><td>库存低于阈值</td><td>replenish.scan</td><td>XXL-Job 周期扫描并生成补货任务</td><td>wms_inventory + wms_replenish_rule → wms_replenish_task</td><td>同 SKU/库区已有未完成任务时不重复生成</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="print" onclick="window.print()">打印 / 导出 PDF</button>
+</body>
+</html>

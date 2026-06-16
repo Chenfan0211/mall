@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知花知果 WMS 系统流程图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f4f8; color: #1e293b; }
+
+  .header {
+    background: linear-gradient(135deg, #1d4ed8, #0891b2);
+    color: white;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header h1 { font-size: 26px; font-weight: 700; }
+  .header p { font-size: 14px; opacity: .8; margin-top: 4px; }
+
+  .page { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+  /* ===== 两条主线 ===== */
+  .two-tracks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  .track {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  }
+  .track-title {
+    font-size: 15px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  .in-title  { background: #dbeafe; color: #1d4ed8; }
+  .out-title { background: #dcfce7; color: #16a34a; }
+
+  /* ===== 流程步骤 ===== */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+  }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    width: 2px;
+    height: calc(100% - 8px);
+    background: #e2e8f0;
+  }
+  .step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .step-body { flex: 1; padding-bottom: 24px; }
+  .step-name { font-size: 15px; font-weight: 600; color: #0f172a; }
+  .step-detail { font-size: 13px; color: #64748b; margin-top: 4px; line-height: 1.6; }
+  .step-roles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .role-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .tag-admin   { background: #eff6ff; color: #2563eb; }
+  .tag-h5      { background: #fef3c7; color: #b45309; }
+  .tag-mini    { background: #f0fdf4; color: #16a34a; }
+  .tag-auto    { background: #fdf4ff; color: #9333ea; }
+
+  /* in-track icons */
+  .step-icon.blue  { background: #dbeafe; color: #1d4ed8; }
+  .step-icon.cyan  { background: #cffafe; color: #0e7490; }
+  /* out-track icons */
+  .step-icon.green { background: #dcfce7; color: #16a34a; }
+  .step-icon.lime  { background: #ecfccb; color: #65a30d; }
+
+  /* ===== 辅助模块 ===== */
+  .aux-section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px 16px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.05);
+    border-top: 4px solid;
+  }
+  .card-icon { font-size: 24px; margin-bottom: 8px; }
+  .card-name { font-size: 14px; font-weight: 600; color: #0f172a; }
+  .card-desc { font-size: 12px; color: #64748b; margin-top: 4px; line-height: 1.5; }
+  .c1 { border-color: #6366f1; }
+  .c2 { border-color: #f59e0b; }
+  .c3 { border-color: #ec4899; }
+  .c4 { border-color: #14b8a6; }
+  .c5 { border-color: #84cc16; }
+  .c6 { border-color: #f97316; }
+  .c7 { border-color: #a78bfa; }
+  .c8 { border-color: #38bdf8; }
+
+  /* ===== 架构说明 ===== */
+  .arch {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    margin-bottom: 28px;
+  }
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .arch-item {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid #e2e8f0;
+  }
+  .arch-item h4 { font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 6px; }
+  .arch-item p  { font-size: 12px; color: #64748b; line-height: 1.6; }
+
+  /* ===== DB 分流 ===== */
+  .db-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .db-box {
+    flex: 1;
+    min-width: 200px;
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid;
+  }
+  .db-wms  { border-color: #6366f1; }
+  .db-zhzg { border-color: #22c55e; }
+  .db-box h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .db-box p  { font-size: 12px; color: #64748b; line-height: 1.6; }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    background: white;
+    padding: 14px 20px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 3px;
+  }
+
+  footer { text-align: center; color: #94a3b8; font-size: 12px; padding: 20px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>📦 知花知果 WMS 系统流程图</h1>
+    <p>Warehouse Management System · 知花知果仓储管理平台 · 2026-06</p>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- 图例 -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div> 后台管理（Admin）</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b45309"></div> 现场 H5 页面</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div> 小程序 / uni-app</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#9333ea"></div> 系统自动处理</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e2e8f0; border:1px solid #cbd5e1"></div> 数据流箭头</div>
+  </div>
+
+  <!-- 两条主线 -->
+  <div class="two-tracks">
+
+    <!-- 入库线 -->
+    <div class="track">
+      <div class="track-title in-title">🟦 入库主流程</div>
+      <div class="flow">
+
+        <div class="step">
+          <div class="step-icon blue">🛒</div>
+          <div class="step-body">
+            <div class="step-name">采购订单（PO）</div>
+            <div class="step-detail">按供应商/商品建立采购计划，录入预期收货数量与价格</div>
+            <div class="step-roles">
+              <span class="role-tag tag-admin">Admin · 采购管理</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon blue">📋</div>
+          <div class="step-body">
+            <div class="step-name">入库单（IN）</div>
+            <div class="step-detail">采购订单审核后自动生成入库单，分配收货库区，状态：draft → approved</div>
+            <div class="step-roles">
+              <span class="role-tag tag-admin">Admin 审核</span>
+              <span class="role-tag tag-auto">自动生成</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon cyan">📦</div>
+          <div class="step-body">
+            <div class="step-name">收货 / 扫码上架</div>
+            <div class="step-detail">收货员通过小程序接单 → 扫码确认到货数量 → 推荐库位上架 → 全部收完后点"完成"</div>
+            <div class="step-roles">
+              <span class="role-tag tag-mini">小程序 receiver</span>
+              <span class="role-tag tag-h5">H5 收货</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon cyan">🔢</div>
+          <div class="step-body">
+            <div class="step-name">库存更新</div>
+            <div class="step-detail">收货完成后实时写入库存流水（wms_inventory_log），更新各 SKU 在库数量</div>
+            <div class="step-roles">
+              <span class="role-tag tag-auto">自动同步</span>
+              <span class="role-tag tag-admin">Admin 库存查询</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon blue">🔍</div>
+          <div class="step-body">
+            <div class="step-name">质检 / 报告上传</div>
+            <div class="step-detail">需质检商品：收货过程中上传检验报告、出厂合格证、溯源码等文件</div>
+            <div class="step-roles">
+              <span class="role-tag tag-mini">小程序上传</span>
+              <span class="role-tag tag-admin">Admin 查看报告</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 出库线 -->
+    <div class="track">
+      <div class="track-title out-title">🟩 出库主流程</div>
+      <div class="flow">
+
+        <div class="step">
+          <div class="step-icon green">🌐</div>
+          <div class="step-body">
+            <div class="step-name">电商订单导入 / 手工销售单</div>
+            <div class="step-detail">三方电商平台自动同步团长订单（bd_route_delivery），或由内部手工录入销售单（MS...）</div>
+            <div class="step-roles">
+              <span class="role-tag tag-auto">ec_sync 自动同步</span>
+              <span class="role-tag tag-admin">Admin · 销售单录入</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon green">🌊</div>
+          <div class="step-body">
+            <div class="step-name">波次下放</div>
+            <div class="step-detail">管理员预览未下放订单，选择配送日/线路，一键下放生成出库单（CK...）并创建拣货任务</div>
+            <div class="step-roles">
+              <span class="role-tag tag-admin">Admin · 波次下放</span>
+              <span class="role-tag tag-auto">自动生成出库单+拣货任务</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon lime">🧺</div>
+          <div class="step-body">
+            <div class="step-name">拣货</div>
+            <div class="step-detail">拣货员通过小程序接单 → 按任务池领任务 → 扫库位确认拣货数量 → 完成分拣</div>
+            <div class="step-roles">
+              <span class="role-tag tag-mini">小程序 picker</span>
+              <span class="role-tag tag-h5">H5 pool/task</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon lime">✅</div>
+          <div class="step-body">
+            <div class="step-name">复检 / 装箱</div>
+            <div class="step-detail">复检员核对拣货数量，打印箱标签，确认装箱完毕，生成复检单（RC...）</div>
+            <div class="step-roles">
+              <span class="role-tag tag-h5">H5 recheck</span>
+              <span class="role-tag tag-admin">Admin 复检管理</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon green">🚛</div>
+          <div class="step-body">
+            <div class="step-name">装车 / 出仓</div>
+            <div class="step-detail">装车员扫描箱码装车，确认出库，生成装车单（DP...）；出仓后库存扣减</div>
+            <div class="step-roles">
+              <span class="role-tag tag-h5">H5 loading</span>
+              <span class="role-tag tag-admin">Admin 装车管理</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon lime">🗺️</div>
+          <div class="step-body">
+            <div class="step-name">司机 / 配送</div>
+            <div class="step-detail">司机 App 查看配送路线、签到团点、更新到达状态；团长扫码确认收货</div>
+            <div class="step-roles">
+              <span class="role-tag tag-h5">H5 driver</span>
+              <span class="role-tag tag-admin">Admin 配送看板</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 辅助功能模块 -->
+  <div class="aux-section">
+    <div class="section-title">⚙️ 辅助与管理模块</div>
+    <div class="cards">
+
+      <div class="card c1">
+        <div class="card-icon">📊</div>
+        <div class="card-name">库存管理</div>
+        <div class="card-desc">实时库存查询、库存流水、FIFO 批次追踪、移库操作、团期商品库位绑定</div>
+      </div>
+
+      <div class="card c2">
+        <div class="card-icon">🔄</div>
+        <div class="card-name">补货管理</div>
+        <div class="card-desc">阈值策略自动触发 / 紧急补货任务 / 补货员 H5 接单执行 / 补货报表</div>
+      </div>
+
+      <div class="card c3">
+        <div class="card-icon">📋</div>
+        <div class="card-name">即时盘点</div>
+        <div class="card-desc">全盘 / 差异盘点 / 移动盘点 3 种模式；盘点单生成 → 盘点员录入 → 差异 FIFO 处理</div>
+      </div>
+
+      <div class="card c4">
+        <div class="card-icon">🍎</div>
+        <div class="card-name">水果仓专区</div>
+        <div class="card-desc">原料入库 → 生产加工 → 成品入库 → 损耗台账，专属 H5 操作页面</div>
+      </div>
+
+      <div class="card c5">
+        <div class="card-icon">📦</div>
+        <div class="card-name">供应商退货</div>
+        <div class="card-desc">退货单（RT）建立、审核、一键出库（FIFO 扣库存），支持批量退货操作</div>
+      </div>
+
+      <div class="card c6">
+        <div class="card-icon">🖨️</div>
+        <div class="card-name">打印模板</div>
+        <div class="card-desc">可视化打印模板设计器，支持采购订单、箱标签、出库单等多场景模板</div>
+      </div>
+
+      <div class="card c7">
+        <div class="card-icon">👥</div>
+        <div class="card-name">权限管理 RBAC</div>
+        <div class="card-desc">10 个预设角色（收货员/拣货员/复检员/装车员/司机/补货员/盘点员等）+ 26 个功能点 + 库区数据权</div>
+      </div>
+
+      <div class="card c8">
+        <div class="card-icon">📈</div>
+        <div class="card-name">数据报表</div>
+        <div class="card-desc">12 张配送数据报表、库存报表、损耗台账、拣货统计、收发存汇总</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 技术架构 -->
+  <div class="arch">
+    <div class="section-title">🏗️ 技术架构</div>
+    <div class="arch-grid">
+      <div class="arch-item">
+        <h4>后端</h4>
+        <p>Python 3.11 + Django 4 + DRF<br>
+        3 容器并行：wms-api-admin (8083) + wms-api-picker-1/2 (8091/8092)<br>
+        nginx 按 URL 前缀路由分流</p>
+      </div>
+      <div class="arch-item">
+        <h4>Admin 前端</h4>
+        <p>Vue 2 + Element UI<br>
+        服务器端 node:16-alpine 构建<br>
+        部署至 nginx 静态目录</p>
+      </div>
+      <div class="arch-item">
+        <h4>移动端</h4>
+        <p>uni-app Vue 3 跨平台<br>
+        双模式：微信小程序（mp-weixin）+ H5 浏览器<br>
+        各岗位独立页面模块</p>
+      </div>
+    </div>
+    <div class="db-row">
+      <div class="db-box db-wms">
+        <h4 style="color:#6366f1">🗄️ wms 数据库（可读写）</h4>
+        <p>WMS 本地业务表 102 张（wms_*）<br>
+        入库单、出库单、拣货任务、库存流水、权限、用户等</p>
+      </div>
+      <div class="db-box db-zhzg">
+        <h4 style="color:#16a34a">🗄️ zhzg 数据库（只读）</h4>
+        <p>电商主数据（bd_* / bsi_* / sys_*）<br>
+        商品信息、线路、团点、电商订单，由 queryuser 只读访问</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>知花知果 WMS · 生成于 2026-06-08 · v13.x</footer>
+</body>
+</html>

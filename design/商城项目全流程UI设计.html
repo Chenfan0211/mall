@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商城项目全流程 UI 设计</title>
+  <style>
+    :root {
+      --bg: #f3f6fa;
+      --panel: #ffffff;
+      --line: #d9e1ea;
+      --line-soft: #edf1f6;
+      --text: #1f2937;
+      --muted: #667085;
+      --primary: #1769aa;
+      --primary-dark: #0f4f84;
+      --green: #16856c;
+      --yellow: #ad7417;
+      --red: #b42318;
+      --sidebar: #111827;
+      --sidebar-active: #1769aa;
+      --soft-blue: #edf6ff;
+      --soft-green: #ecf8f3;
+      --soft-yellow: #fff7e8;
+      --soft-red: #fff1f0;
+      --radius: 8px;
+      --shadow: 0 10px 28px rgba(16, 24, 40, .08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 256px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--sidebar);
+      color: #f8fafc;
+      padding: 18px 14px;
+      overflow: auto;
+    }
+
+    .brand {
+      padding: 8px 10px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      margin-bottom: 14px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 7px 0 0;
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .nav-title {
+      color: #94a3b8;
+      font-size: 12px;
+      margin: 16px 10px 7px;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      text-decoration: none;
+      color: #e5e7eb;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+
+    .nav a:hover, .nav a.active {
+      background: rgba(23, 105, 170, .95);
+      color: white;
+    }
+
+    .nav small {
+      color: #cbd5e1;
+      font-size: 11px;
+    }
+
+    .main {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 60px;
+      background: white;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .crumb {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .content {
+      max-width: 1520px;
+      padding: 24px;
+    }
+
+    section {
+      margin-bottom: 28px;
+    }
+
+    .section-head {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 23px;
+      letter-spacing: 0;
+      line-height: 1.3;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .canvas {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .screen-title {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfe;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .screen-title h3 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .screen-title span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .screen-body {
+      padding: 18px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid.admin-layout { grid-template-columns: 220px minmax(0, 1fr); }
+    .grid.mobile-row { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .metric {
+      border-top: 4px solid var(--primary);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 25px;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric.green { border-top-color: var(--green); }
+    .metric.green strong { color: var(--green); }
+    .metric.yellow { border-top-color: var(--yellow); }
+    .metric.yellow strong { color: var(--yellow); }
+    .metric.red { border-top-color: var(--red); }
+    .metric.red strong { color: var(--red); }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .panel-head h4 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .input, .select, .textarea {
+      width: 100%;
+      min-height: 34px;
+      border: 1px solid #cfd8e3;
+      border-radius: 6px;
+      padding: 7px 9px;
+      color: var(--text);
+      background: white;
+      font-size: 13px;
+    }
+
+    .textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn {
+      min-height: 32px;
+      border: 1px solid #cfd8e3;
+      border-radius: 6px;
+      padding: 6px 11px;
+      background: white;
+      color: #344054;
+      font-size: 13px;
+      cursor: default;
+      white-space: nowrap;
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .btn.green {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+
+    .btn.yellow {
+      background: #fff7e8;
+      border-color: #f2d6a1;
+      color: var(--yellow);
+    }
+
+    .btn.red {
+      background: #fff1f0;
+      border-color: #edbbb6;
+      color: var(--red);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    th, td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line-soft);
+      vertical-align: middle;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f6fa;
+      color: #344054;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 8px;
+    }
+
+    .table-wrap table {
+      min-width: 880px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid #cbdff2;
+      color: var(--primary);
+      background: var(--soft-blue);
+      white-space: nowrap;
+    }
+
+    .tag.green { color: var(--green); background: var(--soft-green); border-color: #c5e7dc; }
+    .tag.yellow { color: var(--yellow); background: var(--soft-yellow); border-color: #f3d9a7; }
+    .tag.red { color: var(--red); background: var(--soft-red); border-color: #efc0bb; }
+    .tag.gray { color: #475467; background: #f2f4f7; border-color: #d0d5dd; }
+
+    .mini-nav {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .mini-nav div {
+      padding: 9px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #475467;
+      margin-bottom: 3px;
+    }
+
+    .mini-nav div.active {
+      background: var(--soft-blue);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .form-grid .wide2 { grid-column: span 2; }
+    .form-grid .wide3 { grid-column: span 3; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .step b {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .step.active {
+      border-color: #b8dbf7;
+      background: var(--soft-blue);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .timeline-item time {
+      color: var(--muted);
+    }
+
+    .timeline-item div {
+      border-left: 3px solid var(--primary);
+      padding-left: 10px;
+    }
+
+    .phone {
+      max-width: 360px;
+      margin: 0 auto;
+      border: 10px solid #101828;
+      border-radius: 28px;
+      background: #f7f8fb;
+      overflow: hidden;
+      box-shadow: 0 14px 34px rgba(16,24,40,.16);
+    }
+
+    .phone-top {
+      height: 44px;
+      background: #101828;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    .phone-screen {
+      min-height: 620px;
+      background: #f6f7fb;
+      padding-bottom: 12px;
+    }
+
+    .mobile-header {
+      background: white;
+      padding: 12px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .mobile-header b {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .search {
+      height: 34px;
+      border-radius: 17px;
+      border: 1px solid #d0d5dd;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .mobile-content {
+      padding: 12px;
+    }
+
+    .banner {
+      height: 96px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1769aa, #1f8a70);
+      color: white;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .banner b {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .product-card {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      gap: 10px;
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid var(--line-soft);
+      margin-bottom: 10px;
+    }
+
+    .thumb {
+      width: 82px;
+      height: 82px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #e7f1fb, #d8efe8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .product-card b {
+      display: block;
+      font-size: 14px;
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+
+    .price {
+      color: var(--red);
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .mobile-tabs {
+      height: 52px;
+      background: white;
+      border-top: 1px solid var(--line-soft);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mobile-tabs .active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .prototype-menu {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .prototype-menu .menu-head {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      background: #0f172a;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .prototype-menu .group {
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .prototype-menu .group-title {
+      padding: 10px 12px;
+      background: #f8fafc;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .prototype-menu .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      color: #475467;
+      font-size: 12px;
+      border-top: 1px solid #f2f4f7;
+    }
+
+    .prototype-menu .item.active {
+      color: var(--primary);
+      background: var(--soft-blue);
+      font-weight: 700;
+    }
+
+    .prototype-menu .item em {
+      font-style: normal;
+      color: #98a2b3;
+      font-size: 11px;
+    }
+
+    .mini-app-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .mini-app-tab {
+      border: 1px solid #cfd8e3;
+      border-radius: 999px;
+      background: white;
+      color: #344054;
+      min-height: 30px;
+      padding: 5px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .mini-app-tab.active {
+      border-color: var(--primary);
+      background: var(--soft-blue);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .mini-page {
+      display: none;
+    }
+
+    .mini-page.active {
+      display: block;
+    }
+
+    .phone.clickable button,
+    .phone.clickable .mobile-tabs div,
+    .phone.clickable .tap {
+      cursor: pointer;
+    }
+
+    .login-hero {
+      background: linear-gradient(135deg, #1769aa, #16856c);
+      color: white;
+      padding: 28px 18px;
+    }
+
+    .login-hero b {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .login-card {
+      margin: -18px 12px 12px;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--line-soft);
+      padding: 14px;
+      box-shadow: 0 8px 20px rgba(16,24,40,.08);
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .role-card {
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+      font-size: 12px;
+    }
+
+    .role-card.active {
+      border-color: var(--primary);
+      background: var(--soft-blue);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .mobile-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mobile-list-row {
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 13px;
+    }
+
+    .mobile-list-row b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .mobile-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      font-size: 13px;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    .task-card {
+      background: white;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .task-card b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .task-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .note {
+      background: var(--soft-blue);
+      color: #26465f;
+      border-left: 4px solid var(--primary);
+      padding: 11px 13px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 1080px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 4px; }
+      .content { padding: 16px; }
+      .grid.two, .grid.three, .grid.four, .grid.admin-layout { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .wide2, .form-grid .wide3 { grid-column: auto; }
+      .topbar { position: static; }
+    }
+
+    @media print {
+      body { background: white; }
+      .app { display: block; }
+      .sidebar, .topbar { display: none; }
+      .content { max-width: none; padding: 0; }
+      .canvas { box-shadow: none; break-inside: avoid; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>商城全流程 UI 设计</h1>
+        <p>运营后台 + WMS 后台 + 小程序 H5</p>
+      </div>
+      <div class="nav-title">设计总览</div>
+      <nav class="nav">
+        <a class="active" href="#design-system">设计规范 <small>Design</small></a>
+        <a href="#dashboard">经营驾驶舱 <small>Admin</small></a>
+      </nav>
+      <div class="nav-title">运营后台</div>
+      <nav class="nav">
+        <a href="#admin-product">商品中心 <small>商品</small></a>
+        <a href="#admin-publish">发布中心 <small>团购</small></a>
+        <a href="#admin-order">订单中心 <small>订单</small></a>
+        <a href="#admin-aftersale">售后中心 <small>售后</small></a>
+        <a href="#admin-finance">财务分账 <small>财务</small></a>
+        <a href="#admin-report">报表权限 <small>系统</small></a>
+      </nav>
+      <div class="nav-title">仓配后台</div>
+      <nav class="nav">
+        <a href="#wms-home">WMS 工作台 <small>仓配</small></a>
+        <a href="#wms-inbound">采购入库 <small>入库</small></a>
+        <a href="#wms-outbound">波次出库 <small>出库</small></a>
+        <a href="#wms-inventory">库存盘点 <small>库存</small></a>
+      </nav>
+      <div class="nav-title">小程序 H5</div>
+      <nav class="nav">
+        <a href="#h5-user">用户小程序 <small>用户</small></a>
+        <a href="#h5-station">自提点端 <small>团点</small></a>
+        <a href="#h5-supplier">供应商端 <small>供应商</small></a>
+        <a href="#h5-warehouse">仓配移动端 <small>仓库</small></a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="crumb">商城项目 / 全流程 UI 设计稿 / 静态 HTML 原型</div>
+        <div class="top-actions">
+          <span>广东运营中心</span>
+          <span class="avatar">GD</span>
+        </div>
+      </div>
+
+      <div class="content">
+        <section id="design-system">
+          <div class="section-head">
+            <div>
+              <h2>1. 设计规范</h2>
+              <p>参考两个后台系统的登录和后台风格，采用深色侧边栏、浅色内容区、表格 + 筛选 + 操作按钮的管理系统布局。小程序端先用 H5 手机画板展示。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>统一视觉与交互规范</h3>
+              <span>后台、WMS、小程序 H5 共用业务色和状态色</span>
+            </div>
+            <div class="screen-body">
+              <div class="grid four">
+                <div class="card metric"><strong>#1769AA</strong><span>主色：查询、保存、发布、主要动作</span></div>
+                <div class="card metric green"><strong>#16856C</strong><span>成功：审核通过、确认收货、完成任务</span></div>
+                <div class="card metric yellow"><strong>#AD7417</strong><span>预警：待处理、缺货、待审核、异常</span></div>
+                <div class="card metric red"><strong>#B42318</strong><span>危险：删除、取消、驳回、退款失败</span></div>
+              </div>
+              <br>
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head">
+                    <h4>按钮规范</h4>
+                  </div>
+                  <div class="btn-row">
+                    <button class="btn primary">查询</button>
+                    <button class="btn green">确认发布</button>
+                    <button class="btn yellow">异常处理</button>
+                    <button class="btn red">取消订单</button>
+                    <button class="btn">重置</button>
+                    <button class="btn">导出</button>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head">
+                    <h4>状态标签</h4>
+                  </div>
+                  <div class="btn-row">
+                    <span class="tag">待审核</span>
+                    <span class="tag green">已完成</span>
+                    <span class="tag yellow">待处理</span>
+                    <span class="tag red">已驳回</span>
+                    <span class="tag gray">已关闭</span>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="note">后台页面统一结构：页面标题、筛选区、主按钮区、数据表格、右侧详情抽屉或弹窗。移动端统一结构：顶部定位/角色信息、数据卡片、任务列表、底部导航、主操作按钮。</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="dashboard">
+          <div class="section-head">
+            <div>
+              <h2>2. 经营驾驶舱</h2>
+              <p>运营后台首页，展示订单、销售、售后、分账、仓配异常的全局概览。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>运营后台 / 首页驾驶舱</h3>
+              <div class="btn-row">
+                <button class="btn">刷新</button>
+                <button class="btn primary">导出日报</button>
+              </div>
+            </div>
+            <div class="screen-body">
+              <div class="filters">
+                <div class="field"><label>城市</label><select class="select"><option>全部城市</option><option>广州</option><option>深圳</option></select></div>
+                <div class="field"><label>自提点</label><input class="input" value="全部自提点"></div>
+                <div class="field"><label>统计日期</label><input class="input" value="2026-06-09"></div>
+                <div class="field"><label>业务线</label><select class="select"><option>商城 + 仓配</option></select></div>
+              </div>
+              <div class="grid four">
+                <div class="card metric"><strong>12,680</strong><span>今日订单金额</span></div>
+                <div class="card metric green"><strong>836</strong><span>已支付订单</span></div>
+                <div class="card metric yellow"><strong>27</strong><span>待处理售后</span></div>
+                <div class="card metric red"><strong>9</strong><span>仓配异常</span></div>
+              </div>
+              <br>
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>待办事项</h4><button class="btn">查看全部</button></div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>事项</th><th>数量</th><th>优先级</th><th>操作</th></tr></thead>
+                      <tbody>
+                        <tr><td>待审核售后</td><td>27</td><td><span class="tag yellow">高</span></td><td><button class="btn primary">去处理</button></td></tr>
+                        <tr><td>待下放订单</td><td>168</td><td><span class="tag">中</span></td><td><button class="btn primary">波次下放</button></td></tr>
+                        <tr><td>提现待审核</td><td>13</td><td><span class="tag">中</span></td><td><button class="btn primary">审核</button></td></tr>
+                        <tr><td>缺货标记</td><td>9</td><td><span class="tag red">高</span></td><td><button class="btn yellow">异常处理</button></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>业务流转状态</h4><button class="btn">查看链路</button></div>
+                  <div class="steps">
+                    <div class="step active"><b>商品发布</b><span>38 个在售团期</span></div>
+                    <div class="step active"><b>用户下单</b><span>836 单已支付</span></div>
+                    <div class="step active"><b>采购入库</b><span>12 张入库单</span></div>
+                    <div class="step active"><b>波次出库</b><span>5 个配送波次</span></div>
+                    <div class="step"><b>售后退款</b><span>27 单待处理</span></div>
+                    <div class="step"><b>分账提现</b><span>13 笔待审核</span></div>
+                  </div>
+                  <div class="timeline">
+                    <div class="timeline-item"><time>09:20</time><div>广州 3 号波次已下放，生成 64 个拣货任务</div></div>
+                    <div class="timeline-item"><time>09:36</time><div>商品“云南蓝莓”库存不足，触发补货任务</div></div>
+                    <div class="timeline-item"><time>10:12</time><div>自提点“越秀东湖店”提交休假申请</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-menu-design">
+          <div class="section-head">
+            <div>
+              <h2>2.1 后台菜单列设计</h2>
+              <p>后台采用左侧一级/二级菜单，右侧业务页面。菜单权限由角色控制，可隐藏无权限菜单和按钮。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>运营后台菜单结构</h3>
+              <div class="btn-row"><button class="btn">折叠菜单</button><button class="btn primary">权限配置</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="grid admin-layout">
+                <div class="prototype-menu">
+                  <div class="menu-head">知花知果运营平台</div>
+                  <div class="group">
+                    <div class="group-title">经营看板</div>
+                    <div class="item active">首页驾驶舱 <em>/dashboard</em></div>
+                    <div class="item">待办中心 <em>/todo</em></div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">商品运营</div>
+                    <div class="item">商品中心 <em>建档/规格</em></div>
+                    <div class="item">展示类目 <em>多级</em></div>
+                    <div class="item">统计类目 <em>报表</em></div>
+                    <div class="item">发布中心 <em>团购模板</em></div>
+                    <div class="item">商品搜索词 <em>ES</em></div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">交易履约</div>
+                    <div class="item">订单中心 <em>查询/取消</em></div>
+                    <div class="item">售后中心 <em>审核/退款</em></div>
+                    <div class="item">配送汇总 <em>商品汇总</em></div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">营销活动</div>
+                    <div class="item">优惠券 <em>黑白名单</em></div>
+                    <div class="item">活动页面 <em>商品池</em></div>
+                    <div class="item">推荐规则 <em>偏好</em></div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">财务报表</div>
+                    <div class="item">分账账户 <em>佣金</em></div>
+                    <div class="item">提现审核 <em>打款</em></div>
+                    <div class="item">经营报表 <em>导出</em></div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">基础系统</div>
+                    <div class="item">供应商</div>
+                    <div class="item">自提点</div>
+                    <div class="item">城市仓库</div>
+                    <div class="item">角色权限</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="grid four">
+                    <div class="card metric"><strong>菜单</strong><span>按角色动态显示</span></div>
+                    <div class="card metric green"><strong>按钮</strong><span>新增/编辑/审核/导出独立授权</span></div>
+                    <div class="card metric yellow"><strong>数据</strong><span>城市、供应商、自提点、仓库隔离</span></div>
+                    <div class="card metric red"><strong>日志</strong><span>关键操作记录审计</span></div>
+                  </div>
+                  <br>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>菜单</th><th>主要页面</th><th>核心按钮</th><th>数据流转</th></tr></thead>
+                      <tbody>
+                        <tr><td>商品中心</td><td>商品列表、商品编辑、规格价格</td><td>新增商品、保存、生成联想词、同步 ES</td><td>prd_product / prd_sku / prd_city_price → MQ → ES</td></tr>
+                        <tr><td>发布中心</td><td>发布向导、发布列表、白名单</td><td>保存草稿、设置白名单、确认发布、下架</td><td>sale_publish_template → Redis 商品缓存 → 用户小程序</td></tr>
+                        <tr><td>订单中心</td><td>订单列表、订单详情、订单轨迹</td><td>查询、详情、取消、备注、导出</td><td>ord_order / pay_trade / wms_outbound_order</td></tr>
+                        <tr><td>售后中心</td><td>售后列表、售后详情、退款处理</td><td>审核通过、驳回、确认退货、确认退款</td><td>afs_after_sale → afs_refund_trade → 支付退款回调</td></tr>
+                        <tr><td>财务分账</td><td>账户、流水、提现审核</td><td>审核通过、驳回、打款、导出</td><td>fin_split_flow / fin_withdraw_apply / fin_commission_account</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="wms-menu-design">
+          <div class="section-head">
+            <div>
+              <h2>2.2 仓库后台菜单列设计</h2>
+              <p>仓配后台菜单以作业流转为主，从采购入库到波次出库、库存盘点和配送监控。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>WMS 后台菜单结构</h3>
+              <div class="btn-row"><button class="btn">作业看板</button><button class="btn primary">刷新任务</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="grid admin-layout">
+                <div class="prototype-menu">
+                  <div class="menu-head">仓配平台</div>
+                  <div class="group">
+                    <div class="group-title">仓配看板</div>
+                    <div class="item active">作业总览</div>
+                    <div class="item">异常中心</div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">入库管理</div>
+                    <div class="item">采购订单</div>
+                    <div class="item">入库单</div>
+                    <div class="item">收货任务</div>
+                    <div class="item">质检文件</div>
+                    <div class="item">供应商退货</div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">出库管理</div>
+                    <div class="item">销售单</div>
+                    <div class="item">波次下放</div>
+                    <div class="item">拣货任务</div>
+                    <div class="item">复检装箱</div>
+                    <div class="item">装车出仓</div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">配送管理</div>
+                    <div class="item">司机任务</div>
+                    <div class="item">线路管理</div>
+                    <div class="item">团点签到</div>
+                    <div class="item">配送报表</div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">库存管理</div>
+                    <div class="item">实时库存</div>
+                    <div class="item">库存流水</div>
+                    <div class="item">移库</div>
+                    <div class="item">报损</div>
+                    <div class="item">盘点</div>
+                    <div class="item">补货</div>
+                  </div>
+                  <div class="group">
+                    <div class="group-title">系统设置</div>
+                    <div class="item">仓库库区</div>
+                    <div class="item">库位管理</div>
+                    <div class="item">打印模板</div>
+                    <div class="item">WMS 权限</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="steps">
+                    <div class="step active"><b>采购单</b><span>PO 创建/审核</span></div>
+                    <div class="step active"><b>入库单</b><span>IN 接单/收货</span></div>
+                    <div class="step active"><b>库存</b><span>批次/库位</span></div>
+                    <div class="step active"><b>波次</b><span>订单下放</span></div>
+                    <div class="step"><b>拣货</b><span>任务池</span></div>
+                    <div class="step"><b>复检</b><span>装箱/箱标</span></div>
+                    <div class="step"><b>装车</b><span>出仓扣库</span></div>
+                    <div class="step"><b>配送</b><span>司机/团点</span></div>
+                  </div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>菜单</th><th>页面重点</th><th>核心按钮</th><th>数据流转</th></tr></thead>
+                      <tbody>
+                        <tr><td>入库单</td><td>收货进度、质检附件、库位推荐</td><td>接单、扫码收货、上传质检、完成入库</td><td>wms_inbound_order → wms_inventory → wms_inventory_log</td></tr>
+                        <tr><td>波次下放</td><td>配送日、线路、库存缺货预览</td><td>查询预览、一键下放、异常处理</td><td>ord_order → dispatch_batch → wms_outbound_order / wms_pick_task</td></tr>
+                        <tr><td>装车出仓</td><td>箱码、线路、司机、出仓确认</td><td>扫码装车、确认出仓、打印装车单</td><td>wms_loading_order → wms_inventory_log(outbound) → log_delivery_order</td></tr>
+                        <tr><td>盘点补货</td><td>库存差异、低库存补货</td><td>新建盘点、提交盘点、审核调整、领取补货</td><td>wms_stocktake_order / wms_replenish_task → wms_inventory_log</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-product">
+          <div class="section-head">
+            <div>
+              <h2>3. 运营后台 / 商品中心</h2>
+              <p>商品建档、规格、库存规格换算、城市价格、联想词和 ES 同步。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>商品管理列表</h3>
+              <div class="btn-row">
+                <button class="btn">导入商品</button>
+                <button class="btn primary">新增商品</button>
+              </div>
+            </div>
+            <div class="screen-body">
+              <div class="filters">
+                <div class="field"><label>商品名称</label><input class="input" placeholder="请输入商品名称"></div>
+                <div class="field"><label>供应商</label><select class="select"><option>全部供应商</option><option>华南果业</option></select></div>
+                <div class="field"><label>采购员</label><select class="select"><option>全部采购员</option></select></div>
+                <div class="field"><label>展示类目</label><select class="select"><option>全部类目</option></select></div>
+                <div class="field"><label>状态</label><select class="select"><option>全部</option><option>启用</option><option>停用</option></select></div>
+                <div class="field"><label>&nbsp;</label><div class="btn-row"><button class="btn primary">查询</button><button class="btn">重置</button></div></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>商品编码</th><th>商品名称</th><th>供应商</th><th>规格数</th><th>采购员</th><th>展示类目</th><th>统计类目</th><th>ES 状态</th><th>操作</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>SP20260609001</td><td>云南蓝莓 125g</td><td>华南果业</td><td>3</td><td>张采购</td><td>水果/浆果</td><td>生鲜水果</td><td><span class="tag green">已同步</span></td><td><button class="btn primary">编辑</button> <button class="btn">规格</button> <button class="btn yellow">发布</button></td></tr>
+                    <tr><td>SP20260609002</td><td>海南贵妃芒</td><td>海南供应链</td><td>2</td><td>李采购</td><td>水果/芒果</td><td>生鲜水果</td><td><span class="tag yellow">待同步</span></td><td><button class="btn primary">编辑</button> <button class="btn">价格</button> <button class="btn red">停用</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <br>
+              <div class="card">
+                <div class="panel-head">
+                  <h4>新增/编辑商品表单</h4>
+                  <div class="btn-row"><button class="btn">取消</button><button class="btn primary">保存并同步 ES</button></div>
+                </div>
+                <div class="form-grid">
+                  <div class="field"><label>商品名称</label><input class="input" value="云南蓝莓 125g"></div>
+                  <div class="field"><label>供应商</label><select class="select"><option>华南果业</option></select></div>
+                  <div class="field"><label>采购员</label><select class="select"><option>张采购</option></select></div>
+                  <div class="field"><label>展示类目</label><select class="select"><option>水果 / 浆果</option></select></div>
+                  <div class="field"><label>统计类目</label><select class="select"><option>生鲜水果</option></select></div>
+                  <div class="field"><label>商品状态</label><select class="select"><option>启用</option></select></div>
+                  <div class="field wide2"><label>联想词</label><input class="input" value="蓝莓, 云南蓝莓, 盒装蓝莓, 新鲜蓝莓"></div>
+                  <div class="field"><label>&nbsp;</label><button class="btn">自动生成联想词</button></div>
+                  <div class="field wide3"><label>商品说明</label><textarea class="textarea">产地直采，适合社区团购配送。</textarea></div>
+                </div>
+                <br>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>规格名称</th><th>销售单位</th><th>库存规格</th><th>换算系数</th><th>城市价</th><th>操作</th></tr></thead>
+                    <tbody>
+                      <tr><td>125g/盒</td><td>盒</td><td>箱</td><td>1 箱 = 24 盒</td><td>三级城市价已配置</td><td><button class="btn">编辑</button> <button class="btn red">删除</button></td></tr>
+                      <tr><td>2 盒装</td><td>份</td><td>箱</td><td>1 箱 = 12 份</td><td>三级城市价已配置</td><td><button class="btn">编辑</button> <button class="btn red">删除</button></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-publish">
+          <div class="section-head">
+            <div>
+              <h2>4. 运营后台 / 商品发布中心</h2>
+              <p>通过发布模板配置销售时间、配送日、城市/自提点白名单、城市价格和采购仓。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>团购发布向导</h3>
+              <div class="btn-row"><button class="btn">保存草稿</button><button class="btn green">确认发布</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="steps">
+                <div class="step active"><b>1. 选择商品</b><span>选择可发布商品</span></div>
+                <div class="step active"><b>2. 销售与配送</b><span>销售时间、配送日</span></div>
+                <div class="step active"><b>3. 售卖范围</b><span>城市/自提点白名单</span></div>
+                <div class="step"><b>4. 价格与采购仓</b><span>城市价格、采购仓</span></div>
+                <div class="step"><b>5. 发布确认</b><span>校验并发布</span></div>
+              </div>
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>发布配置</h4></div>
+                  <div class="form-grid">
+                    <div class="field"><label>发布名称</label><input class="input" value="6 月 12 日水果团购"></div>
+                    <div class="field"><label>销售开始</label><input class="input" value="2026-06-09 10:00"></div>
+                    <div class="field"><label>销售结束</label><input class="input" value="2026-06-11 20:00"></div>
+                    <div class="field"><label>配送日期</label><input class="input" value="2026-06-12"></div>
+                    <div class="field"><label>采购仓</label><select class="select"><option>广州中心仓</option></select></div>
+                    <div class="field"><label>配送规则</label><select class="select"><option>未指定则自动计算</option></select></div>
+                    <div class="field wide3"><label>售卖范围</label><div class="btn-row"><span class="tag">广州</span><span class="tag">深圳</span><span class="tag green">越秀东湖店</span><button class="btn">设置白名单</button></div></div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>发布商品</h4><button class="btn primary">添加商品</button></div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>商品</th><th>规格</th><th>广州价</th><th>深圳价</th><th>采购仓</th><th>操作</th></tr></thead>
+                      <tbody>
+                        <tr><td>云南蓝莓</td><td>125g/盒</td><td>12.90</td><td>13.50</td><td>广州中心仓</td><td><button class="btn">调价</button></td></tr>
+                        <tr><td>海南贵妃芒</td><td>5 斤装</td><td>29.90</td><td>31.90</td><td>广州中心仓</td><td><button class="btn">调价</button></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="note">点击“确认发布”后：校验配送日大于销售结束时间，校验商品城市价格和采购仓，写入发布表，刷新前台商品缓存，发送 ES 同步事件。</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-order">
+          <div class="section-head">
+            <div>
+              <h2>5. 运营后台 / 订单中心</h2>
+              <p>订单查询、订单详情、取消、备注、导出和业务链路追踪。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>订单管理</h3>
+              <div class="btn-row"><button class="btn">批量备注</button><button class="btn primary">导出订单</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="filters">
+                <div class="field"><label>订单号</label><input class="input" placeholder="请输入订单号"></div>
+                <div class="field"><label>订单状态</label><select class="select"><option>全部</option><option>未支付</option><option>待发货</option><option>已完成</option></select></div>
+                <div class="field"><label>城市</label><select class="select"><option>全部城市</option></select></div>
+                <div class="field"><label>自提点</label><input class="input" placeholder="请输入自提点"></div>
+                <div class="field"><label>时间</label><input class="input" value="2026-06-09"></div>
+                <div class="field"><label>&nbsp;</label><div class="btn-row"><button class="btn primary">查询</button><button class="btn">重置</button></div></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>订单号</th><th>用户</th><th>自提点</th><th>金额</th><th>支付</th><th>履约状态</th><th>售后</th><th>操作</th></tr></thead>
+                  <tbody>
+                    <tr><td>DD202606090001</td><td>陈用户</td><td>越秀东湖店</td><td>42.80</td><td><span class="tag green">已支付</span></td><td><span class="tag yellow">待发货</span></td><td><span class="tag gray">无</span></td><td><button class="btn primary">详情</button> <button class="btn red">取消</button></td></tr>
+                    <tr><td>DD202606090002</td><td>李用户</td><td>天河体育西店</td><td>68.60</td><td><span class="tag">未支付</span></td><td><span class="tag gray">未下放</span></td><td><span class="tag gray">无</span></td><td><button class="btn primary">详情</button> <button class="btn red">取消</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <br>
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>订单详情抽屉</h4><div class="btn-row"><button class="btn">添加备注</button><button class="btn yellow">申请售后</button></div></div>
+                  <table>
+                    <tbody>
+                      <tr><th>订单状态</th><td>已付款（待发货）</td></tr>
+                      <tr><th>支付流水</th><td>WX20260609000021 / 42.80 元</td></tr>
+                      <tr><th>优惠券</th><td>满 39 减 5</td></tr>
+                      <tr><th>自提点</th><td>越秀东湖店</td></tr>
+                      <tr><th>数据流转</th><td>订单已支付 → 等待波次下放 → 生成出库单 → 配送</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>订单流转时间线</h4></div>
+                  <div class="timeline">
+                    <div class="timeline-item"><time>10:02</time><div>用户提交订单，锁定库存</div></div>
+                    <div class="timeline-item"><time>10:03</time><div>微信支付成功，生成支付流水</div></div>
+                    <div class="timeline-item"><time>10:04</time><div>生成佣金预估，通知自提点</div></div>
+                    <div class="timeline-item"><time>待处理</time><div>等待仓库波次下放</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-aftersale">
+          <div class="section-head">
+            <div>
+              <h2>6. 运营后台 / 售后中心</h2>
+              <p>支持仅退款、退货退款、部分退款，退货退款必须先确认退货再退款。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>售后订单</h3>
+              <div class="btn-row"><button class="btn">导出售后</button><button class="btn primary">刷新</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="filters">
+                <div class="field"><label>售后单号</label><input class="input" placeholder="请输入售后单号"></div>
+                <div class="field"><label>售后状态</label><select class="select"><option>待审核</option><option>待退货</option><option>待退款</option></select></div>
+                <div class="field"><label>售后类型</label><select class="select"><option>全部</option><option>仅退款</option><option>退货退款</option></select></div>
+                <div class="field"><label>&nbsp;</label><div class="btn-row"><button class="btn primary">查询</button><button class="btn">重置</button></div></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>售后单号</th><th>订单号</th><th>用户</th><th>类型</th><th>退款金额</th><th>状态</th><th>操作</th></tr></thead>
+                  <tbody>
+                    <tr><td>SH20260609001</td><td>DD202606090001</td><td>陈用户</td><td>仅退款</td><td>12.90</td><td><span class="tag">待审核</span></td><td><button class="btn green">审核通过</button> <button class="btn red">驳回</button></td></tr>
+                    <tr><td>SH20260609002</td><td>DD202606080087</td><td>王用户</td><td>退货退款</td><td>29.90</td><td><span class="tag yellow">待退货</span></td><td><button class="btn yellow">确认退货</button> <button class="btn green">退款</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <br>
+              <div class="steps">
+                <div class="step active"><b>提交售后</b><span>用户选择商品、原因、金额</span></div>
+                <div class="step active"><b>后台审核</b><span>通过或驳回</span></div>
+                <div class="step"><b>确认退货</b><span>退货退款场景必走</span></div>
+                <div class="step"><b>执行退款</b><span>调用支付退款接口</span></div>
+                <div class="step"><b>回调完成</b><span>退款成功或失败</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-finance">
+          <div class="section-head">
+            <div>
+              <h2>7. 运营后台 / 财务分账</h2>
+              <p>订单完成后生成分账流水，自提点和供应商可提交提现申请。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>分账账户与提现审核</h3>
+              <div class="btn-row"><button class="btn">导出流水</button><button class="btn primary">批量审核</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="grid four">
+                <div class="card metric"><strong>86,240.50</strong><span>累计佣金</span></div>
+                <div class="card metric green"><strong>58,120.00</strong><span>已分账</span></div>
+                <div class="card metric yellow"><strong>13</strong><span>提现待审核</span></div>
+                <div class="card metric red"><strong>2</strong><span>打款失败</span></div>
+              </div>
+              <br>
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>提现申请</h4></div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>申请单</th><th>分账方</th><th>类型</th><th>金额</th><th>状态</th><th>操作</th></tr></thead>
+                      <tbody>
+                        <tr><td>TX20260609001</td><td>越秀东湖店</td><td>自提点</td><td>320.00</td><td><span class="tag">待审核</span></td><td><button class="btn green">通过</button> <button class="btn red">驳回</button></td></tr>
+                        <tr><td>TX20260609002</td><td>华南果业</td><td>供应商</td><td>2,860.00</td><td><span class="tag yellow">打款中</span></td><td><button class="btn">查看</button></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>分账流水</h4><button class="btn">查看全部</button></div>
+                  <div class="timeline">
+                    <div class="timeline-item"><time>10:33</time><div>订单 DD202606090001 完成，自提点佣金 1.20 元入账</div></div>
+                    <div class="timeline-item"><time>10:35</time><div>供应商华南果业结算金额 28.60 元入账</div></div>
+                    <div class="timeline-item"><time>11:02</time><div>提现申请 TX20260609001 冻结余额 320.00 元</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-report">
+          <div class="section-head">
+            <div>
+              <h2>8. 运营后台 / 报表与权限</h2>
+              <p>报表按数据权限过滤，权限中心统一维护菜单、按钮和数据范围。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>报表中心 + 权限中心</h3>
+              <div class="btn-row"><button class="btn">保存权限</button><button class="btn primary">导出报表</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>报表筛选</h4></div>
+                  <div class="filters">
+                    <div class="field"><label>报表类型</label><select class="select"><option>订单报表</option><option>配送商品汇总</option><option>分账报表</option><option>统计类目销售</option></select></div>
+                    <div class="field"><label>日期</label><input class="input" value="2026-06-01 至 2026-06-09"></div>
+                    <div class="field"><label>城市</label><select class="select"><option>全部城市</option></select></div>
+                    <div class="field"><label>&nbsp;</label><button class="btn primary">生成报表</button></div>
+                  </div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>维度</th><th>订单数</th><th>销售额</th><th>退款额</th><th>佣金</th></tr></thead>
+                      <tbody>
+                        <tr><td>广州</td><td>3,286</td><td>126,840.00</td><td>2,320.00</td><td>8,640.00</td></tr>
+                        <tr><td>深圳</td><td>2,190</td><td>98,210.00</td><td>1,680.00</td><td>6,320.00</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>角色权限配置</h4></div>
+                  <div class="grid admin-layout">
+                    <div class="mini-nav">
+                      <div class="active">城市运营</div>
+                      <div>供应商</div>
+                      <div>采购员</div>
+                      <div>自提点</div>
+                      <div>仓库管理员</div>
+                    </div>
+                    <div>
+                      <div class="btn-row">
+                        <span class="tag green">商品查看</span><span class="tag green">订单查看</span><span class="tag">售后审核</span><span class="tag">报表导出</span><span class="tag yellow">数据范围：广州</span>
+                      </div>
+                      <br>
+                      <div class="table-wrap">
+                        <table>
+                          <thead><tr><th>菜单</th><th>查看</th><th>新增</th><th>编辑</th><th>删除</th><th>导出</th></tr></thead>
+                          <tbody>
+                            <tr><td>商品中心</td><td>是</td><td>是</td><td>是</td><td>否</td><td>是</td></tr>
+                            <tr><td>订单中心</td><td>是</td><td>否</td><td>否</td><td>否</td><td>是</td></tr>
+                            <tr><td>财务分账</td><td>否</td><td>否</td><td>否</td><td>否</td><td>否</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="wms-home">
+          <div class="section-head">
+            <div>
+              <h2>9. WMS 工作台</h2>
+              <p>仓配后台关注入库、出库、拣货、复检、装车、配送、库存异常。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>仓配平台 / 作业看板</h3>
+              <div class="btn-row"><button class="btn">刷新看板</button><button class="btn primary">打印作业单</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="grid four">
+                <div class="card metric"><strong>12</strong><span>待收货入库单</span></div>
+                <div class="card metric green"><strong>168</strong><span>待拣货任务</span></div>
+                <div class="card metric yellow"><strong>42</strong><span>待复检箱数</span></div>
+                <div class="card metric red"><strong>9</strong><span>作业异常</span></div>
+              </div>
+              <br>
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>线路作业进度</h4></div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>线路</th><th>订单</th><th>拣货</th><th>复检</th><th>装车</th><th>配送</th></tr></thead>
+                      <tbody>
+                        <tr><td>广州 A 线</td><td>64</td><td><span class="tag green">已完成</span></td><td><span class="tag yellow">进行中</span></td><td><span class="tag">待装车</span></td><td><span class="tag gray">未出发</span></td></tr>
+                        <tr><td>广州 B 线</td><td>82</td><td><span class="tag yellow">拣货中</span></td><td><span class="tag gray">待复检</span></td><td><span class="tag gray">待装车</span></td><td><span class="tag gray">未出发</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>异常任务</h4><button class="btn yellow">批量处理</button></div>
+                  <div class="timeline">
+                    <div class="timeline-item"><time>09:36</time><div>拣货异常：云南蓝莓缺货 12 盒</div></div>
+                    <div class="timeline-item"><time>09:50</time><div>复检异常：海南贵妃芒数量不一致</div></div>
+                    <div class="timeline-item"><time>10:06</time><div>司机配送：广州 A 线待确认出仓</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="wms-inbound">
+          <div class="section-head">
+            <div>
+              <h2>10. WMS / 采购入库</h2>
+              <p>采购单审核生成入库单，收货员接单后扫码收货、质检上传、推荐库位上架。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>入库单管理</h3>
+              <div class="btn-row"><button class="btn">打印采购单</button><button class="btn primary">新增采购单</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="steps">
+                <div class="step active"><b>采购单 PO</b><span>创建并审核</span></div>
+                <div class="step active"><b>入库单 IN</b><span>自动生成</span></div>
+                <div class="step"><b>收货</b><span>任务池接单</span></div>
+                <div class="step"><b>质检</b><span>上传文件</span></div>
+                <div class="step"><b>上架</b><span>写库存流水</span></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>入库单</th><th>采购单</th><th>供应商</th><th>仓库</th><th>应收</th><th>已收</th><th>状态</th><th>操作</th></tr></thead>
+                  <tbody>
+                    <tr><td>IN20260609001</td><td>PO20260609001</td><td>华南果业</td><td>广州中心仓</td><td>120 箱</td><td>80 箱</td><td><span class="tag yellow">收货中</span></td><td><button class="btn primary">查看</button> <button class="btn green">完成入库</button></td></tr>
+                    <tr><td>IN20260609002</td><td>PO20260609002</td><td>海南供应链</td><td>广州中心仓</td><td>60 箱</td><td>0</td><td><span class="tag">待收货</span></td><td><button class="btn green">分配任务</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <br>
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>收货操作面板</h4><div class="btn-row"><button class="btn">扫码商品</button><button class="btn green">确认收货</button></div></div>
+                  <div class="form-grid">
+                    <div class="field"><label>商品</label><input class="input" value="云南蓝莓 125g"></div>
+                    <div class="field"><label>应收数量</label><input class="input" value="120 箱"></div>
+                    <div class="field"><label>实收数量</label><input class="input" value="80 箱"></div>
+                    <div class="field"><label>推荐库位</label><input class="input" value="A-01-03"></div>
+                    <div class="field"><label>批次号</label><input class="input" value="B20260609001"></div>
+                    <div class="field"><label>&nbsp;</label><button class="btn primary">推荐入库位</button></div>
+                    <div class="field wide3"><label>质检文件</label><div class="btn-row"><button class="btn">上传合格证</button><button class="btn">上传溯源码</button><span class="tag green">已上传 2 个文件</span></div></div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>数据流转</h4></div>
+                  <div class="timeline">
+                    <div class="timeline-item"><time>采购审核</time><div>PO 状态变为已审核，自动生成 IN 入库单</div></div>
+                    <div class="timeline-item"><time>收货确认</time><div>写收货记录，更新入库单明细已收数量</div></div>
+                    <div class="timeline-item"><time>完成入库</time><div>更新库存，写库存流水 inbound，释放入库任务</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="wms-outbound">
+          <div class="section-head">
+            <div>
+              <h2>11. WMS / 波次出库</h2>
+              <p>订单按配送日和线路下放，生成拣货、复检、装车、配送任务。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>波次下放与出库作业</h3>
+              <div class="btn-row"><button class="btn">下放预览</button><button class="btn green">一键下放</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="filters">
+                <div class="field"><label>配送日期</label><input class="input" value="2026-06-12"></div>
+                <div class="field"><label>仓库</label><select class="select"><option>广州中心仓</option></select></div>
+                <div class="field"><label>线路</label><select class="select"><option>全部线路</option><option>广州 A 线</option></select></div>
+                <div class="field"><label>&nbsp;</label><div class="btn-row"><button class="btn primary">查询预览</button><button class="btn green">生成出库任务</button></div></div>
+              </div>
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>下放预览</h4></div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>线路</th><th>自提点</th><th>订单数</th><th>SKU</th><th>可用库存</th><th>缺货</th><th>状态</th></tr></thead>
+                      <tbody>
+                        <tr><td>广州 A 线</td><td>越秀东湖店</td><td>42</td><td>18</td><td>充足</td><td>0</td><td><span class="tag green">可下放</span></td></tr>
+                        <tr><td>广州 B 线</td><td>天河体育西店</td><td>58</td><td>21</td><td>不足</td><td>12 盒</td><td><span class="tag red">缺货</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>作业任务链路</h4></div>
+                  <div class="steps">
+                    <div class="step active"><b>出库单</b><span>CK20260609001</span></div>
+                    <div class="step active"><b>拣货任务</b><span>64 个</span></div>
+                    <div class="step"><b>复检任务</b><span>待生成</span></div>
+                    <div class="step"><b>装车单</b><span>待装车</span></div>
+                    <div class="step"><b>配送单</b><span>司机待接收</span></div>
+                  </div>
+                  <div class="btn-row"><button class="btn primary">查看出库单</button><button class="btn yellow">异常处理</button><button class="btn">打印箱标</button></div>
+                </div>
+              </div>
+              <br>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>任务</th><th>执行人</th><th>当前状态</th><th>商品数</th><th>异常</th><th>操作</th></tr></thead>
+                  <tbody>
+                    <tr><td>拣货任务 PICK001</td><td>分拣员 A</td><td><span class="tag yellow">拣货中</span></td><td>18</td><td>0</td><td><button class="btn primary">查看</button></td></tr>
+                    <tr><td>复检任务 RC001</td><td>复检员 B</td><td><span class="tag">待复检</span></td><td>18</td><td>0</td><td><button class="btn green">开始复检</button></td></tr>
+                    <tr><td>装车单 LOAD001</td><td>装车员 C</td><td><span class="tag gray">待装车</span></td><td>32 箱</td><td>0</td><td><button class="btn green">扫码装车</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="wms-inventory">
+          <div class="section-head">
+            <div>
+              <h2>12. WMS / 库存、盘点、补货</h2>
+              <p>库存查询、库位、移库、报损、盘点计划、补货任务统一管理。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>库存管理</h3>
+              <div class="btn-row"><button class="btn">新增移库</button><button class="btn">新增盘点</button><button class="btn primary">导出库存</button></div>
+            </div>
+            <div class="screen-body">
+              <div class="grid two">
+                <div class="card">
+                  <div class="panel-head"><h4>实时库存</h4></div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>SKU</th><th>仓库</th><th>库位</th><th>批次</th><th>可用</th><th>锁定</th><th>操作</th></tr></thead>
+                      <tbody>
+                        <tr><td>云南蓝莓 125g</td><td>广州中心仓</td><td>A-01-03</td><td>B20260609001</td><td>480</td><td>120</td><td><button class="btn">流水</button> <button class="btn yellow">移库</button></td></tr>
+                        <tr><td>海南贵妃芒 5 斤</td><td>广州中心仓</td><td>B-02-01</td><td>B20260608006</td><td>60</td><td>58</td><td><button class="btn">流水</button> <button class="btn red">报损</button></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>补货与盘点</h4></div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>类型</th><th>单号</th><th>范围</th><th>状态</th><th>操作</th></tr></thead>
+                      <tbody>
+                        <tr><td>补货</td><td>BH20260609001</td><td>拣货区 A</td><td><span class="tag yellow">待领取</span></td><td><button class="btn green">领取</button></td></tr>
+                        <tr><td>盘点</td><td>PD20260609001</td><td>库区 B</td><td><span class="tag">待盘点</span></td><td><button class="btn primary">执行</button></td></tr>
+                        <tr><td>报损</td><td>BS20260609001</td><td>芒果 2 箱</td><td><span class="tag">待审核</span></td><td><button class="btn green">审核</button></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="note">库存类按钮点击后必须写库存流水：入库 inbound、出库 outbound、移库 move、盘点调整 stocktake_adjust、报损 loss、退货 return_in、补货 replenish。</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="h5-user">
+          <div class="section-head">
+            <div>
+              <h2>13. 小程序 H5 / 用户端</h2>
+              <p>可点击切换页面：登录、首页、分类、商品详情、购物车、确认订单、支付结果、订单、售后、我的。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title">
+              <h3>用户小程序交互原型</h3>
+              <span>点击手机内按钮可切换页面，不接真实接口</span>
+            </div>
+            <div class="screen-body">
+              <div class="mini-app-tabs" data-tabs="userApp">
+                <button class="mini-app-tab active" data-page="login">登录</button>
+                <button class="mini-app-tab" data-page="home">首页</button>
+                <button class="mini-app-tab" data-page="category">分类</button>
+                <button class="mini-app-tab" data-page="detail">详情</button>
+                <button class="mini-app-tab" data-page="cart">购物车</button>
+                <button class="mini-app-tab" data-page="confirm">确认订单</button>
+                <button class="mini-app-tab" data-page="orders">订单</button>
+                <button class="mini-app-tab" data-page="aftersale">售后</button>
+                <button class="mini-app-tab" data-page="mine">我的</button>
+              </div>
+              <div class="grid two">
+                <div class="phone clickable" data-app="userApp">
+                  <div class="phone-top">用户小程序 H5</div>
+                  <div class="phone-screen">
+                    <div class="mini-page active" data-page="login">
+                      <div class="login-hero"><b>知花知果商城</b><span>登录后查看附近自提点和团购商品</span></div>
+                      <div class="login-card">
+                        <div class="field"><label>手机号</label><input class="input" value="13800000000"></div>
+                        <div class="field"><label>验证码</label><input class="input" value="888888"></div>
+                        <button class="btn green" style="width:100%;" data-go="home">登录 / 微信授权</button>
+                        <div class="note" style="margin-top:10px;">登录成功：写 user_session，读取用户当前城市、自提点、优惠券弹窗。</div>
+                      </div>
+                    </div>
+                    <div class="mini-page" data-page="home">
+                      <div class="mobile-header"><b>广州 · 越秀东湖店</b><div class="search tap" data-go="category">搜索商品、类目、活动</div></div>
+                      <div class="mobile-content">
+                        <div class="banner tap" data-go="category"><b>今日团购</b><span>6 月 12 日配送，截团前可下单</span></div>
+                        <div class="btn-row"><button class="btn">领券弹窗</button><button class="btn">切换城市</button><button class="btn">切换自提点</button></div><br>
+                        <div class="product-card tap" data-go="detail"><div class="thumb">商品图</div><div><b>云南蓝莓 125g</b><span>产地直采，6 月 12 日配送</span><div class="price">¥12.90</div><div class="btn-row"><button class="btn primary" data-go="cart">加购</button><button class="btn">分享</button></div></div></div>
+                        <div class="product-card"><div class="thumb">商品图</div><div><b>海南贵妃芒 5 斤</b><span>限广州部分自提点</span><div class="price">¥29.90</div><div class="btn-row"><button class="btn primary" data-go="cart">加购</button><button class="btn yellow">想要</button></div></div></div>
+                      </div>
+                      <div class="mobile-tabs"><div class="active" data-go="home">首页</div><div data-go="category">分类</div><div data-go="cart">购物车</div><div data-go="mine">我的</div></div>
+                    </div>
+                    <div class="mini-page" data-page="category">
+                      <div class="mobile-header"><span class="mobile-back" data-go="home">返回首页</span><b>商品分类</b><div class="search">搜索：蓝莓</div></div>
+                      <div class="mobile-content">
+                        <div class="grid two"><div class="role-card active">水果</div><div class="role-card">蔬菜</div><div class="role-card">肉禽蛋</div><div class="role-card">粮油</div></div><br>
+                        <div class="mobile-list">
+                          <div class="mobile-list-row tap" data-go="detail"><b>浆果类</b><span>蓝莓、草莓、树莓</span></div>
+                          <div class="mobile-list-row"><b>芒果类</b><span>贵妃芒、台农芒</span></div>
+                          <div class="mobile-list-row"><b>活动商品</b><span>轮播活动页跳转列表</span></div>
+                        </div>
+                      </div>
+                      <div class="mobile-tabs"><div data-go="home">首页</div><div class="active" data-go="category">分类</div><div data-go="cart">购物车</div><div data-go="mine">我的</div></div>
+                    </div>
+                    <div class="mini-page" data-page="detail">
+                      <div class="mobile-header"><span class="mobile-back" data-go="home">返回</span><b>云南蓝莓 125g</b><div class="search">广州价 ¥12.90 · 6 月 12 日配送</div></div>
+                      <div class="mobile-content">
+                        <div class="banner"><b>商品主图区域</b><span>展示轮播图、视频、规格说明</span></div>
+                        <div class="task-card"><b>规格选择</b><div class="btn-row"><span class="tag green">125g/盒</span><span class="tag">2 盒装</span><span class="tag">整箱</span></div></div>
+                        <div class="task-card"><b>配送范围</b><span>广州、深圳部分自提点可售。配送日必须晚于销售结束时间。</span></div>
+                        <div class="btn-row"><button class="btn primary" data-go="cart">加入购物车</button><button class="btn green" data-go="confirm">立即购买</button><button class="btn">分享</button></div>
+                      </div>
+                    </div>
+                    <div class="mini-page" data-page="cart">
+                      <div class="mobile-header"><b>购物车</b><div class="search">越秀东湖店 · 2 件商品</div></div>
+                      <div class="mobile-content">
+                        <div class="task-card"><b>云南蓝莓 125g</b><div class="task-row"><span>¥12.90 x 2</span><span class="price">¥25.80</span></div><div class="btn-row"><button class="btn">-</button><button class="btn">2</button><button class="btn">+</button><button class="btn red">删除</button></div></div>
+                        <div class="task-card"><b>海南贵妃芒</b><div class="task-row"><span>¥29.90 x 1</span><span class="price">¥29.90</span></div></div>
+                        <button class="btn green" style="width:100%;" data-go="confirm">去结算 ¥55.70</button>
+                      </div>
+                      <div class="mobile-tabs"><div data-go="home">首页</div><div data-go="category">分类</div><div class="active" data-go="cart">购物车</div><div data-go="mine">我的</div></div>
+                    </div>
+                    <div class="mini-page" data-page="confirm">
+                      <div class="mobile-header"><span class="mobile-back" data-go="cart">返回购物车</span><b>确认订单</b><div class="search">越秀东湖店 · 6 月 12 日配送</div></div>
+                      <div class="mobile-content">
+                        <div class="task-card"><b>商品清单</b><div class="task-row"><span>云南蓝莓 x 2</span><strong>¥25.80</strong></div><div class="task-row"><span>海南贵妃芒 x 1</span><strong>¥29.90</strong></div></div>
+                        <div class="task-card"><b>优惠券</b><div class="task-row"><span>满 39 减 5</span><button class="btn">选择优惠券</button></div></div>
+                        <div class="task-card"><b>应付金额</b><div class="task-row"><span>合计</span><strong class="price">¥50.70</strong></div><button class="btn green" style="width:100%;margin-top:10px;" data-go="payResult">提交订单并支付</button></div>
+                      </div>
+                    </div>
+                    <div class="mini-page" data-page="payResult">
+                      <div class="mobile-header"><b>支付成功</b><div class="search">订单号 DD202606090001</div></div>
+                      <div class="mobile-content">
+                        <div class="task-card"><b>支付流水已生成</b><span>pay_trade 写入成功，订单状态变为已付款待发货，佣金预估推送给自提点。</span></div>
+                        <button class="btn primary" style="width:100%;" data-go="orders">查看订单</button>
+                      </div>
+                    </div>
+                    <div class="mini-page" data-page="orders">
+                      <div class="mobile-header"><b>我的订单</b><div class="search">全部 / 待付款 / 待发货 / 售后</div></div>
+                      <div class="mobile-content">
+                        <div class="task-card"><b>DD202606090001</b><div class="task-row"><span>已付款，待发货</span><span class="tag yellow">待发货</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn">查看详情</button><button class="btn red">取消订单</button></div></div>
+                        <div class="task-card"><b>DD202606080087</b><div class="task-row"><span>已发货，待收货</span><span class="tag green">配送中</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn green">确认收货</button><button class="btn yellow" data-go="aftersale">申请售后</button></div></div>
+                      </div>
+                      <div class="mobile-tabs"><div data-go="home">首页</div><div data-go="category">分类</div><div data-go="cart">购物车</div><div class="active" data-go="mine">我的</div></div>
+                    </div>
+                    <div class="mini-page" data-page="aftersale">
+                      <div class="mobile-header"><span class="mobile-back" data-go="orders">返回订单</span><b>申请售后</b><div class="search">支持部分退款、仅退款、退货退款</div></div>
+                      <div class="mobile-content">
+                        <div class="task-card"><b>售后商品</b><div class="task-row"><span>海南贵妃芒</span><span>1 件</span></div></div>
+                        <div class="field"><label>退款类型</label><select class="select"><option>仅退款</option><option>退货退款</option></select></div>
+                        <div class="field"><label>退款金额</label><input class="input" value="29.90"></div>
+                        <div class="field"><label>原因</label><textarea class="textarea">商品破损</textarea></div>
+                        <button class="btn primary" style="width:100%;" data-go="orders">提交售后</button>
+                      </div>
+                    </div>
+                    <div class="mini-page" data-page="mine">
+                      <div class="mobile-header"><b>我的</b><div class="search">陈用户 · 越秀东湖店</div></div>
+                      <div class="mobile-content">
+                        <div class="role-grid"><div class="role-card active">普通用户</div><div class="role-card">申请自提点</div></div><br>
+                        <div class="mobile-list">
+                          <div class="mobile-list-row" data-go="orders"><b>我的订单</b><span>查看订单、取消、售后</span></div>
+                          <div class="mobile-list-row"><b>优惠券</b><span>点击优惠券跳转可用商品</span></div>
+                          <div class="mobile-list-row"><b>收货地址</b><span>维护地址信息</span></div>
+                          <div class="mobile-list-row"><b>商品想要</b><span>售罄上架后公众号通知</span></div>
+                        </div>
+                      </div>
+                      <div class="mobile-tabs"><div data-go="home">首页</div><div data-go="category">分类</div><div data-go="cart">购物车</div><div class="active" data-go="mine">我的</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="panel-head"><h4>用户端页面跳转与数据流</h4></div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>入口</th><th>跳转</th><th>关键按钮</th><th>数据流转</th></tr></thead>
+                      <tbody>
+                        <tr><td>登录</td><td>首页</td><td>登录/微信授权</td><td>user_session → 当前城市/自提点 → 优惠券弹窗</td></tr>
+                        <tr><td>首页</td><td>商品详情/分类/购物车</td><td>切换城市、自提点、加购、分享</td><td>Redis 商品列表 → cart_item / user_share_log</td></tr>
+                        <tr><td>购物车</td><td>确认订单</td><td>加减数量、删除、去结算</td><td>cart_item → 可售校验 → 订单预结算</td></tr>
+                        <tr><td>确认订单</td><td>支付结果</td><td>选择优惠券、提交订单并支付</td><td>ord_order / ord_order_item / pay_trade / 库存锁定</td></tr>
+                        <tr><td>订单</td><td>售后</td><td>取消订单、确认收货、申请售后</td><td>订单状态 → 售后单 → 退款/退货流程</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="h5-station">
+          <div class="section-head">
+            <div>
+              <h2>14. 小程序 H5 / 自提点端</h2>
+              <p>自提点负责人登录后可查看订单、配送汇总、佣金、提现、缺货、休假和收退货；原型支持页面切换。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title"><h3>自提点工作台交互原型</h3><span>角色登录后只展示自提点数据</span></div>
+            <div class="screen-body">
+              <div class="mini-app-tabs" data-tabs="stationApp">
+                <button class="mini-app-tab active" data-page="login">登录</button>
+                <button class="mini-app-tab" data-page="home">工作台</button>
+                <button class="mini-app-tab" data-page="delivery">配送</button>
+                <button class="mini-app-tab" data-page="finance">佣金提现</button>
+                <button class="mini-app-tab" data-page="return">收退货</button>
+              </div>
+              <div class="grid two">
+              <div class="phone clickable" data-app="stationApp">
+                <div class="phone-top">自提点工作台</div>
+                <div class="phone-screen">
+                  <div class="mini-page active" data-page="login">
+                    <div class="login-hero"><b>自提点登录</b><span>团点负责人专属工作台</span></div>
+                    <div class="login-card">
+                      <div class="field"><label>账号</label><input class="input" value="越秀东湖店"></div>
+                      <div class="field"><label>密码/验证码</label><input class="input" value="888888"></div>
+                      <button class="btn green" style="width:100%;" data-go="home">登录自提点端</button>
+                    </div>
+                  </div>
+                  <div class="mini-page" data-page="home">
+                    <div class="mobile-header"><b>越秀东湖店</b><div class="search">今日配送 128 件，待收货 42 件</div></div>
+                    <div class="mobile-content">
+                      <div class="grid two"><div class="card metric"><strong>186</strong><span>今日订单</span></div><div class="card metric green"><strong>320.50</strong><span>今日佣金</span></div></div><br>
+                      <div class="task-card"><b>配送汇总</b><div class="task-row"><span>广州 A 线</span><span class="tag yellow">待收货</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn green" data-go="delivery">确认收货</button><button class="btn yellow" data-go="delivery">缺货标记</button></div></div>
+                      <div class="task-card"><b>提现</b><div class="task-row"><span>可提现余额</span><strong>¥1,286.00</strong></div><button class="btn primary" style="width:100%;margin-top:10px;" data-go="finance">申请提现</button></div>
+                    </div>
+                    <div class="mobile-tabs"><div class="active" data-go="home">首页</div><div data-go="delivery">配送</div><div data-go="finance">佣金</div><div data-go="return">退货</div></div>
+                  </div>
+                  <div class="mini-page" data-page="delivery">
+                    <div class="mobile-header"><span class="mobile-back" data-go="home">返回</span><b>配送收货</b><div class="search">司机到达后确认收货</div></div>
+                    <div class="mobile-content">
+                      <div class="task-card"><b>DEL20260609001</b><div class="task-row"><span>广州 A 线</span><span>42 件</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn green">确认收货</button><button class="btn yellow">缺货标记</button></div></div>
+                      <div class="task-card"><b>缺货标记</b><div class="field"><label>商品</label><input class="input" value="云南蓝莓"></div><div class="field"><label>缺货数量</label><input class="input" value="2"></div><button class="btn yellow" style="width:100%;">提交缺货</button></div>
+                    </div>
+                    <div class="mobile-tabs"><div data-go="home">首页</div><div class="active" data-go="delivery">配送</div><div data-go="finance">佣金</div><div data-go="return">退货</div></div>
+                  </div>
+                  <div class="mini-page" data-page="finance">
+                    <div class="mobile-header"><span class="mobile-back" data-go="home">返回</span><b>佣金提现</b><div class="search">可提现 ¥1,286.00</div></div>
+                    <div class="mobile-content">
+                      <div class="task-card"><b>佣金明细</b><div class="task-row"><span>DD202606090001</span><span>+¥1.20</span></div><div class="task-row"><span>DD202606090002</span><span>+¥2.60</span></div></div>
+                      <div class="task-card"><b>申请提现</b><div class="field"><label>金额</label><input class="input" value="320.00"></div><button class="btn green" style="width:100%;">提交提现申请</button></div>
+                    </div>
+                    <div class="mobile-tabs"><div data-go="home">首页</div><div data-go="delivery">配送</div><div class="active" data-go="finance">佣金</div><div data-go="return">退货</div></div>
+                  </div>
+                  <div class="mini-page" data-page="return">
+                    <div class="mobile-header"><span class="mobile-back" data-go="home">返回</span><b>收退货处理</b><div class="search">扫码或输入售后单号</div></div>
+                    <div class="mobile-content">
+                      <div class="task-card"><b>SH20260609002</b><div class="task-row"><span>退货退款</span><span class="tag yellow">待退货</span></div><div class="task-row"><span>海南贵妃芒</span><span>1 件</span></div><button class="btn green" style="width:100%;margin-top:10px;">确认收退货</button></div>
+                      <div class="task-card"><b>休假申请</b><div class="field"><label>日期</label><input class="input" value="2026-06-15 至 2026-06-16"></div><button class="btn primary" style="width:100%;">提交休假</button></div>
+                    </div>
+                    <div class="mobile-tabs"><div data-go="home">首页</div><div data-go="delivery">配送</div><div data-go="finance">佣金</div><div class="active" data-go="return">退货</div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="panel-head"><h4>自提点数据流</h4></div>
+                <table>
+                  <tbody>
+                    <tr><th>登录</th><td>sys_user → station_id 数据范围</td></tr>
+                    <tr><th>确认收货</th><td>log_delivery_order.status=station_received，写 station_receive_record</td></tr>
+                    <tr><th>缺货标记</th><td>station_shortage_record → 后台异常中心</td></tr>
+                    <tr><th>提现</th><td>fin_withdraw_apply，冻结佣金账户余额</td></tr>
+                    <tr><th>收退货</th><td>afs_return_record，售后状态变为已退货待退款</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="h5-supplier">
+          <div class="section-head">
+            <div>
+              <h2>15. 小程序 H5 / 供应商端</h2>
+              <p>供应商查看自身商品销售、售后、佣金、送货单、发票和提现。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title"><h3>供应商工作台交互原型</h3><span>供应商只能查看自己名下商品和结算数据</span></div>
+            <div class="screen-body">
+              <div class="mini-app-tabs" data-tabs="supplierApp">
+                <button class="mini-app-tab active" data-page="login">登录</button>
+                <button class="mini-app-tab" data-page="home">首页</button>
+                <button class="mini-app-tab" data-page="sales">销售</button>
+                <button class="mini-app-tab" data-page="delivery">送货单</button>
+                <button class="mini-app-tab" data-page="finance">财务</button>
+              </div>
+              <div class="grid two">
+              <div class="phone clickable" data-app="supplierApp">
+                <div class="phone-top">供应商工作台</div>
+                <div class="phone-screen">
+                  <div class="mini-page active" data-page="login">
+                    <div class="login-hero"><b>供应商登录</b><span>查看销售、售后、送货、结算</span></div>
+                    <div class="login-card"><div class="field"><label>账号</label><input class="input" value="华南果业"></div><div class="field"><label>密码</label><input class="input" value="888888"></div><button class="btn green" style="width:100%;" data-go="home">登录供应商端</button></div>
+                  </div>
+                  <div class="mini-page" data-page="home">
+                    <div class="mobile-header"><b>华南果业</b><div class="search">本月销售额 ¥28,640.00</div></div>
+                    <div class="mobile-content">
+                      <div class="grid two"><div class="card metric"><strong>12</strong><span>在售商品</span></div><div class="card metric green"><strong>2,860</strong><span>可提现</span></div></div><br>
+                      <div class="task-card"><b>商品销售</b><div class="task-row"><span>云南蓝莓</span><span>销量 820 盒</span></div><button class="btn" data-go="sales">查看明细</button></div>
+                      <div class="task-card"><b>送货单</b><div class="task-row"><span>PO20260609001</span><span class="tag">待送货</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn primary" data-go="delivery">查看送货单</button><button class="btn">打印</button></div></div>
+                    </div>
+                    <div class="mobile-tabs"><div class="active" data-go="home">首页</div><div data-go="sales">销售</div><div data-go="delivery">送货</div><div data-go="finance">财务</div></div>
+                  </div>
+                  <div class="mini-page" data-page="sales">
+                    <div class="mobile-header"><span class="mobile-back" data-go="home">返回</span><b>销售数据</b><div class="search">按商品、日期统计</div></div>
+                    <div class="mobile-content"><div class="task-card"><b>云南蓝莓</b><div class="task-row"><span>销量</span><span>820 盒</span></div><div class="task-row"><span>销售额</span><span>¥10,578.00</span></div></div><div class="task-card"><b>售后单</b><div class="task-row"><span>待处理</span><span class="tag yellow">3 单</span></div></div></div>
+                    <div class="mobile-tabs"><div data-go="home">首页</div><div class="active" data-go="sales">销售</div><div data-go="delivery">送货</div><div data-go="finance">财务</div></div>
+                  </div>
+                  <div class="mini-page" data-page="delivery">
+                    <div class="mobile-header"><span class="mobile-back" data-go="home">返回</span><b>送货单</b><div class="search">PO20260609001</div></div>
+                    <div class="mobile-content"><div class="task-card"><b>广州中心仓</b><div class="task-row"><span>云南蓝莓</span><span>120 箱</span></div><div class="task-row"><span>预计到货</span><span>2026-06-11</span></div><button class="btn primary" style="width:100%;margin-top:10px;">打印送货单</button></div></div>
+                    <div class="mobile-tabs"><div data-go="home">首页</div><div data-go="sales">销售</div><div class="active" data-go="delivery">送货</div><div data-go="finance">财务</div></div>
+                  </div>
+                  <div class="mini-page" data-page="finance">
+                    <div class="mobile-header"><span class="mobile-back" data-go="home">返回</span><b>财务</b><div class="search">余额、提现、开票</div></div>
+                    <div class="mobile-content"><div class="task-card"><b>可提现余额</b><strong class="price">¥2,860.00</strong><div class="btn-row" style="margin-top:10px;"><button class="btn green">申请提现</button><button class="btn">申请开票</button></div></div></div>
+                    <div class="mobile-tabs"><div data-go="home">首页</div><div data-go="sales">销售</div><div data-go="delivery">送货</div><div class="active" data-go="finance">财务</div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card"><div class="panel-head"><h4>供应商数据流</h4></div><table><tbody><tr><th>登录</th><td>sys_user → supplier_id 数据范围</td></tr><tr><th>销售数据</th><td>ord_order_item 按 supplier_id 聚合</td></tr><tr><th>送货单</th><td>pur_purchase_order → wms_inbound_order</td></tr><tr><th>开票/提现</th><td>supplier_invoice_apply / fin_withdraw_apply</td></tr></tbody></table></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="h5-warehouse">
+          <div class="section-head">
+            <div>
+              <h2>16. 小程序 H5 / 仓配移动端</h2>
+              <p>仓库、收货员、分拣员、复检员、装车员、司机按角色显示不同任务卡片。</p>
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="screen-title"><h3>仓配移动端交互原型</h3><span>根据角色切换：仓库、收货员、分拣员、复检员、装车员、司机</span></div>
+            <div class="screen-body">
+              <div class="mini-app-tabs" data-tabs="warehouseApp">
+                <button class="mini-app-tab active" data-page="login">登录</button>
+                <button class="mini-app-tab" data-page="receiver">收货</button>
+                <button class="mini-app-tab" data-page="picker">拣货</button>
+                <button class="mini-app-tab" data-page="recheck">复检</button>
+                <button class="mini-app-tab" data-page="driver">司机</button>
+              </div>
+              <div class="grid two">
+              <div class="phone clickable" data-app="warehouseApp">
+                <div class="phone-top">收货员</div>
+                <div class="phone-screen">
+                  <div class="mini-page active" data-page="login">
+                    <div class="login-hero"><b>仓配移动端登录</b><span>按角色进入收货、拣货、复检、司机页面</span></div>
+                    <div class="login-card"><div class="field"><label>账号</label><input class="input" value="receiver01"></div><div class="field"><label>密码</label><input class="input" value="888888"></div><div class="role-grid"><div class="role-card active">收货员</div><div class="role-card">分拣员</div><div class="role-card">司机</div><div class="role-card">仓管</div></div><br><button class="btn green" style="width:100%;" data-go="receiver">登录仓配端</button></div>
+                  </div>
+                  <div class="mini-page" data-page="receiver">
+                    <div class="mobile-header"><b>入库任务池</b><div class="search">广州中心仓 · 收货区</div></div>
+                    <div class="mobile-content"><div class="task-card"><b>IN20260609001</b><div class="task-row"><span>华南果业</span><span>120 箱</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn green">接单</button><button class="btn">查看</button></div></div><div class="task-card"><b>扫码收货</b><div class="field"><label>商品码</label><input class="input" value="扫码后自动带出"></div><div class="field"><label>实收数量</label><input class="input" value="80"></div><button class="btn green" style="width:100%;">确认收货并推荐库位</button></div></div>
+                    <div class="mobile-tabs"><div class="active" data-go="receiver">收货</div><div data-go="picker">拣货</div><div data-go="recheck">复检</div><div data-go="driver">司机</div></div>
+                  </div>
+                  <div class="mini-page" data-page="picker">
+                    <div class="mobile-header"><b>拣货任务</b><div class="search">任务池 / 我的任务</div></div>
+                    <div class="mobile-content"><div class="task-card"><b>PICK20260609001</b><div class="task-row"><span>广州 A 线</span><span>18 个 SKU</span></div><button class="btn green" style="width:100%;margin-top:10px;">领取任务</button></div><div class="task-card"><b>按库位拣货</b><div class="task-row"><span>A-01-03</span><span>云南蓝莓 12 盒</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn">扫码库位</button><button class="btn green">确认拣货</button><button class="btn yellow">异常上报</button></div></div></div>
+                    <div class="mobile-tabs"><div data-go="receiver">收货</div><div class="active" data-go="picker">拣货</div><div data-go="recheck">复检</div><div data-go="driver">司机</div></div>
+                  </div>
+                  <div class="mini-page" data-page="recheck">
+                    <div class="mobile-header"><b>复检装箱</b><div class="search">扫描商品和箱码</div></div>
+                    <div class="mobile-content"><div class="task-card"><b>RC20260609001</b><div class="task-row"><span>广州 A 线</span><span>32 箱</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn">扫码商品</button><button class="btn green">确认复检</button><button class="btn">打印箱标</button></div></div></div>
+                    <div class="mobile-tabs"><div data-go="receiver">收货</div><div data-go="picker">拣货</div><div class="active" data-go="recheck">复检</div><div data-go="driver">司机</div></div>
+                  </div>
+                  <div class="mini-page" data-page="driver">
+                    <div class="mobile-header"><b>今日配送</b><div class="search">广州 A 线 · 8 个团点</div></div>
+                    <div class="mobile-content"><div class="task-card"><b>配送单 DEL20260609001</b><div class="task-row"><span>已装车 32 箱</span><span class="tag green">待出发</span></div><button class="btn green" style="width:100%;margin-top:10px;">确认出发</button></div><div class="task-card"><b>越秀东湖店</b><div class="task-row"><span>预计 11:30 到达</span><span>42 件</span></div><div class="btn-row" style="margin-top:10px;"><button class="btn primary">团点签到</button><button class="btn">查看商品</button></div></div></div>
+                    <div class="mobile-tabs"><div data-go="receiver">收货</div><div data-go="picker">拣货</div><div data-go="recheck">复检</div><div class="active" data-go="driver">司机</div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card"><div class="panel-head"><h4>仓配移动端数据流</h4></div><table><tbody><tr><th>登录</th><td>sys_user → 角色 → 仓库/库区数据权限</td></tr><tr><th>收货</th><td>wms_receive_record → wms_inventory_log(inbound)</td></tr><tr><th>拣货</th><td>wms_pick_task → wms_pick_record → 待复检</td></tr><tr><th>复检</th><td>wms_recheck_order → wms_box → 箱标签</td></tr><tr><th>司机</th><td>log_delivery_order → driver_sign_record → 团点到达</td></tr></tbody></table></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script>
+    (function () {
+      function setActive(appName, pageName) {
+        var app = document.querySelector('[data-app="' + appName + '"]');
+        if (!app) return;
+
+        app.querySelectorAll('.mini-page').forEach(function (page) {
+          page.classList.toggle('active', page.getAttribute('data-page') === pageName);
+        });
+
+        document.querySelectorAll('[data-tabs="' + appName + '"] .mini-app-tab').forEach(function (tab) {
+          tab.classList.toggle('active', tab.getAttribute('data-page') === pageName);
+        });
+      }
+
+      document.querySelectorAll('[data-tabs] .mini-app-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var appName = tab.parentElement.getAttribute('data-tabs');
+          setActive(appName, tab.getAttribute('data-page'));
+        });
+      });
+
+      document.querySelectorAll('[data-app]').forEach(function (app) {
+        app.addEventListener('click', function (event) {
+          var target = event.target.closest('[data-go]');
+          if (!target || !app.contains(target)) return;
+          event.preventDefault();
+          event.stopPropagation();
+          setActive(app.getAttribute('data-app'), target.getAttribute('data-go'));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

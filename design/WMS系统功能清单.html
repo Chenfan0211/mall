@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知花知果 WMS 系统功能清单</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #f8fafc; color: #1e293b; }
+
+  .header {
+    background: linear-gradient(135deg, #0f172a, #1e3a5f);
+    color: white;
+    padding: 28px 48px;
+  }
+  .header h1 { font-size: 26px; font-weight: 700; }
+  .header-meta { display: flex; gap: 24px; margin-top: 10px; flex-wrap: wrap; }
+  .header-meta span { font-size: 13px; opacity: .75; }
+  .badge { background: rgba(255,255,255,.15); padding: 3px 10px; border-radius: 12px; }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+  /* 统计卡片 */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    border-top: 4px solid;
+  }
+  .stat-num { font-size: 28px; font-weight: 800; }
+  .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+  /* 模块区块 */
+  .module {
+    background: white;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    overflow: hidden;
+  }
+  .module-header {
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .module-icon { font-size: 24px; }
+  .module-title-block { flex: 1; }
+  .module-title { font-size: 16px; font-weight: 700; }
+  .module-sub { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+  .module-count {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: rgba(0,0,0,.06);
+  }
+  .module-entry { font-size: 12px; color: #64748b; padding: 2px 8px; background: #f1f5f9; border-radius: 8px; }
+
+  .module-body { padding: 0 24px 20px; }
+
+  /* 功能表格 */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    padding: 9px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+
+  .feat-name { font-weight: 600; color: #0f172a; }
+  .feat-desc { color: #64748b; font-size: 12px; margin-top: 2px; }
+
+  /* 状态标签 */
+  .st { font-size: 11px; padding: 2px 8px; border-radius: 8px; font-weight: 600; display: inline-block; }
+  .st-done    { background: #dcfce7; color: #16a34a; }
+  .st-prod    { background: #dbeafe; color: #1d4ed8; }
+
+  /* 入口标签 */
+  .entry { font-size: 11px; padding: 2px 8px; border-radius: 8px; font-weight: 500; display: inline-block; margin: 2px 2px 0 0; }
+  .e-admin { background: #eff6ff; color: #2563eb; }
+  .e-h5    { background: #fef3c7; color: #b45309; }
+  .e-mini  { background: #f0fdf4; color: #16a34a; }
+  .e-auto  { background: #fdf4ff; color: #9333ea; }
+
+  /* 颜色主题 */
+  .m1 .module-header { background: linear-gradient(135deg, #eff6ff, #e0f2fe); }
+  .m2 .module-header { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+  .m3 .module-header { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+  .m4 .module-header { background: linear-gradient(135deg, #fdf4ff, #ede9fe); }
+  .m5 .module-header { background: linear-gradient(135deg, #fff1f2, #fce7f3); }
+  .m6 .module-header { background: linear-gradient(135deg, #f0fdfa, #ccfbf1); }
+  .m7 .module-header { background: linear-gradient(135deg, #fff7ed, #fed7aa); }
+  .m8 .module-header { background: linear-gradient(135deg, #f8fafc, #f1f5f9); }
+  .m9 .module-header { background: linear-gradient(135deg, #ecfccb, #d9f99d); }
+  .m10 .module-header { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
+  .m11 .module-header { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+  .m12 .module-header { background: linear-gradient(135deg, #f5f3ff, #ede9fe); }
+
+  .m1 .module-count  { background: #dbeafe; color: #1d4ed8; }
+  .m2 .module-count  { background: #dcfce7; color: #16a34a; }
+  .m3 .module-count  { background: #fde68a; color: #b45309; }
+  .m4 .module-count  { background: #ede9fe; color: #7c3aed; }
+  .m5 .module-count  { background: #fce7f3; color: #be185d; }
+  .m6 .module-count  { background: #ccfbf1; color: #0f766e; }
+  .m7 .module-count  { background: #fed7aa; color: #c2410c; }
+  .m8 .module-count  { background: #e2e8f0; color: #475569; }
+  .m9 .module-count  { background: #d9f99d; color: #4d7c0f; }
+  .m10 .module-count { background: #bae6fd; color: #0369a1; }
+  .m11 .module-count { background: #fbcfe8; color: #9d174d; }
+  .m12 .module-count { background: #ede9fe; color: #6d28d9; }
+
+  footer { text-align: center; color: #94a3b8; font-size: 12px; padding: 24px; border-top: 1px solid #e2e8f0; margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 知花知果 WMS 系统功能清单</h1>
+  <div class="header-meta">
+    <span class="badge">版本 v13.x</span>
+    <span class="badge">生成日期 2026-06-08</span>
+    <span class="badge">12 大模块</span>
+    <span class="badge">87 项功能</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- 统计 -->
+  <div class="stats">
+    <div class="stat-card" style="border-color:#2563eb">
+      <div class="stat-num" style="color:#2563eb">12</div>
+      <div class="stat-label">功能模块</div>
+    </div>
+    <div class="stat-card" style="border-color:#16a34a">
+      <div class="stat-num" style="color:#16a34a">87</div>
+      <div class="stat-label">功能点</div>
+    </div>
+    <div class="stat-card" style="border-color:#b45309">
+      <div class="stat-num" style="color:#b45309">3</div>
+      <div class="stat-label">端（Admin/H5/小程序）</div>
+    </div>
+    <div class="stat-card" style="border-color:#7c3aed">
+      <div class="stat-num" style="color:#7c3aed">10</div>
+      <div class="stat-label">角色类型</div>
+    </div>
+    <div class="stat-card" style="border-color:#0f766e">
+      <div class="stat-num" style="color:#0f766e">26</div>
+      <div class="stat-label">权限功能点</div>
+    </div>
+    <div class="stat-card" style="border-color:#c2410c">
+      <div class="stat-num" style="color:#c2410c">102</div>
+      <div class="stat-label">数据库表（wms）</div>
+    </div>
+  </div>
+
+  <!-- M1 采购管理 -->
+  <div class="module m1">
+    <div class="module-header">
+      <div class="module-icon">🛒</div>
+      <div class="module-title-block">
+        <div class="module-title">采购管理</div>
+        <div class="module-sub">采购订单全生命周期管理</div>
+      </div>
+      <span class="module-count">6 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">采购订单创建</div></td>
+          <td><div class="feat-desc">选供应商、仓库、商品规格，填预期数量单价，生成 PO... 编号草稿</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">采购订单审核</div></td>
+          <td><div class="feat-desc">审核后锁定，自动生成关联入库单（IN...），触发收货流程</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">收货状态跟踪</div></td>
+          <td><div class="feat-desc">采购订单上展示关联入库单号、已收数量 / 待收数量、收货状态</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">已审核印章</div></td>
+          <td><div class="feat-desc">已审采购订单详情页展示蓝色"已审核"水印印章</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">打印采购订单</div></td>
+          <td><div class="feat-desc">可视化打印模板，支持字段拖拽，一键打印 PDF</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">供应商退货单</div></td>
+          <td><div class="feat-desc">针对库存商品建退货单（RT...），审核后 FIFO 扣减库存，一键出库</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M2 收货管理 -->
+  <div class="module m2">
+    <div class="module-header">
+      <div class="module-icon">📦</div>
+      <div class="module-title-block">
+        <div class="module-title">收货管理</div>
+        <div class="module-sub">入库单接单 → 扫码收货 → 上架入库</div>
+      </div>
+      <span class="module-count">8 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">入库单列表</div></td>
+          <td><div class="feat-desc">按仓库、状态、供应商过滤；展示进度（已收/待收件数）</div></td>
+          <td><span class="entry e-admin">Admin</span><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">收货任务池 / 接单</div></td>
+          <td><div class="feat-desc">收货员通过任务池按库区接单，支持多人同时收不同库区</div></td>
+          <td><span class="entry e-mini">小程序 receiver</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">单品逐件收货</div></td>
+          <td><div class="feat-desc">每个 SKU 单独录入实收数量，实时更新进度条；支持超收硬卡</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">推荐入库位</div></td>
+          <td><div class="feat-desc">根据历史上架记录推荐库位，收货员确认后自动写入库位绑定</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">质检文件上传</div></td>
+          <td><div class="feat-desc">必传质检商品：检验报告 / 出厂合格证 / 溯源码 拍照上传，支持多文件类型</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">手动完成入库单</div></td>
+          <td><div class="feat-desc">全部商品收完后弹出确认提示，用户主动点"完成"才结单（不自动完成）</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">收货管理（Admin 只读）</div></td>
+          <td><div class="feat-desc">后台查看所有入库单进度、质检报告、收货人员记录</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">下拉刷新</div></td>
+          <td><div class="feat-desc">收货首页支持下拉刷新最新任务列表</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M3 销售单 / 波次下放 -->
+  <div class="module m3">
+    <div class="module-header">
+      <div class="module-icon">🌊</div>
+      <div class="module-title-block">
+        <div class="module-title">销售单录入 &amp; 波次下放</div>
+        <div class="module-sub">电商订单 / 手工销售单 → 生成出库任务</div>
+      </div>
+      <span class="module-count">7 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">手工销售单录入</div></td>
+          <td><div class="feat-desc">内部手工建单，选仓库 → 选团点（自动带出线路）→ 填配送日 → 录入商品明细；生成 MS... 编号</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">三方订单查看</div></td>
+          <td><div class="feat-desc">开关切换显示/隐藏从电商平台同步进来的三方订单（只读）</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">销售单审核</div></td>
+          <td><div class="feat-desc">审核后按团点拆分，自动生成出库单（CK...），进入拣货流程</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">波次下放预览</div></td>
+          <td><div class="feat-desc">预览未下放电商订单，展示 SKU 库存数量 / 可用量 / 差缺量，支持分页</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">一键下放</div></td>
+          <td><div class="feat-desc">选定配送日批量下放，生成下放批次记录（dispatch_batch），自动创建拣货任务池</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">下放批次日志</div></td>
+          <td><div class="feat-desc">记录每次下放的批次明细、操作人、时间戳、涉及出库单数量</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">作业实时监控</div></td>
+          <td><div class="feat-desc">大屏看板：实时显示各线路进度、拣货完成率、装车状态</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M4 拣货管理 -->
+  <div class="module m4">
+    <div class="module-header">
+      <div class="module-icon">🧺</div>
+      <div class="module-title-block">
+        <div class="module-title">拣货管理</div>
+        <div class="module-sub">任务池接单 → 按库位拣货 → 拣货完成</div>
+      </div>
+      <span class="module-count">7 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">拣货任务池</div></td>
+          <td><div class="feat-desc">按仓库展示所有待拣任务，拣货员自主领取；支持多人并发拣货</div></td>
+          <td><span class="entry e-mini">小程序 picker</span><span class="entry e-h5">H5 pool</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">按任务拣货</div></td>
+          <td><div class="feat-desc">扫描或手动确认库位 → 输入拣货数量 → 实时更新拣货进度</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">拣货位选择器</div></td>
+          <td><div class="feat-desc">多库位时弹出库位选择，按库区分组，支持关键词搜索</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">异常报告</div></td>
+          <td><div class="feat-desc">拣货中发现缺货/破损可发起异常上报，通知管理员</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">拣货历史</div></td>
+          <td><div class="feat-desc">拣货员查看历史完成任务，按日期过滤</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">下放预览分流</div></td>
+          <td><div class="feat-desc">Admin 展示每单拣货情况、出库单明细，支持导出</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">拣货今日统计</div></td>
+          <td><div class="feat-desc">今日完成任务数、件数、各人员绩效汇总展示</div></td>
+          <td><span class="entry e-mini">小程序</span><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M5 复检 & 装车 -->
+  <div class="module m5">
+    <div class="module-header">
+      <div class="module-icon">✅</div>
+      <div class="module-title-block">
+        <div class="module-title">复检 &amp; 装车管理</div>
+        <div class="module-sub">拣货后核查 → 装箱打印 → 装车出仓</div>
+      </div>
+      <span class="module-count">6 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">复检任务列表</div></td>
+          <td><div class="feat-desc">展示待复检的出库单，按线路/团点分组，支持搜索过滤</div></td>
+          <td><span class="entry e-h5">H5 recheck</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">逐件复检</div></td>
+          <td><div class="feat-desc">逐件扫码核对，确认实际装箱数量，允许小差异修正</div></td>
+          <td><span class="entry e-h5">H5</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">箱标签打印</div></td>
+          <td><div class="feat-desc">复检完成后自动生成箱标签（含二维码），热敏打印机直接打印</div></td>
+          <td><span class="entry e-h5">H5</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">装车单管理</div></td>
+          <td><div class="feat-desc">创建装车单（DP...），指派司机，展示装车清单</div></td>
+          <td><span class="entry e-h5">H5 loading</span><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">扫码装车</div></td>
+          <td><div class="feat-desc">扫描箱码逐箱确认装车，完成后触发出库、库存扣减</div></td>
+          <td><span class="entry e-h5">H5</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">复检管理（Admin）</div></td>
+          <td><div class="feat-desc">后台查看复检记录、差异汇总、装车状态</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M6 司机 & 配送 -->
+  <div class="module m6">
+    <div class="module-header">
+      <div class="module-icon">🚛</div>
+      <div class="module-title-block">
+        <div class="module-title">司机 &amp; 配送管理</div>
+        <div class="module-sub">配送路线 → 签到团点 → 到达确认</div>
+      </div>
+      <span class="module-count">5 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">今日配送任务</div></td>
+          <td><div class="feat-desc">司机 App 展示当日线路所有团点，按顺序排列配送路线</div></td>
+          <td><span class="entry e-h5">H5 driver</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">团点签到 / 到达</div></td>
+          <td><div class="feat-desc">到达团点扫码或点击签到，更新到达状态，通知团长</div></td>
+          <td><span class="entry e-h5">H5</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">中转站管理</div></td>
+          <td><div class="feat-desc">中转货物交接记录，中转站扫码确认收货/发货</div></td>
+          <td><span class="entry e-h5">H5 transit</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">团长报益</div></td>
+          <td><div class="feat-desc">团长自助查看当期收益明细，扫码认领</div></td>
+          <td><span class="entry e-h5">H5 colonel</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">配送数据报表</div></td>
+          <td><div class="feat-desc">12 张配送维度报表：按线路/司机/团点/日期统计配送量、到达率</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M7 库存管理 -->
+  <div class="module m7">
+    <div class="module-header">
+      <div class="module-icon">📊</div>
+      <div class="module-title-block">
+        <div class="module-title">库存管理</div>
+        <div class="module-sub">实时库存 · 移库 · 库位绑定</div>
+      </div>
+      <span class="module-count">7 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">实时库存查询</div></td>
+          <td><div class="feat-desc">按仓库/库区/SKU 实时查询在库数量、批次信息、库位分布</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">库存流水</div></td>
+          <td><div class="feat-desc">每笔入库/出库/移库/盘点操作均生成流水记录，可按日期/SKU 过滤</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">FIFO 批次追踪</div></td>
+          <td><div class="feat-desc">先进先出自动扣库，批次保质期追踪，临期预警</div></td>
+          <td><span class="entry e-auto">自动处理</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">移库操作</div></td>
+          <td><div class="feat-desc">扫码将商品从一个库位移至另一个库位，实时更新库存分布</div></td>
+          <td><span class="entry e-h5">H5 moveStock</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">库位自动绑定</div></td>
+          <td><div class="feat-desc">根据收货记录自动推荐并绑定商品默认库位</div></td>
+          <td><span class="entry e-auto">自动处理</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">团期商品库位</div></td>
+          <td><div class="feat-desc">按团期批量配置商品库位，支持多个团期并行管理</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">库区管理</div></td>
+          <td><div class="feat-desc">建立仓库 → 库区层级，设置库区类型（拣货区/存储区），每仓自动建 7 个标准库区</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M8 即时盘点 -->
+  <div class="module m8">
+    <div class="module-header">
+      <div class="module-icon">📋</div>
+      <div class="module-title-block">
+        <div class="module-title">即时盘点</div>
+        <div class="module-sub">全盘 / 差异盘点 / 移动盘点</div>
+      </div>
+      <span class="module-count">6 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">盘点计划创建</div></td>
+          <td><div class="feat-desc">创建盘点计划，指定盘点范围（仓库/库区/商品），选择盘点模式</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">全盘模式</div></td>
+          <td><div class="feat-desc">对指定范围内所有 SKU 进行清点，逐一录入实盘数量</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">差异盘点模式</div></td>
+          <td><div class="feat-desc">只录入与系统库存有差异的商品，节省盘点时间</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">移动盘点模式</div></td>
+          <td><div class="feat-desc">按库位扫码盘点，适用于移动场景随时随地盘清某个库位</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">差异审核 &amp; FIFO 调整</div></td>
+          <td><div class="feat-desc">盘点差异提交后，管理员审核通过自动按 FIFO 调整批次库存</div></td>
+          <td><span class="entry e-admin">Admin</span><span class="entry e-auto">FIFO 自动</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">盘点流水报表</div></td>
+          <td><div class="feat-desc">记录每次盘点操作明细，支持按计划/日期/商品过滤查询</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M9 补货管理 -->
+  <div class="module m9">
+    <div class="module-header">
+      <div class="module-icon">🔄</div>
+      <div class="module-title-block">
+        <div class="module-title">补货管理</div>
+        <div class="module-sub">阈值策略 / 紧急补货 / 补货员 H5</div>
+      </div>
+      <span class="module-count">5 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">补货阈值策略</div></td>
+          <td><div class="feat-desc">按 SKU/库区设置最低库存阈值，低于阈值自动触发补货任务</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">自动补货任务生成</div></td>
+          <td><div class="feat-desc">周期检测库存，满足触发条件时自动生成补货任务推入任务池</div></td>
+          <td><span class="entry e-auto">定时任务</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">紧急补货</div></td>
+          <td><div class="feat-desc">管理员发现紧急缺货可手动创建紧急补货任务，优先级最高</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">补货员任务执行</div></td>
+          <td><div class="feat-desc">补货员 H5 接单 → 按指定路径取货 → 补入目标库位 → 完成</div></td>
+          <td><span class="entry e-h5">H5 replenish</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">补货报表</div></td>
+          <td><div class="feat-desc">补货任务统计：完成率、平均耗时、高频补货商品排行</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M10 水果仓 -->
+  <div class="module m10">
+    <div class="module-header">
+      <div class="module-icon">🍎</div>
+      <div class="module-title-block">
+        <div class="module-title">水果仓专区</div>
+        <div class="module-sub">原料入库 → 生产加工 → 成品出库</div>
+      </div>
+      <span class="module-count">6 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">原料入库</div></td>
+          <td><div class="feat-desc">扫码录入水果原料：品种、重量、等级、供应商、批次</div></td>
+          <td><span class="entry e-h5">H5 fruit</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">生产批次管理</div></td>
+          <td><div class="feat-desc">每批次处理记录原料消耗量、成品产出量、损耗</div></td>
+          <td><span class="entry e-h5">H5</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">成品库存</div></td>
+          <td><div class="feat-desc">加工后成品自动入库，与主仓库存体系合并管理</div></td>
+          <td><span class="entry e-h5">H5</span><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">损耗台账</div></td>
+          <td><div class="feat-desc">记录每日损耗数量/金额，按品种汇总，支持损耗原因分类</div></td>
+          <td><span class="entry e-h5">H5</span><span class="entry e-admin">Admin 报表</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">物料下拉选择</div></td>
+          <td><div class="feat-desc">H5 操作时物料下拉按品种分组，支持搜索快速定位</div></td>
+          <td><span class="entry e-h5">H5</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">水果仓 Admin 报表</div></td>
+          <td><div class="feat-desc">7 个子报表：原料入库 / 批次处理 / 成品统计 / 损耗汇总等</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M11 权限管理 -->
+  <div class="module m11">
+    <div class="module-header">
+      <div class="module-icon">👥</div>
+      <div class="module-title-block">
+        <div class="module-title">权限管理 RBAC</div>
+        <div class="module-sub">角色 · 功能权限 · 数据权（库区）</div>
+      </div>
+      <span class="module-count">6 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">用户管理</div></td>
+          <td><div class="feat-desc">创建/删除用户，设置用户名密码，关联角色和仓库</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">角色管理</div></td>
+          <td><div class="feat-desc">10 个预设角色（收货员/拣货员/复检员/装车员/司机/补货员/盘点员/仓库管理员/超管等），支持自定义</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">功能权限配置</div></td>
+          <td><div class="feat-desc">26 个功能点按角色勾选，控制菜单可见性与操作权限</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">库区数据权</div></td>
+          <td><div class="feat-desc">每个用户可分配具体库区访问权，限制只能看/操作自己负责的库区</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">小程序模块门户</div></td>
+          <td><div class="feat-desc">登录后首页根据角色动态展示可用功能卡片（收货/拣货/复检等）</div></td>
+          <td><span class="entry e-mini">小程序</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">权限中心</div></td>
+          <td><div class="feat-desc">Tab 式统一管理页：用户列表 / 角色配置 / 功能权限 / 数据权 合并为一个入口</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- M12 基础数据 & 系统 -->
+  <div class="module m12">
+    <div class="module-header">
+      <div class="module-icon">⚙️</div>
+      <div class="module-title-block">
+        <div class="module-title">基础数据 &amp; 系统管理</div>
+        <div class="module-sub">仓库 · 供应商 · 商品 · 打印模板</div>
+      </div>
+      <span class="module-count">8 项功能</span>
+    </div>
+    <div class="module-body">
+      <table>
+        <tr><th width="200">功能名称</th><th>说明</th><th width="160">入口</th><th width="80">状态</th></tr>
+        <tr>
+          <td><div class="feat-name">仓库管理</div></td>
+          <td><div class="feat-desc">创建仓库，绑定电商仓库（zhzg_warehouse_id），建立 7 个标准库区</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">库区管理</div></td>
+          <td><div class="feat-desc">仓库下建库区，设置类型（拣货区/存储区/退货区等），area_code 管理</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">供应商管理</div></td>
+          <td><div class="feat-desc">供应商 CRUD，关联联系人、银行账号，用于采购单选择</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">商品管理（只读）</div></td>
+          <td><div class="feat-desc">从电商 zhzg 库同步商品信息（bd_product_publish / bd_release_product_specification）</div></td>
+          <td><span class="entry e-admin">Admin 只读</span><span class="entry e-auto">zhzg 同步</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">打印模板管理</div></td>
+          <td><div class="feat-desc">可视化打印模板设计器，支持拖拽字段布局，多场景模板（采购单/箱标签/出库单）</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">电商数据同步</div></td>
+          <td><div class="feat-desc">ec_sync 定时任务从 zhzg 库拉取最新团长订单，同步到 wms 下放队列</div></td>
+          <td><span class="entry e-auto">定时任务</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">系统配置</div></td>
+          <td><div class="feat-desc">系统参数配置：单号前缀规则、质检文件类型、默认库区策略</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name">数据清理工具</div></td>
+          <td><div class="feat-desc">按模块选择性清理测试数据，支持 16 组数据类型（采购/入库/出库/权限等）</div></td>
+          <td><span class="entry e-admin">Admin</span></td>
+          <td><span class="st st-prod">生产</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer>知花知果 WMS · 功能清单 v13.x · 生成于 2026-06-08 · 共 12 模块 · 87 项功能</footer>
+
+</body>
+</html>

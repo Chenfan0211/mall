@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商城项目流程文档与功能清单</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --primary: #1769aa;
+      --primary-dark: #0f4f84;
+      --accent: #1f8a70;
+      --warn: #b7791f;
+      --danger: #b42318;
+      --soft-blue: #eef6ff;
+      --soft-green: #edf8f4;
+      --soft-yellow: #fff7e6;
+      --soft-red: #fff1f0;
+      --shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 268px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: #111827;
+      color: #f8fafc;
+      padding: 24px 18px;
+      overflow: auto;
+    }
+
+    .brand {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 8px 0 0;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+
+    .nav-title {
+      margin: 18px 8px 8px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .nav a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 6px;
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .main {
+      min-width: 0;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f4f84 0%, #1769aa 48%, #1f8a70 100%);
+      color: #fff;
+      padding: 34px 42px 28px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      max-width: 940px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 14px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 12px;
+    }
+
+    .content {
+      max-width: 1280px;
+      padding: 28px;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+
+    .section-head {
+      padding: 20px 24px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section-body {
+      padding: 22px 24px 24px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 24px;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #edf1f6;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f6fa;
+      color: #344054;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .flow {
+      display: grid;
+      gap: 12px;
+    }
+
+    .flow-line {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 88px;
+      background: #fff;
+    }
+
+    .step::after {
+      content: "";
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      width: 14px;
+      height: 2px;
+      background: #b8c2d2;
+    }
+
+    .flow-line .step:last-child::after {
+      display: none;
+    }
+
+    .step .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .step span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .step.green .num {
+      background: var(--accent);
+    }
+
+    .step.yellow .num {
+      background: var(--warn);
+    }
+
+    .step.red .num {
+      background: var(--danger);
+    }
+
+    .module {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      margin-bottom: 14px;
+    }
+
+    .module h4 {
+      margin: 0;
+      padding: 13px 15px;
+      background: #f3f6fa;
+      border-bottom: 1px solid var(--line);
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .module .inner {
+      padding: 14px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: var(--soft-blue);
+      color: var(--primary-dark);
+      border: 1px solid #cfe5fa;
+    }
+
+    .tag.green {
+      background: var(--soft-green);
+      color: #0b6b56;
+      border-color: #cceadf;
+    }
+
+    .tag.yellow {
+      background: var(--soft-yellow);
+      color: #8a5a00;
+      border-color: #f5d79c;
+    }
+
+    .tag.red {
+      background: var(--soft-red);
+      color: #a32018;
+      border-color: #f2c2be;
+    }
+
+    .note {
+      border-left: 4px solid var(--primary);
+      background: var(--soft-blue);
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #27445f;
+    }
+
+    .toc-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .toc-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .toc-card strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .toc-card span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .print-bar {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 20;
+    }
+
+    .print-btn {
+      border: 0;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .print-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    @media (max-width: 980px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+
+      .nav {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 4px;
+      }
+
+      .content {
+        padding: 18px;
+      }
+
+      .hero {
+        padding: 28px 20px;
+      }
+
+      .grid.two,
+      .grid.three {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .flow-line {
+        grid-template-columns: 1fr;
+      }
+
+      .step::after {
+        display: none;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .shell {
+        display: block;
+      }
+
+      .sidebar,
+      .print-bar {
+        display: none;
+      }
+
+      .hero {
+        background: #fff;
+        color: #111827;
+        padding: 0 0 18px;
+      }
+
+      .content {
+        max-width: none;
+        padding: 0;
+      }
+
+      section {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>商城项目文档</h1>
+        <p>流程文档 + 功能清单</p>
+      </div>
+      <div class="nav-title">流程</div>
+      <nav class="nav">
+        <a href="#scope">项目范围</a>
+        <a href="#roles">角色与端口</a>
+        <a href="#main-flow">总体流程</a>
+        <a href="#product-flow">商品发布</a>
+        <a href="#order-flow">用户下单</a>
+        <a href="#wms-in">采购入库</a>
+        <a href="#wms-out">出库配送</a>
+        <a href="#after-sale">售后分账</a>
+      </nav>
+      <div class="nav-title">功能</div>
+      <nav class="nav">
+        <a href="#admin-functions">运营后台</a>
+        <a href="#mini-functions">小程序</a>
+        <a href="#wms-functions">WMS</a>
+        <a href="#automation">自动化</a>
+        <a href="#permission">数据权限</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="hero">
+        <h2>商城项目流程文档与功能清单</h2>
+        <p>覆盖商品建档、商品发布、用户下单、采购入库、仓储履约、配送、自提点交付、售后退款、分账提现、报表统计等完整进销存配流程。</p>
+        <div class="meta-row">
+          <span class="chip">编制日期：2026-06-09</span>
+          <span class="chip">后端：Spring Boot + Spring Cloud + Java 18</span>
+          <span class="chip">前端：Vue 3 + Vite + TypeScript + Element Plus</span>
+          <span class="chip">中间件：Redis / Nacos / RocketMQ / XXL-Job / Elasticsearch</span>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="scope">
+          <div class="section-head">
+            <h3>1. 项目范围</h3>
+            <p>本项目按商城业务和 WMS 仓配业务统一规划。</p>
+          </div>
+          <div class="section-body">
+            <div class="grid three">
+              <div class="stat"><strong>5</strong><span>主要端口：后台、用户、自提点、供应商、仓配</span></div>
+              <div class="stat"><strong>17</strong><span>核心业务模块</span></div>
+              <div class="stat"><strong>全链路</strong><span>商品、订单、库存、售后、分账闭环</span></div>
+            </div>
+            <br>
+            <table>
+              <thead><tr><th>层级</th><th>技术</th></tr></thead>
+              <tbody>
+                <tr><td>后端</td><td>Java 18、Spring Boot、Spring Cloud</td></tr>
+                <tr><td>前端</td><td>Vue 3、Vite、TypeScript、Element Plus</td></tr>
+                <tr><td>数据库</td><td>MySQL 8</td></tr>
+                <tr><td>中间件</td><td>Redis、Nacos、RocketMQ、XXL-Job、Elasticsearch</td></tr>
+                <tr><td>部署</td><td>Docker</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="roles">
+          <div class="section-head">
+            <h3>2. 角色与端口</h3>
+            <p>不同角色登录不同工作台，后台统一做菜单权限和数据隔离。</p>
+          </div>
+          <div class="section-body">
+            <table>
+              <thead><tr><th>端口</th><th>主要角色</th><th>说明</th></tr></thead>
+              <tbody>
+                <tr><td>运营后台</td><td>运营、采购、财务、仓库管理员、平台管理员</td><td>管理商品、类目、供应商、城市、自提点、订单、售后、报表、权限、分账</td></tr>
+                <tr><td>用户小程序</td><td>普通用户</td><td>浏览商品、领取优惠券、下单、支付、售后、分享、切换城市/自提点</td></tr>
+                <tr><td>自提点小程序</td><td>自提点/团点负责人</td><td>订单汇总、配送汇总、佣金、提现、缺货、休假、收退货</td></tr>
+                <tr><td>供应商小程序</td><td>供应商</td><td>销售数据、售后单、商品信息、佣金、余额、提现、发票、送货单</td></tr>
+                <tr><td>仓配小程序/H5</td><td>仓库、收货员、分拣员、复检员、装车员、司机</td><td>采购入库、收货上架、库位管理、拣货、复检、装车、配送、盘点、报损</td></tr>
+                <tr><td>系统任务</td><td>定时任务、消息队列、搜索同步</td><td>自动取消未支付订单、ES 同步、商品列表刷新、公众号通知、订单分账</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="main-flow">
+          <div class="section-head">
+            <h3>3. 总体业务流程</h3>
+            <p>从商品资料到履约完成后分账，形成完整经营闭环。</p>
+          </div>
+          <div class="section-body flow">
+            <div class="flow-line">
+              <div class="step"><span class="num">1</span><strong>基础资料维护</strong><span>供应商、自提点、城市、仓库、采购员、类目</span></div>
+              <div class="step"><span class="num">2</span><strong>商品建档</strong><span>商品、规格、库存规格、城市价格、联想词</span></div>
+              <div class="step"><span class="num">3</span><strong>商品发布</strong><span>模板、配送日、白名单、采购仓</span></div>
+              <div class="step green"><span class="num">4</span><strong>用户下单</strong><span>浏览、搜索、领券、购物车、支付</span></div>
+              <div class="step green"><span class="num">5</span><strong>采购入库</strong><span>采购单、入库单、收货、质检、上架</span></div>
+              <div class="step green"><span class="num">6</span><strong>出库配送</strong><span>波次、拣货、复检、装车、司机配送</span></div>
+            </div>
+            <div class="flow-line">
+              <div class="step yellow"><span class="num">7</span><strong>用户收货</strong><span>自提点收货、用户确认、订单完成</span></div>
+              <div class="step yellow"><span class="num">8</span><strong>分账入账</strong><span>订单完成后生成分账流水</span></div>
+              <div class="step yellow"><span class="num">9</span><strong>提现审核</strong><span>分账方提交提现，财务审核打款</span></div>
+              <div class="step red"><span class="num">10</span><strong>售后退款</strong><span>仅退款、退货退款、部分退款</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="product-flow">
+          <div class="section-head">
+            <h3>4. 商品与发布流程</h3>
+            <p>商品资料是后续采购、售卖、库存和搜索的基础。</p>
+          </div>
+          <div class="section-body">
+            <div class="grid two">
+              <div class="module">
+                <h4>商品建档规则</h4>
+                <div class="inner">
+                  <table>
+                    <tbody>
+                      <tr><th>商品</th><td>一个商品对应一个供应商、多个规格、一个采购员、一个展示类目、一个统计类目</td></tr>
+                      <tr><th>规格</th><td>商品规格可绑定库存规格，并配置系数转换关系</td></tr>
+                      <tr><th>价格</th><td>商品需要维护三级城市价格信息</td></tr>
+                      <tr><th>搜索</th><td>创建或修改商品后生成联想词，并同步 Elasticsearch</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="module">
+                <h4>发布规则</h4>
+                <div class="inner">
+                  <table>
+                    <tbody>
+                      <tr><th>配送日期</th><td>配送日期必须大于销售结束时间</td></tr>
+                      <tr><th>自动配送日</th><td>未指定配送日时，系统按规则自动计算</td></tr>
+                      <tr><th>售卖范围</th><td>支持城市白名单、自提点白名单</td></tr>
+                      <tr><th>采购仓</th><td>发布团购必须指定采购仓，衔接采购入库流程</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="flow-line">
+              <div class="step"><span class="num">1</span><strong>选择商品</strong><span>选择已建档商品和规格</span></div>
+              <div class="step"><span class="num">2</span><strong>创建模板</strong><span>设置销售时间、配送规则</span></div>
+              <div class="step"><span class="num">3</span><strong>配置范围</strong><span>城市/自提点白名单、价格调整</span></div>
+              <div class="step"><span class="num">4</span><strong>指定采购仓</strong><span>形成采购需求来源</span></div>
+              <div class="step"><span class="num">5</span><strong>发布展示</strong><span>同步到用户小程序</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="order-flow">
+          <div class="section-head">
+            <h3>5. 用户下单流程</h3>
+            <p>订单支付后生成支付流水和佣金预估，未支付订单自动取消。</p>
+          </div>
+          <div class="section-body">
+            <div class="flow-line">
+              <div class="step green"><span class="num">1</span><strong>选择城市/自提点</strong><span>决定可售商品和配送范围</span></div>
+              <div class="step green"><span class="num">2</span><strong>浏览商品</strong><span>首页、类目、活动、搜索</span></div>
+              <div class="step green"><span class="num">3</span><strong>提交订单</strong><span>购物车、优惠券、地址</span></div>
+              <div class="step green"><span class="num">4</span><strong>微信支付</strong><span>支付成功进入待发货</span></div>
+              <div class="step yellow"><span class="num">5</span><strong>支付流水</strong><span>生成支付流水、佣金预估</span></div>
+            </div>
+            <br>
+            <table>
+              <thead><tr><th>场景</th><th>规则</th></tr></thead>
+              <tbody>
+                <tr><td>未支付订单</td><td>15 分钟后自动取消，用户也可手动取消</td></tr>
+                <tr><td>支付提醒</td><td>未支付订单最后 5 分钟通过公众号通知用户</td></tr>
+                <tr><td>支付成功</td><td>生成支付流水、订单佣金/分佣记录</td></tr>
+                <tr><td>发货后</td><td>不允许取消订单，只能进入售后流程</td></tr>
+                <tr><td>商品售罄</td><td>用户可点击“想要”，后续上架后通过公众号通知</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="wms-in">
+          <div class="section-head">
+            <h3>6. 采购与入库流程</h3>
+            <p>发布团购指定采购仓后，采购和 WMS 入库流程承接库存。</p>
+          </div>
+          <div class="section-body">
+            <div class="flow-line">
+              <div class="step"><span class="num">1</span><strong>采购需求</strong><span>商品发布指定采购仓</span></div>
+              <div class="step"><span class="num">2</span><strong>采购订单 PO</strong><span>采购员创建并提交审核</span></div>
+              <div class="step"><span class="num">3</span><strong>入库单 IN</strong><span>审核后自动生成</span></div>
+              <div class="step"><span class="num">4</span><strong>收货质检</strong><span>接单、扫码、上传文件</span></div>
+              <div class="step"><span class="num">5</span><strong>上架入库</strong><span>推荐库位、写入库存流水</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="wms-out">
+          <div class="section-head">
+            <h3>7. 出库与配送流程</h3>
+            <p>订单通过波次下放进入仓库作业，完成拣货、复检、装车和配送。</p>
+          </div>
+          <div class="section-body">
+            <div class="flow-line">
+              <div class="step green"><span class="num">1</span><strong>订单同步</strong><span>电商订单或手工销售单</span></div>
+              <div class="step green"><span class="num">2</span><strong>波次下放</strong><span>按配送日、路线、库存生成任务</span></div>
+              <div class="step green"><span class="num">3</span><strong>拣货</strong><span>任务池接单，按库位拣货</span></div>
+              <div class="step green"><span class="num">4</span><strong>复检装箱</strong><span>核对数量，打印箱标签</span></div>
+              <div class="step green"><span class="num">5</span><strong>装车出仓</strong><span>扫码装车并扣减库存</span></div>
+              <div class="step green"><span class="num">6</span><strong>司机配送</strong><span>路线配送，团点签到到达</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="after-sale">
+          <div class="section-head">
+            <h3>8. 售后与分账流程</h3>
+            <p>售后支持部分退款；分账在订单完成后执行。</p>
+          </div>
+          <div class="section-body">
+            <div class="grid two">
+              <div class="module">
+                <h4>售后规则</h4>
+                <div class="inner">
+                  <table>
+                    <tbody>
+                      <tr><th>部分退款</th><td>支持订单部分退款</td></tr>
+                      <tr><th>仅退款</th><td>不需要退货时，审核通过后可直接退款</td></tr>
+                      <tr><th>退货退款</th><td>需要退货时，必须退货完成后才能退款</td></tr>
+                      <tr><th>发货后取消</th><td>订单发货后不允许取消，只能走售后</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="module">
+                <h4>分账规则</h4>
+                <div class="inner">
+                  <table>
+                    <tbody>
+                      <tr><th>分账时点</th><td>订单已完成后才进行分账</td></tr>
+                      <tr><th>分账方</th><td>自提点、供应商、采购员等按业务配置</td></tr>
+                      <tr><th>账户</th><td>分账方拥有佣金账户、余额、提现记录</td></tr>
+                      <tr><th>流水</th><td>记录提成流水、分账流水、提现流水</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="admin-functions">
+          <div class="section-head">
+            <h3>9. 运营后台功能清单</h3>
+            <p>后台负责商品、订单、权限、报表、分账和营销配置。</p>
+          </div>
+          <div class="section-body">
+            <div class="toc-cards">
+              <div class="toc-card"><strong>商品中心</strong><span>商品基础资料、规格、库存规格、价格、联想词、ES 同步</span></div>
+              <div class="toc-card"><strong>类目中心</strong><span>展示类目、统计类目、多级类目</span></div>
+              <div class="toc-card"><strong>基础资料</strong><span>供应商、自提点、采购员、城市、仓库、账号生成</span></div>
+              <div class="toc-card"><strong>商品发布</strong><span>发布模板、配送日期、城市/自提点白名单、采购仓</span></div>
+              <div class="toc-card"><strong>权限中心</strong><span>角色、菜单权限、数据隔离、多端登录</span></div>
+              <div class="toc-card"><strong>订单中心</strong><span>下单、支付、取消、发货、收货、订单状态流转</span></div>
+              <div class="toc-card"><strong>售后中心</strong><span>仅退款、退货退款、部分退款、售后状态流转</span></div>
+              <div class="toc-card"><strong>分账中心</strong><span>佣金账户、提现申请、提成流水、分账流水</span></div>
+              <div class="toc-card"><strong>营销中心</strong><span>优惠券、黑白名单、活动页、推荐规则</span></div>
+              <div class="toc-card"><strong>报表中心</strong><span>订单报表、分佣报表、配送汇总、统计类目销售报表</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="mini-functions">
+          <div class="section-head">
+            <h3>10. 小程序功能清单</h3>
+            <p>用户、自提点、供应商按角色切换工作台。</p>
+          </div>
+          <div class="section-body">
+            <div class="grid three">
+              <div class="module">
+                <h4>用户小程序</h4>
+                <div class="inner tags">
+                  <span class="tag">首页商品列表</span><span class="tag">轮播图跳转</span><span class="tag">优惠券弹窗</span><span class="tag">商品详情</span><span class="tag">商品分享</span><span class="tag">展示类目</span><span class="tag">商品搜索</span><span class="tag">购物车</span><span class="tag">切换自提点</span><span class="tag">切换城市</span><span class="tag">收货地址</span><span class="tag">申请自提点</span><span class="tag">商品想要</span><span class="tag">下单支付</span><span class="tag">售后申请</span>
+                </div>
+              </div>
+              <div class="module">
+                <h4>自提点小程序</h4>
+                <div class="inner tags">
+                  <span class="tag green">用户下单数据</span><span class="tag green">今日汇总</span><span class="tag green">配送汇总</span><span class="tag green">佣金明细</span><span class="tag green">余额</span><span class="tag green">提现记录</span><span class="tag green">提现申请</span><span class="tag green">商品佣金</span><span class="tag green">取消订单</span><span class="tag green">订单售后</span><span class="tag green">缺货标记</span><span class="tag green">休假申请</span><span class="tag green">收退货</span>
+                </div>
+              </div>
+              <div class="module">
+                <h4>供应商小程序</h4>
+                <div class="inner tags">
+                  <span class="tag yellow">商品销售数据</span><span class="tag yellow">售后单</span><span class="tag yellow">佣金明细</span><span class="tag yellow">余额</span><span class="tag yellow">提现记录</span><span class="tag yellow">提现申请</span><span class="tag yellow">商品信息</span><span class="tag yellow">开发票</span><span class="tag yellow">送货单</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="wms-functions">
+          <div class="section-head">
+            <h3>11. WMS 功能清单</h3>
+            <p>仓配功能覆盖采购、入库、出库、库存、盘点、补货、配送和权限。</p>
+          </div>
+          <div class="section-body">
+            <div class="grid two">
+              <div class="module"><h4>采购管理</h4><div class="inner tags"><span class="tag">采购订单创建</span><span class="tag">采购订单审核</span><span class="tag">收货状态跟踪</span><span class="tag">打印采购订单</span><span class="tag">供应商退货单</span></div></div>
+              <div class="module"><h4>收货管理</h4><div class="inner tags"><span class="tag">入库单列表</span><span class="tag">任务池接单</span><span class="tag">单品收货</span><span class="tag">推荐入库位</span><span class="tag">质检上传</span><span class="tag">完成入库单</span></div></div>
+              <div class="module"><h4>销售单与波次</h4><div class="inner tags"><span class="tag green">手工销售单</span><span class="tag green">三方订单查看</span><span class="tag green">销售单审核</span><span class="tag green">波次预览</span><span class="tag green">一键下放</span><span class="tag green">批次日志</span></div></div>
+              <div class="module"><h4>拣货管理</h4><div class="inner tags"><span class="tag green">拣货任务池</span><span class="tag green">按任务拣货</span><span class="tag green">库位选择器</span><span class="tag green">异常报告</span><span class="tag green">拣货历史</span><span class="tag green">今日统计</span></div></div>
+              <div class="module"><h4>复检与装车</h4><div class="inner tags"><span class="tag yellow">复检任务</span><span class="tag yellow">逐件复检</span><span class="tag yellow">箱标签打印</span><span class="tag yellow">装车单</span><span class="tag yellow">扫码装车</span></div></div>
+              <div class="module"><h4>司机与配送</h4><div class="inner tags"><span class="tag yellow">今日配送任务</span><span class="tag yellow">团点签到</span><span class="tag yellow">中转站管理</span><span class="tag yellow">团长报益</span><span class="tag yellow">配送报表</span></div></div>
+              <div class="module"><h4>库存管理</h4><div class="inner tags"><span class="tag">实时库存</span><span class="tag">库存流水</span><span class="tag">FIFO 批次</span><span class="tag">移库操作</span><span class="tag">库位绑定</span><span class="tag">团期库位</span><span class="tag">库区管理</span></div></div>
+              <div class="module"><h4>即时盘点</h4><div class="inner tags"><span class="tag">盘点计划</span><span class="tag">全盘模式</span><span class="tag">差异盘点</span><span class="tag">移动盘点</span><span class="tag">差异审核</span><span class="tag">盘点报表</span></div></div>
+              <div class="module"><h4>补货管理</h4><div class="inner tags"><span class="tag green">补货阈值</span><span class="tag green">自动任务</span><span class="tag green">紧急补货</span><span class="tag green">任务执行</span><span class="tag green">补货报表</span></div></div>
+              <div class="module"><h4>水果仓专区</h4><div class="inner tags"><span class="tag yellow">原料入库</span><span class="tag yellow">生产批次</span><span class="tag yellow">成品库存</span><span class="tag yellow">损耗台账</span><span class="tag yellow">物料选择</span><span class="tag yellow">Admin 报表</span></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="automation">
+          <div class="section-head">
+            <h3>12. 自动化与中间件功能</h3>
+            <p>系统任务和消息队列用于处理异步同步、提醒、取消、分账等流程。</p>
+          </div>
+          <div class="section-body">
+            <table>
+              <thead><tr><th>功能</th><th>技术建议</th><th>说明</th></tr></thead>
+              <tbody>
+                <tr><td>商品 ES 同步</td><td>RocketMQ + Elasticsearch</td><td>商品新增/修改后异步同步</td></tr>
+                <tr><td>商品列表缓存</td><td>Redis</td><td>缓存首页、类目、活动商品列表</td></tr>
+                <tr><td>定时刷新</td><td>XXL-Job</td><td>定时刷新商品列表、检测库存、取消订单</td></tr>
+                <tr><td>未支付超时</td><td>RocketMQ 延迟消息或 XXL-Job</td><td>15 分钟未支付自动取消</td></tr>
+                <tr><td>支付提醒</td><td>XXL-Job + 公众号模板消息</td><td>最后 5 分钟提醒用户支付</td></tr>
+                <tr><td>佣金通知</td><td>RocketMQ + 公众号模板消息</td><td>支付成功后通知自提点</td></tr>
+                <tr><td>服务注册配置</td><td>Nacos</td><td>Spring Cloud 服务注册、配置管理</td></tr>
+                <tr><td>容器部署</td><td>Docker</td><td>后端服务、中间件、前端静态资源容器化</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="permission">
+          <div class="section-head">
+            <h3>13. 数据权限隔离</h3>
+            <p>数据隔离要作为基础能力实现，避免后期补权限导致返工。</p>
+          </div>
+          <div class="section-body">
+            <table>
+              <thead><tr><th>角色</th><th>数据范围</th></tr></thead>
+              <tbody>
+                <tr><td>平台管理员</td><td>全部数据</td></tr>
+                <tr><td>城市角色</td><td>当前城市及下级城市数据</td></tr>
+                <tr><td>供应商</td><td>当前供应商商品、订单、售后、佣金数据</td></tr>
+                <tr><td>采购员</td><td>自己负责商品、采购、入库相关数据</td></tr>
+                <tr><td>自提点</td><td>当前自提点订单、配送、佣金、售后数据</td></tr>
+                <tr><td>仓库角色</td><td>当前仓库及授权库区数据</td></tr>
+                <tr><td>司机</td><td>当前司机配送任务数据</td></tr>
+              </tbody>
+            </table>
+            <br>
+            <div class="note">建议后端以角色权限、组织维度、数据范围三层控制实现数据隔离。只做前端菜单隐藏不够，接口查询必须带权限范围约束。</div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="print-bar">
+    <button class="print-btn" type="button" onclick="window.print()">打印 / 导出 PDF</button>
+  </div>
+</body>
+</html>

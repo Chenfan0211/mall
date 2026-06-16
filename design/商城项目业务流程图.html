@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商城项目业务流程图</title>
+  <style>
+    :root {
+      --bg:#f4f6f9; --panel:#fff; --line:#d8e0ea; --text:#1f2937; --muted:#667085;
+      --blue:#1769aa; --green:#16856c; --yellow:#ad7417; --red:#b42318; --dark:#111827;
+      --soft-blue:#edf6ff; --soft-green:#ecf8f3; --soft-yellow:#fff7e8; --soft-red:#fff1f0;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+    header{background:linear-gradient(135deg,#0f4f84,#1769aa 48%,#16856c);color:white;padding:28px 34px}
+    header h1{margin:0;font-size:28px;letter-spacing:0}
+    header p{margin:8px 0 0;color:rgba(255,255,255,.86);font-size:14px}
+    .wrap{max-width:1480px;margin:0 auto;padding:24px}
+    section{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-bottom:22px;overflow:hidden;box-shadow:0 10px 26px rgba(16,24,40,.08)}
+    .head{padding:16px 20px;background:#fbfcfe;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:center}
+    .head h2{margin:0;font-size:20px;letter-spacing:0}.head span{color:var(--muted);font-size:12px}
+    .body{padding:20px}
+    .legend{display:flex;flex-wrap:wrap;gap:10px}.legend span{border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:white;font-size:12px}
+    .flow{display:grid;gap:12px}
+    .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:stretch}
+    .node{position:relative;border:1px solid var(--line);border-radius:8px;background:white;padding:13px;min-height:92px}
+    .node:after{content:"";position:absolute;right:-10px;top:45%;width:12px;height:2px;background:#aab6c7}
+    .row .node:last-child:after{display:none}
+    .node b{display:block;font-size:14px;margin-bottom:5px}.node p{margin:0;color:var(--muted);font-size:12px}
+    .node.blue{border-color:#b8dbf7;background:var(--soft-blue)}.node.green{border-color:#bee7da;background:var(--soft-green)}
+    .node.yellow{border-color:#f0d39c;background:var(--soft-yellow)}.node.red{border-color:#efc0bb;background:var(--soft-red)}
+    .grid{display:grid;gap:16px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    table{width:100%;border-collapse:collapse;font-size:13px;border:1px solid var(--line)}
+    th,td{padding:9px 10px;border-bottom:1px solid #edf1f6;text-align:left;vertical-align:top}th{background:#f3f6fa;color:#344054;white-space:nowrap}tr:last-child td{border-bottom:0}
+    .tag{display:inline-flex;border-radius:999px;border:1px solid #cbdff2;background:var(--soft-blue);color:var(--blue);padding:1px 8px;font-size:12px;white-space:nowrap}
+    .tag.green{background:var(--soft-green);border-color:#c8eadf;color:var(--green)}.tag.yellow{background:var(--soft-yellow);border-color:#f2d6a2;color:var(--yellow)}.tag.red{background:var(--soft-red);border-color:#efc0bb;color:var(--red)}
+    .lane{display:grid;grid-template-columns:150px minmax(0,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:12px}
+    .lane-title{background:#f3f6fa;padding:14px;font-weight:700;color:#344054;border-right:1px solid var(--line)}
+    .lane-body{padding:14px}
+    @media(max-width:900px){.grid.two{grid-template-columns:1fr}.lane{grid-template-columns:1fr}.lane-title{border-right:0;border-bottom:1px solid var(--line)}.node:after{display:none}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>商城项目业务流程图</h1>
+    <p>按《商城项目功能清单.md》整理，覆盖商品发布、用户下单、采购入库、波次出库、配送、售后、分账和系统任务。</p>
+  </header>
+  <div class="wrap">
+    <section>
+      <div class="head"><h2>图例</h2><span>颜色代表业务领域</span></div>
+      <div class="body legend">
+        <span class="tag">运营后台</span><span class="tag green">用户/小程序</span><span class="tag yellow">WMS/仓配</span><span class="tag red">异常/售后</span><span>箭头表示数据和状态流转</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>1. 商城全链路主流程</h2><span>商品 → 订单 → 仓配 → 售后/分账</span></div>
+      <div class="body flow">
+        <div class="row">
+          <div class="node blue"><b>基础资料</b><p>供应商、自提点、采购员、城市、仓库、账号生成</p></div>
+          <div class="node blue"><b>商品中心</b><p>商品、规格、库存规格、城市价格、联想词、ES同步</p></div>
+          <div class="node blue"><b>商品发布</b><p>发布模板、配送日、白名单、采购仓</p></div>
+          <div class="node green"><b>用户浏览</b><p>首页、类目、搜索、活动页、优惠券弹窗</p></div>
+          <div class="node green"><b>购物车/下单</b><p>选择规格、优惠券、锁定库存、创建订单</p></div>
+          <div class="node green"><b>支付成功</b><p>生成支付流水、佣金预估、通知自提点</p></div>
+        </div>
+        <div class="row">
+          <div class="node yellow"><b>采购订单 PO</b><p>人工创建或系统按发布/销量/库存自动生成，审核后生成入库单</p></div>
+          <div class="node yellow"><b>收货入库 IN</b><p>接单、扫码收货、质检、推荐库位、库存更新</p></div>
+          <div class="node yellow"><b>配送数据生成</b><p>按订单配送日生成配送数据，自提点商品汇总</p></div>
+          <div class="node yellow"><b>波次下放</b><p>根据配送数据下放，生成出库单和拣货任务</p></div>
+          <div class="node yellow"><b>拣货复检装车</b><p>拣货、异常上报、复检、箱标、扫码装车</p></div>
+          <div class="node yellow"><b>司机配送</b><p>确认出仓、司机配送、团点签到、自提点收货</p></div>
+          <div class="node green"><b>订单完成</b><p>用户确认收货或系统完成，触发分账</p></div>
+        </div>
+        <div class="row">
+          <div class="node red"><b>售后申请</b><p>发货后不可取消，只能仅退款或退货退款</p></div>
+          <div class="node red"><b>售后审核</b><p>审核通过/驳回；退货退款需确认退货</p></div>
+          <div class="node red"><b>退款处理</b><p>调用支付退款，更新退款流水和售后状态</p></div>
+          <div class="node blue"><b>分账流水</b><p>订单完成后生成佣金、提成和分账流水</p></div>
+          <div class="node blue"><b>提现审核</b><p>自提点/供应商提交提现，财务审核打款</p></div>
+          <div class="node blue"><b>报表归档</b><p>订单、配送、售后、库存、分佣、类目销售报表</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>2. 分角色泳道流程</h2><span>不同端口的业务职责</span></div>
+      <div class="body">
+        <div class="lane"><div class="lane-title">运营后台</div><div class="lane-body"><div class="row"><div class="node blue"><b>商品建档</b><p>供应商/采购员/类目/规格</p></div><div class="node blue"><b>发布团购</b><p>配送日、白名单、采购仓</p></div><div class="node blue"><b>订单售后</b><p>订单查询、售后审核</p></div><div class="node blue"><b>财务报表</b><p>分账提现、经营报表</p></div></div></div></div>
+        <div class="lane"><div class="lane-title">用户小程序</div><div class="lane-body"><div class="row"><div class="node green"><b>登录定位</b><p>城市/自提点</p></div><div class="node green"><b>浏览加购</b><p>首页、类目、搜索、详情</p></div><div class="node green"><b>下单支付</b><p>优惠券、购物车、支付</p></div><div class="node red"><b>售后申请</b><p>仅退款、退货退款</p></div></div></div></div>
+        <div class="lane"><div class="lane-title">自提点</div><div class="lane-body"><div class="row"><div class="node green"><b>订单汇总</b><p>今日订单、配送汇总</p></div><div class="node yellow"><b>确认收货</b><p>司机到达后收货</p></div><div class="node red"><b>缺货/退货</b><p>缺货标记、收退货</p></div><div class="node blue"><b>提现</b><p>佣金明细、提现申请</p></div></div></div></div>
+        <div class="lane"><div class="lane-title">供应商</div><div class="lane-body"><div class="row"><div class="node green"><b>销售数据</b><p>商品销售、售后单</p></div><div class="node yellow"><b>送货单</b><p>采购单关联送货</p></div><div class="node blue"><b>发票提现</b><p>开发票、佣金提现</p></div></div></div></div>
+        <div class="lane"><div class="lane-title">仓配/WMS</div><div class="lane-body"><div class="row"><div class="node yellow"><b>仓库基础数据</b><p>仓库、库区、库位、商品库存、线路、司机</p></div><div class="node yellow"><b>采购入库</b><p>PO 来源：人工或系统自动；IN/收货/质检</p></div><div class="node yellow"><b>出库作业</b><p>波次、拣货、复检、装车</p></div><div class="node yellow"><b>配送数据</b><p>配送单、线路、司机、团点、到达记录</p></div><div class="node yellow"><b>库存</b><p>FIFO、移库、盘点、补货</p></div></div></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>3. 商品发布与搜索同步流程</h2><span>商品中心、发布中心、ES/Redis</span></div>
+      <div class="body flow">
+        <div class="row">
+          <div class="node blue"><b>新增商品</b><p>商品基础信息、供应商、采购员、类目</p></div>
+          <div class="node blue"><b>维护规格</b><p>商品规格、库存规格绑定、换算系数</p></div>
+          <div class="node blue"><b>三级城市价格</b><p>分别维护一级城市价、二级城市价、三级城市价</p></div>
+          <div class="node blue"><b>自动生成联想词</b><p>根据商品名称、商品规格自动生成搜索联想词</p></div>
+          <div class="node green"><b>ES/Redis</b><p>商品搜索索引和商品列表缓存由后台保存/定时任务同步</p></div>
+        </div>
+        <div class="row">
+          <div class="node blue"><b>创建发布模板</b><p>销售时间、配送日</p></div>
+          <div class="node blue"><b>配送日校验</b><p>必须大于销售结束时间</p></div>
+          <div class="node blue"><b>白名单配置</b><p>城市/自提点可售范围</p></div>
+          <div class="node blue"><b>指定采购仓</b><p>衔接采购流程</p></div>
+          <div class="node green"><b>前台展示</b><p>首页、类目、活动页、搜索</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>4. 订单状态与售后状态</h2><span>状态必须由按钮、系统任务或回调触发</span></div>
+      <div class="body grid two">
+        <table>
+          <thead><tr><th>订单状态</th><th>触发</th><th>数据变化</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tag">未支付</span></td><td>用户提交订单</td><td>ord_order 创建，库存锁定</td></tr>
+            <tr><td><span class="tag green">已付款待发货</span></td><td>支付回调</td><td>pay_trade 成功，订单已付款</td></tr>
+            <tr><td><span class="tag red">未支付取消</span></td><td>15分钟超时/手动取消</td><td>释放锁定库存</td></tr>
+            <tr><td><span class="tag yellow">已发货待收货</span></td><td>WMS 确认出仓</td><td>库存扣减，订单发货</td></tr>
+            <tr><td><span class="tag green">已收货已完成</span></td><td>用户确认/系统完成</td><td>触发 order.completed 分账</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>售后状态</th><th>触发</th><th>数据变化</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tag">待审核</span></td><td>用户提交售后</td><td>afs_after_sale 创建</td></tr>
+            <tr><td><span class="tag yellow">已审核待退货</span></td><td>审核退货退款</td><td>等待自提点/仓库收退货</td></tr>
+            <tr><td><span class="tag yellow">已审核待退款</span></td><td>审核仅退款</td><td>可直接发起退款</td></tr>
+            <tr><td><span class="tag yellow">已退货待退款</span></td><td>确认退货</td><td>afs_return_record 创建</td></tr>
+            <tr><td><span class="tag green">退款成功</span></td><td>退款回调</td><td>refund_trade 成功，售后完成</td></tr>
+            <tr><td><span class="tag red">退款失败</span></td><td>退款回调失败</td><td>允许重新退款</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>5. WMS 基础数据、入库、出库、库存流程</h2><span>所有库存变化必须写库存流水</span></div>
+      <div class="body flow">
+        <div class="row">
+          <div class="node yellow"><b>仓库基础数据</b><p>维护仓库、库区、库位、库位类型、库容量、线路、司机、车辆</p></div>
+          <div class="node yellow"><b>线路关系</b><p>自提点分配给线路，线路对应仓库</p></div>
+          <div class="node yellow"><b>商品库存基础</b><p>商品 SKU、库存规格、长宽高、默认库位、批次规则、质检规则</p></div>
+          <div class="node yellow"><b>采购需求生成</b><p>来源一：采购员手工创建；来源二：系统按发布商品、预售量、库存阈值自动生成</p></div>
+          <div class="node yellow"><b>采购订单创建</b><p>选择或自动带出供应商、仓库、商品规格、数量单价</p></div>
+          <div class="node yellow"><b>采购审核</b><p>审核后锁定 PO，生成 IN 入库单</p></div>
+        </div>
+        <div class="row">
+          <div class="node yellow"><b>收货接单</b><p>收货员任务池接单</p></div>
+          <div class="node yellow"><b>逐件收货</b><p>扫码商品、录入实收、上传质检</p></div>
+          <div class="node yellow"><b>上架入库</b><p>推荐库位，库存增加，写 inbound 流水</p></div>
+        </div>
+        <div class="row">
+          <div class="node yellow"><b>配送数据生成</b><p>根据订单配送日生成配送数据，按自提点汇总商品</p></div>
+          <div class="node yellow"><b>波次预览</b><p>基于配送数据计算仓库、线路、自提点、商品汇总、可用库存、缺货量</p></div>
+          <div class="node yellow"><b>一键下放</b><p>根据配送数据下放，生成出库单和拣货任务</p></div>
+          <div class="node yellow"><b>拣货复检</b><p>按库位拣货，异常报告，逐件复检</p></div>
+          <div class="node yellow"><b>装车出仓</b><p>扫码装车，出仓扣库存，写 outbound 流水</p></div>
+        </div>
+        <div class="row">
+          <div class="node yellow"><b>配送数据生成</b><p>确认出仓后按线路、司机、自提点、箱码生成配送单</p></div>
+          <div class="node yellow"><b>配送任务下发</b><p>司机端获取今日配送任务、团点顺序和商品汇总</p></div>
+          <div class="node yellow"><b>司机配送</b><p>确认出发、团点签到、到达确认、异常上报</p></div>
+          <div class="node yellow"><b>自提点收货</b><p>自提点确认收货，缺货标记，生成收货记录</p></div>
+          <div class="node yellow"><b>配送报表</b><p>按配送日、线路、司机、自提点、商品汇总配送数量和到达率</p></div>
+        </div>
+        <div class="row">
+          <div class="node red"><b>自提点退货</b><p>自提点整理售后退货商品，生成退货交接数据</p></div>
+          <div class="node red"><b>司机取回退货</b><p>司机从自提点拿回退货，扫码确认数量和状态</p></div>
+          <div class="node red"><b>退货交接</b><p>司机与仓库交接退货，生成退货交接单</p></div>
+          <div class="node yellow"><b>仓库退货入库</b><p>仓库验收退货，合格入退货区，不合格报损</p></div>
+          <div class="node yellow"><b>库存处理</b><p>写 return_in 或 loss 库存流水，更新售后状态</p></div>
+        </div>
+        <div class="row">
+          <div class="node yellow"><b>实时库存</b><p>仓库、库区、SKU、批次</p></div>
+          <div class="node yellow"><b>移库</b><p>move_out/move_in 流水</p></div>
+          <div class="node yellow"><b>盘点</b><p>全盘、差异盘点、移动盘点</p></div>
+          <div class="node yellow"><b>补货</b><p>阈值策略、自动任务、紧急补货</p></div>
+          <div class="node yellow"><b>报损</b><p>审核后扣减库存，写 loss 流水</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>6. 配送数据生成流程</h2><span>配送数据先生成，波次下放再基于配送数据执行</span></div>
+      <div class="body flow">
+        <div class="row">
+          <div class="node blue"><b>订单来源</b><p>商城已支付订单，包含配送日、自提点、商品明细</p></div>
+          <div class="node yellow"><b>按配送日生成</b><p>系统按订单配送日汇总生成配送数据</p></div>
+          <div class="node yellow"><b>自提点归线</b><p>读取自提点所属线路，线路再对应仓库</p></div>
+          <div class="node yellow"><b>自提点商品汇总</b><p>同一自提点下的订单商品汇总在一起</p></div>
+          <div class="node yellow"><b>配送数据确认</b><p>形成配送日、仓库、线路、自提点、商品汇总数据</p></div>
+        </div>
+        <div class="row">
+          <div class="node yellow"><b>波次下放</b><p>根据已生成的配送数据下放，不直接按订单临时下放</p></div>
+          <div class="node yellow"><b>出库作业</b><p>生成出库单、拣货任务、复检箱码、装车单</p></div>
+          <div class="node yellow"><b>确认出仓</b><p>出仓后配送数据进入司机配送状态</p></div>
+          <div class="node yellow"><b>司机任务</b><p>司机端读取线路、自提点顺序、商品汇总</p></div>
+          <div class="node yellow"><b>团点签到</b><p>写 driver_sign_record，记录到达时间、定位、异常</p></div>
+          <div class="node green"><b>自提点收货</b><p>确认该自提点商品汇总数量，写 station_receive_record</p></div>
+          <div class="node blue"><b>配送报表</b><p>按配送日、仓库、线路、自提点、商品统计配送数据</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>7. 配送基础关系与汇总规则</h2><span>自提点归线路，线路归仓库，商品按自提点汇总</span></div>
+      <div class="body grid two">
+        <table>
+          <thead><tr><th>关系</th><th>说明</th><th>建议数据对象</th></tr></thead>
+          <tbody>
+            <tr><td>自提点 → 线路</td><td>每个自提点需要分配到配送线路；波次和司机配送按线路组织</td><td>route_station</td></tr>
+            <tr><td>线路 → 仓库</td><td>每条线路对应一个出货仓库；线路下自提点的商品从该仓出库</td><td>route.warehouse_id</td></tr>
+            <tr><td>订单 → 配送日</td><td>订单下单后保存配送日；配送数据按配送日生成</td><td>ord_order.delivery_date</td></tr>
+            <tr><td>订单 → 自提点</td><td>订单绑定自提点；同一自提点商品需要汇总在一起</td><td>ord_order.station_id</td></tr>
+            <tr><td>自提点商品汇总</td><td>同一配送日、同一仓库、同一线路、同一自提点下，按 SKU 汇总数量</td><td>delivery_station_item</td></tr>
+            <tr><td>商品 → 体积/重量</td><td>商品维护长宽高、重量、包装单位，用于车辆装载判断</td><td>prd_sku.length/width/height/weight</td></tr>
+            <tr><td>车辆 → 装载能力</td><td>车辆维护车牌、车型、长宽高、载重、容积、冷链能力</td><td>log_vehicle</td></tr>
+            <tr><td>地图 → 自提点销售</td><td>地图上展示自提点销售额、订单数、商品件数、售后/退货量</td><td>station_sales_map_view</td></tr>
+            <tr><td>司机 → 费用规则</td><td>司机费用按送货数量、自提点数量、总距离、退货数量、车型等计算</td><td>driver_fee_rule / driver_fee_settle</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>生成步骤</th><th>输入</th><th>输出</th></tr></thead>
+          <tbody>
+            <tr><td>1. 按配送日筛订单</td><td>已支付订单、配送日</td><td>待生成配送数据订单集合</td></tr>
+            <tr><td>2. 找自提点线路</td><td>订单自提点、route_station</td><td>订单归属线路</td></tr>
+            <tr><td>3. 找线路仓库</td><td>route.warehouse_id</td><td>出货仓库</td></tr>
+            <tr><td>4. 自提点商品汇总</td><td>订单明细 SKU、数量</td><td>自提点商品汇总数据</td></tr>
+            <tr><td>5. 生成配送数据</td><td>配送日、仓库、线路、自提点、商品汇总</td><td>delivery_order / delivery_station / delivery_station_item</td></tr>
+            <tr><td>6. 装载校验</td><td>商品长宽高、重量、配送数量、车辆容量</td><td>车辆是否可装载、装载率、是否超载</td></tr>
+            <tr><td>7. 波次下放</td><td>已生成配送数据</td><td>出库单、拣货任务、复检装箱、装车配送</td></tr>
+            <tr><td>8. 费用计算</td><td>送货数量、自提点数量、总距离、退货数量、车型</td><td>司机配送费用</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>8. 司机配送、退货交接与费用规则</h2><span>配送正向送货 + 逆向退货回收 + 费用计算</span></div>
+      <div class="body flow">
+        <div class="row">
+          <div class="node yellow"><b>车辆资料</b><p>维护车牌、车型、司机、车辆长宽高、载重、容积、冷链能力</p></div>
+          <div class="node yellow"><b>商品体积</b><p>商品记录长宽高、重量、包装单位，用于装载校验</p></div>
+          <div class="node yellow"><b>装载判断</b><p>根据商品体积、重量、箱数判断车辆是否装得下</p></div>
+          <div class="node yellow"><b>线路规划</b><p>可手动规划线路，也可按地图距离、订单量、自提点分布辅助规划</p></div>
+          <div class="node yellow"><b>司机任务</b><p>司机接收配送自提点、商品汇总、箱码、预计距离</p></div>
+        </div>
+        <div class="row">
+          <div class="node green"><b>地图销售数据</b><p>地图展示各自提点销售额、订单数、商品件数、售后/退货量</p></div>
+          <div class="node green"><b>自提点送货</b><p>司机到达自提点签到，交付配送商品</p></div>
+          <div class="node red"><b>自提点退货取回</b><p>司机同时取回退货商品，扫码确认退货单、SKU、数量</p></div>
+          <div class="node red"><b>司机退货交接</b><p>回仓后与仓库交接，仓库确认收到退货</p></div>
+          <div class="node yellow"><b>退货入库</b><p>仓库验收后入退货库位或报损，写库存流水</p></div>
+        </div>
+        <div class="row">
+          <div class="node blue"><b>费用规则</b><p>按送货数量、自提点数量、总距离、退货数量、车型等规则计算司机费用</p></div>
+          <div class="node blue"><b>费用试算</b><p>线路规划时预估司机费用和车辆装载率</p></div>
+          <div class="node blue"><b>费用确认</b><p>配送完成后按实际到达、实际送货、实际退货计算费用</p></div>
+          <div class="node blue"><b>费用报表</b><p>按司机、线路、车辆、配送日统计费用</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>9. 系统任务与中间件流转</h2><span>MQ 主要处理优惠券和订单分账；定时任务处理配送数据、提醒、超时</span></div>
+      <div class="body">
+        <table>
+          <thead><tr><th>触发点</th><th>任务/事件</th><th>中间件</th><th>处理结果</th></tr></thead>
+          <tbody>
+            <tr><td>优惠券领取/使用/退回</td><td>coupon.event</td><td>RocketMQ</td><td>处理优惠券发放、锁定、核销、退回和库存扣减</td></tr>
+            <tr><td>订单提交后 10 分钟</td><td>pay.remind</td><td>XXL-Job + 公众号模板消息</td><td>最后 5 分钟提醒用户支付</td></tr>
+            <tr><td>未支付订单超时</td><td>order.unpaid.timeout</td><td>XXL-Job</td><td>15 分钟未支付自动取消，释放库存和优惠券</td></tr>
+            <tr><td>支付成功回调</td><td>pay.success</td><td>支付回调</td><td>订单已付款，生成支付流水和佣金预估</td></tr>
+            <tr><td>订单配送日到达生成节点</td><td>delivery.data.generate</td><td>XXL-Job</td><td>根据订单配送日生成配送数据，并按自提点汇总商品</td></tr>
+            <tr><td>配送数据生成后</td><td>vehicle.load.check</td><td>系统计算</td><td>根据商品长宽高、重量、箱数和车辆容量判断是否能装满或超载</td></tr>
+            <tr><td>线路规划/调整</td><td>driver.fee.calculate</td><td>系统计算</td><td>根据送货数量、自提点数量、总距离、退货数量、车型计算司机费用</td></tr>
+            <tr><td>确认出仓</td><td>order.shipped</td><td>WMS 事件</td><td>订单已发货，不能取消，只能售后</td></tr>
+            <tr><td>司机自提点取回退货</td><td>return.handover.driver</td><td>WMS 事件</td><td>生成司机退货交接数据，记录退货 SKU、数量、自提点、司机</td></tr>
+            <tr><td>司机回仓交接退货</td><td>return.handover.warehouse</td><td>WMS 事件</td><td>仓库确认退货，合格入库或报损，写 return_in/loss 库存流水</td></tr>
+            <tr><td>订单完成</td><td>order.completed</td><td>RocketMQ</td><td>处理订单分账，生成分账流水，佣金入账户</td></tr>
+            <tr><td>商品重新上架</td><td>want.notify</td><td>公众号模板消息</td><td>通知点击“想要”的用户</td></tr>
+            <tr><td>库存低于阈值</td><td>replenish.scan</td><td>XXL-Job</td><td>自动生成补货任务</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
