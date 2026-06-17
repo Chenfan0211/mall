@@ -213,6 +213,34 @@
     .metric.yellow strong { color: var(--yellow); }
     .metric.red { border-color: var(--red); }
     .metric.red strong { color: var(--red); }
+    .points-rule-list {
+      display: grid;
+      gap: 10px;
+    }
+    .points-rule {
+      border: 1px solid #e1e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfe;
+      display: grid;
+      gap: 6px;
+    }
+    .points-rule b { color: #1f2a44; font-size: 14px; }
+    .points-rule span { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .points-ledger-note {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .points-ledger-note div {
+      border: 1px solid #e1e8f0;
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+    }
+    .points-ledger-note b { display: block; color: var(--primary); margin-bottom: 4px; }
+    .points-ledger-note span { color: var(--muted); font-size: 12px; line-height: 1.5; }
     .filters {
       background: var(--soft);
       border: 1px solid #e7edf4;
@@ -955,17 +983,18 @@
       margin-bottom: 8px;
       box-shadow: 0 1px 5px rgba(16,24,40,.08);
       cursor: pointer;
+      position: relative;
       display: grid;
-      grid-template-columns: 96px minmax(0,1fr) 38px;
-      gap: 8px;
-      padding: 9px;
-      align-items: center;
+      grid-template-columns: 110px minmax(0,1fr);
+      gap: 10px;
+      padding: 9px 52px 10px 9px;
+      align-items: start;
     }
     .shop-product:active, .cat-product:active {
       transform: scale(.992);
     }
     .shop-product-media {
-      width: 96px;
+      width: 110px;
       display: grid;
       gap: 6px;
       align-self: stretch;
@@ -992,6 +1021,8 @@
       font-size: 11px;
       font-weight: 900;
       white-space: nowrap;
+      width: fit-content;
+      max-width: 110px;
     }
     .ship-tag {
       position: absolute;
@@ -1068,10 +1099,9 @@
       max-width: 100%;
     }
     .shop-product .shop-sale-meta {
-      margin-right: -32px;
-      padding-right: 32px;
+      padding-right: 0;
       display: grid;
-      grid-template-columns: max-content 1fr;
+      grid-template-columns: minmax(0,1fr);
       gap: 5px 6px;
       align-items: center;
       font-size: 12px;
@@ -1124,9 +1154,22 @@
       font-weight: 900;
       white-space: nowrap;
     }
-    .shop-product .shop-sale-meta .rank-line {
+    .shop-product-tag-row {
       grid-column: 1 / -1;
-      width: max-content;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      margin-top: -2px;
+    }
+    .shop-product-tag-row .shop-product-date {
+      flex: 0 0 auto;
+      max-width: none;
+    }
+    .shop-product .shop-sale-meta .rank-line,
+    .shop-product-tag-row .rank-line {
+      width: fit-content;
+      max-width: 100%;
       min-height: 22px;
       padding: 3px 8px;
       border-radius: 7px;
@@ -1137,6 +1180,12 @@
       font-weight: 900;
       cursor: pointer;
       font-family: inherit;
+      white-space: nowrap;
+    }
+    .shop-product-tag-row .rank-line {
+      flex: 0 1 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .shop-product .shop-price {
       font-size: 22px;
@@ -1176,7 +1225,13 @@
       width: 34px;
       height: 34px;
       min-width: 34px;
-      justify-self: end;
+    }
+    .shop-product > .cart-btn,
+    .shop-product > .round-add {
+      position: absolute;
+      right: 10px;
+      bottom: 12px;
+      z-index: 2;
     }
     .round-add {
       width: 38px;
@@ -1203,6 +1258,7 @@
       stroke-width: 2.6;
       stroke-linecap: round;
       stroke-linejoin: round;
+      pointer-events: none;
     }
     .activity-page {
       background: #f3f3f3;
@@ -1868,6 +1924,14 @@
       font-size: 17px;
       line-height: 1.35;
     }
+    .cat-product .shop-desc {
+      display: none;
+    }
+    .cat-product .shop-sale-meta {
+      margin-top: 3px;
+      font-size: 11px;
+      gap: 2px;
+    }
     .cart-head {
       background: white;
       padding: 54px 16px 14px;
@@ -2267,6 +2331,106 @@
       font-style: normal;
       margin: 0 auto 6px;
     }
+    .order-icons i {
+      position: relative;
+      font-size: 0;
+      overflow: hidden;
+    }
+    .order-icons i::before,
+    .order-icons i::after {
+      content: "";
+      position: absolute;
+      box-sizing: border-box;
+    }
+    .order-icons i[data-order-icon="unpaid"]::before {
+      width: 25px;
+      height: 18px;
+      left: 8px;
+      top: 12px;
+      border: 2px solid #172033;
+      border-radius: 4px;
+      background: linear-gradient(#f6c247 0 45%, #fff 45% 100%);
+    }
+    .order-icons i[data-order-icon="unpaid"]::after {
+      width: 16px;
+      height: 2px;
+      left: 12px;
+      top: 24px;
+      background: #172033;
+      box-shadow: 5px 0 0 #172033;
+    }
+    .order-icons i[data-order-icon="paid"]::before {
+      width: 24px;
+      height: 25px;
+      left: 9px;
+      top: 9px;
+      border: 2px solid #172033;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #fff 0 52%, #f6c247 52% 100%);
+    }
+    .order-icons i[data-order-icon="paid"]::after {
+      width: 11px;
+      height: 2px;
+      left: 15px;
+      top: 17px;
+      background: #d84d38;
+      box-shadow: 0 6px 0 #d84d38;
+    }
+    .order-icons i[data-order-icon="done"]::before {
+      width: 24px;
+      height: 24px;
+      left: 9px;
+      top: 9px;
+      border: 2px solid #172033;
+      border-radius: 5px;
+      background: #fff;
+    }
+    .order-icons i[data-order-icon="done"]::after {
+      width: 14px;
+      height: 8px;
+      left: 14px;
+      top: 16px;
+      border-left: 3px solid #e85d3f;
+      border-bottom: 3px solid #e85d3f;
+      transform: rotate(-45deg);
+    }
+    .order-icons i[data-order-icon="pickup"]::before {
+      width: 26px;
+      height: 24px;
+      left: 8px;
+      top: 10px;
+      border: 2px solid #172033;
+      border-radius: 5px;
+      background: #fff;
+    }
+    .order-icons i[data-order-icon="pickup"]::after {
+      width: 14px;
+      height: 14px;
+      left: 14px;
+      top: 13px;
+      border-right: 3px solid #34c759;
+      border-bottom: 3px solid #34c759;
+      transform: rotate(45deg);
+    }
+    .order-icons i[data-order-icon="refund"]::before {
+      width: 23px;
+      height: 18px;
+      left: 10px;
+      top: 13px;
+      border: 2px solid #172033;
+      border-radius: 5px;
+      background: #fff;
+    }
+    .order-icons i[data-order-icon="refund"]::after {
+      width: 16px;
+      height: 16px;
+      left: 13px;
+      top: 12px;
+      border-left: 3px solid #e85d3f;
+      border-bottom: 3px solid #e85d3f;
+      border-radius: 0 0 0 9px;
+      transform: rotate(35deg);
+    }
     .service-icons.compact-service i {
       width: 42px;
       height: 42px;
@@ -2351,7 +2515,8 @@
       gap: 10px;
       align-items: center;
       position: relative;
-      padding-top: 18px;
+      padding-top: 14px;
+      overflow: hidden;
     }
     .coupon-amount {
       min-height: 76px;
@@ -2385,22 +2550,29 @@
     }
     .coupon-count-badge {
       position: absolute;
-      top: 8px;
-      right: 10px;
-      min-height: 24px;
-      padding: 0 10px;
-      border-radius: 999px;
+      top: -1px;
+      right: -1px;
+      min-height: 25px;
+      padding: 0 11px;
+      border-radius: 0 14px 0 12px;
       background: #d82236;
       color: white;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
-      box-shadow: 0 6px 14px rgba(216,34,54,.24);
+      line-height: 1;
+      box-shadow: 0 5px 12px rgba(216,34,54,.24);
+      z-index: 2;
     }
     .coupon-row b, .receiver-row b { display:block; margin-bottom:4px; }
     .coupon-row span, .receiver-row span { color:#7b5f51; font-size:12px; line-height:1.45; }
+    .coupon-row .coupon-count-badge {
+      color: white;
+      font-size: 12px;
+      line-height: 1;
+    }
     .coupon-product-summary {
       margin: 12px;
       padding: 12px;
@@ -2431,6 +2603,9 @@
       color: white;
       font-weight: 900;
       cursor: pointer;
+      align-self: end;
+      justify-self: end;
+      width: 76px;
     }
     .recommend-bottom button svg {
       width: 17px;
@@ -2854,7 +3029,7 @@
     }
     .order-detail-page {
       background: #f7f1ea;
-      padding-bottom: 104px;
+      padding-bottom: 122px;
     }
     .order-detail-hero {
       min-height: 236px;
@@ -2919,7 +3094,7 @@
       font-size: 13px;
     }
     .order-detail-body {
-      padding: 12px;
+      padding: 12px 12px 118px;
       display: grid;
       gap: 12px;
     }
@@ -3031,18 +3206,20 @@
       color: white;
     }
     .order-detail-page .detail-action-row.detail-floating-actions {
-      position: sticky;
+      position: absolute;
       left: 0;
       right: 0;
-      bottom: 12px;
+      bottom: 0;
       z-index: 8;
       grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-      margin: 4px 0 0;
-      padding: 10px;
-      border: 1px solid rgba(241,216,203,.92);
-      border-radius: 20px;
-      background: rgba(255,250,247,.96);
-      box-shadow: 0 14px 34px rgba(23,32,51,.18);
+      margin: 0;
+      padding: 8px 12px;
+      min-height: 66px;
+      border: 0;
+      border-top: 1px solid rgba(241,216,203,.92);
+      border-radius: 0;
+      background: rgba(255,250,247,.98);
+      box-shadow: 0 -10px 24px rgba(23,32,51,.14);
       backdrop-filter: blur(10px);
     }
     .order-detail-page .detail-action-row.detail-floating-actions button {
@@ -3060,6 +3237,29 @@
     }
     .order-detail-product-head h3 {
       margin: 0;
+    }
+    .order-detail-product-head span {
+      color: #8c6a58;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .order-detail-product-list {
+      display: grid;
+      gap: 12px;
+    }
+    .order-detail-product-line + .order-detail-product-line {
+      padding-top: 12px;
+      border-top: 1px solid #f5e5dc;
+    }
+    .order-product-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .order-product-title-row h4 {
+      min-width: 0;
+      margin-bottom: 6px;
     }
     .order-product-review-btn,
     .order-product-reviewed {
@@ -4570,6 +4770,10 @@
       background: #eef6ff;
       color: #2b6cb0;
     }
+    .role-status.amber {
+      background: #fff7db;
+      color: #a36d14;
+    }
     .role-status.gray {
       background: #f4f1ee;
       color: #78665b;
@@ -4759,6 +4963,11 @@
     .role-action-btn.danger {
       background: #fff0ec;
       color: #b42318;
+    }
+    .role-action-btn:disabled {
+      background: #f4f1ee;
+      color: #9a8a80;
+      cursor: default;
     }
     .role-product-summary-card {
       padding: 12px;
@@ -6495,11 +6704,19 @@
       box-shadow: 0 8px 20px rgba(20, 80, 72, .07);
     }
     .warehouse-receiver-filter-head {
+      width: 100%;
+      border: 0;
+      padding: 0;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       min-height: 26px;
       color: #173b3a;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
     }
     .warehouse-receiver-filter-head span {
       display: inline-flex;
@@ -6518,6 +6735,7 @@
       box-shadow: 0 0 0 4px rgba(53, 165, 131, .13);
     }
     .warehouse-receiver-filter-head b {
+      margin-left: auto;
       max-width: 142px;
       min-height: 25px;
       padding: 0 10px;
@@ -6534,6 +6752,20 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .warehouse-receiver-filter-head i {
+      width: 7px;
+      height: 7px;
+      border-right: 2px solid #2d7569;
+      border-bottom: 2px solid #2d7569;
+      transform: rotate(45deg);
+      transition: transform .18s ease;
+      flex: 0 0 auto;
+      margin: 0 2px 3px 0;
+    }
+    .warehouse-receiver-filter.open .warehouse-receiver-filter-head i {
+      transform: rotate(225deg);
+      margin: 4px 2px 0 0;
+    }
     .warehouse-receiver-filter-options {
       display: flex;
       gap: 7px;
@@ -6541,6 +6773,9 @@
       padding: 1px 0 2px;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
+    }
+    .warehouse-receiver-filter-options[hidden] {
+      display: none;
     }
     .warehouse-receiver-filter-options::-webkit-scrollbar {
       display: none;
@@ -9080,7 +9315,7 @@
       padding-bottom: 188px;
     }
     .warehouse-purchase-page .warehouse-main {
-      padding-bottom: 112px;
+      padding-bottom: 164px;
     }
     .warehouse-purchase-tools {
       margin: 0 12px 10px;
@@ -9114,16 +9349,17 @@
     }
     .warehouse-purchase-item {
       display: grid;
-      grid-template-columns: 58px minmax(0, 1fr);
-      gap: 10px;
-      padding: 10px;
+      grid-template-columns: 64px minmax(0, 1fr);
+      gap: 11px;
+      padding: 11px;
       border-radius: 14px;
       background: #fbfdfb;
       border: 1px solid #dceee7;
+      position: relative;
     }
     .warehouse-purchase-item .warehouse-detail-img {
-      width: 58px;
-      height: 58px;
+      width: 64px;
+      height: 64px;
       border-radius: 12px;
     }
     .warehouse-purchase-item h4 {
@@ -9137,6 +9373,64 @@
       color: #66847c;
       font-size: 12px;
       line-height: 1.45;
+    }
+    .warehouse-purchase-info {
+      min-width: 0;
+      display: grid;
+      gap: 7px;
+      align-content: start;
+    }
+    .warehouse-purchase-title-line {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+    }
+    .warehouse-purchase-title-line h4 {
+      min-width: 0;
+      margin-bottom: 0;
+    }
+    .warehouse-purchase-summary {
+      margin: 0;
+      color: #5f7b74;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .warehouse-purchase-fields {
+      display: grid;
+      gap: 4px;
+      color: #5f7b74;
+      font-size: 12px;
+      line-height: 1.38;
+    }
+    .warehouse-purchase-fields span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .warehouse-purchase-fields b {
+      color: #173b3a;
+      font-size: 12px;
+      font-weight: 900;
+      margin-right: 4px;
+    }
+    .warehouse-purchase-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .warehouse-purchase-tags span {
+      border-radius: 999px;
+      background: #eef8f3;
+      color: #117b6d;
+      padding: 4px 7px;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .warehouse-purchase-row {
       display: grid;
@@ -9254,6 +9548,24 @@
       background: #fff1f2;
       color: #c53646;
     }
+    .warehouse-purchase-selected-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 1px;
+    }
+    .warehouse-purchase-selected-actions .warehouse-qty-stepper {
+      width: 132px;
+    }
+    .warehouse-purchase-selected-actions .warehouse-purchase-delete-btn {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      min-height: 28px;
+      padding: 0 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
     .warehouse-purchase-source {
       margin-top: 8px;
       border-radius: 12px;
@@ -9294,13 +9606,16 @@
       cursor: pointer;
     }
     .warehouse-purchase-catalog-item {
-      grid-template-columns: 58px minmax(0, 1fr) auto;
-      align-items: center;
+      grid-template-columns: 64px minmax(0, 1fr) 54px;
+      align-items: stretch;
+      min-height: 92px;
     }
     .warehouse-purchase-catalog-item .warehouse-purchase-add-btn {
-      align-self: stretch;
-      min-width: 54px;
+      width: 54px;
+      min-width: 0;
       padding: 0 10px;
+      align-self: stretch;
+      justify-self: end;
     }
     .warehouse-scan-page .warehouse-main {
       padding-bottom: 112px;
@@ -9619,9 +9934,7 @@
       gap: 10px;
     }
     .warehouse-scan-search {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 76px;
-      gap: 8px;
+      display: block;
       margin-bottom: 10px;
     }
     .warehouse-scan-search input,
@@ -9641,7 +9954,6 @@
       height: 38px;
       padding: 0 10px;
     }
-    .warehouse-scan-search button,
     .warehouse-scan-one {
       min-height: 38px;
       padding: 0 10px;
@@ -9656,10 +9968,6 @@
       font-weight: 900;
       font-family: inherit;
       cursor: pointer;
-    }
-    .warehouse-scan-search button {
-      width: 76px;
-      font-size: 12px;
     }
     .warehouse-scan-one {
       min-width: 86px;
@@ -13012,14 +13320,20 @@
     }
     .sku-grid {
       display: grid;
-      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
     }
     .sku-option {
       border: 1px solid #efd5c8;
-      border-radius: 16px;
-      padding: 11px 12px;
+      border-radius: 14px;
+      min-height: 44px;
+      padding: 0 8px;
       background: #fffaf6;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
     .sku-option.active {
       border-color: #e85d3f;
@@ -13027,18 +13341,10 @@
       box-shadow: 0 8px 18px rgba(232,93,63,.12);
     }
     .sku-option b {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
+      display: block;
       color: #172033;
       font-size: 15px;
-    }
-    .sku-option span {
-      display: block;
-      margin-top: 5px;
-      color: #8c6a58;
-      font-size: 12px;
-      line-height: 1.45;
+      line-height: 1.2;
     }
     .buyer-list {
       display: grid;
@@ -13427,10 +13733,13 @@
     .review-page {
       background: #f6f7f9;
       color: #172033;
-      padding-bottom: 86px;
+      padding-bottom: 18px;
+    }
+    .review-page .detail-bottom {
+      display: none;
     }
     .review-hero {
-      min-height: 178px;
+      min-height: 190px;
       padding: 42px 14px 14px;
       color: #172033;
       background: linear-gradient(145deg, #fff7ed 0%, #ffe8e7 54%, #fff 100%);
@@ -13474,10 +13783,10 @@
     }
     .review-stats {
       display: grid;
-      grid-template-columns: 1.2fr repeat(3, 1fr);
-      gap: 8px;
+      grid-template-columns: 1.15fr 1fr 1fr;
+      gap: 0;
       align-items: center;
-      padding: 12px;
+      padding: 13px 10px;
       border-radius: 14px;
       background: rgba(255,255,255,.82);
       box-shadow: inset 0 0 0 1px rgba(216,34,54,.06);
@@ -13485,9 +13794,17 @@
     .review-stats div {
       min-width: 0;
       color: #80665c;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 800;
-      line-height: 1.35;
+      line-height: 1.25;
+      text-align: center;
+    }
+    .review-rate-main {
+      display: grid;
+      align-content: center;
+      min-height: 56px;
+      padding-right: 8px;
+      border-right: 1px solid rgba(216,34,54,.1);
     }
     .review-stats strong {
       display: inline-block;
@@ -13499,12 +13816,32 @@
     .review-stats small {
       font-size: 14px;
     }
+    .review-rate-main span {
+      display: block;
+      margin-top: 5px;
+      color: #6b7280;
+      font-size: 12px;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+    .review-metric span {
+      display: block;
+      margin-top: 5px;
+      color: #6b7280;
+      font-size: 12px;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
     .review-stats b {
       display: block;
       color: #d82236;
       font-size: 16px;
-      line-height: 1;
-      margin-bottom: 5px;
+      line-height: 1.1;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+    .review-stats .review-metric + .review-metric {
+      border-left: 1px solid rgba(216,34,54,.1);
     }
     .review-filter-panel {
       margin: 10px 10px 0;
@@ -13564,7 +13901,7 @@
       display: grid;
       gap: 8px;
       background: transparent;
-      padding: 8px 10px 94px;
+      padding: 8px 10px 18px;
     }
     .review-list-count {
       color: #8b93a1;
@@ -13992,7 +14329,6 @@
     .shop-phone[data-mobile="user"] .pay-amount-card span,
     .shop-phone[data-mobile="user"] .pay-success,
     .shop-phone[data-mobile="user"] .pay-result-status p,
-    .shop-phone[data-mobile="user"] .sku-option span,
     .shop-phone[data-mobile="user"] .buyer-row,
     .shop-phone[data-mobile="user"] .detail-rank-card span,
     .shop-phone[data-mobile="user"] .detail-review-summary span,
@@ -14060,6 +14396,70 @@
     .shop-phone[data-mobile="user"] [data-cart-page-count] {
       font-size: 14px !important;
     }
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-card h3,
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-section .detail-review-title h3 {
+      font-size: 16px;
+    }
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .sku-option {
+      min-height: 40px;
+      padding: 0 6px;
+    }
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .sku-option b {
+      font-size: 14px;
+      line-height: 1.15;
+    }
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-section .detail-review-title button,
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-tags button,
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-head,
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-card p {
+      font-size: 12px;
+    }
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-summary {
+      padding: 12px 8px;
+    }
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-summary strong {
+      font-size: 30px;
+    }
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-summary strong small,
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-summary span,
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-summary em {
+      font-size: 12px;
+    }
+    .shop-phone[data-mobile="user"] [data-m-page="detail"] .detail-review-summary b {
+      font-size: 17px;
+    }
+    .shop-phone[data-mobile="user"] .user-floating-back {
+      position: absolute;
+      top: 44px;
+      left: 14px;
+      z-index: 7;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,.56);
+      border-radius: 50%;
+      background: rgba(255,255,255,.92);
+      color: #172033;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(15,23,42,.18);
+      backdrop-filter: blur(8px);
+    }
+    .shop-phone[data-mobile="user"] .user-floating-back.show {
+      display: flex;
+    }
+    .shop-phone[data-mobile="user"] .shop-page.floating-back-active .detail-back,
+    .shop-phone[data-mobile="user"] .shop-page.floating-back-active .activity-back,
+    .shop-phone[data-mobile="user"] .shop-page.floating-back-active .order-back,
+    .shop-phone[data-mobile="user"] .shop-page.floating-back-active .order-detail-back,
+    .shop-phone[data-mobile="user"] .shop-page.floating-back-active [data-rank-back],
+    .shop-phone[data-mobile="user"] .shop-page.floating-back-active [data-review-back] {
+      visibility: hidden;
+      pointer-events: none;
+    }
 
     @media (max-width: 1080px) {
       .layout { grid-template-columns: 1fr; }
@@ -14092,6 +14492,7 @@
       <button class="nav-btn" data-go="adminFinance">分账中心 <small>提现</small></button>
       <button class="nav-btn" data-go="adminCommission">佣金中心 <small>订单分佣</small></button>
       <button class="nav-btn" data-go="adminMarketing">营销中心 <small>优惠券</small></button>
+      <button class="nav-btn" data-go="adminPoints">积分中心 <small>用户积分</small></button>
       <button class="nav-btn" data-go="adminReport">报表中心 <small>经营报表</small></button>
       <div class="nav-title">小程序 H5</div>
       <button class="nav-btn" data-go="h5User">用户小程序 <small>下单</small></button>
@@ -14127,7 +14528,7 @@
             <div class="btns"><button class="btn primary" data-go="adminProduct">进入后台原型</button><button class="btn green" data-go="h5User">进入小程序原型</button><button class="btn yellow" data-go="wmsDocumentFlow">进入 WMS 原型</button></div>
           </div>
           <div class="grid four">
-            <div class="card metric"><strong>21</strong><span>功能模块</span></div>
+            <div class="card metric"><strong>22</strong><span>功能模块</span></div>
             <div class="card metric green"><strong>4</strong><span>小程序/H5 端</span></div>
             <div class="card metric yellow"><strong>17</strong><span>WMS 子模块</span></div>
             <div class="card metric red"><strong>全链路</strong><span>下单、入库、出库、售后、分账</span></div>
@@ -14166,7 +14567,7 @@
                   <div class="menu-group-title">交易履约</div>
                   <div class="menu-item" data-go="adminOrder">订单中心</div><div class="menu-item" data-go="adminAfterSale">售后中心</div>
                   <div class="menu-group-title">财务营销</div>
-                  <div class="menu-item" data-go="adminFinance">分账中心</div><div class="menu-item" data-go="adminCommission">佣金中心</div><div class="menu-item" data-go="adminMarketing">营销中心</div><div class="menu-item" data-go="adminReport">报表中心</div>
+                  <div class="menu-item" data-go="adminFinance">分账中心</div><div class="menu-item" data-go="adminCommission">佣金中心</div><div class="menu-item" data-go="adminMarketing">营销中心</div><div class="menu-item" data-go="adminPoints">积分中心</div><div class="menu-item" data-go="adminReport">报表中心</div>
                   <div class="menu-group-title">系统</div>
                   <div class="menu-item" data-go="adminBase">基础资料</div><div class="menu-item" data-go="adminPermission">权限中心</div>
                 </div>
@@ -14177,6 +14578,7 @@
                     <tr><td>订单中心</td><td>订单列表/详情</td><td>查询、取消、备注、导出</td><td>ord_order → pay_trade / wms_outbound</td></tr>
                     <tr><td>售后中心</td><td>售后审核/退款</td><td>通过、驳回、确认退货、退款</td><td>afs_after_sale → refund_trade</td></tr>
                     <tr><td>佣金中心</td><td>订单商品分佣明细</td><td>查询订单、查看分账方、导出佣金</td><td>ord_order_item → fin_commission_detail</td></tr>
+                    <tr><td>积分中心</td><td>用户积分账户/流水/规则</td><td>配置规则、手工调整、过期处理、导出</td><td>ord_order / 签到 → usr_point_flow → usr_point_account</td></tr>
                   </tbody></table>
                 </div>
               </div>
@@ -14232,6 +14634,7 @@
         <section class="view" id="adminFinance"></section>
         <section class="view" id="adminCommission"></section>
         <section class="view" id="adminMarketing"></section>
+        <section class="view" id="adminPoints"></section>
         <section class="view" id="adminReport"></section>
         <section class="view" id="wmsDocumentFlow"></section>
         <section class="view" id="wmsPurchase"></section>
@@ -14403,6 +14806,19 @@
         filters: ['活动名称','优惠券状态','城市','商品'],
         table: ['活动/券','类型','范围','商品规则','库存','状态','操作'],
         rows: [['新人券','优惠券','广州/深圳','水果可用','1200','进行中','编辑/停用'],['夏日水果页','活动页','全部城市','指定商品池','18商品','启用','排序/预览']]
+      },
+      adminPoints: {
+        title: '运营后台 / 积分中心',
+        desc: '记录每个用户积分账户、积分流水和过期批次；支持实付金额下单返积分、签到领取积分，后续可用于积分兑换商品。',
+        actions: [['新增积分规则','adminPoints','primary'],['手工调整积分','adminPoints','yellow'],['处理过期积分','systemJobs','red'],['导出积分流水','adminReport','green']],
+        filters: ['用户手机号','用户昵称','积分来源','过期状态','下单时间'],
+        table: ['用户','手机号','可用积分','待过期积分','最近来源','本笔积分','获得时间','过期时间','状态','操作'],
+        rows: [
+          ['陈晓琳','138****2918','1280','320','实付金额返积分 / DD202606090001','42','2026-06-09 10:36','2027-06-30 23:59','未过期','明细/调整/冻结'],
+          ['李明轩','136****7720','860','0','签到领取积分 / SIGN20260609002','5','2026-06-09 08:12','2026-12-31 23:59','未过期','明细/调整'],
+          ['张雨桐','139****6402','246','88','售后回退积分 / SH20260609001','-30','2026-06-09 16:20','2027-06-30 23:59','已回退','明细/订单/用户']
+        ],
+        detail: '用户维度维护 usr_point_account 汇总账户；每次获得、扣减、冻结、回退、过期都写 usr_point_flow。每一笔正向积分必须写 expire_time，兑换时按即将过期优先扣减，定时任务扫描到期批次生成 expire 类型流水。'
       },
       adminReport: {
         title: '运营后台 / 报表中心',
@@ -14666,6 +15082,16 @@
           ]
         },
         {
+          title: '积分中心',
+          buttons: [['新增积分规则','adminPoints','primary'],['手工调整积分','adminPoints','yellow'],['处理过期积分','systemJobs','red'],['导出积分流水','adminReport','green']],
+          steps: [
+            '新增积分规则：配置实付金额返积分比例、签到固定积分、连续签到奖励、到账时机和过期规则。',
+            '订单支付或完成后按实付金额生成 usr_point_flow(type=earn_order)，每笔正向积分必须写 expire_time。',
+            '签到成功写 usr_point_flow(type=earn_sign)，同一用户同一自然日只允许一条签到积分流水。',
+            '定时任务扫描 expire_time 到期且 remain_points>0 的批次，生成 expire 扣减流水并更新 usr_point_account。'
+          ]
+        },
+        {
           title: '报表中心',
           buttons: [['生成报表','adminReport','primary'],['导出 Excel','adminReport','green'],['库存报表','wmsInventory',''],['分佣报表','adminFinance','yellow']],
           steps: [
@@ -14910,7 +15336,7 @@
       }
     };
 
-    const navTargets = new Set(['overview','menu','adminProduct','adminCategory','adminBase','adminPublish','adminPermission','adminOrder','adminAfterSale','adminFinance','adminCommission','adminMarketing','adminReport','h5User','h5Station','h5Supplier','h5Warehouse','wmsDocumentFlow','wmsPurchase','wmsInbound','wmsOutbound','wmsPick','wmsDelivery','wmsVehicle','wmsRouteMap','wmsReturn','wmsDriverFee','wmsBase','wmsInventory','wmsFruit','wmsLogs','systemJobs']);
+    const navTargets = new Set(['overview','menu','adminProduct','adminCategory','adminBase','adminPublish','adminPermission','adminOrder','adminAfterSale','adminFinance','adminCommission','adminMarketing','adminPoints','adminReport','h5User','h5Station','h5Supplier','h5Warehouse','wmsDocumentFlow','wmsPurchase','wmsInbound','wmsOutbound','wmsPick','wmsDelivery','wmsVehicle','wmsRouteMap','wmsReturn','wmsDriverFee','wmsBase','wmsInventory','wmsFruit','wmsLogs','systemJobs']);
     const navWords = /返回|进入|打开|查看|单据流转|用户下单|商品发布|仓配履约|分账提现/;
     function isNavButton(text, go) {
       if (!go || go === '#') return false;
@@ -14980,6 +15406,7 @@
       return index === 0 ? 'primary' : 'ghost';
     }
     function actionTarget(text) {
+      if (/积分|签到|兑换|过期/.test(text)) return 'adminPoints';
       if (/佣金|分账方|确认入账|冻结原因/.test(text)) return 'adminCommission';
       if (/用户|订单/.test(text)) return 'adminOrder';
       if (/商品|规格|价格|保存|提交审核|同步 ES/.test(text)) return 'adminProduct';
@@ -15072,6 +15499,72 @@
       const seq = Math.floor(Math.random() * 900 + 100);
       categoryTreeData.stat.unshift({ name: `测试统计类目${seq}`, products: 0, status: '启用' });
       refreshCategoryTree();
+    }
+    const pointRuleRows = [
+      ['实付金额返积分','order_paid','每实付 1 元返 1 积分，按支付成功后的实付金额向下取整','支付成功后先生成 pending，订单完成后转可用','获得后次年 6 月 30 日 23:59 过期','启用'],
+      ['签到领取积分','daily_sign','每日签到 5 积分，连续 7 天额外 20 积分','签到成功立即可用，每人每天一次','获得后当年 12 月 31 日 23:59 过期','启用'],
+      ['售后回退积分','after_sale_refund','退款按原返积分批次扣回；不足时冻结账户并标记异常','售后退款成功后执行','沿用原积分批次过期时间','启用']
+    ];
+    const pointFlowRows = [
+      ['PF202606090001','陈晓琳','138****2918','earn_order','DD202606090001','+42','42','2026-06-09 10:36','2027-06-30 23:59','可用'],
+      ['PF202606090002','李明轩','136****7720','earn_sign','SIGN20260609002','+5','5','2026-06-09 08:12','2026-12-31 23:59','可用'],
+      ['PF202606090003','张雨桐','139****6402','refund_revoke','SH20260609001','-30','0','2026-06-09 16:20','2027-06-30 23:59','已回退'],
+      ['PF202606080009','王嘉怡','137****3185','expire','POINTBATCH202506','-68','0','2026-06-08 00:05','2026-06-07 23:59','已过期']
+    ];
+    function renderPointsCenter() {
+      const el = document.getElementById('adminPoints');
+      const cfg = pages.adminPoints;
+      if (!el || !cfg) return;
+      el.innerHTML = `
+        <div class="page-head"><div><h2>${cfg.title}</h2><p>${cfg.desc}</p></div>${buttons(cfg.actions)}</div>
+        <div class="grid four">
+          <div class="card metric"><strong>2386</strong><span>累计用户积分</span></div>
+          <div class="card metric green"><strong>2148</strong><span>当前可用积分</span></div>
+          <div class="card metric yellow"><strong>408</strong><span>90 天内待过期</span></div>
+          <div class="card metric red"><strong>68</strong><span>今日已过期积分</span></div>
+        </div>
+        <br>
+        <div class="canvas" data-standard-page="adminPoints">
+          <div class="canvas-head"><h3>用户积分账户 / 列表原型</h3>${buttons([['返回总览','overview',''],['查看报表','adminReport','primary']])}</div>
+          <div class="body">
+            ${filters(cfg.filters)}
+            <div class="action-result" data-local-result>已加载 ${cfg.rows.length} 条用户积分账户数据；每笔正向积分都带独立过期时间。</div>
+            <div class="points-ledger-note">
+              <div><b>账户汇总</b><span>usr_point_account 保存用户可用、冻结、累计获得、累计消耗和待过期积分。</span></div>
+              <div><b>流水明细</b><span>usr_point_flow 记录每一次获得、扣减、回退、冻结、过期，正向流水必须有 expire_time。</span></div>
+              <div><b>扣减顺序</b><span>积分兑换商品时按 expire_time 升序扣减，优先消耗快过期批次。</span></div>
+            </div>
+            ${table(cfg.table, cfg.rows)}
+          </div>
+        </div>
+        <br>
+        <div class="grid two">
+          <div class="canvas">
+            <div class="canvas-head"><h3>积分获取规则</h3>${buttons([['新增积分规则','adminPoints','primary'],['保存积分规则','adminPoints','green']])}</div>
+            <div class="body">
+              <div class="points-rule-list">
+                <div class="points-rule"><b>实付金额下单返积分</b><span>支付成功后按订单实付金额计算积分，建议订单完成后转为可用；若发生退款，按原流水批次回退积分。</span><span class="tag green">order_paid → usr_point_flow(type=earn_order)</span></div>
+                <div class="points-rule"><b>签到领取积分</b><span>用户每天签到领取固定积分，可配置连续签到奖励；每人每天仅允许一条签到积分流水。</span><span class="tag yellow">daily_sign → usr_point_flow(type=earn_sign)</span></div>
+                <div class="points-rule"><b>积分兑换预留</b><span>后续兑换商品时生成 redeem 类型流水，按过期时间优先扣减，并关联兑换订单或商品。</span><span class="tag">point_redeem_order</span></div>
+              </div>
+              <br>
+              ${table(['规则','触发点','计算方式','到账时机','过期时间','状态'], pointRuleRows)}
+            </div>
+          </div>
+          <div class="canvas">
+            <div class="canvas-head"><h3>积分流水与过期批次</h3>${buttons([['处理过期积分','systemJobs','red'],['导出积分流水','adminReport','green']])}</div>
+            <div class="body">
+              ${table(['流水号','用户','手机号','类型','关联单号','积分变动','剩余可用','获得/处理时间','过期时间','状态'], pointFlowRows)}
+              <br>
+              <div class="card">
+                <h3>表结构建议</h3>
+                <p>usr_point_account：user_id、available_points、frozen_points、total_earned、total_used、next_expire_points、next_expire_time。</p>
+                <p>usr_point_flow：user_id、flow_type、source_type、source_id、points、remain_points、occur_time、expire_time、status、remark。所有 earn_* 正向流水必须写 expire_time。</p>
+                <p>usr_point_rule：rule_type、earn_ratio、fixed_points、effective_time、expire_type、expire_value、status，用于配置下单返积分和签到奖励。</p>
+              </div>
+            </div>
+          </div>
+        </div>`;
     }
     const wmsDocumentFlows = [
       {
@@ -15180,6 +15673,7 @@
     function renderStandard(id, cfg) {
       const el = document.getElementById(id);
       if (id === 'adminCategory') return renderCategoryCenter();
+      if (id === 'adminPoints') return renderPointsCenter();
       if (id === 'wmsDocumentFlow') return renderWmsDocumentFlow();
       el.innerHTML = `
         <div class="page-head"><div><h2>${cfg.title}</h2><p>${cfg.desc}</p></div>${buttons(cfg.actions)}</div>
@@ -15261,6 +15755,7 @@
         adminFinance: [`测试团点${seq}`, '自提点', '0.00', '0.00', `TX20260610${seq}`, '待审核', '通过/驳回'],
         adminCommission: [`DD20260610${seq}`, '新疆库尔勒香梨 5斤装', `测试用户 138****${String(seq).slice(-4)}`, '王府花园', '自提点', '36.80', '团点佣金 8%', '2.94', '待入账', `CM20260610${seq}`, '订单/商品/用户/重算/确认入账'],
         adminMarketing: [`测试优惠券${seq}`, '优惠券', '广州/深圳', '水果可用', '500', '进行中', '编辑/停用'],
+        adminPoints: [`测试用户${seq}`, '138****' + String(seq).slice(-4), '105', '105', `实付金额返积分 / DD20260610${seq}`, '36', '2026-06-10 12:08', '2027-06-30 23:59', '未过期', '明细/调整/冻结'],
         adminReport: [`测试报表${seq}`, '12', '3680.00', '0.00', '86', '294.00', '导出'],
         wmsDocumentFlow: [`测试单据${seq}`, '仓库发起 / 订单自动生成', '仓库发起需审核；订单自动生成无需审核', '生成 → 审核 → 作业 → 库存流水', '完成', '查看单据'],
         wmsPurchase: [`PO20260610${seq}`, '人工创建', '新疆供应链', '广州中心仓', '3', '80箱', '待审核', '未生成', '审核'],
@@ -15496,14 +15991,15 @@
       stationAddr: '长沙市芙蓉区车站北路王府花园 3 栋左侧架空负一楼',
       receiver: '义炎 137****3185',
       pickupTime: '2026-06-10 16:00-20:00',
-      goodsAmount: '44.48',
+      goodsAmount: '63.28',
       discount: '5.00',
       freight: '0.00',
-      total: '39.48',
+      total: '58.28',
       items: [
-        { img: shopImgs.list, title: '临期秒杀！西藏印象后藏牦牛酸奶', spec: '140g/瓶*2瓶 / 冷藏自提', price: '5.99', qty: 1 },
-        { img: shopImgs.detail, title: '后藏青稞牦牛酸奶', spec: '1kg/桶*1 / 低温配送', price: '18.50', qty: 1 },
-        { img: shopImgs.detail2, title: '苗育万物新疆西梅干', spec: '500g/袋*1 / 休闲零食', price: '19.99', qty: 1 }
+        { img: shopImgs.list, title: '山东烟台红富士苹果 6枚', spec: '精选大果 / 6枚装', price: '18.80', qty: 1 },
+        { img: shopImgs.detail, title: '四川爱媛果冻橙 5斤装', spec: '基地现摘 / 5斤装', price: '29.90', qty: 1 },
+        { img: shopImgs.home, title: '有机蔬菜组合 3斤', spec: '当日分拣 / 3斤装', price: '9.90', qty: 1 },
+        { img: shopImgs.category, title: '西瓜小果 1个', spec: '清甜多汁 / 1个', price: '4.68', qty: 1 }
       ]
     };
     const receiverData = [
@@ -15668,17 +16164,17 @@
       {
         id: 'W260610104216718420',
         station: '王府花园',
-        status: '待备货',
-        statusClass: 'paid',
-        statusTitle: '已付款，等待仓库生成配货任务',
-        statusDesc: '订单已支付，系统会按配送日汇总到配送数据，再生成仓库备货任务。',
+        status: '仓库备货中',
+        statusClass: 'preparing',
+        statusTitle: '仓库备货中',
+        statusDesc: '订单已支付，仓库正在按波次拣货、复核和装箱。',
         time: '2026-06-10 10:42:16',
         payTime: '2026-06-10 10:42:40',
         pickupTime: '2026-06-11 16:00-20:00',
         amount: '48.80',
         freight: '0.00',
         discount: '6.00',
-        orderType: 'paid',
+        orderType: 'preparing',
         user: '义炎 137****3185',
         stationAddr: '长沙市芙蓉区车站北路王府花园 3 栋左侧架空负一楼',
         product: {
@@ -15691,7 +16187,7 @@
         timeline: [
           ['提交订单', '2026-06-10 10:42:16'],
           ['支付成功', '2026-06-10 10:42:40'],
-          ['等待配送日汇总', '2026-06-10 10:43:02']
+          ['仓库备货中', '2026-06-10 10:43:02']
         ]
       },
       {
@@ -15757,10 +16253,10 @@
       {
         id: 'W260609165025670314',
         station: '王府花园',
-        status: '自提点已收货',
-        statusClass: 'arrived',
-        statusTitle: '自提点已收货，等待核销',
-        statusDesc: '司机已完成交接，自提点已确认到货，用户可在提货时间内到点提货。',
+        status: '待提货',
+        statusClass: 'pickup',
+        statusTitle: '已到自提点，等待提货',
+        statusDesc: '司机已配送到店，用户可按提货时间到自提点提货。',
         time: '2026-06-09 16:50:25',
         payTime: '2026-06-09 16:51:02',
         pickupTime: '2026-06-10 16:00-20:00',
@@ -15781,7 +16277,7 @@
           ['提交订单', '2026-06-09 16:50:25'],
           ['支付成功', '2026-06-09 16:51:02'],
           ['司机交接', '2026-06-10 15:20:00'],
-          ['自提点收货', '2026-06-10 15:35:12']
+          ['司机配送到店', '2026-06-10 15:35:12']
         ]
       },
       {
@@ -15826,7 +16322,7 @@
         amount: '9.99',
         freight: '0.00',
         discount: '3.00',
-        orderType: 'paid',
+        orderType: 'pickup',
         user: '义炎 137****3185',
         stationAddr: '长沙市芙蓉区车站北路王府花园 3 栋左侧架空负一楼',
         product: {
@@ -16035,6 +16531,7 @@
     let activeReviewTab = 'all';
     let activeReviewTag = '';
     let activeOrderReviewId = '';
+    let activeOrderReviewProductKey = '';
     let activeAfterSaleOrderId = '';
     const rankTagData = [
       { key:'fruit-hot', name:'鲜果热卖榜', short:'鲜果榜', rule:'依据最近7天销量计算，每日更新', products:[
@@ -16157,9 +16654,9 @@
         supplier: shortTitle.includes('橙') ? '四川眉山果业' : shortTitle.includes('苹果') ? '烟台优果供应链' : shortTitle.includes('酸奶') ? '后藏乳业' : shortTitle.includes('蔬菜') ? '本地鲜蔬合作社' : '华南果业',
         rank,
         specs: [
-          { name: sku1, desc: '家庭自提推荐，团点价限时供应', price: basePrice.toFixed(2), oldPrice: (basePrice + 6).toFixed(2), stock: Math.max(35, Math.floor(basePrice * 6)) },
-          { name: '双份优惠装', desc: '2份组合更划算，适合家庭囤货', price: (basePrice * 1.86).toFixed(2), oldPrice: (basePrice * 2.18).toFixed(2), stock: Math.max(18, Math.floor(basePrice * 3)) },
-          { name: '分享团购装', desc: '邻里拼单规格，到点统一提货', price: (basePrice * 2.68).toFixed(2), oldPrice: (basePrice * 3.15).toFixed(2), stock: Math.max(12, Math.floor(basePrice * 2)) }
+          { name: sku1, desc: '家庭自提推荐，团点价限时供应', price: basePrice.toFixed(2), oldPrice: (basePrice + 6).toFixed(2), stock: Math.max(35, Math.floor(basePrice * 6)), sold: rank ? Math.floor(rank.sales7d / 7) : Math.floor(basePrice * 38 + 260), pickup: '2026-06-10 16:00-20:00' },
+          { name: '双份优惠装', desc: '2份组合更划算，适合家庭囤货', price: (basePrice * 1.86).toFixed(2), oldPrice: (basePrice * 2.18).toFixed(2), stock: Math.max(18, Math.floor(basePrice * 3)), sold: rank ? Math.floor(rank.sales7d / 10) : Math.floor(basePrice * 24 + 180), pickup: '2026-06-11 16:00-20:00' },
+          { name: '分享团购装', desc: '邻里拼单规格，到点统一提货', price: (basePrice * 2.68).toFixed(2), oldPrice: (basePrice * 3.15).toFixed(2), stock: Math.max(12, Math.floor(basePrice * 2)), sold: rank ? Math.floor(rank.sales7d / 14) : Math.floor(basePrice * 16 + 120), pickup: '2026-06-12 16:00-20:00' }
         ],
         buyers: [
           { name: '义炎', station: '王府花园', spec: sku1, qty: 1, time: '刚刚下单' },
@@ -16202,16 +16699,16 @@
       const rankLabel = rank && rank.topTen ? `${rank.rankShort}排行第${rank.rankNo}名` : '';
       const deliveryDate = '2026年06月10日';
       return `<div class="shop-product" data-product-id="${productKey(title)}">
-        <div class="shop-product-media"><div class="shop-product-img" style="${bg(img)}"></div><span class="shop-product-date">提货日期 ${monthDay(deliveryDate)}</span></div>
+        <div class="shop-product-media"><div class="shop-product-img" style="${bg(img)}"></div></div>
         <div class="shop-product-info">
           <h4>${title}</h4>
           <div class="price-row"><span class="shop-price">¥${price}</span><span class="old-price">¥${oldPrice}</span></div>
           <div class="shop-sale-meta">
             <span class="sale-stock"><b>已售${soldCount}</b><b>剩余${remainCount}</b></span>
-            ${rankLabel ? `<button class="rank-line" data-open-rank="${rank.rankKey}">${rankLabel}</button>` : ''}
           </div>
         </div>
-        ${mode==='add'?`<button class="round-add" aria-label="加入购物车" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-price="${price}" data-cart-img="${img}">${cartIconSvg}</button>`:`<button class="cart-btn" aria-label="加入购物车" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-price="${price}" data-cart-img="${img}">${cartIconSvg}</button>`}
+        <div class="shop-product-tag-row"><span class="shop-product-date">提货日期 ${monthDay(deliveryDate)}</span>${rankLabel ? `<button class="rank-line" data-open-rank="${rank.rankKey}">${rankLabel}</button>` : ''}</div>
+        ${mode==='add'?`<button class="round-add" aria-label="加入购物车" onclick="return handleAddCartClick(this,event)" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-spec="${desc}" data-cart-price="${price}" data-cart-old="${oldPrice}" data-cart-img="${img}">${cartIconSvg}</button>`:`<button class="cart-btn" aria-label="加入购物车" onclick="return handleAddCartClick(this,event)" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-spec="${desc}" data-cart-price="${price}" data-cart-old="${oldPrice}" data-cart-img="${img}">${cartIconSvg}</button>`}
       </div>`;
     }
     function renderShopMobile(viewId, cfg) {
@@ -16241,8 +16738,9 @@
               ${shopCheckoutPage()}
               ${shopPayPage()}
               ${shopPayResultPage()}
-              <div class="mini-cart-panel" data-mini-cart>
-              <div class="mini-cart-head"><div class="mini-cart-title"><button class="mini-cart-toggle" data-mini-cart-toggle>−</button><b>购物车</b></div><span data-mini-cart-count>0 件商品</span></div>
+              <button class="user-floating-back" data-user-floating-back aria-label="返回">‹</button>
+              <div class="mini-cart-panel compact" data-mini-cart>
+              <div class="mini-cart-head"><div class="mini-cart-title"><button class="mini-cart-toggle" data-mini-cart-toggle>+</button><b>购物车</b></div><span data-mini-cart-count>0 件商品</span></div>
                 <div class="mini-cart-items" data-mini-cart-items></div>
                 <div class="mini-cart-total"><span data-mini-cart-total>合计 ¥0.00</span><button data-m-go="checkout">去结算</button></div>
               </div>
@@ -16315,7 +16813,7 @@
       const list = subCategoryMeta[catKey] || subCategoryMeta.all;
       return list.map((name, i) => `<button class="sub-cat-chip ${i===activeIndex?'active':''}" data-sub-cat="${catKey}" data-sub-index="${i}">${name}</button>`).join('');
     }
-    function catProduct(img,title,desc,price){return `<div class="cat-product" data-product-id="${productKey(title)}"><div class="cat-product-img" style="${bg(img)}"></div><div><h4>${title}</h4><div class="shop-desc">${desc}</div><div class="shop-price">¥${price}</div><div class="shop-sale-meta"><span class="sale-stock"><b>已售1170份</b><b>剩余376份</b></span></div></div><button class="round-add" aria-label="加入购物车" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-price="${price}" data-cart-img="${img}">${cartIconSvg}</button></div>`}
+    function catProduct(img,title,desc,price){return `<div class="cat-product" data-product-id="${productKey(title)}"><div class="cat-product-img" style="${bg(img)}"></div><div><h4>${title}</h4><div class="shop-desc">${desc}</div><div class="shop-price">¥${price}</div><div class="shop-sale-meta"><span class="sale-stock"><b>已售1170份</b><b>剩余376份</b></span></div></div><button class="round-add" aria-label="加入购物车" onclick="return handleAddCartClick(this,event)" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-spec="${desc}" data-cart-price="${price}" data-cart-img="${img}">${cartIconSvg}</button></div>`}
     function shopActivityPage(){
       const activity = activityProducts.new;
       return `<div class="shop-page activity-page" data-m-page="activity" data-current-activity="new">
@@ -16346,7 +16844,7 @@
           <h4>${item.title}</h4>
           <p>${item.desc}</p>
           <span class="rank-hot">近7日销量${formatRankSales(item.sales7d)}份</span>
-          <div class="rank-product-foot"><b>¥${item.price}</b><button data-action="加入购物车" data-action-target="cart" data-cart-name="${item.title}" data-cart-price="${item.price}" data-cart-img="${item.img}">立即加购</button></div>
+          <div class="rank-product-foot"><b>¥${item.price}</b><button onclick="return handleAddCartClick(this,event)" data-action="加入购物车" data-action-target="cart" data-cart-name="${item.title}" data-cart-spec="${item.desc}" data-cart-price="${item.price}" data-cart-img="${item.img}">立即加购</button></div>
         </div>
       </div>`;
     }
@@ -16369,13 +16867,22 @@
     }
     function activityProduct(img,title,desc,price,old=''){
       const oldPrice = old || (Number(price) + 10).toFixed(2);
-      return `<div class="activity-good" data-product-id="${productKey(title)}"><div class="activity-good-img" style="${bg(img)}"></div><div class="activity-good-body"><h4>${title}</h4><div class="activity-desc">${desc}</div><div class="activity-price-row"><div><span class="shop-price">¥${price}</span><span class="old-price">¥${oldPrice}</span></div><button class="round-add" aria-label="加入购物车" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-price="${price}" data-cart-img="${img}">${cartIconSvg}</button></div><div class="activity-meta"><span>配送日 2026年06月10日</span><span class="sale-stock"><b>已售498</b><b>剩余437</b></span></div></div></div>`;
+      return `<div class="activity-good" data-product-id="${productKey(title)}"><div class="activity-good-img" style="${bg(img)}"></div><div class="activity-good-body"><h4>${title}</h4><div class="activity-desc">${desc}</div><div class="activity-price-row"><div><span class="shop-price">¥${price}</span><span class="old-price">¥${oldPrice}</span></div><button class="round-add" aria-label="加入购物车" onclick="return handleAddCartClick(this,event)" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-spec="${desc}" data-cart-price="${price}" data-cart-old="${oldPrice}" data-cart-img="${img}">${cartIconSvg}</button></div><div class="activity-meta"><span>配送日 2026年06月10日</span><span class="sale-stock"><b>已售498</b><b>剩余437</b></span></div></div></div>`;
     }
     function recommendSection(title='猜你喜欢', sub='根据购物车和订单推荐', limit=4){
-      return `<div class="recommend-section"><h3>${title}<span>${sub}</span></h3><div class="recommend-grid">${recommendProducts.slice(0, limit).map(([img,title,desc,price])=>`<div class="recommend-card" data-product-id="${productKey(title)}"><div class="recommend-img" style="${bg(img)}"></div><b>${title}</b><p>${desc}</p><div class="recommend-bottom"><span>¥${price}</span><button aria-label="加入购物车" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-price="${price}" data-cart-img="${img}">${cartIconSvg}</button></div></div>`).join('')}</div></div>`;
+      return `<div class="recommend-section"><h3>${title}<span>${sub}</span></h3><div class="recommend-grid">${recommendProducts.slice(0, limit).map(([img,title,desc,price])=>`<div class="recommend-card" data-product-id="${productKey(title)}"><div class="recommend-img" style="${bg(img)}"></div><b>${title}</b><p>${desc}</p><div class="recommend-bottom"><span>¥${price}</span><button aria-label="加入购物车" onclick="return handleAddCartClick(this,event)" data-action="加入购物车" data-action-target="cart" data-cart-name="${title}" data-cart-spec="${desc}" data-cart-price="${price}" data-cart-img="${img}">${cartIconSvg}</button></div></div>`).join('')}</div></div>`;
     }
-    function shopCartPage(){return `<div class="shop-page" data-m-page="cart"><div class="cart-head">购物车<div class="mini-pill" style="position:absolute;right:16px;top:46px;width:72px">••• ◎</div></div><div class="cart-page-list" data-cart-page-list>${cartItem(shopImgs.list,'临期秒杀！西藏印象后藏牦牛酸奶','140g/瓶*2瓶','5.99','11.99',1)}${cartItem(shopImgs.detail,'临期秒杀！后藏青稞牦牛酸奶','1kg/桶*1','18.50','39.99',1)}${cartItem(shopImgs.detail2,'苗育万物新疆西梅干','500g/袋*1','19.99','29.90',1)}${recommendSection('购物车推荐','凑单与同类热卖',4)}</div><div class="cart-settle"><button class="settle-btn" data-cart-select-all>全选</button><div><b>合计：<span class="price" data-cart-page-total>¥44.48</span></b><br><span style="color:#888;font-size:13px" data-cart-page-count>已选数量：3</span></div><button class="settle-btn" data-cart-checkout data-m-go="checkout">去结算</button></div>${bottom('cart')}</div>`}
-    function cartItem(img,title,spec,price,old='',qty=1){return `<div class="cart-swipe-wrap" data-cart-swipe><button class="cart-swipe-delete" data-cart-delete>删除</button><div class="cart-item" data-cart-row data-cart-selected="true" data-cart-img="${img}" data-cart-title="${title}" data-cart-spec="${spec}" data-cart-price="${price}" data-cart-qty="${qty}"><div class="check-dot" data-cart-check>✓</div><div class="cart-img" style="${bg(img)}"></div><div class="cart-item-info"><b>${title}</b><div style="color:#888;font-size:11px;line-height:1.25">${spec}</div><div><span class="shop-price" style="font-size:18px">¥${price}</span><span class="old-price" style="font-size:10px">${old ? `¥${old}` : ''}</span></div></div><div class="cart-actions"><div class="qty"><button data-cart-minus>−</button><span data-cart-qty-text>${qty}</span><button style="color:red" data-cart-plus>+</button></div></div></div></div>`}
+    const defaultCartItems = [
+      { img: shopImgs.list, title: '山东烟台红富士苹果 6枚', spec: '精选大果 / 6枚装', price: '18.80', oldPrice: '26.90', qty: 1 },
+      { img: shopImgs.detail, title: '四川爱媛果冻橙 5斤装', spec: '基地现摘 / 5斤装', price: '29.90', oldPrice: '39.90', qty: 1 },
+      { img: shopImgs.home, title: '有机蔬菜组合 3斤', spec: '当日分拣 / 3斤装', price: '9.90', oldPrice: '16.90', qty: 1 },
+      { img: shopImgs.category, title: '西瓜小果 1个', spec: '清甜多汁 / 1个', price: '4.68', oldPrice: '8.90', qty: 1 }
+    ];
+    function cartPageListMarkup(items=defaultCartItems) {
+      return `${items.map(item => cartItem(item.img, item.title, item.spec, item.price, item.oldPrice || '', item.qty, item.selected !== false)).join('')}${recommendSection('购物车推荐','凑单与同类热卖',4)}`;
+    }
+    function shopCartPage(){return `<div class="shop-page" data-m-page="cart"><div class="cart-head">购物车<div class="mini-pill" style="position:absolute;right:16px;top:46px;width:72px">••• ◎</div></div><div class="cart-page-list" data-cart-page-list>${cartPageListMarkup(defaultCartItems)}</div><div class="cart-settle"><button class="settle-btn" data-cart-select-all>全选</button><div><b>合计：<span class="price" data-cart-page-total>¥58.28</span></b><br><span style="color:#888;font-size:13px" data-cart-page-count>已选数量：4</span></div><button class="settle-btn" data-cart-checkout data-m-go="checkout">去结算</button></div>${bottom('cart')}</div>`}
+    function cartItem(img,title,spec,price,old='',qty=1,selected=true){return `<div class="cart-swipe-wrap" data-cart-swipe><button class="cart-swipe-delete" data-cart-delete>删除</button><div class="cart-item" data-cart-row data-cart-selected="${selected ? 'true' : 'false'}" data-cart-img="${img}" data-cart-title="${title}" data-cart-spec="${spec}" data-cart-price="${price}" data-cart-old="${old || ''}" data-cart-qty="${qty}"><div class="check-dot ${selected ? '' : 'off'}" data-cart-check>${selected ? '✓' : ''}</div><div class="cart-img" style="${bg(img)}"></div><div class="cart-item-info"><b>${title}</b><div style="color:#888;font-size:11px;line-height:1.25">${spec}</div><div><span class="shop-price" style="font-size:18px">¥${price}</span><span class="old-price" style="font-size:10px">${old ? `¥${old}` : ''}</span></div></div><div class="cart-actions"><div class="qty"><button data-cart-minus>−</button><span data-cart-qty-text>${qty}</span><button style="color:red" data-cart-plus>+</button></div></div></div></div>`}
     function couponTotalCount() {
       return Object.values(couponUseData).reduce((sum, item) => sum + Number(String(item.count || '').replace(/\D/g, '') || 0), 0);
     }
@@ -16396,6 +16903,7 @@
     }
     function shopMinePage(){
       const unpaidCount = userOrderData.filter(order => order.orderType === 'unpaid').length;
+      const pickupCount = userOrderData.filter(order => order.orderType === 'pickup' || order.statusClass === 'pickup').length;
       const couponCount = couponTotalCount();
       return `<div class="shop-page mine-page" data-m-page="mine">
       <div class="mine-hero">
@@ -16405,7 +16913,7 @@
         </div>
       </div>
       <div class="mine-vip-card"><div><b>鲜选会员</b><br><span>本月已节省 ¥36.80，优惠券 ${couponCount} 张可用</span></div></div>
-      <div class="mine-card"><h3>我的订单 <button class="btn" data-m-go="orders" data-order-shortcut="all">全部订单 ›</button></h3><div class="order-icons"><div data-m-go="orders" data-order-shortcut="unpaid"><i>💳</i>${mineBadge(unpaidCount)}待付款</div><div data-m-go="orders" data-order-shortcut="paid"><i>📦</i>已付款</div><div data-m-go="orders" data-order-shortcut="done"><i>✓</i>已完成</div><div data-m-go="orders" data-order-shortcut="pickup"><i>✅</i>待收货</div><div data-m-go="orders" data-order-shortcut="afterSale"><i>↩</i>售后退款</div></div></div>
+      <div class="mine-card"><h3>我的订单 <button class="btn" data-m-go="orders" data-order-shortcut="all">全部订单 ›</button></h3><div class="order-icons"><div data-m-go="orders" data-order-shortcut="unpaid"><i data-order-icon="unpaid">待付款</i>${mineBadge(unpaidCount)}待付款</div><div data-m-go="orders" data-order-shortcut="paid"><i data-order-icon="paid">已付款</i>已付款</div><div data-m-go="orders" data-order-shortcut="done"><i data-order-icon="done">已完成</i>已完成</div><div data-m-go="orders" data-order-shortcut="pickup"><i data-order-icon="pickup">待提货</i>${mineBadge(pickupCount)}待提货</div><div data-m-go="orders" data-order-shortcut="afterSale"><i data-order-icon="refund">售后退款</i>售后退款</div></div></div>
       <div class="mine-card"><h3>当前自提点 <button class="btn" data-open-station>切换自提点 ›</button></h3><div class="station-card" data-station-card><b data-station-name>王府花园</b><span data-station-addr>📍 长沙市芙蓉区车站北路王府花园 3 栋左侧架空负一楼</span><span data-station-phone>☎ 137****3185　营业 09:00-21:00</span></div></div>
       <div class="mine-card"><h3>我的服务</h3><div class="service-icons compact-service"><div data-m-go="coupons"><i>🎟</i>${mineBadge(couponCount)}优惠券</div><div data-m-go="receivers"><i>📍</i>收货信息</div></div></div>
       <div class="mine-logout"><button data-user-logout>注销登录</button></div>
@@ -16477,7 +16985,7 @@
       if (!type || type === 'all') return userOrderData;
       if (type === 'paid') return userOrderData.filter(order => ['paid','preparing','shipping','pickup','done'].includes(order.orderType));
       if (type === 'shippingWait') return userOrderData.filter(order => canCancelOrder(order) && order.orderType !== 'unpaid');
-      if (type === 'pickup') return userOrderData.filter(order => order.orderType === 'pickup' || order.statusClass === 'pickup' || order.statusClass === 'arrived');
+      if (type === 'pickup') return userOrderData.filter(order => order.orderType === 'pickup' || order.statusClass === 'pickup');
       if (type === 'done') return userOrderData.filter(order => order.orderType === 'done' || order.statusClass === 'done');
       return userOrderData.filter(order => order.orderType === type);
     }
@@ -16490,6 +16998,29 @@
       if (!order) return [];
       if (Array.isArray(order.products) && order.products.length) return order.products;
       return order.product ? [order.product] : [];
+    }
+    function orderProductKey(item, index=0) {
+      return `${productKey(item?.title || '商品')}_${productKey(item?.spec || '默认规格')}_${index}`;
+    }
+    function orderReviewedMap(order) {
+      if (!order) return {};
+      if (!order.productReviews) order.productReviews = {};
+      return order.productReviews;
+    }
+    function isOrderProductReviewed(order, item, index=0) {
+      return !!orderReviewedMap(order)[orderProductKey(item, index)];
+    }
+    function orderAllProductsReviewed(order) {
+      const products = orderProducts(order);
+      return !!products.length && products.every((item, index) => isOrderProductReviewed(order, item, index));
+    }
+    function orderGoodsAmount(order) {
+      const products = orderProducts(order);
+      const sum = products.reduce((total, item) => total + Number(item.price || 0) * Number(item.qty || 1), 0);
+      return (sum || Number(order?.product?.price || order?.amount || 0)).toFixed(2);
+    }
+    function orderHeroImage(order) {
+      return orderProducts(order)[0]?.img || order?.product?.img || shopImgs.detail;
     }
     function orderTotalQty(order) {
       const products = orderProducts(order);
@@ -16517,36 +17048,44 @@
       return `${min}:${sec}`;
     }
     function canCancelOrder(order) {
-      return order && (order.orderType === 'unpaid' || order.statusClass === 'paid' || order.status === '待备货');
+      return order && (order.orderType === 'unpaid' || order.statusClass === 'paid' || order.status === '仓库备货中');
+    }
+    function canPayOrder(order) {
+      return order && order.orderType === 'unpaid';
     }
     function canAfterSaleOrder(order) {
       return order && order.orderType === 'done';
     }
     function canReviewOrder(order) {
-      return order && order.orderType === 'done' && !order.reviewed;
+      return order && order.orderType === 'done' && !orderAllProductsReviewed(order);
     }
     function orderActionMarkup(order) {
       if (!order) return '';
+      if (canPayOrder(order)) return `<button data-order-action data-order-id="${order.id}" data-order-op="pay">去支付</button><button class="danger" data-order-action data-order-id="${order.id}" data-order-op="cancel">取消订单</button>`;
       if (canCancelOrder(order)) return `<button class="danger" data-order-action data-order-id="${order.id}" data-order-op="cancel">取消订单</button>`;
-      if (order.orderType === 'done') return `<button data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button>${canReviewOrder(order) ? `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="review">评价</button>` : `<button disabled>已评价</button>`}<button class="danger" data-order-action data-order-id="${order.id}" data-order-op="afterSale">申请售后</button>`;
+      if (order.orderType === 'done') return `<button data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button><button class="danger" data-order-action data-order-id="${order.id}" data-order-op="afterSale">申请售后</button>`;
+      if (order.orderType === 'cancelled') return `<button data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button>`;
       if (canAfterSaleOrder(order)) return `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="afterSale">申请售后</button>`;
       return '';
     }
     function orderDetailActionMarkup(order) {
       if (!order) return '';
+      if (canPayOrder(order)) return `<button data-order-action data-order-id="${order.id}" data-order-op="pay">去支付</button><button class="danger" data-order-action data-order-id="${order.id}" data-order-op="cancel">取消订单</button>`;
       if (canCancelOrder(order)) return `<button class="danger" data-order-action data-order-id="${order.id}" data-order-op="cancel">取消订单</button>`;
+      if (order.orderType === 'pickup') return `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="confirmReceive">确认收货</button>`;
       if (order.orderType === 'done') return `<button data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button><button class="danger" data-order-action data-order-id="${order.id}" data-order-op="afterSale">申请售后</button>`;
+      if (order.orderType === 'cancelled') return `<button data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button>`;
       if (canAfterSaleOrder(order)) return `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="afterSale">申请售后</button>`;
       return '';
     }
-    function orderProductReviewAction(order) {
+    function orderProductReviewAction(order, item, index=0) {
       if (!order || order.orderType !== 'done') return '';
-      if (canReviewOrder(order)) return `<button class="order-product-review-btn" data-order-action data-order-id="${order.id}" data-order-op="review">评价</button>`;
+      if (!isOrderProductReviewed(order, item, index)) return `<button class="order-product-review-btn" data-order-action data-order-id="${order.id}" data-order-op="review" data-product-key="${orderProductKey(item, index)}">评价</button>`;
       return '<span class="order-product-reviewed">已评价</span>';
     }
     function orderNoteMarkup(order) {
       if (order.rejectReason) return `<div class="order-note">拒绝原因：${order.rejectReason}</div>`;
-      if (order.cancelReason) return `<div class="order-note">取消原因：${order.cancelReason}</div>`;
+      if (order.cancelReason && order.orderType === 'cancelled') return `<div class="order-note">取消原因：${order.cancelReason}</div>`;
       if (order.afterSaleReason) return `<div class="order-note">售后原因：${order.afterSaleReason}</div>`;
       return '';
     }
@@ -16576,28 +17115,42 @@
       const order = userOrderData.find(item => item.id === activeAfterSaleOrderId) || userOrderData.find(canAfterSaleOrder) || userOrderData[0];
       return `<div class="shop-page order-detail-page" data-m-page="afterSaleApply">${afterSaleApplyPageMarkup(order)}</div>`;
     }
-    function orderMiniProductMarkup(order) {
-      if (!order) return '';
+    function orderProductLineMarkup(order, item, index=0) {
+      const qty = Number(item?.qty || 1);
+      const lineTotal = (Number(item?.price || 0) * qty).toFixed(2);
+      return `<div class="detail-product order-detail-product-line">
+        <div class="order-thumb" style="${bg(item?.img || shopImgs.detail)}"></div>
+        <div><div class="order-product-title-row"><h4>${item?.title || '订单商品'}</h4>${orderProductReviewAction(order, item, index)}</div><p>${item?.spec || '默认规格'}</p><div class="detail-price-line"><span>¥${lineTotal}</span><span>x${qty}</span></div></div>
+      </div>`;
+    }
+    function orderProductsDetailMarkup(order) {
+      const products = orderProducts(order);
+      return products.map((item, index) => orderProductLineMarkup(order, item, index)).join('');
+    }
+    function orderMiniProductMarkup(order, item=orderProducts(order)[0], index=0) {
+      if (!order || !item) return '';
       return `<div class="order-info-card">
         <h3>商品信息</h3>
-        <div class="detail-product"><div class="order-thumb" style="${bg(order.product.img)}"></div><div><h4>${order.product.title}</h4><p>${order.product.spec}<br>订单号：${order.id}</p><div class="detail-price-line"><span>¥${order.product.price}</span><span>x${order.product.qty}</span></div></div></div>
+        ${orderProductLineMarkup(order, item, index)}
       </div>`;
     }
     function orderReviewPageMarkup(order) {
       if (!order) return '<div class="order-empty">暂无可评价订单</div>';
-      return `<div class="order-detail-hero" style="${bg(order.product.img)}">
+      const productIndex = Math.max(0, orderProducts(order).findIndex((item, index) => orderProductKey(item, index) === activeOrderReviewProductKey));
+      const targetItem = orderProducts(order)[productIndex] || orderProducts(order)[0];
+      return `<div class="order-detail-hero" style="${bg(targetItem?.img || orderHeroImage(order))}">
         <div class="order-detail-nav"><button class="order-detail-back" data-m-go="orders">‹</button><b>订单评价</b><span>提交评价</span></div>
-        <div class="order-detail-status"><span class="order-status ${order.statusClass}">${order.status}</span><h2>评价本次购买</h2><p>评价提交后会同步到商品详情的买家评论中。</p></div>
+        <div class="order-detail-status"><span class="order-status ${order.statusClass}">${order.status}</span><h2>评价商品</h2><p>每个商品只能评价一次，评价提交后会同步到商品详情。</p></div>
       </div>
       <div class="order-detail-body">
-        ${orderMiniProductMarkup(order)}
-        ${canReviewOrder(order) ? reviewFormMarkup(order) : `<div class="order-info-card"><h3>评价状态</h3><p>${order.reviewed ? '该订单已评价。' : '当前订单暂不可评价。'}</p></div>`}
-        <div class="detail-action-row"><button data-m-go="orders">返回订单列表</button>${canReviewOrder(order) ? `<button class="primary" data-order-review-submit data-order-id="${order.id}">提交评价</button>` : '<button disabled>无法提交</button>'}</div>
+        ${orderMiniProductMarkup(order, targetItem, productIndex)}
+        ${order.orderType === 'done' && !isOrderProductReviewed(order, targetItem, productIndex) ? reviewFormMarkup(order, targetItem, productIndex) : `<div class="order-info-card"><h3>评价状态</h3><p>${isOrderProductReviewed(order, targetItem, productIndex) ? '该商品已评价。' : '当前订单暂不可评价。'}</p></div>`}
+        <div class="detail-action-row"><button data-m-go="orders">返回订单列表</button>${order.orderType === 'done' && !isOrderProductReviewed(order, targetItem, productIndex) ? `<button class="primary" data-order-review-submit data-order-id="${order.id}" data-product-key="${orderProductKey(targetItem, productIndex)}">提交评价</button>` : '<button disabled>无法提交</button>'}</div>
       </div>`;
     }
     function afterSaleApplyPageMarkup(order) {
       if (!order) return '<div class="order-empty">暂无可申请售后的订单</div>';
-      return `<div class="order-detail-hero" style="${bg(order.product.img)}">
+      return `<div class="order-detail-hero" style="${bg(orderHeroImage(order))}">
         <div class="order-detail-nav"><button class="order-detail-back" data-m-go="orders">‹</button><b>申请售后</b><span>退款/退货</span></div>
         <div class="order-detail-status"><span class="order-status ${order.statusClass}">${order.status}</span><h2>提交售后申请</h2><p>售后申请提交后，平台将审核订单、提货和自提点交接记录。</p></div>
       </div>
@@ -16609,19 +17162,19 @@
     }
     function orderDetailMarkup(order){
       if (!order) return '<div class="order-empty">暂无订单详情</div>';
-      return `<div class="order-detail-hero" style="${bg(order.product.img)}">
+      return `<div class="order-detail-hero" style="${bg(orderHeroImage(order))}">
         <div class="order-detail-nav"><button class="order-detail-back" data-m-go="orders">‹</button><b>订单详情</b><span class="order-detail-nav-status">${order.status}</span></div>
         <div class="order-detail-status"><span class="order-status ${order.statusClass}">${order.status}</span><h2>${order.statusTitle}</h2><p>${order.statusDesc}</p>${order.orderType === 'unpaid' ? `<div class="pay-countdown">剩余支付时间 ${formatPayCountdown(order.payDeadlineSeconds || 900)}</div>` : ''}</div>
       </div>
       <div class="order-detail-body">
         <div class="order-info-card"><h3>提货信息</h3><p><b>${order.station}</b><br>${order.stationAddr}<br>提货时间：${pickupDateOnly(order.pickupTime)}<br>提货人：${order.user}</p></div>
         <div class="order-info-card">
-          <div class="order-detail-product-head"><h3>商品信息</h3>${orderProductReviewAction(order)}</div>
-          <div class="detail-product"><div class="order-thumb" style="${bg(order.product.img)}"></div><div><h4>${order.product.title}</h4><p>${order.product.spec}</p><div class="detail-price-line"><span>¥${order.product.price}</span><span>x${order.product.qty}</span></div></div></div>
+          <div class="order-detail-product-head"><h3>商品信息</h3><span>${orderProducts(order).length} 个商品</span></div>
+          <div class="order-detail-product-list">${orderProductsDetailMarkup(order)}</div>
         </div>
         <div class="order-info-card">
           <h3>订单金额</h3>
-          <div class="detail-field"><span>商品金额</span><b>¥${order.product.price}</b></div>
+          <div class="detail-field"><span>商品金额</span><b>¥${orderGoodsAmount(order)}</b></div>
           <div class="detail-field"><span>优惠抵扣</span><b>-¥${order.discount}</b></div>
           <div class="detail-field"><span>配送费</span><b>¥${order.freight}</b></div>
           <div class="detail-field"><span>实付金额</span><b>¥${order.amount}</b></div>
@@ -16635,16 +17188,15 @@
           <div class="detail-field"><span>订单状态</span><b>${order.statusTitle}</b></div>
         </div>
         <div class="order-info-card"><h3>履约进度</h3><div class="detail-timeline">${order.timeline.map(([title,time])=>`<div class="timeline-step"><i></i><div><b>${title}</b>${time}</div></div>`).join('')}</div></div>
-        ${order.reviewed ? `<div class="order-info-card"><h3>我的评价</h3><p>${order.reviewText || '已评价：商品不错，下次还会购买。'}</p></div>` : ''}
         <div class="detail-action-row detail-floating-actions"><button data-m-go="orders">返回订单列表</button>${orderDetailActionMarkup(order) || `<button data-action="联系团点" data-action-target="订单详情" data-row="${encodeURIComponent(JSON.stringify({'订单号': order.id, '自提点': order.station, '联系人': order.user, '当前状态': order.statusTitle}))}">联系团点</button>`}</div>
       </div>`;
     }
-    function reviewFormMarkup(order) {
-      if (!order) return '<div class="order-empty">暂无可评价订单</div>';
-      const product = detailProductByKey(productKey(order.product.title.replace(/\s+(标准装|双份优惠装|分享团购装)$/,'')));
+    function reviewFormMarkup(order, item=orderProducts(order)[0], index=0) {
+      if (!order || !item) return '<div class="order-empty">暂无可评价商品</div>';
+      const product = detailProductByKey(productKey(String(item.title || '').replace(/\s+(标准装|双份优惠装|分享团购装)$/,'')));
       const reviews = product.reviews || defaultProductReviews(product);
-      const reviewImages = [order.product.img, ...(product.images || []).filter(img => img !== order.product.img)].slice(0, 3);
-      return `<div class="order-info-card after-sale-card" data-review-card data-order-id="${order.id}">
+      const reviewImages = [item.img, ...(product.images || []).filter(img => img !== item.img)].slice(0, 3);
+      return `<div class="order-info-card after-sale-card" data-review-card data-order-id="${order.id}" data-product-key="${orderProductKey(item, index)}">
         <h3>评价商品</h3>
         <div class="after-sale-flow"><span><i>1</i>评价内容会同步到商品详情买家评价</span><span><i>2</i>标签、图片和评分会参与评价筛选</span></div>
         <div class="after-sale-form">
@@ -16691,19 +17243,19 @@
     function shopPayPage(){return `<div class="shop-page pay-page" data-m-page="pay">
       <div class="pay-head">
         <div class="order-nav"><button class="order-back" data-m-go="checkout">‹</button><b>订单支付</b><span data-pay-countdown>15:00</span></div>
-        <div class="pay-title-block"><b>等待支付</b><span>订单 ${checkoutData.no} 已生成，支付成功后团点开始备货。</span></div>
+        <div class="pay-title-block"><b>等待支付</b><span>订单 ${checkoutData.no} 已生成，支付成功后进入仓库备货。</span></div>
       </div>
       <div class="pay-body">
         <div class="pay-card pay-amount-card"><span>需支付金额</span><b>¥${checkoutData.total}</b><span>含优惠券抵扣 ¥${checkoutData.discount}</span></div>
         <div class="pay-card"><h3>支付方式</h3><div class="pay-method active" data-pay-method="微信支付"><div><i>微</i>微信支付</div></div><div class="pay-method" data-pay-method="余额支付"><div><i>余</i>会员余额支付</div></div><div class="pay-method" data-pay-method="银行卡支付"><div><i>卡</i>银行卡快捷支付</div></div></div>
-        <div class="pay-success" data-pay-success><b>支付成功</b>已生成支付流水 PAY20260609150820，订单状态更新为已付款，商品进入团点备货流程。</div>
+        <div class="pay-success" data-pay-success><b>支付成功</b>已生成支付流水 PAY20260609150820，订单状态更新为仓库备货中。</div>
       </div>
       <div class="pay-bottom"><div><span>应付金额</span><b>¥${checkoutData.total}</b></div><button class="pay-submit" data-pay-submit>确认支付</button></div>
     </div>`}
     function shopPayResultPage(){return `<div class="shop-page pay-result-page" data-m-page="payResult">
       <div class="pay-result-hero">
         <div class="order-nav"><button class="order-back" data-m-go="home">‹</button><b>支付结果</b><span>完成</span></div>
-        <div class="pay-result-status"><div class="pay-result-icon">✓</div><h2>支付成功</h2><p>订单 ${checkoutData.no} 已支付，商品将按提货时间送达自提点。</p></div>
+        <div class="pay-result-status"><div class="pay-result-icon">✓</div><h2>支付成功</h2><p>订单 ${checkoutData.no} 已支付，商品已进入仓库备货中。</p></div>
       </div>
       <div class="pay-result-card"><h3>订单信息</h3><div class="detail-field"><span>实付金额</span><b>¥${checkoutData.total}</b></div><div class="detail-field"><span>自提点</span><b>${checkoutData.station}</b></div><div class="detail-field"><span>提货时间</span><b>${pickupDateOnly(checkoutData.pickupTime)}</b></div><div class="pay-result-actions"><button data-m-go="orders" data-order-shortcut="all">查看订单</button><button class="primary" data-m-go="home">继续逛逛</button></div></div>
       ${recommendSection('支付后推荐','这些也适合一起买',4)}
@@ -16715,13 +17267,15 @@
       const sku = product.specs[skuIndex] || product.specs[0];
       const images = product.images || [product.img];
       const subscribed = priceAlertSubscriptions.has(product.id);
+      const skuSold = Number(sku.sold || product.sold || 0);
+      const skuPickup = sku.pickup || product.pickup;
       return `<div class="detail-hero"><div class="detail-carousel-track">${images.map(img=>`<div class="detail-slide" style="${bg(img)}"></div>`).join('')}</div><button class="detail-back" data-detail-back data-m-go="home">‹</button><button class="price-alert-btn ${subscribed ? 'subscribed' : ''}" data-price-alert data-product-id="${product.id}">${subscribed ? '已订阅降价' : '降价提醒我'}</button><div class="detail-dots">${images.map(()=>'<span></span>').join('')}</div></div>
-        <div class="detail-price"><div><span data-detail-price style="font-size:28px;font-weight:900">¥${sku.price}</span><span data-detail-old class="old-price" style="color:#ffd8c9">¥${sku.oldPrice}</span></div><div class="pickup-info"><b>已售${product.sold}份 / 剩余${sku.stock}份</b><span class="pickup-date">提货 ${pickupDateOnly(product.pickup)}</span></div></div>
-        <div class="detail-card"><h2>${product.title}</h2><p>${product.desc}</p><div class="supplier-line">供应商 <span>${product.supplier}</span></div><div class="detail-meta-grid"><span><b>${product.origin}</b>产地</span><span><b>${product.sold}</b>购买人数</span><span><b>${product.stock}</b>库存</span></div>${product.rank && product.rank.topTen ? detailRankMarkup(product.rank) : ''}</div>
-        <div class="detail-card"><h3>商品规格</h3><div class="sku-grid">${product.specs.map((item,i)=>`<div class="sku-option ${i===skuIndex?'active':''}" data-sku-index="${i}" data-cart-name="${product.title} ${item.name}" data-cart-price="${item.price}" data-cart-old="${item.oldPrice}" data-cart-img="${product.img}"><b>${item.name}<em>¥${item.price}</em></b><span>${item.desc} / 库存 ${item.stock} 份</span></div>`).join('')}</div></div>
+        <div class="detail-price"><div><span data-detail-price style="font-size:28px;font-weight:900">¥${sku.price}</span><span data-detail-old class="old-price" style="color:#ffd8c9">¥${sku.oldPrice}</span></div><div class="pickup-info"><b data-detail-sale-stock>已售${skuSold}份 / 剩余${sku.stock}份</b><span class="pickup-date" data-detail-pickup>提货 ${pickupDateOnly(skuPickup)}</span></div></div>
+        <div class="detail-card"><h2>${product.title}</h2><p>${product.desc}</p><div class="supplier-line">供应商 <span>${product.supplier}</span></div><div class="detail-meta-grid"><span><b>${product.origin}</b>产地</span><span><b data-detail-buyer-count>${skuSold}</b>购买人数</span></div>${product.rank && product.rank.topTen ? detailRankMarkup(product.rank) : ''}</div>
+        <div class="detail-card"><h3>商品规格</h3><div class="sku-grid">${product.specs.map((item,i)=>`<div class="sku-option ${i===skuIndex?'active':''}" data-sku-index="${i}" data-cart-name="${product.title}" data-cart-spec="${item.name}" data-cart-price="${item.price}" data-cart-old="${item.oldPrice}" data-cart-img="${product.img}" data-sku-sold="${item.sold || product.sold}" data-sku-stock="${item.stock}" data-sku-pickup="${item.pickup || product.pickup}"><b>${item.name}</b></div>`).join('')}</div></div>
         ${detailReviewMarkup(product)}
         <div class="detail-card"><h3>购买记录</h3><div class="buyer-list">${product.buyers.map(buyer=>`<div class="buyer-row"><div class="buyer-avatar">${buyer.name.slice(0,1)}</div><div><b>${buyer.name}</b>${buyer.time || '刚刚下单'} · ${buyer.station} · ${buyer.spec}</div><em>x${buyer.qty}</em></div>`).join('')}</div></div>
-        <div class="detail-bottom"><button class="cart-action" data-action="加入购物车" data-action-target="cart" data-cart-name="${product.title} ${sku.name}" data-cart-price="${sku.price}" data-cart-img="${product.img}">加入购物车</button><button class="red" data-buy-now data-cart-name="${product.title} ${sku.name}" data-cart-price="${sku.price}" data-cart-img="${product.img}">立即购买</button></div>`;
+        <div class="detail-bottom"><button class="cart-action" onclick="return handleAddCartClick(this,event)" data-action="加入购物车" data-action-target="cart" data-cart-name="${product.title}" data-cart-spec="${sku.name}" data-cart-price="${sku.price}" data-cart-old="${sku.oldPrice}" data-cart-img="${product.img}">加入购物车</button><button class="red" data-buy-now data-cart-name="${product.title}" data-cart-spec="${sku.name}" data-cart-price="${sku.price}" data-cart-img="${product.img}">立即购买</button></div>`;
     }
     function detailRankMarkup(rank) {
       return `<button class="detail-rank-card" data-open-rank="${rank.rankKey}"><em>榜单</em><span>${rank.rankName}</span><b>第${rank.rankNo}名</b></button>`;
@@ -16799,15 +17353,13 @@
       const reviews = product.reviews || defaultProductReviews(product);
       const visibleReviews = applyReviewFilters(product, tab, activeTag);
       const photoCount = reviewPhotoCount(product);
-      const sku = product.specs[0] || {};
       const tabs = [['all', `全部`], ['latest', '最新'], ['image', `图片(${photoCount})`]];
       return `<div class="review-hero">
         <div class="review-nav"><button data-review-back onclick="handleReviewBackClick(this,event)">‹</button><b>买家评价（${reviews.count}）</b><span>••• ◎</span></div>
         <div class="review-stats">
-          <div><strong>${String(reviews.goodRate).split('.')[0]}<small>.${String(reviews.goodRate).split('.')[1] || '0'}%</small></strong><br>好评率</div>
-          <div><b>${formatRankSales(product.rank?.sales7d || product.sold * 7)}</b>近期已售</div>
-          <div><b>${formatRankSales(reviews.repurchaseUsers)}</b>近期回购用户</div>
-          <div><b>${product.rank && product.rank.topTen ? `第${product.rank.rankNo}名` : '高复购'}</b>${product.rank && product.rank.topTen ? product.rank.rankName : '买家推荐'}</div>
+          <div class="review-rate-main"><strong>${String(reviews.goodRate).split('.')[0]}<small>.${String(reviews.goodRate).split('.')[1] || '0'}%</small></strong><span>好评率</span></div>
+          <div class="review-metric"><b>${formatRankSales(product.rank?.sales7d || product.sold * 7)}</b><span>近期已售</span></div>
+          <div class="review-metric"><b>${formatRankSales(reviews.repurchaseUsers)}</b><span>近期回购用户</span></div>
         </div>
       </div>
       <div class="review-filter-panel">
@@ -16817,8 +17369,7 @@
       <div class="review-list-page" data-review-list>
         <div class="review-list-count">当前筛选：${reviewFilterLabel(tab, activeTag)} · ${visibleReviews.length} 条评价示例</div>
         ${visibleReviews.length ? visibleReviews.map(review => detailReviewCard(review)).join('') : '<div class="order-empty">暂无符合条件的评价</div>'}
-      </div>
-      <div class="detail-bottom"><button class="cart-action" data-action="加入购物车" data-action-target="cart" data-cart-name="${product.title} ${sku.name || '标准装'}" data-cart-price="${sku.price || product.specs[0]?.price || '0'}" data-cart-img="${product.img}">加入购物车</button><button class="red" data-buy-now data-cart-name="${product.title} ${sku.name || '标准装'}" data-cart-price="${sku.price || product.specs[0]?.price || '0'}" data-cart-img="${product.img}">立即购买</button></div>`;
+      </div>`;
     }
     function reviewMatchesTag(review, tag) {
       const reviewTags = review.tags || [];
@@ -16971,17 +17522,17 @@
           ]}
         ],
         purchaseCatalog: [
-          { img:warehouseImgs.blueberry, title:'云南蓝莓 125g*24盒', sku:'SKU-FR-001', spec:'冷藏整箱 / 24盒', supplier:'华南果业', unit:'箱', temp:'2-6℃', qty:30 },
-          { img:warehouseImgs.orange, title:'四川爱媛果冻橙 5斤装', sku:'SKU-FR-002', spec:'5斤装 / 单果70-80mm', supplier:'华南果业', unit:'袋', temp:'常温', qty:50 },
-          { img:warehouseImgs.mango, title:'海南贵妃芒 5斤装', sku:'SKU-FR-015', spec:'自然熟果 / 5斤', supplier:'海南供应链', unit:'箱', temp:'常温', qty:40 },
-          { img:warehouseImgs.apple, title:'山东烟台红富士苹果 6枚', sku:'SKU-FR-011', spec:'精选大果 / 6枚', supplier:'山东烟台仓', unit:'盒', temp:'常温', qty:60 },
-          { img:warehouseImgs.vegetable, title:'有机蔬菜组合 3斤', sku:'SKU-VE-004', spec:'净菜组合 / 3斤', supplier:'广州净菜工厂', unit:'份', temp:'2-8℃', qty:80 },
-          { img:warehouseImgs.yogurt, title:'希腊酸奶 6杯', sku:'SKU-DR-018', spec:'冷藏 / 6杯组', supplier:'低温乳品仓', unit:'组', temp:'0-4℃', qty:50 },
-          { img:warehouseImgs.bread, title:'黄油可颂 4只', sku:'SKU-BK-009', spec:'烘焙冷藏 / 4只', supplier:'低温乳品仓', unit:'袋', temp:'2-8℃', qty:36 },
-          { img:warehouseImgs.shrimp, title:'冷冻黑虎虾 400g', sku:'SKU-SF-019', spec:'冷冻 / 400g', supplier:'海鲜供应商', unit:'盒', temp:'-18℃', qty:48 },
-          { img:warehouseImgs.grain, title:'东北长粒香米 10kg', sku:'SKU-GR-026', spec:'常温 / 10kg', supplier:'东北粮仓', unit:'袋', temp:'常温', qty:32 },
-          { img:warehouseImgs.meat, title:'冷鲜牛腱 500g', sku:'SKU-MT-020', spec:'冷鲜分割 / 500g', supplier:'海鲜供应商', unit:'盒', temp:'0-4℃', qty:42 },
-          { img:warehouseImgs.bread, title:'全麦吐司 1袋', sku:'SKU-BK-022', spec:'烘焙冷藏 / 1袋', supplier:'低温乳品仓', unit:'袋', temp:'2-8℃', qty:60 }
+          { img:warehouseImgs.blueberry, title:'云南蓝莓 125g*24盒', sku:'SKU-FR-001', spec:'冷藏整箱 / 24盒', supplier:'华南果业', unit:'箱', temp:'2-6℃', qty:30, barcode:'693000310001' },
+          { img:warehouseImgs.orange, title:'四川爱媛果冻橙 5斤装', sku:'SKU-FR-002', spec:'5斤装 / 单果70-80mm', supplier:'华南果业', unit:'袋', temp:'常温', qty:50, barcode:'693000310002' },
+          { img:warehouseImgs.mango, title:'海南贵妃芒 5斤装', sku:'SKU-FR-015', spec:'自然熟果 / 5斤', supplier:'海南供应链', unit:'箱', temp:'常温', qty:40, barcode:'693000310003' },
+          { img:warehouseImgs.apple, title:'山东烟台红富士苹果 6枚', sku:'SKU-FR-011', spec:'精选大果 / 6枚', supplier:'山东烟台仓', unit:'盒', temp:'常温', qty:60, barcode:'693000310004' },
+          { img:warehouseImgs.vegetable, title:'有机蔬菜组合 3斤', sku:'SKU-VE-004', spec:'净菜组合 / 3斤', supplier:'广州净菜工厂', unit:'份', temp:'2-8℃', qty:80, barcode:'693000310005' },
+          { img:warehouseImgs.yogurt, title:'希腊酸奶 6杯', sku:'SKU-DR-018', spec:'冷藏 / 6杯组', supplier:'低温乳品仓', unit:'组', temp:'0-4℃', qty:50, barcode:'693000310006' },
+          { img:warehouseImgs.bread, title:'黄油可颂 4只', sku:'SKU-BK-009', spec:'烘焙冷藏 / 4只', supplier:'低温乳品仓', unit:'袋', temp:'2-8℃', qty:36, barcode:'693000310007' },
+          { img:warehouseImgs.shrimp, title:'冷冻黑虎虾 400g', sku:'SKU-SF-019', spec:'冷冻 / 400g', supplier:'海鲜供应商', unit:'盒', temp:'-18℃', qty:48, barcode:'693000310008' },
+          { img:warehouseImgs.grain, title:'东北长粒香米 10kg', sku:'SKU-GR-026', spec:'常温 / 10kg', supplier:'东北粮仓', unit:'袋', temp:'常温', qty:32, barcode:'693000310009' },
+          { img:warehouseImgs.meat, title:'冷鲜牛腱 500g', sku:'SKU-MT-020', spec:'冷鲜分割 / 500g', supplier:'海鲜供应商', unit:'盒', temp:'0-4℃', qty:42, barcode:'693000310010' },
+          { img:warehouseImgs.bread, title:'全麦吐司 1袋', sku:'SKU-BK-022', spec:'烘焙冷藏 / 1袋', supplier:'低温乳品仓', unit:'袋', temp:'2-8℃', qty:60, barcode:'693000310011' }
         ],
         stock: [
           { img:warehouseImgs.blueberry, title:'云南蓝莓采购批次', sku:'PO-SKU-FR-001', location:'华南果业 / 广州中心仓', qty:'120箱', locked:'0', batch:'PO20260610021', status:'待审核' },
@@ -17477,7 +18028,7 @@
     ];
     warehouseHubData.manager.documents = {
       inbound: [
-        { no:'IN-MGR-20251204001', type:'采购入库单', title:'华南果业到仓入库', status:'待入库', statusClass:'amber', owner:'华南果业', submitRole:'采购', submitter:'采购员 李琴', warehouse:'西藏中心仓', deliveryWarehouse:'湘潭总仓', deliveryDate:'2025-12-04', driver:'姚文冠', driverPhone:'155***15400', operator:'王思权', operatorPhone:'155***15400', receiveTime:'-', date:'2025-12-04', qty:168, amount:'¥12,860', currentStep:1, actions:['入库'], meta:['采购单已审','冷藏优先','3个SKU'], purchaseApproved:true, approvedBy:'采购主管 陈敏', products:[
+        { no:'IN-MGR-20251204001', type:'采购入库单', title:'华南果业到仓入库', status:'待入库', statusClass:'amber', owner:'华南果业', submitRole:'采购', submitter:'采购员 李琴', warehouse:'西藏中心仓', deliveryWarehouse:'湘潭总仓', deliveryDate:'2025-12-04', driver:'姚文冠', driverPhone:'155***15400', operator:'王思权', operatorPhone:'155***15400', receiveTime:'-', date:'2025-12-04', qty:168, amount:'¥12,860', currentStep:1, actions:['入库'], meta:['采购单已审','冷藏优先','3个SKU'], purchaseApproved:true, approvedBy:'采购主管 陈敏', sourceSupplierDeliveryNo:'SH20260610001', products:[
           { title:'云南蓝莓 125g*24盒', sku:'SKU-FR-001', barcode:'3412341245243', spec:'冷藏整箱', category:'生鲜水果', location:'L-32412', qty:60, actualQty:60, unit:'箱' },
           { title:'海南金煌芒 4斤装', sku:'SKU-FR-003', barcode:'3412341245244', spec:'常温大果', category:'生鲜水果', location:'L-32413', qty:48, actualQty:45, unit:'箱' },
           { title:'四川爱媛果冻橙 5斤装', sku:'SKU-FR-002', barcode:'3412341245245', spec:'精选大果', category:'生鲜水果', location:'L-32414', qty:60, actualQty:60, unit:'袋' }
@@ -17991,7 +18542,7 @@
           item('yogurt', '希腊酸奶 6杯', 'SKU-DR-018', 50, 0, '组', 'C-R-18', { spec:'冷藏 / 6杯组', temp:'0-4℃', barcode:'693000120061' }),
           item('bread', '全麦吐司 1袋', 'SKU-BK-022', 38, 0, '袋', 'C-R-19', { spec:'烘焙冷藏 / 1袋', temp:'2-8℃', barcode:'693000120062' })
         ]},
-        { no:'IN20260612062', type:'补货入库', status:'已收货', statusClass:'green', route:'深圳中心仓调拨 → 广州中心仓', warehouse:'广州中心仓', area:'B-常温暂存区', location:'B-T-16', due:'06月12日 10:40', date:'2026-06-12', priority:'待打印库位标', actions:['打印库位标','确认上架'], accepted:true, items:[
+        { no:'IN20260612062', type:'补货入库', status:'已收货', statusClass:'green', route:'深圳中心仓调拨 → 广州中心仓', warehouse:'广州中心仓', area:'B-常温暂存区', location:'B-T-16', due:'06月12日 10:40', date:'2026-06-12', priority:'待上架', actions:['打印库位标','确认上架'], accepted:true, items:[
           item('grain', '五常大米 5kg', 'SKU-GR-021', 56, 56, '袋', 'B-T-16', { spec:'常温 / 5kg', barcode:'693000120063' }),
           item('orange', '四川爱媛果冻橙 5斤装', 'SKU-FR-002', 64, 64, '袋', 'B-T-17', { spec:'5斤装 / 单果70-80mm', barcode:'693000120064' })
         ]},
@@ -18352,7 +18903,6 @@
     function warehouseActionLabel(action) {
       if (action === '上传质检') return '上传质检报告';
       if (action === '调整数量') return '修改';
-      if (action === '扫码收货') return '扫码库位';
       if (action === '确认复检') return '复检';
       return action;
     }
@@ -18446,8 +18996,8 @@
       if (/质检中/.test(status)) return ['上传质检报告', '上传温度', '作废单据'];
       if (/待确认收货/.test(status)) return ['确认收货', '作废单据'];
       if (/待收货/.test(status)) return warehouseReceiverPostAcceptActions(task, true);
-      if (/已收货/.test(status)) return ['打印库位标', '确认上架'];
-      if (/已上架/.test(status)) return ['打印库位标'];
+      if (/已收货/.test(status)) return ['确认上架'];
+      if (/已上架/.test(status)) return [];
       return [];
     }
     function warehouseActionButton(task, action, role, payload) {
@@ -18593,8 +19143,8 @@
         if (data) data.activeTaskFilter = activeFilter;
         const label = warehouseReceiverFilterLabel(activeFilter);
         return `<div class="warehouse-receiver-filter">
-          <div class="warehouse-receiver-filter-head"><span>单据状态</span><b>${label}</b></div>
-          <div class="warehouse-receiver-filter-options" aria-label="单据状态">${warehouseReceiverStatusTabs.map(([value, optionLabel]) => `<button class="warehouse-filter ${activeFilter === value ? 'active' : ''}" data-warehouse-task-filter="${value}">${optionLabel}</button>`).join('')}</div>
+          <button class="warehouse-receiver-filter-head" type="button" data-warehouse-receiver-filter-toggle aria-expanded="false"><span>单据状态</span><b>${label}</b><i aria-hidden="true"></i></button>
+          <div class="warehouse-receiver-filter-options" aria-label="单据状态" hidden>${warehouseReceiverStatusTabs.map(([value, optionLabel]) => `<button class="warehouse-filter ${activeFilter === value ? 'active' : ''}" data-warehouse-task-filter="${value}">${optionLabel}</button>`).join('')}</div>
         </div>`;
       }
       if (role === 'buyer') {
@@ -19702,7 +20252,6 @@
             <h3>商品库位明细</h3>
             <div class="warehouse-scan-search">
               <input data-warehouse-scan-search="${task.no}" value="${keyword}" placeholder="输入商品编码/条码/商品名称">
-              <button data-warehouse-scan-auto="${task.no}">扫码库位</button>
             </div>
             ${warehouseReceiveScanListMarkup(task)}
           </div>
@@ -19763,7 +20312,7 @@
                 <input type="number" min="0" max="${item.qty}" value="${item.done || 0}" data-warehouse-scan-input="${task.no}" data-index="${index}" aria-label="${item.title} 实收数量">
                 <button data-warehouse-scan-qty="${task.no}" data-index="${index}" data-delta="1">＋</button>
               </div>
-              <button class="warehouse-scan-one" data-warehouse-scan-one="${task.no}" data-index="${index}">扫码库位</button>
+              <button class="warehouse-scan-one" data-warehouse-location-edit="${task.no}" data-index="${index}">更改库位</button>
             </div>
           </div>
         </div>`).join('') : '<div class="warehouse-log-empty">没有匹配的商品</div>'}</div>`;
@@ -20082,19 +20631,19 @@
             <div class="warehouse-purchase-list" data-warehouse-purchase-selected-list>
               ${items.length ? items.map((item, index) => `
               <div class="warehouse-purchase-item" data-warehouse-purchase-item-row="${index}">
+                <button class="warehouse-purchase-delete-btn" data-warehouse-purchase-delete-item="${task ? task.no : ''}" data-index="${index}">删除</button>
                 <div class="warehouse-detail-img" style="${bg(item.img || warehouseImgs.stock)}"></div>
-                <div>
-                  <h4>${item.title}</h4>
-                  <p>${item.supplier ? `${item.supplier} · ` : ''}${item.spec} · ${item.temp || '常温'}<br>${item.sku}</p>
-                  <div class="warehouse-purchase-row">
-                    <span>${item.unit || '件'} / 可修改数量</span>
+                <div class="warehouse-purchase-info">
+                  <div class="warehouse-purchase-title-line"><h4>${item.title}</h4></div>
+                  <div class="warehouse-purchase-summary">${item.supplier ? `${item.supplier} · ` : ''}${item.spec}</div>
+                  <div class="warehouse-purchase-tags"><span>${item.temp || '常温'}</span></div>
+                  <div class="warehouse-purchase-selected-actions">
                     <div class="warehouse-qty-stepper">
                       <button data-warehouse-purchase-qty-step="${task ? task.no : ''}" data-index="${index}" data-delta="-1">−</button>
                       <input type="number" min="1" value="${item.qty || 1}" data-warehouse-purchase-qty="${task ? task.no : ''}" data-index="${index}" aria-label="${item.title} 采购数量">
                       <button data-warehouse-purchase-qty-step="${task ? task.no : ''}" data-index="${index}" data-delta="1">＋</button>
                     </div>
                   </div>
-                  <button class="warehouse-purchase-delete-btn" data-warehouse-purchase-delete-item="${task ? task.no : ''}" data-index="${index}">删除商品</button>
                 </div>
               </div>`).join('') : '<div class="warehouse-empty">暂无已选择商品，请先添加商品</div>'}
             </div>
@@ -20123,7 +20672,7 @@
       const keyword = String(data.purchaseProductKeyword || '').trim().toLowerCase();
       const chosen = new Set((data.purchaseDraftItems || []).map(item => item.sku));
       return (data.purchaseCatalog || []).filter(item => {
-        const text = [item.title, item.sku, item.spec, item.supplier, item.temp].filter(Boolean).join(' ').toLowerCase();
+        const text = [item.title, item.barcode, item.spec, item.supplier, item.temp].filter(Boolean).join(' ').toLowerCase();
         return (!keyword || text.includes(keyword)) && !chosen.has(item.sku);
       });
     }
@@ -20139,18 +20688,20 @@
         </div>
         <div class="warehouse-main">
           <div class="warehouse-detail-section">
-            <div class="warehouse-purchase-search"><input data-warehouse-purchase-product-search value="${data.purchaseProductKeyword || ''}" placeholder="搜索商品名称 / SKU / 供应商"><button data-warehouse-purchase-product-search-submit>查询</button></div>
-            <div class="warehouse-purchase-meta"><span>商品库</span><span>${rows.length} 个可添加</span><span>已选 ${(data.purchaseDraftItems || []).length} 个</span></div>
+            <div class="warehouse-purchase-search"><input data-warehouse-purchase-product-search value="${data.purchaseProductKeyword || ''}" placeholder="搜索商品名称 / 条码 / 供应商"><button data-warehouse-purchase-product-search-submit>查询</button></div>
+            <div class="warehouse-purchase-meta"><span>商品库</span><span>${rows.length} 个可添加</span></div>
           </div>
           <div class="warehouse-detail-section">
             <div class="warehouse-purchase-list" data-warehouse-purchase-product-results>${rows.length ? rows.map(item => `
               <div class="warehouse-purchase-item warehouse-purchase-catalog-item">
                 <div class="warehouse-detail-img" style="${bg(item.img || warehouseImgs.stock)}"></div>
-                <div>
-                  <h4>${item.title}</h4>
-                  <p>${item.supplier} · ${item.spec}<br>${item.sku}</p>
-                  <div class="warehouse-purchase-row">
-                    <span>${item.temp || '常温'} / 默认 ${item.qty || 1}${item.unit || '件'}</span>
+                <div class="warehouse-purchase-info">
+                  <div class="warehouse-purchase-title-line"><h4>${item.title}</h4></div>
+                  <div class="warehouse-purchase-fields">
+                    <span><b>规格</b>${item.spec || '-'}</span>
+                    <span><b>条码</b>${item.barcode || '-'}</span>
+                    <span><b>存储方式</b>${item.temp || '常温'}</span>
+                    <span><b>供应商</b>${item.supplier || '-'}</span>
                   </div>
                 </div>
                 <button class="warehouse-purchase-add-btn" data-warehouse-purchase-pick-product="${item.sku}">添加</button>
@@ -21855,6 +22406,22 @@
       }
       setMobile(phone, phone.dataset.currentPage || 'tasks');
     }
+    function warehouseReceiverStatusFilterForTask(task) {
+      const status = warehouseReceiverDisplayStatus(task);
+      const filter = warehouseReceiverNormalizeFilter(status);
+      return filter === 'all' ? '' : filter;
+    }
+    function warehouseGoToReceiverStatusTab(phone, task) {
+      const { role, data } = warehouseContextFromPhone(phone);
+      if (!phone || !data || role !== 'receiver' || !task) return false;
+      const filter = warehouseReceiverStatusFilterForTask(task);
+      if (!filter) return false;
+      data.activeTaskFilter = filter;
+      const tasksPage = phone.querySelector('[data-m-page="tasks"]');
+      if (tasksPage) tasksPage.outerHTML = warehouseTasksPage(data, role);
+      setMobile(phone, 'tasks');
+      return true;
+    }
     function openWarehouseReceiveScan(phone, taskNo) {
       const { role, data } = warehouseContextFromPhone(phone);
       if (!phone || !data) return false;
@@ -21927,6 +22494,10 @@
       renderWarehousePhone(phone, mobileApps[phone.dataset.warehouseView] || {}, role);
       return true;
     }
+    function removeWarehouseReceiverActionModal(phone) {
+      const modal = phone && phone.querySelector('[data-warehouse-receiver-action-modal]');
+      if (modal) modal.remove();
+    }
     function openWarehouseReceiveArea(phone, taskNo) {
       const { role, data } = warehouseContextFromPhone(phone);
       if (!phone || !data || role !== 'receiver') return false;
@@ -21971,7 +22542,7 @@
       });
       warehouseUpdateStockForTask(data, task, '接单');
       warehouseRefreshSurfaces(phone, task.no);
-      setMobile(phone, 'tasks');
+      warehouseGoToReceiverStatusTab(phone, task);
       showShopToast(phone, `已选择${warehouseAreaShortLabel(selectedArea)}，接单完成`);
       return true;
     }
@@ -22238,7 +22809,7 @@
       });
       warehouseUpdateStockForTask(data, task, '确认扫码收货');
       warehouseRefreshSurfaces(phone, task.no);
-      openWarehouseTaskDetail(phone, task.no);
+      warehouseGoToReceiverStatusTab(phone, task);
       showShopToast(phone, `确认扫码收货完成：${previousStatus} → ${task.status}`);
       return true;
     }
@@ -22287,7 +22858,8 @@
       data.lastActionTime = now;
       data.temperatureModalTaskNo = '';
       warehouseRefreshSurfaces(phone, task.no);
-      setMobile(phone, phone.dataset.currentPage || 'tasks');
+      if (task.status !== previousStatus) warehouseGoToReceiverStatusTab(phone, task);
+      else setMobile(phone, phone.dataset.currentPage || 'tasks');
       showShopToast(phone, `温度已上传：${previousStatus} → ${task.status}`);
       return true;
     }
@@ -22330,7 +22902,7 @@
       });
       warehouseUpdateStockForTask(data, task, '异常上报');
       warehouseRefreshSurfaces(phone, task.no);
-      openWarehouseTaskDetail(phone, task.no);
+      if (!warehouseGoToReceiverStatusTab(phone, task)) openWarehouseTaskDetail(phone, task.no);
       showShopToast(phone, '异常原因已提交');
       return true;
     }
@@ -22712,6 +23284,7 @@
       });
       warehouseUpdateStockForTask(data, task, action);
       warehouseRefreshSurfaces(phone, task.no);
+      if (role === 'receiver') warehouseGoToReceiverStatusTab(phone, task);
       showShopToast(phone, actionResult ? `${actionResult.toast}：${previousStatus} → ${task.status}` : `${warehouseActionLabel(action)}完成：${previousStatus} → ${task.status}`);
       return true;
     }
@@ -22753,8 +23326,9 @@
       });
       warehouseUpdateStockForTask(data, task, action);
       data.receiverActionModal = null;
+      removeWarehouseReceiverActionModal(phone);
       warehouseRefreshSurfaces(phone, task.no);
-      setMobile(phone, phone.dataset.currentPage || 'tasks');
+      warehouseGoToReceiverStatusTab(phone, task);
       showShopToast(phone, actionResult ? `${actionResult.toast}：${previousStatus} → ${task.status}` : `${warehouseActionLabel(action)}完成`);
       return true;
     }
@@ -23682,6 +24256,7 @@
         doc.statusClass = 'green';
         doc.currentStep = flowLength;
         doc.actions = [];
+        if (type === 'inbound') syncSupplierDeliveryInboundStatus(doc);
         if (type === 'inbound' && doc.sourceReturnId) warehouseSyncDriverReturnWarehouseQty(doc);
       } else if (/异常登记/.test(action)) {
         doc.status = '异常待处理';
@@ -23708,6 +24283,15 @@
       refreshWarehouseManagerPage(phone, config.detail);
       showShopToast(phone, `${doc.no} ${action}`);
       return true;
+    }
+    function syncSupplierDeliveryInboundStatus(doc) {
+      const no = doc && (doc.sourceSupplierDeliveryNo || doc.supplierDeliveryNo || doc.deliveryNo || doc.orderNo);
+      const supplier = typeof roleHubData !== 'undefined' && roleHubData.supplier;
+      const order = supplier && (supplier.orders || []).find(item => item.no === no);
+      if (!order) return;
+      updateSupplierDeliveryOrderStatus(order, '已入库');
+      order.inboundNo = doc.no;
+      order.inboundTime = doc.receiveTime || doc.date || '';
     }
     function updateDriverDeliverySearch(input) {
       const phone = input && input.closest('[data-mobile]');
@@ -25081,8 +25665,7 @@
       items.push(warehousePurchaseCloneItem(Object.assign({}, source, {
         done: 0,
         batch: '',
-        location: '',
-        barcode: ''
+        location: ''
       })));
       data.purchaseDraftItems = items;
       const page = phone.querySelector('[data-m-page="purchaseProductSearch"]');
@@ -25274,7 +25857,20 @@
       if (data) data.activeTaskFilter = button.dataset.warehouseTaskFilter || 'all';
       const label = role === 'receiver' ? phone.querySelector('.warehouse-receiver-filter-head b') : null;
       if (label && data) label.textContent = warehouseReceiverFilterLabel(data.activeTaskFilter);
+      if (role === 'receiver') toggleWarehouseReceiverFilter(phone, false);
       refreshWarehouseTaskList(phone);
+    }
+    function toggleWarehouseReceiverFilter(target, forceOpen) {
+      const box = target && (target.matches && target.matches('.warehouse-receiver-filter') ? target : target.querySelector('.warehouse-receiver-filter'));
+      if (!box) return false;
+      const options = box.querySelector('.warehouse-receiver-filter-options');
+      const toggle = box.querySelector('[data-warehouse-receiver-filter-toggle]');
+      if (!options || !toggle) return false;
+      const open = typeof forceOpen === 'boolean' ? forceOpen : !box.classList.contains('open');
+      box.classList.toggle('open', open);
+      options.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      return true;
     }
     function setWarehouseTaskDate(select) {
       const phone = select && select.closest('[data-mobile]');
@@ -25615,7 +26211,7 @@
         loginNote: '登录后绑定 supplier_id 数据权限，订单列表展示送货单摘要，不展示用户信息；商品明细进入详情页查看。',
         kpis: [['¥28,640', '本月销售额', 'orders'], ['12', '在售商品', 'delivery'], ['4', '采购单', 'purchase']],
         tasks: [
-          ['今日送货 3 单', '广州中心仓 2 单、深圳中心仓 1 单，需打印送货单并预约到仓。', 'orders'],
+          ['今日送货 3 单', '广州中心仓 2 单、深圳中心仓 1 单，需确认送货并预约到仓。', 'orders'],
           ['选择商品提交送货单', '勾选本供应商在售商品，提交给采购审核后生成送货单。', 'delivery']
         ],
         quicks: [
@@ -25685,7 +26281,7 @@
           ['商品表现', '查看商品图片、名称、规格、销量和发布状态。'],
           ['售后复核', '按订单商品和批次核对售后原因。'],
           ['发票申请', '按结算周期上传开票信息和附件。'],
-          ['送货资料', '打印送货单、查看到仓要求和预约记录。']
+          ['送货资料', '确认送货、查看到仓要求和预约记录。']
         ],
         salesRecords: [
           {
@@ -25725,8 +26321,8 @@
         ],
         orders: [
           {
-            status: '待送货',
-            statusClass: 'orange',
+            status: '送货中',
+            statusClass: 'blue',
             no: 'SH20260610001',
             time: '2026-06-09 09:26:18',
             amount: '3,458.00',
@@ -25833,8 +26429,8 @@
       );
       supplier.orders.push(
         {
-          status: '待送货',
-          statusClass: 'orange',
+          status: '送货中',
+          statusClass: 'blue',
           no: 'SH20260610003',
           time: '2026-06-09 15:22:14',
           amount: '4,128.00',
@@ -26147,8 +26743,8 @@
       );
       supplier.orders.push(
         {
-          status: '待送货',
-          statusClass: 'orange',
+          status: '送货中',
+          statusClass: 'blue',
           no: 'SH20260610004',
           time: '2026-06-09 16:18:27',
           amount: '5,640.00',
@@ -26161,8 +26757,8 @@
           ]
         },
         {
-          status: '待送货',
-          statusClass: 'orange',
+          status: '送货中',
+          statusClass: 'blue',
           no: 'SH20260610005',
           time: '2026-06-09 18:05:39',
           amount: '2,760.00',
@@ -26175,8 +26771,8 @@
           ]
         },
         {
-          status: '待送货',
-          statusClass: 'orange',
+          status: '送货中',
+          statusClass: 'blue',
           no: 'SH20260610006',
           time: '2026-06-09 18:46:12',
           amount: '3,920.00',
@@ -26189,8 +26785,8 @@
           ]
         },
         {
-          status: '待送货',
-          statusClass: 'orange',
+          status: '送货中',
+          statusClass: 'blue',
           no: 'SH20260610007',
           time: '2026-06-09 19:18:30',
           amount: '2,486.00',
@@ -26203,8 +26799,8 @@
           ]
         },
         {
-          status: '待送货',
-          statusClass: 'orange',
+          status: '送货中',
+          statusClass: 'blue',
           no: 'SH20260610008',
           time: '2026-06-09 19:52:04',
           amount: '1,980.00',
@@ -26437,6 +27033,7 @@
       }
     }
     enrichRoleHubDemoData();
+    normalizeRoleSupplierDeliveryData(roleHubData.supplier);
     function roleBottomIcon(name) {
       const icons = {
         home: '<svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5"></path><path d="M6.5 10.5V20h11v-9.5"></path><path d="M10 20v-5h4v5"></path></svg>',
@@ -26650,7 +27247,7 @@
         row.qty += roleOrderQty(order);
         row.amount += roleMoneyNumber(roleOrderAmount(order));
         row.statuses.add(order.status);
-        if (roleCanCancelOrder(order)) row.pending += 1;
+        if (/送货中|待入库|待送货|待处理|未发货/.test(order.status || '')) row.pending += 1;
         const pickup = String(order.pickup || '');
         if (!row.latestPickup || pickup > row.latestPickup) row.latestPickup = pickup;
         const stationName = String(order.station || '').split('/')[0]?.trim();
@@ -26699,6 +27296,38 @@
     function roleCanCancelOrder(order) {
       return /未发货|待送货|待处理|待发货/.test(order.status || '');
     }
+    function roleSupplierDeliveryStatusClass(status) {
+      if (/已入库|已结算|已完成/.test(status || '')) return 'green';
+      if (/送货中/.test(status || '')) return 'blue';
+      if (/待入库|待送货|待处理|待发货|待结算/.test(status || '')) return 'orange';
+      if (/售后|复核|审核/.test(status || '')) return 'blue';
+      return 'gray';
+    }
+    function normalizeRoleSupplierDeliveryOrder(order) {
+      if (!order) return order;
+      if (order.status === '待送货') order.status = '送货中';
+      else if (order.status === '已送货') order.status = '待入库';
+      else if (order.status === '待结算') order.status = '已入库';
+      order.statusClass = roleSupplierDeliveryStatusClass(order.status);
+      return order;
+    }
+    function normalizeRoleSupplierDeliveryData(data) {
+      if (!data || data.roleName !== '供应商角色') return;
+      (data.orders || []).forEach(normalizeRoleSupplierDeliveryOrder);
+    }
+    function roleSupplierDeliveryButtons(order) {
+      if (!order) return '';
+      if (order.status === '送货中') {
+        return `<button class="role-action-btn soft" data-role-supplier-delivery-action="deliver" data-order-no="${order.no}">确认送货</button><button class="role-action-btn primary" data-role-supplier-delivery-action="arrive" data-order-no="${order.no}">确认到仓</button>`;
+      }
+      if (order.status === '待入库') {
+        return `<button class="role-action-btn soft" disabled>等待入库</button>`;
+      }
+      if (order.status === '已入库') {
+        return `<button class="role-action-btn soft" disabled>已入库</button>`;
+      }
+      return `<button class="role-action-btn primary" data-role-supplier-delivery-action="deliver" data-order-no="${order.no}">确认送货</button>`;
+    }
     function roleOrderPayload(order, role) {
       return encodeURIComponent(JSON.stringify({
         '送货单号': order.no,
@@ -26710,6 +27339,9 @@
     }
     function roleHubOrderCard(order, role) {
       const location = role === 'supplier' ? roleSupplierOrderLocation(order) : order.station;
+      const action = role === 'supplier'
+        ? roleSupplierDeliveryButtons(order)
+        : `<button class="role-action-btn soft" data-action="联系用户" data-action-target="orders" data-row="${roleOrderPayload(order, role)}">联系用户</button>`;
       return `<div class="role-order-card" data-role-delivery-detail="${order.no}">
         <div class="role-order-head">
           <div><b>${order.no}</b><span>${location}</span></div>
@@ -26718,7 +27350,7 @@
         <div class="role-order-summary"><div><b>${roleOrderQty(order)}</b>合计数量</div><div><b>¥${roleOrderAmount(order)}</b>合计金额</div></div>
         <div class="role-order-actions">
           <button class="role-action-btn primary" data-role-delivery-detail="${order.no}">查看详情</button>
-          <button class="role-action-btn soft" data-action="${role === 'station' ? '联系用户' : '打印送货单'}" data-action-target="${role === 'station' ? 'orders' : 'delivery'}" data-row="${roleOrderPayload(order, role)}">${role === 'station' ? '联系用户' : '打印送货单'}</button>
+          ${action}
         </div>
       </div>`;
     }
@@ -26741,9 +27373,9 @@
       </div>`;
     }
     function roleWarehouseStatusClass(status) {
-      if (/已送货|已结算|已完成/.test(status || '')) return 'green';
-      if (/待送货|待结算|待处理|未发货/.test(status || '')) return 'orange';
-      if (/售后|复核|审核/.test(status || '')) return 'blue';
+      if (/已入库|已送货|已结算|已完成/.test(status || '')) return 'green';
+      if (/送货中|售后|复核|审核/.test(status || '')) return 'blue';
+      if (/待入库|待送货|待结算|待处理|未发货/.test(status || '')) return 'orange';
       return 'gray';
     }
     function roleWarehouseSummaryCard(item) {
@@ -26884,6 +27516,9 @@
         ? `<button class="role-action-btn danger" data-role-supplier-shortage-page="${order.no}">缺货标记</button>`
         : '';
       const location = role === 'supplier' ? roleSupplierOrderLocation(order) : order.station;
+      const actionButtons = role === 'supplier'
+        ? `${roleSupplierDeliveryButtons(order)}${shortageBtn}`
+        : `<button class="role-action-btn primary" data-action="确认核销" data-action-target="delivery" data-row="${roleOrderPayload(order, role)}">确认核销</button>${cancelBtn}<button class="role-action-btn soft" data-action="联系用户" data-action-target="orders" data-row="${roleOrderPayload(order, role)}">联系用户</button>`;
       return `<div class="role-page role-detail-page" data-m-page="roleOrderDetail">
         <div class="role-work-head">
           <div class="status-bar"><span>14:49</span><span>▮▮▮  WiFi 80</span></div>
@@ -26903,7 +27538,7 @@
           <div class="role-detail-section"><h3>合计</h3><div class="role-total-box"><div>商品种类<b>${(order.items || []).length}</b></div><div>合计数量<b>${roleOrderQty(order)}</b></div><div>合计金额<b>¥${roleOrderAmount(order)}</b></div></div></div>
           ${role === 'station' ? `<div class="role-detail-section"><h3>用户信息</h3><p style="margin:0;color:#8b6a57;font-size:13px;line-height:1.7"><b style="color:#2d241f">${order.userName}　${order.userMobile}</b><br>备注：${order.userRemark}</p></div>` : ''}
           <div class="role-detail-section"><h3>${role === 'station' ? '自提点信息' : '履约信息'}</h3><p style="margin:0;color:#8b6a57;font-size:13px;line-height:1.7">${role === 'station' ? order.station : `送达仓库：${location}`}<br>生成时间：${order.time}<br>${role === 'station' ? '提货时间' : '到仓时间'}：${order.pickup}</p></div>
-          <div class="role-order-actions"><button class="role-action-btn primary" data-action="${role === 'station' ? '确认核销' : '确认送货'}" data-action-target="delivery" data-row="${roleOrderPayload(order, role)}">${role === 'station' ? '确认核销' : '确认送货'}</button>${cancelBtn}${shortageBtn}<button class="role-action-btn soft" data-action="${role === 'station' ? '联系用户' : '打印送货单'}" data-action-target="orders" data-row="${roleOrderPayload(order, role)}">${role === 'station' ? '联系用户' : '打印送货单'}</button></div>
+          <div class="role-order-actions">${actionButtons}</div>
         </div>
         ${roleHubBottom('orders', role)}
       </div>`;
@@ -27967,6 +28602,117 @@
       const role = phone && phone.dataset.role || (cfg && cfg.defaultRole) || 'station';
       return { cfg, role, data: roleHubData[role] };
     }
+    function refreshRoleSupplierOrderViews(phone, order) {
+      if (!phone || !order) return;
+      const { role, data } = roleContextFromPhone(phone);
+      if (role !== 'supplier' || !data) return;
+      const detailPage = phone.querySelector('[data-m-page="roleOrderDetail"]');
+      if (detailPage) detailPage.outerHTML = roleDeliveryDetailMarkup(data, role, order);
+      const ordersPage = phone.querySelector('[data-m-page="orders"]');
+      if (ordersPage) ordersPage.outerHTML = roleHubOrdersPage(data, role);
+      const warehousePage = phone.querySelector('[data-m-page="warehouseDetail"]');
+      if (warehousePage) warehousePage.outerHTML = roleWarehouseDetailPage(data);
+      setMobile(phone, phone.dataset.currentPage || 'orders');
+    }
+    function updateSupplierDeliveryOrderStatus(order, status) {
+      if (!order) return;
+      order.status = status;
+      order.statusClass = roleSupplierDeliveryStatusClass(status);
+    }
+    function refreshWarehouseManagerInboundViews() {
+      document.querySelectorAll('[data-mobile][data-warehouse-role="manager"]').forEach(phone => {
+        const page = phone.querySelector('[data-m-page="managerInbound"]');
+        if (page) page.outerHTML = warehouseManagerDocPage(warehouseHubData.manager, 'manager', 'inbound');
+        const detailPage = phone.querySelector('[data-m-page="managerInboundDetail"]');
+        if (detailPage) detailPage.outerHTML = warehouseManagerInboundDetailPage(warehouseHubData.manager, 'manager', managerFindDoc(warehouseHubData.manager, 'inbound', detailPage.dataset.docNo));
+        if (/managerInbound|managerInboundDetail/.test(phone.dataset.currentPage || '')) setMobile(phone, phone.dataset.currentPage);
+      });
+    }
+    function ensureSupplierDeliveryInboundOrder(order) {
+      const manager = typeof warehouseHubData !== 'undefined' && warehouseHubData.manager;
+      if (!manager) return;
+      manager.documents = manager.documents || {};
+      manager.documents.inbound = manager.documents.inbound || [];
+      const inboundNo = order.inboundNo || `IN-SUP-${String(order.no || '').replace(/\D/g, '').slice(-10)}`;
+      const warehouse = roleWarehouseName(order);
+      const deliveryDate = roleDateInputValue(order.pickup) || warehouseToday();
+      const products = (order.items || []).map((item, index) => ({
+        title: item.title,
+        sku: item.sku || `SUP-${String(order.no || '').slice(-6)}-${index + 1}`,
+        barcode: item.barcode || `SUP${String(order.no || '').replace(/\D/g, '').slice(-8)}${String(index + 1).padStart(2, '0')}`,
+        spec: item.spec || '供应商送货',
+        category: '供应商直送',
+        location: item.location || 'R-供应商到仓',
+        qty: Number(item.qty || 0),
+        actualQty: Number(item.qty || 0),
+        unit: item.unit || '件'
+      }));
+      const doc = {
+        no: inboundNo,
+        type: '采购入库单',
+        title: `${order.no} 到仓入库`,
+        status: '待入库',
+        statusClass: 'amber',
+        owner: '华南果业',
+        submitRole: '供应商',
+        submitter: '华南果业',
+        warehouse,
+        deliveryWarehouse: warehouse,
+        deliveryDate,
+        driver: '供应商配送',
+        driverPhone: '-',
+        operator: '仓库收货员',
+        operatorPhone: '-',
+        receiveTime: '-',
+        date: deliveryDate,
+        qty: roleOrderQty(order),
+        amount: `¥${roleOrderAmount(order)}`,
+        currentStep: 1,
+        actions: ['入库'],
+        meta: ['供应商确认到仓', order.no, `${products.length}个SKU`],
+        purchaseApproved: true,
+        approvedBy: '采购审核',
+        products,
+        flowSource: 'supplier',
+        sourceSupplierDeliveryNo: order.no
+      };
+      const index = manager.documents.inbound.findIndex(item => item.sourceSupplierDeliveryNo === order.no || item.no === inboundNo);
+      if (index >= 0) manager.documents.inbound[index] = Object.assign({}, manager.documents.inbound[index], doc);
+      else manager.documents.inbound.unshift(doc);
+      order.inboundNo = inboundNo;
+      manager.kpis = [[String((manager.documents.inbound || []).filter(item => item.status === '待入库').length), '入库单', 'managerInbound'], [String(((manager.documents || {}).outbound || []).length), '出库单', 'managerOutbound'], [String(((manager.documents || {}).purchase || []).filter(item => /待审核|待复核|待到仓|已审核待到仓/.test(item.status || '')).length), '待到仓', 'managerPurchase']];
+      refreshWarehouseManagerInboundViews();
+    }
+    function handleRoleSupplierDeliveryAction(button) {
+      const phone = button && button.closest('[data-mobile]');
+      const { role, data } = roleContextFromPhone(phone);
+      if (!phone || role !== 'supplier' || !data) return false;
+      const order = (data.orders || []).find(item => item.no === button.dataset.orderNo);
+      if (!order) return false;
+      const action = button.dataset.roleSupplierDeliveryAction || '';
+      if (action === 'arrive') {
+        if (order.status !== '送货中') {
+          showShopToast(phone, '只有送货中的送货单才能确认到仓');
+          return true;
+        }
+        updateSupplierDeliveryOrderStatus(order, '待入库');
+        ensureSupplierDeliveryInboundOrder(order);
+        showShopToast(phone, `${order.no} 已确认到仓，状态已变更为待入库`);
+      } else {
+        if (order.status === '已入库') {
+          showShopToast(phone, '该送货单已入库');
+          return true;
+        }
+        if (order.status === '待入库') {
+          showShopToast(phone, '该送货单已到仓，等待仓库入库');
+          return true;
+        }
+        updateSupplierDeliveryOrderStatus(order, '送货中');
+        showShopToast(phone, `${order.no} 已确认送货，状态已变更为送货中`);
+      }
+      refreshRoleSupplierOrderViews(phone, order);
+      return true;
+    }
     function roleResetMobileMatches(data, value) {
       const input = String(value || '').replace(/\D/g, '');
       const plain = String(data && data.mobilePlain || '').replace(/\D/g, '');
@@ -28081,6 +28827,7 @@
       const { role, data } = roleContextFromPhone(phone);
       if (!phone || role !== 'supplier' || !data) return;
       data.activeSupplierShortageOrderNo = button.dataset.roleSupplierShortagePage;
+      const order = (data.orders || []).find(item => item.no === data.activeSupplierShortageOrderNo) || data.orders[0];
       const page = phone.querySelector('[data-m-page="supplierShortage"]');
       if (page) {
         page.outerHTML = roleSupplierOrderShortagePage(data);
@@ -28548,8 +29295,8 @@
       request.orderNo = orderNo;
       data.orders = data.orders || [];
       data.orders.unshift({
-        status: '待送货',
-        statusClass: 'orange',
+        status: '送货中',
+        statusClass: 'blue',
         no: orderNo,
         time: request.auditTime,
         amount: roleMoneyText(request.amount),
@@ -28736,7 +29483,7 @@
                 <div class="role-compare">${table(['模块','自提点角色','供应商角色'], [
                   ['登录绑定','绑定 station_id，只看本自提点数据','绑定 supplier_id，只看本供应商数据'],
                   ['订单页','列表展示用户姓名、手机号；详情展示商品图/名称/规格','列表不展示用户；详情展示商品图/名称/规格和到仓信息'],
-                  ['履约页','按配送日查询配送商品、应到/实到、用户购买数量、退货数据和缺货标记','送货排期、打印送货单、查看入库回执'],
+                  ['履约页','按配送日查询配送商品、应到/实到、用户购买数量、退货数据和缺货标记','送货排期、确认送货、查看入库回执'],
                   ['我的页','佣金明细、待审核、已到账、售后扣减、提现','货款明细、结算状态、发票和提现']
                 ])}</div>
               </div>
@@ -28761,7 +29508,7 @@
     const titles = {
       overview:'项目总览', menu:'后台菜单结构',
       adminProduct:'商品中心', adminCategory:'类目中心', adminBase:'基础资料', adminPublish:'商品发布', adminPermission:'权限中心',
-      adminOrder:'订单中心', adminAfterSale:'售后中心', adminFinance:'分账中心', adminCommission:'佣金中心', adminMarketing:'营销中心', adminReport:'报表中心',
+      adminOrder:'订单中心', adminAfterSale:'售后中心', adminFinance:'分账中心', adminCommission:'佣金中心', adminMarketing:'营销中心', adminPoints:'积分中心', adminReport:'报表中心',
       h5User:'用户小程序', h5Station:'角色工作台小程序', h5Supplier:'角色工作台小程序 / 供应商视角', h5Warehouse:'仓配移动端',
       wmsDocumentFlow:'仓库单据流转', wmsPurchase:'采购管理', wmsInbound:'收货管理', wmsOutbound:'销售单与波次', wmsPick:'拣货复检装车', wmsDelivery:'司机配送',
       wmsVehicle:'车辆装载', wmsRouteMap:'地图线路', wmsReturn:'退货交接', wmsDriverFee:'司机费用',
@@ -28786,6 +29533,37 @@
       document.getElementById('crumb').textContent = `${titles[id] || id} / 交互原型`;
       window.scrollTo({top:0, behavior:'smooth'});
     }
+    const userFloatingBackSelectors = '[data-detail-back], [data-rank-back], [data-review-back], .activity-back, .order-back, .order-detail-back';
+    function getActiveUserBackButton(phone) {
+      if (!phone || phone.dataset.mobile !== 'user') return null;
+      const activePage = phone.querySelector('.shop-page.active');
+      if (!activePage) return null;
+      return activePage.querySelector(userFloatingBackSelectors);
+    }
+    function syncUserFloatingBack(phone) {
+      if (!phone || phone.dataset.mobile !== 'user') return;
+      const floatingBack = phone.querySelector('[data-user-floating-back]');
+      const activePage = phone.querySelector('.shop-page.active');
+      phone.querySelectorAll('.shop-page.floating-back-active').forEach(page => {
+        if (page !== activePage) page.classList.remove('floating-back-active');
+      });
+      if (!floatingBack || !activePage) return;
+      const sourceBack = getActiveUserBackButton(phone);
+      activePage.classList.toggle('floating-back-active', !!sourceBack);
+      floatingBack.classList.toggle('show', !!sourceBack);
+      floatingBack.disabled = !sourceBack;
+    }
+    function triggerUserFloatingBack(button, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      const phone = button && button.closest('[data-mobile="user"]');
+      const sourceBack = getActiveUserBackButton(phone);
+      if (!sourceBack) return;
+      sourceBack.click();
+      syncUserFloatingBack(phone);
+    }
     function setMobile(phone, page) {
       if (!phone) return;
       if (page === 'receivers') refreshReceiverPage(phone);
@@ -28799,7 +29577,7 @@
       });
       syncStationView(phone, getCurrentStation());
       updateMiniCartVisibility(phone);
-      if (page === 'cart') updateCartPage(phone.querySelector('[data-m-page="cart"]'));
+      if (page === 'cart') refreshCartPageFromMiniCart(phone);
       if (page === 'pay' || page === 'orders') refreshPaymentCountdowns();
       const view = phone.closest('.view');
       const appName = phone.dataset.mobile;
@@ -28814,6 +29592,7 @@
           b.classList.toggle('active', b.dataset.mGo === warehouseActivePage);
         });
       }
+      syncUserFloatingBack(phone);
     }
     function setCategory(phone, catKey) {
       if (!phone || !catKey || !categoryProducts[catKey]) return;
@@ -28939,7 +29718,8 @@
       const name = button.dataset.cartName || '立即购买商品';
       const price = Number(button.dataset.cartPrice || 0);
       const img = button.dataset.cartImg || shopImgs.detail;
-      checkoutData.items = [{ img, title: name, spec: '当前选择规格 / x1', price: price.toFixed(2), qty: 1 }];
+      const spec = button.dataset.cartSpec || '当前选择规格 / x1';
+      checkoutData.items = [{ img, title: name, spec, price: price.toFixed(2), qty: 1 }];
       checkoutData.goodsAmount = price.toFixed(2);
       checkoutData.discount = price >= 39 ? '5.00' : '0.00';
       checkoutData.freight = '0.00';
@@ -29019,7 +29799,7 @@
       activeReviewProductId = productId;
       activeReviewTab = parsed.tab;
       activeReviewTag = parsed.tag;
-      page.dataset.productId = productId;
+      page.dataset.reviewProductId = productId;
       page.dataset.backPage = 'detail';
       page.dataset.detailBackPage = detailPage?.dataset.backPage || phone.dataset.detailReturnPage || 'home';
       page.dataset.reviewTab = activeReviewTab;
@@ -29029,12 +29809,12 @@
     }
     function refreshReviewPage(phone, tab=activeReviewTab, tag=activeReviewTag) {
       const page = phone && phone.querySelector('[data-m-page="reviews"]');
-      const productId = page?.dataset.productId || activeReviewProductId;
+      const productId = page?.dataset.reviewProductId || activeReviewProductId;
       if (!phone || !page || !productId) return;
       activeReviewTab = tab || 'all';
       activeReviewTag = tag || '';
       page.innerHTML = reviewPageMarkup(detailProductByKey(productId), activeReviewTab, activeReviewTag);
-      page.dataset.productId = productId;
+      page.dataset.reviewProductId = productId;
       page.dataset.reviewTab = activeReviewTab;
       page.dataset.reviewTag = activeReviewTag;
     }
@@ -29075,6 +29855,9 @@
       const nextTag = page?.dataset.reviewTag === button.dataset.reviewTag ? '' : button.dataset.reviewTag;
       if (phone) refreshReviewPage(phone, page?.dataset.reviewTab || 'all', nextTag);
     }
+    window.handleReviewBackClick = handleReviewBackClick;
+    window.handleReviewTabClick = handleReviewTabClick;
+    window.handleReviewTagClick = handleReviewTagClick;
     function closeReviewImage(phone) {
       const mask = phone && phone.querySelector('[data-review-image-mask]');
       if (mask) mask.classList.remove('show');
@@ -29089,19 +29872,41 @@
       if (panel) panel.style.backgroundImage = `url('${url.replace(/\\/g,'/')}')`;
       if (mask) mask.classList.add('show');
     }
+    function isBlockedReviewPageClick(target) {
+      const reviewPage = target && target.closest && target.closest('[data-m-page="reviews"]');
+      if (!reviewPage) return false;
+      if (target.closest('[data-review-back], [data-review-tab], [data-review-tag], [data-review-img], [data-close-review-image]')) return false;
+      if (target.matches && target.matches('[data-review-image-mask]')) return false;
+      return !!target.closest('[data-m-go], [data-product-id], [data-open-rank], [data-action], [data-buy-now], button');
+    }
     function setProductSku(option) {
       const page = option && option.closest('[data-m-page="detail"]');
       if (!page) return;
       page.querySelectorAll('[data-sku-index]').forEach(item => item.classList.toggle('active', item === option));
       const price = page.querySelector('[data-detail-price]');
       const oldPrice = page.querySelector('[data-detail-old]');
+      const saleStock = page.querySelector('[data-detail-sale-stock]');
+      const pickup = page.querySelector('[data-detail-pickup]');
+      const buyerCount = page.querySelector('[data-detail-buyer-count]');
       const addBtn = page.querySelector('.cart-action');
+      const buyBtn = page.querySelector('[data-buy-now]');
       if (price) price.textContent = `¥${option.dataset.cartPrice}`;
       if (oldPrice) oldPrice.textContent = `¥${option.dataset.cartOld}`;
+      if (saleStock) saleStock.textContent = `已售${option.dataset.skuSold || 0}份 / 剩余${option.dataset.skuStock || 0}份`;
+      if (pickup) pickup.textContent = `提货 ${pickupDateOnly(option.dataset.skuPickup)}`;
+      if (buyerCount) buyerCount.textContent = option.dataset.skuSold || 0;
       if (addBtn) {
         addBtn.dataset.cartName = option.dataset.cartName;
+        addBtn.dataset.cartSpec = option.dataset.cartSpec || '默认规格';
         addBtn.dataset.cartPrice = option.dataset.cartPrice;
+        addBtn.dataset.cartOld = option.dataset.cartOld || '';
         addBtn.dataset.cartImg = option.dataset.cartImg;
+      }
+      if (buyBtn) {
+        buyBtn.dataset.cartName = option.dataset.cartName;
+        buyBtn.dataset.cartSpec = option.dataset.cartSpec || '默认规格';
+        buyBtn.dataset.cartPrice = option.dataset.cartPrice;
+        buyBtn.dataset.cartImg = option.dataset.cartImg;
       }
     }
     function setOrderDetail(phone, orderId) {
@@ -29163,6 +29968,86 @@
         const order = userOrderData.find(item => item.id === orderId);
         if (order) afterSalePage.innerHTML = afterSaleApplyPageMarkup(order);
       }
+    }
+    function syncCheckoutFromOrder(order) {
+      if (!order) return;
+      checkoutData.no = order.id;
+      checkoutData.station = order.station;
+      checkoutData.stationAddr = order.stationAddr;
+      checkoutData.receiver = order.user;
+      checkoutData.pickupTime = order.pickupTime;
+      checkoutData.goodsAmount = orderGoodsAmount(order);
+      checkoutData.discount = Number(order.discount || 0).toFixed(2);
+      checkoutData.freight = Number(order.freight || 0).toFixed(2);
+      checkoutData.total = Number(order.amount || Math.max(0, Number(checkoutData.goodsAmount) - Number(checkoutData.discount) + Number(checkoutData.freight))).toFixed(2);
+      checkoutData.items = orderProducts(order).map(item => ({ ...item }));
+    }
+    function syncOrderFromCheckout(order) {
+      if (!order) return;
+      order.station = checkoutData.station;
+      order.stationAddr = checkoutData.stationAddr;
+      order.user = checkoutData.receiver;
+      order.pickupTime = checkoutData.pickupTime;
+      order.amount = checkoutData.total;
+      order.discount = checkoutData.discount;
+      order.freight = checkoutData.freight;
+      order.product = {
+        img: checkoutData.items[0]?.img || shopImgs.detail,
+        title: checkoutData.items[0]?.title || '订单商品',
+        spec: checkoutData.items[0]?.spec || '默认规格',
+        qty: checkoutData.items.reduce((sum, item) => sum + Number(item.qty || 0), 0),
+        price: checkoutData.goodsAmount
+      };
+      order.products = checkoutData.items.map(item => ({ ...item }));
+    }
+    function payOrder(button) {
+      const phone = button.closest('[data-mobile]');
+      const order = userOrderData.find(item => item.id === button.dataset.orderId);
+      if (!phone || !order || !canPayOrder(order)) return;
+      syncCheckoutFromOrder(order);
+      refreshPayView(phone);
+      setMobile(phone, 'pay');
+    }
+    function markOrderPreparing(order) {
+      if (!order) return;
+      order.status = '仓库备货中';
+      order.statusClass = 'preparing';
+      order.statusTitle = '仓库备货中';
+      order.statusDesc = '支付已完成，订单已进入仓库备货流程，仓库会按波次拣货、复核和装箱。';
+      order.orderType = 'preparing';
+      order.payDeadlineSeconds = 0;
+      order.cancelReason = '';
+      order.payTime = order.payTime && order.payTime !== '待支付' ? order.payTime : '2026-06-10 09:36:02';
+      order.timeline = [['提交订单', order.time || '2026-06-10 09:35:20'], ['支付成功', order.payTime], ['仓库备货中', '2026-06-10 09:36:08']];
+    }
+    function changeOrderFulfillment(button, nextStep) {
+      const phone = button.closest('[data-mobile]');
+      const order = userOrderData.find(item => item.id === button.dataset.orderId);
+      if (!phone || !order) return;
+      if (nextStep === 'ship' && order.orderType === 'preparing') {
+        order.status = '配送中';
+        order.statusClass = 'shipping';
+        order.statusTitle = '仓库已发货，司机配送中';
+        order.statusDesc = '商品已从仓库出库，司机正在按线路配送到自提点。';
+        order.orderType = 'shipping';
+        order.timeline.push(['仓库发货', '2026-06-10 13:10:00']);
+      } else if (nextStep === 'arrive' && order.orderType === 'shipping') {
+        order.status = '待提货';
+        order.statusClass = 'pickup';
+        order.statusTitle = '已到自提点，等待提货';
+        order.statusDesc = '司机已配送到店，用户可按提货时间到自提点提货。';
+        order.orderType = 'pickup';
+        order.timeline.push(['司机配送到店', '2026-06-10 15:35:12']);
+      } else if (nextStep === 'confirmReceive' && order.orderType === 'pickup') {
+        order.status = '已完成';
+        order.statusClass = 'done';
+        order.statusTitle = '订单已完成';
+        order.statusDesc = '用户已确认收货，订单已完成。';
+        order.orderType = 'done';
+        order.timeline.push(['用户确认收货', '2026-06-10 17:18:00']);
+      }
+      refreshOrderSurfaces(phone, order.id);
+      showShopToast(phone, order.status);
     }
     function cancelOrder(button) {
       const phone = button.closest('[data-mobile]');
@@ -29229,33 +30114,45 @@
       const phone = button.closest('[data-mobile]');
       if (!phone) return;
       const order = userOrderData.find(item => item.id === button.dataset.orderId);
-      if (!canReviewOrder(order)) {
-        showShopToast(phone, order?.reviewed ? '该商品已评价' : '当前订单暂不可评价');
+      const productKeyValue = button.dataset.productKey || '';
+      const targetIndex = orderProducts(order).findIndex((item, index) => orderProductKey(item, index) === productKeyValue);
+      if (!order || order.orderType !== 'done' || targetIndex < 0) {
+        showShopToast(phone, '当前商品暂不可评价');
         return;
       }
+      if (isOrderProductReviewed(order, orderProducts(order)[targetIndex], targetIndex)) {
+        showShopToast(phone, '该商品已评价');
+        return;
+      }
+      activeOrderReviewProductKey = productKeyValue;
       setOrderReviewPage(phone, button.dataset.orderId);
     }
     function submitOrderReview(button) {
       const phone = button.closest('[data-mobile]');
       const order = userOrderData.find(item => item.id === button.dataset.orderId);
-      const card = button.closest('[data-m-page="orderReview"]')?.querySelector(`[data-review-card][data-order-id="${button.dataset.orderId}"]`) || (phone && phone.querySelector(`[data-review-card][data-order-id="${button.dataset.orderId}"]`));
+      const productKeyValue = button.dataset.productKey || activeOrderReviewProductKey;
+      const card = button.closest('[data-m-page="orderReview"]')?.querySelector(`[data-review-card][data-order-id="${button.dataset.orderId}"][data-product-key="${productKeyValue}"]`) || (phone && phone.querySelector(`[data-review-card][data-order-id="${button.dataset.orderId}"][data-product-key="${productKeyValue}"]`));
       if (!phone || !order || !card) return;
+      const productIndex = orderProducts(order).findIndex((item, index) => orderProductKey(item, index) === productKeyValue);
+      const item = orderProducts(order)[productIndex];
+      if (!item || isOrderProductReviewed(order, item, productIndex)) {
+        showShopToast(phone, '该商品已评价');
+        return;
+      }
       const rate = Number(card.querySelector('[data-review-rate]')?.value || 5);
       const text = card.querySelector('[data-review-text]')?.value.trim() || '商品不错，下次还会购买。';
       const selectedTags = Array.from(card.querySelectorAll('[data-review-tag-option].active')).map(item => item.dataset.reviewTagOption).filter(Boolean);
       const selectedImages = Array.from(card.querySelectorAll('[data-review-image-option].active')).map(item => decodeURIComponent(item.dataset.reviewImageOption || '')).filter(Boolean);
-      const product = detailProductByKey(productKey(order.product.title.replace(/\s+(标准装|双份优惠装|分享团购装)$/,'')));
+      const product = detailProductByKey(productKey(String(item.title || '').replace(/\s+(标准装|双份优惠装|分享团购装)$/,'')));
       const store = productReviewStore[product.id] || (productReviewStore[product.id] = defaultProductReviews(product));
       store.count += 1;
       store.goodRate = Math.min(99.9, Number(((store.goodRate * (store.count - 1) + (rate >= 4 ? 100 : 80)) / store.count).toFixed(1)));
       store.repurchaseUsers = Number(store.repurchaseUsers || 0) + 1;
       store.tags = store.tags.map(([name, count]) => [name, count + (selectedTags.includes(name) ? 1 : 0)]);
       store.list.unshift({ user: order.user.split(' ')[0] || '用***', rate, date:'2026-06-15', text, images:selectedImages, likes:0, repurchase:1, tags:selectedTags });
-      order.reviewed = true;
-      order.reviewText = text;
-      order.reviewTags = selectedTags;
-      order.reviewImages = selectedImages;
-      order.timeline.push(['用户评价商品', '2026-06-15 10:18:00']);
+      orderReviewedMap(order)[productKeyValue] = { text, tags:selectedTags, images:selectedImages, rate, date:'2026-06-15' };
+      order.reviewed = orderAllProductsReviewed(order);
+      order.timeline.push([`用户评价商品：${item.title}`, '2026-06-15 10:18:00']);
       const detailPage = phone.querySelector('[data-m-page="detail"]');
       if (detailPage?.dataset.productId === product.id) {
         detailPage.innerHTML = productDetailMarkup(detailProductByKey(product.id));
@@ -29345,6 +30242,14 @@
         ['接口', 'GET /admin/product/page'],
         ['耗时', '86ms'],
         ['页面结果', '列表、分页、状态标签已刷新']
+      ];
+      if (/积分|签到|兑换|过期/.test(text)) return [
+        ['积分账户', 'usr_point_account / USER20260609001'],
+        ['触发来源', /签到/.test(text) ? 'daily_sign' : /过期/.test(text) ? 'point.expire.job' : 'order_paid'],
+        ['计算规则', /签到/.test(text) ? '每日签到 +5，连续签到按规则加赠' : '订单实付金额向下取整返积分'],
+        ['本笔流水', 'usr_point_flow(type=earn_order/earn_sign/expire/redeem)'],
+        ['过期时间', '每笔正向积分单独写 expire_time，兑换时按过期时间优先扣减'],
+        ['页面结果', '用户积分账户、积分流水、待过期积分和操作日志已刷新']
       ];
       if (/商品|规格|价格|发布|同步 ES|联想词/.test(text)) return [
         ['商品编码', 'SP20260609001'],
@@ -29460,7 +30365,48 @@
         ['页面结果', '当前页面数据已刷新，操作日志已记录']
       ];
     }
-    const miniCartState = [];
+    const miniCartState = defaultCartItems.map(item => ({
+      name: item.title,
+      spec: item.spec,
+      price: Number(item.price || 0),
+      oldPrice: item.oldPrice || '',
+      img: item.img,
+      qty: Number(item.qty || 1),
+      selected: item.selected !== false
+    }));
+    function miniCartToCartItems() {
+      return miniCartState.map(item => ({
+        img: item.img || shopImgs.detail,
+        title: item.name || '购物车商品',
+        spec: item.spec || '默认规格',
+        price: Number(item.price || 0).toFixed(2),
+        oldPrice: item.oldPrice || '',
+        qty: Number(item.qty || 1),
+        selected: item.selected !== false
+      }));
+    }
+    function selectedMiniCartItems() {
+      return miniCartState.filter(item => item.selected !== false);
+    }
+    function cartTotalQty(items=miniCartState) {
+      return items.reduce((sum, item) => sum + Number(item.qty || 0), 0);
+    }
+    function updateNavCartBadges(phone, count=cartTotalQty()) {
+      if (!phone) return;
+      phone.querySelectorAll('.cart-badge').forEach(badge => badge.textContent = count);
+    }
+    function refreshCartPageFromMiniCart(phone) {
+      if (!phone) return;
+      const items = miniCartToCartItems();
+      syncCartPageItems(phone, items);
+      applyCheckoutItems(phone, items.filter(item => item.selected !== false));
+      updateNavCartBadges(phone, cartTotalQty(items));
+    }
+    function syncCartSurfaces(phone) {
+      if (!phone) return;
+      renderMiniCart(phone);
+      refreshCartPageFromMiniCart(phone);
+    }
     function showShopToast(phone, text='成功加入购物车') {
       const toast = phone && phone.querySelector('[data-shop-toast]');
       if (!toast) return;
@@ -29472,17 +30418,21 @@
       }, 1000);
     }
     function addToMiniCart(button) {
-      const phone = button.closest('[data-mobile]');
+      const phone = button.closest('[data-mobile]') || document.querySelector('#h5User.view.active [data-mobile="user"]') || document.querySelector('[data-mobile="user"]');
       if (!phone || !button.dataset.cartName) return;
       const item = {
         name: button.dataset.cartName,
+        spec: button.dataset.cartSpec || '默认规格',
         price: Number(button.dataset.cartPrice || 0),
+        oldPrice: button.dataset.cartOld || '',
         img: button.dataset.cartImg
       };
-      const existed = miniCartState.find(x => x.name === item.name);
-      if (existed) existed.qty += 1;
-      else miniCartState.push({...item, qty: 1});
-      renderMiniCart(phone);
+      const existed = miniCartState.find(x => x.name === item.name && (x.spec || '默认规格') === item.spec);
+      if (existed) {
+        existed.qty += 1;
+        existed.selected = true;
+      } else miniCartState.push({...item, qty: 1, selected: true});
+      syncCartSurfaces(phone);
       showShopToast(phone);
       if (button.classList.contains('cart-action')) {
         button.classList.add('added');
@@ -29492,20 +30442,43 @@
         }, 1200);
       }
     }
+    function handleAddCartClick(button, event) {
+      if (event && event.__cartAddHandled) return false;
+      if (event) event.__cartAddHandled = true;
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+      }
+      addToMiniCart(button);
+      return false;
+    }
+    function handleAddCartEvent(event) {
+      if (isBlockedReviewPageClick(event.target)) return;
+      const button = event.target.closest('[data-action="加入购物车"]');
+      if (!button) return;
+      handleAddCartClick(button, event);
+    }
+    window.addToMiniCart = addToMiniCart;
+    window.handleAddCartClick = handleAddCartClick;
     function renderMiniCart(phone) {
       const panel = phone.querySelector('[data-mini-cart]');
       if (!panel) return;
-      const count = miniCartState.reduce((sum, item) => sum + item.qty, 0);
-      const total = miniCartState.reduce((sum, item) => sum + item.qty * item.price, 0);
+      const visibleItems = selectedMiniCartItems();
+      const count = visibleItems.reduce((sum, item) => sum + item.qty, 0);
+      const total = visibleItems.reduce((sum, item) => sum + item.qty * item.price, 0);
       const items = phone.querySelector('[data-mini-cart-items]');
       if (items) {
-        items.innerHTML = miniCartState.map((item, index) => `<div class="mini-cart-swipe" data-mini-cart-row data-mini-cart-index="${index}"><button class="mini-cart-delete" data-mini-cart-delete>删除</button><div class="mini-cart-item"><div class="mini-cart-thumb" style="${bg(item.img)}"></div><div><div class="mini-cart-name">${item.name}</div><div class="mini-cart-sub">¥${item.price.toFixed(2)}</div></div><div class="mini-cart-qty"><button data-mini-cart-minus>−</button><span>${item.qty}</span><button data-mini-cart-plus>+</button></div><b>¥${(item.price * item.qty).toFixed(2)}</b></div></div>`).join('');
+        items.innerHTML = visibleItems.map((item) => {
+          const index = miniCartState.indexOf(item);
+          return `<div class="mini-cart-swipe" data-mini-cart-row data-mini-cart-index="${index}"><button class="mini-cart-delete" data-mini-cart-delete>删除</button><div class="mini-cart-item"><div class="mini-cart-thumb" style="${bg(item.img)}"></div><div><div class="mini-cart-name">${item.name}</div><div class="mini-cart-sub">¥${item.price.toFixed(2)}</div></div><div class="mini-cart-qty"><button data-mini-cart-minus>−</button><span>${item.qty}</span><button data-mini-cart-plus>+</button></div><b>¥${(item.price * item.qty).toFixed(2)}</b></div></div>`;
+        }).join('');
       }
       const countEl = phone.querySelector('[data-mini-cart-count]');
       if (countEl) countEl.textContent = `${count} 件商品`;
       const totalEl = phone.querySelector('[data-mini-cart-total]');
       if (totalEl) totalEl.textContent = `合计 ¥${total.toFixed(2)}`;
-      phone.querySelectorAll('.cart-badge').forEach(badge => badge.textContent = count);
+      updateNavCartBadges(phone);
       panel.classList.toggle('show', count > 0);
       updateMiniCartVisibility(phone);
     }
@@ -29513,17 +30486,21 @@
       const page = phone && phone.querySelector('[data-m-page="cart"]');
       const list = page && page.querySelector('[data-cart-page-list]');
       if (!list) return;
-      list.innerHTML = `${items.map(item => cartItem(item.img, item.title, item.spec, item.price, '', item.qty)).join('')}${recommendSection('购物车推荐','凑单与同类热卖',4)}`;
+      list.innerHTML = cartPageListMarkup(items);
       updateCartPage(page);
+      updateNavCartBadges(phone, cartTotalQty(items));
     }
     function syncMiniCartItems(phone, items) {
       miniCartState.length = 0;
       items.forEach(item => {
         miniCartState.push({
           name: item.title,
+          spec: item.spec || '默认规格',
           price: Number(item.price || 0),
+          oldPrice: item.oldPrice || '',
           img: item.img,
-          qty: Number(item.qty || 1)
+          qty: Number(item.qty || 1),
+          selected: item.selected !== false
         });
       });
       renderMiniCart(phone);
@@ -29555,8 +30532,7 @@
     }
     function replaceCartWithItems(phone, items) {
       syncMiniCartItems(phone, items);
-      syncCartPageItems(phone, items);
-      applyCheckoutItems(phone, items);
+      refreshCartPageFromMiniCart(phone);
     }
     function changeMiniCartItem(button, delta) {
       const phone = button.closest('[data-mobile]');
@@ -29566,19 +30542,20 @@
       const item = miniCartState[index];
       if (!item) return;
       if (delta < 0 && item.qty <= 1) {
-        miniCartState.splice(index, 1);
+        item.selected = false;
       } else {
         item.qty = Math.max(1, item.qty + delta);
+        item.selected = true;
       }
-      renderMiniCart(phone);
+      syncCartSurfaces(phone);
     }
     function deleteMiniCartItem(button) {
       const phone = button.closest('[data-mobile]');
       const row = button.closest('[data-mini-cart-row]');
       if (!phone || !row) return;
       const index = Number(row.dataset.miniCartIndex);
-      if (Number.isFinite(index)) miniCartState.splice(index, 1);
-      renderMiniCart(phone);
+      if (Number.isFinite(index) && miniCartState[index]) miniCartState[index].selected = false;
+      syncCartSurfaces(phone);
     }
     function useCoupon(button) {
       const phone = button.closest('[data-mobile]');
@@ -29802,6 +30779,21 @@
       const phone = page.closest('[data-mobile]');
       if (phone) phone.querySelectorAll('.cart-badge').forEach(badge => badge.textContent = cartCount);
     }
+    function syncMiniCartFromCartPage(page) {
+      const phone = page && page.closest('[data-mobile]');
+      if (!phone) return;
+      const items = Array.from(page.querySelectorAll('[data-cart-row]')).map(row => ({
+        img: row.dataset.cartImg || shopImgs.detail,
+        title: row.dataset.cartTitle || row.querySelector('.cart-item-info b')?.textContent || '购物车商品',
+        spec: row.dataset.cartSpec || '默认规格',
+        price: Number(row.dataset.cartPrice || 0).toFixed(2),
+        oldPrice: row.dataset.cartOld || '',
+        qty: Number(row.dataset.cartQty || 1),
+        selected: row.dataset.cartSelected !== 'false'
+      }));
+      syncMiniCartItems(phone, items);
+      applyCheckoutItems(phone, items.filter(item => item.selected !== false));
+    }
     function setCartRowSelected(row, selected) {
       if (!row) return;
       row.dataset.cartSelected = selected ? 'true' : 'false';
@@ -29816,6 +30808,7 @@
       if (!row) return;
       setCartRowSelected(row, row.dataset.cartSelected === 'false');
       updateCartPage(row);
+      syncMiniCartFromCartPage(row.closest('[data-m-page="cart"]'));
     }
     function toggleCartSelectAll(button) {
       const page = button.closest('[data-m-page="cart"]');
@@ -29824,6 +30817,7 @@
       const shouldSelect = rows.some(row => row.dataset.cartSelected === 'false');
       rows.forEach(row => setCartRowSelected(row, shouldSelect));
       updateCartPage(page);
+      syncMiniCartFromCartPage(page);
     }
     function selectedCartItems(page) {
       return Array.from(page.querySelectorAll('[data-cart-row]'))
@@ -29880,6 +30874,7 @@
         const wrap = row.closest('[data-cart-swipe]');
         (wrap || row).remove();
         updateCartPage(page);
+        syncMiniCartFromCartPage(page);
         return;
       }
       const next = Math.max(1, current + delta);
@@ -29887,6 +30882,7 @@
       const text = row.querySelector('[data-cart-qty-text]');
       if (text) text.textContent = next;
       updateCartPage(row);
+      syncMiniCartFromCartPage(row.closest('[data-m-page="cart"]'));
     }
     function deleteCartRow(button) {
       const wrap = button.closest('[data-cart-swipe]');
@@ -29895,6 +30891,7 @@
       const page = row.closest('[data-m-page="cart"]');
       (wrap || row).remove();
       updateCartPage(page);
+      syncMiniCartFromCartPage(page);
     }
     function showActionModal(action, target, rowData) {
       const modal = document.getElementById('actionModal');
@@ -30195,7 +31192,32 @@
     }
     setInterval(() => refreshPaymentCountdowns(true), 1000);
     refreshPaymentCountdowns();
+    document.querySelectorAll('[data-mobile="user"]').forEach(phone => {
+      renderMiniCart(phone);
+      syncUserFloatingBack(phone);
+    });
+    document.addEventListener('click', handleAddCartEvent, true);
     document.addEventListener('click', function(e) {
+      const floatingBack = e.target.closest('[data-user-floating-back]');
+      if (floatingBack) {
+        triggerUserFloatingBack(floatingBack, e);
+        return;
+      }
+      const reviewBackBtn = e.target.closest('[data-review-back]');
+      if (reviewBackBtn) {
+        handleReviewBackClick(reviewBackBtn, e);
+        return;
+      }
+      if (isBlockedReviewPageClick(e.target)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      const addCartAction = e.target.closest('[data-action="加入购物车"]');
+      if (addCartAction) {
+        handleAddCartClick(addCartAction, e);
+        return;
+      }
       if (handleWarehouseDriverPriorityClick(e)) {
         e.preventDefault();
         e.stopPropagation();
@@ -30693,11 +31715,6 @@
         scanWarehouseReceiveItem(warehouseScanOne);
         return;
       }
-      const warehouseScanAuto = e.target.closest('[data-warehouse-scan-auto]');
-      if (warehouseScanAuto) {
-        autoScanWarehouseReceive(warehouseScanAuto);
-        return;
-      }
       const warehouseScanSubmit = e.target.closest('[data-warehouse-scan-submit]');
       if (warehouseScanSubmit) {
         submitWarehouseScan(warehouseScanSubmit);
@@ -30770,6 +31787,11 @@
         }
         return;
       }
+      const roleSupplierDeliveryAction = e.target.closest('[data-role-supplier-delivery-action]');
+      if (roleSupplierDeliveryAction) {
+        handleRoleSupplierDeliveryAction(roleSupplierDeliveryAction);
+        return;
+      }
       const actionBtn = e.target.closest('[data-action]');
       if (actionBtn) {
         if (/^查询/.test(actionBtn.dataset.action || '')) {
@@ -30778,10 +31800,6 @@
         }
         if (/^重置/.test(actionBtn.dataset.action || '')) {
           resetLocalSearch(actionBtn);
-          return;
-        }
-        if (actionBtn.dataset.action === '加入购物车') {
-          addToMiniCart(actionBtn);
           return;
         }
         if (actionBtn.dataset.closeCoupon !== undefined || actionBtn.hasAttribute('data-close-coupon')) {
@@ -30994,6 +32012,11 @@
         confirmWarehouseDriverModal(driverModalConfirm);
         return;
       }
+      const warehouseReceiverFilterToggle = e.target.closest('[data-warehouse-receiver-filter-toggle]');
+      if (warehouseReceiverFilterToggle) {
+        toggleWarehouseReceiverFilter(warehouseReceiverFilterToggle.closest('.warehouse-receiver-filter'));
+        return;
+      }
       const warehouseTaskFilter = e.target.closest('[data-warehouse-task-filter]');
       if (warehouseTaskFilter) {
         setWarehouseTaskFilter(warehouseTaskFilter);
@@ -31117,10 +32140,16 @@
       }
       const orderAction = e.target.closest('[data-order-action]');
       if (orderAction) {
+        e.preventDefault();
+        e.stopPropagation();
         const op = orderAction.dataset.orderOp;
+        if (op === 'pay') payOrder(orderAction);
         if (op === 'cancel') cancelOrder(orderAction);
         if (op === 'rebuy') rebuyOrder(orderAction);
         if (op === 'review') openReviewOrder(orderAction);
+        if (op === 'ship') changeOrderFulfillment(orderAction, 'ship');
+        if (op === 'arrive') changeOrderFulfillment(orderAction, 'arrive');
+        if (op === 'confirmReceive') changeOrderFulfillment(orderAction, 'confirmReceive');
         if (op === 'afterSale') {
           const phone = orderAction.closest('[data-mobile]');
           if (phone) setAfterSaleApplyPage(phone, orderAction.dataset.orderId);
@@ -31178,13 +32207,8 @@
         if (success) success.classList.add('show');
         const order = userOrderData.find(item => item.id === checkoutData.no);
         if (order) {
-          order.status = '待提货';
-          order.statusClass = 'pickup';
-          order.statusTitle = '支付成功，等待团点备货';
-          order.statusDesc = '支付已完成，商品将按提货时间送达自提点。';
-          order.payTime = '2026-06-10 09:36:02';
-          order.orderType = 'paid';
-          order.timeline = [['提交订单','2026-06-10 09:35:20'], ['微信支付成功','2026-06-10 09:36:02'], ['团点备货中','2026-06-10 09:36:08']];
+          syncOrderFromCheckout(order);
+          markOrderPreparing(order);
         }
         if (phone) setMobile(phone, 'payResult');
         paySubmit.textContent = '已支付，查看订单';
@@ -31247,6 +32271,7 @@
       }
       const productCardEl = e.target.closest('[data-product-id]');
       if (productCardEl) {
+        if (productCardEl.closest('[data-m-page="reviews"]')) return;
         if (e.target.closest('button')) return;
         const phone = productCardEl.closest('[data-mobile]');
         if (phone) {
@@ -31469,15 +32494,6 @@
       if (driverFeeSearch) refreshWarehouseDriverFeePage(driverFeeSearch);
       const driverFeeDateInput = e.target.closest('[data-driver-fee-date]');
       if (driverFeeDateInput) refreshWarehouseDriverFeePage(driverFeeDateInput);
-    });
-    document.addEventListener('keydown', function(e) {
-      const warehouseScanSearch = e.target.closest && e.target.closest('[data-warehouse-scan-search]');
-      if (warehouseScanSearch && e.key === 'Enter') {
-        e.preventDefault();
-        const page = warehouseScanSearch.closest('[data-m-page="receiveScan"]');
-        const autoBtn = page && page.querySelector('[data-warehouse-scan-auto]');
-        if (autoBtn) autoScanWarehouseReceive(autoBtn);
-      }
     });
     document.addEventListener('change', function(e) {
       const driverDeliveryDate = e.target.closest('[data-driver-delivery-date]');

@@ -335,7 +335,7 @@
         <div class="chips">
           <span class="chip">日期：2026-06-09</span>
           <span class="chip">项目：商城 + 进销存配 + WMS</span>
-          <span class="chip">后端：Spring Boot / Spring Cloud / Java 18</span>
+          <span class="chip">后端：Spring Boot / Spring Cloud / Java 8（JDK1.8）</span>
           <span class="chip">前端：Vue 3 / TypeScript / Element Plus</span>
         </div>
       </header>
@@ -535,6 +535,10 @@
                 <tr><td>优惠券列表</td><td>停用</td><td><span class="badge red">停用</span></td><td>二次确认，提示未使用优惠券将不可用</td><td>修改券批次状态</td><td>promo_coupon_batch.status=disabled；刷新优惠券缓存</td><td>已使用订单不受影响</td></tr>
                 <tr><td>活动页配置</td><td>活动商品</td><td><span class="badge">添加商品</span></td><td>打开商品选择器，支持排序</td><td>保存活动页商品关系</td><td>写 promo_activity_product；刷新活动页缓存</td><td>仅已发布商品可添加</td></tr>
                 <tr><td>推荐规则</td><td>商品推荐</td><td><span class="badge green">保存规则</span></td><td>配置用户偏好、类目权重、商品权重</td><td>保存推荐规则，刷新推荐缓存</td><td>写 promo_recommend_rule；更新 Redis</td><td>规则启用后影响首页推荐商品</td></tr>
+                <tr><td>积分中心</td><td>积分规则</td><td><span class="badge">新增积分规则</span></td><td>配置下单实付金额返积分比例、签到积分、连续签到奖励和过期周期</td><td>校验规则时间不冲突，保存后刷新积分规则缓存</td><td>写 usr_point_rule；后续订单支付、签到按规则生成 usr_point_flow</td><td>正向积分规则必须配置过期时间计算方式</td></tr>
+                <tr><td>积分中心</td><td>积分账户</td><td><span class="badge yellow">手工调整积分</span></td><td>选择用户、调整类型、积分值、原因和过期时间</td><td>写调整流水并更新用户积分账户</td><td>写 usr_point_flow(type=manual_adjust)、usr_point_account、sys_operation_log</td><td>增加积分必须写 expire_time；扣减积分按过期时间优先扣减</td></tr>
+                <tr><td>积分中心</td><td>积分过期</td><td><span class="badge red">处理过期积分</span></td><td>展示到期批次，二次确认后执行过期扣减</td><td>扫描 expire_time 到期且 remain_points 大于 0 的流水批次</td><td>写 usr_point_flow(type=expire)，更新 usr_point_account.available_points</td><td>每个积分批次只允许过期一次，需幂等防重</td></tr>
+                <tr><td>积分中心</td><td>积分流水</td><td><span class="badge">导出积分流水</span></td><td>选择用户、来源、时间、过期状态后创建导出任务</td><td>按当前权限导出积分账户和流水明细</td><td>读取 usr_point_account、usr_point_flow，写 sys_export_task</td><td>导出需包含每笔积分的 expire_time 和 remain_points</td></tr>
                 <tr><td>报表中心</td><td>报表</td><td><span class="badge">查询</span></td><td>选择日期、城市、自提点、供应商、类目</td><td>聚合统计数据</td><td>读取订单、售后、分账、配送、库存数据</td><td>查询范围受数据权限控制</td></tr>
                 <tr><td>报表中心</td><td>报表</td><td><span class="badge">导出</span></td><td>选择导出字段，创建导出任务</td><td>异步生成 Excel</td><td>写 sys_export_task，生成文件地址</td><td>大数据量必须异步导出</td></tr>
               </tbody>

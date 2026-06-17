@@ -1,4 +1,4 @@
-给我做一个商城的项目  需要包括进销存配模式  使用java代码 后端框架使用Spring Boot + Spring Cloud + jdk18 前端框架使用Vue 3 + Vite + TypeScript + Element Plus 中间件使用 Redis+Nacos+RocketMQ+XXL-Job+Elasticsearch+mysql8+docker
+给我做一个商城的项目  需要包括进销存配模式  使用java代码 后端框架使用Spring Boot + Spring Cloud + JDK1.8 前端框架使用Vue 3 + Vite + TypeScript + Element Plus 中间件使用 Redis+Nacos+RocketMQ+XXL-Job+Elasticsearch+mysql8+docker
 运营后台功能
 1.需要一个存放商品基本信息的地方 一个商品对应一个供应商、多个规格、一个采购人员、一个展示类目、一个统计类目  规格可以绑定库存规格 可以进行系数转换关系 每个商品需要有三级城市的价格信息 创建商品数据自动生成联想词 便于后续搜索使用 可以自定义添加或修改
 2.可以自己创建展示类目和统计类目  展示类目和统计类目可以设置多级
