@@ -3211,7 +3211,7 @@
       right: 0;
       bottom: 0;
       z-index: 8;
-      grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
       margin: 0;
       padding: 8px 12px;
       min-height: 66px;
@@ -3227,6 +3227,18 @@
       padding: 10px 8px;
       border-radius: 14px;
       font-size: 14px;
+    }
+    .order-detail-page .detail-action-row.detail-floating-actions .primary {
+      background: #172033;
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(23,32,51,.22);
+    }
+    .order-detail-page .detail-action-row.detail-floating-actions .danger {
+      background: #fff5f2;
+      color: #c2412d;
+      font-weight: 800;
+      box-shadow: none;
     }
     .order-detail-product-head {
       display: flex;
@@ -17070,11 +17082,11 @@
     }
     function orderDetailActionMarkup(order) {
       if (!order) return '';
-      if (canPayOrder(order)) return `<button data-order-action data-order-id="${order.id}" data-order-op="pay">去支付</button><button class="danger" data-order-action data-order-id="${order.id}" data-order-op="cancel">取消订单</button>`;
+      if (canPayOrder(order)) return `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="pay">去支付</button><button class="danger" data-order-action data-order-id="${order.id}" data-order-op="cancel">取消订单</button>`;
       if (canCancelOrder(order)) return `<button class="danger" data-order-action data-order-id="${order.id}" data-order-op="cancel">取消订单</button>`;
       if (order.orderType === 'pickup') return `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="confirmReceive">确认收货</button>`;
-      if (order.orderType === 'done') return `<button data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button><button class="danger" data-order-action data-order-id="${order.id}" data-order-op="afterSale">申请售后</button>`;
-      if (order.orderType === 'cancelled') return `<button data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button>`;
+      if (order.orderType === 'done') return `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button><button class="danger" data-order-action data-order-id="${order.id}" data-order-op="afterSale">申请售后</button>`;
+      if (order.orderType === 'cancelled') return `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="rebuy">再次购买</button>`;
       if (canAfterSaleOrder(order)) return `<button class="primary" data-order-action data-order-id="${order.id}" data-order-op="afterSale">申请售后</button>`;
       return '';
     }
@@ -17188,7 +17200,7 @@
           <div class="detail-field"><span>订单状态</span><b>${order.statusTitle}</b></div>
         </div>
         <div class="order-info-card"><h3>履约进度</h3><div class="detail-timeline">${order.timeline.map(([title,time])=>`<div class="timeline-step"><i></i><div><b>${title}</b>${time}</div></div>`).join('')}</div></div>
-        <div class="detail-action-row detail-floating-actions"><button data-m-go="orders">返回订单列表</button>${orderDetailActionMarkup(order) || `<button data-action="联系团点" data-action-target="订单详情" data-row="${encodeURIComponent(JSON.stringify({'订单号': order.id, '自提点': order.station, '联系人': order.user, '当前状态': order.statusTitle}))}">联系团点</button>`}</div>
+        <div class="detail-action-row detail-floating-actions">${orderDetailActionMarkup(order) || `<button class="primary" data-action="联系团点" data-action-target="订单详情" data-row="${encodeURIComponent(JSON.stringify({'订单号': order.id, '自提点': order.station, '联系人': order.user, '当前状态': order.statusTitle}))}">联系团点</button>`}</div>
       </div>`;
     }
     function reviewFormMarkup(order, item=orderProducts(order)[0], index=0) {
