@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -200,7 +200,7 @@
 <div class="header">
   <div>
     <h1>📦 知花知果 WMS 系统流程图</h1>
-    <p>Warehouse Management System · 知花知果仓储管理平台 · 2026-06</p>
+    <p>Warehouse Management System · 知花知果仓储管理平台 · 2026-06-22 v14</p>
   </div>
 </div>
 
@@ -210,7 +210,7 @@
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div> 后台管理（Admin）</div>
     <div class="legend-item"><div class="legend-dot" style="background:#b45309"></div> 现场 H5 页面</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div> 小程序 / uni-app</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div> 仓配移动端 H5</div>
     <div class="legend-item"><div class="legend-dot" style="background:#9333ea"></div> 系统自动处理</div>
     <div class="legend-item"><div class="legend-dot" style="background:#e2e8f0; border:1px solid #cbd5e1"></div> 数据流箭头</div>
   </div>
@@ -227,7 +227,7 @@
           <div class="step-icon blue">🛒</div>
           <div class="step-body">
             <div class="step-name">采购订单（PO）</div>
-            <div class="step-detail">按供应商/商品建立采购计划，录入预期收货数量与价格</div>
+            <div class="step-detail">按供应商/商品建立采购计划，WMS 只展示到仓协同、数量和状态，不展示采购价格或结算金额</div>
             <div class="step-roles">
               <span class="role-tag tag-admin">Admin · 采购管理</span>
             </div>
@@ -250,9 +250,9 @@
           <div class="step-icon cyan">📦</div>
           <div class="step-body">
             <div class="step-name">收货 / 扫码上架</div>
-            <div class="step-detail">收货员通过小程序接单 → 扫码确认到货数量 → 推荐库位上架 → 全部收完后点"完成"</div>
+            <div class="step-detail">收货员通过仓配 H5 扫码确认实收、破损、拒收数量，录入批次、生产日期、保质期、质检结果、差异原因和图片凭证；第一版不强制温度和温区校验</div>
             <div class="step-roles">
-              <span class="role-tag tag-mini">小程序 receiver</span>
+              <span class="role-tag tag-h5">H5 receiver</span>
               <span class="role-tag tag-h5">H5 收货</span>
             </div>
           </div>
@@ -261,8 +261,8 @@
         <div class="step">
           <div class="step-icon cyan">🔢</div>
           <div class="step-body">
-            <div class="step-name">库存更新</div>
-            <div class="step-detail">收货完成后实时写入库存流水（wms_inventory_log），更新各 SKU 在库数量</div>
+            <div class="step-name">待上架库存</div>
+            <div class="step-detail">收货完成不等于可售入库，先进入待上架库存；完成上架确认并绑定库位后才进入在库或可售库存</div>
             <div class="step-roles">
               <span class="role-tag tag-auto">自动同步</span>
               <span class="role-tag tag-admin">Admin 库存查询</span>
@@ -273,10 +273,10 @@
         <div class="step">
           <div class="step-icon blue">🔍</div>
           <div class="step-body">
-            <div class="step-name">质检 / 报告上传</div>
-            <div class="step-detail">需质检商品：收货过程中上传检验报告、出厂合格证、溯源码等文件</div>
+            <div class="step-name">上架 / 库存流水</div>
+            <div class="step-detail">上架完成后写入库存流水；上架数量小于收货数量时记录去向：继续待上架、异常库存、报损或退供</div>
             <div class="step-roles">
-              <span class="role-tag tag-mini">小程序上传</span>
+              <span class="role-tag tag-h5">H5 上架</span>
               <span class="role-tag tag-admin">Admin 查看报告</span>
             </div>
           </div>
@@ -306,7 +306,7 @@
           <div class="step-icon green">🌊</div>
           <div class="step-body">
             <div class="step-name">波次下放</div>
-            <div class="step-detail">管理员预览未下放订单，选择配送日/线路，一键下放生成出库单（CK...）并创建拣货任务</div>
+            <div class="step-detail">管理员预览未下放订单，选择配送日/线路；一键下放前校验库存锁定、重复下放和 FIFO 批次，失败回滚拣货任务和出库占用</div>
             <div class="step-roles">
               <span class="role-tag tag-admin">Admin · 波次下放</span>
               <span class="role-tag tag-auto">自动生成出库单+拣货任务</span>
@@ -318,9 +318,9 @@
           <div class="step-icon lime">🧺</div>
           <div class="step-body">
             <div class="step-name">拣货</div>
-            <div class="step-detail">拣货员通过小程序接单 → 按任务池领任务 → 扫库位确认拣货数量 → 完成分拣</div>
+            <div class="step-detail">拣货任务由系统分配或主管转派；按仓区、通道、库位编码排序，扫码商品码/库位码/任务码确认数量</div>
             <div class="step-roles">
-              <span class="role-tag tag-mini">小程序 picker</span>
+              <span class="role-tag tag-h5">H5 picker</span>
               <span class="role-tag tag-h5">H5 pool/task</span>
             </div>
           </div>
@@ -329,11 +329,11 @@
         <div class="step">
           <div class="step-icon lime">✅</div>
           <div class="step-body">
-            <div class="step-name">复检 / 装箱</div>
-            <div class="step-detail">复检员核对拣货数量，打印箱标签，确认装箱完毕，生成复检单（RC...）</div>
+            <div class="step-name">缺货联动</div>
+            <div class="step-detail">缺货是正常履约状态，确认前提示其他库位、同批次和相邻库位；确认后同步订单、自提点汇总和运营履约状态，不生成异常处理单</div>
             <div class="step-roles">
-              <span class="role-tag tag-h5">H5 recheck</span>
-              <span class="role-tag tag-admin">Admin 复检管理</span>
+              <span class="role-tag tag-h5">H5 picker</span>
+              <span class="role-tag tag-admin">Admin 履约状态</span>
             </div>
           </div>
         </div>
@@ -342,7 +342,7 @@
           <div class="step-icon green">🚛</div>
           <div class="step-body">
             <div class="step-name">装车 / 出仓</div>
-            <div class="step-detail">装车员扫描箱码装车，确认出库，生成装车单（DP...）；出仓后库存扣减</div>
+            <div class="step-detail">第一版不做复检模块；装车扫码绑定线路、车辆、司机和箱码，少件、重复、线路或自提点不匹配直接拦截</div>
             <div class="step-roles">
               <span class="role-tag tag-h5">H5 loading</span>
               <span class="role-tag tag-admin">Admin 装车管理</span>
@@ -354,7 +354,7 @@
           <div class="step-icon lime">🗺️</div>
           <div class="step-body">
             <div class="step-name">司机 / 配送</div>
-            <div class="step-detail">司机 App 查看配送路线、签到团点、更新到达状态；团长扫码确认收货</div>
+            <div class="step-detail">确认出库后才正式扣减库存并开放司机发车；司机 H5 默认只看当天任务，签到留定位、时间和交接备注</div>
             <div class="step-roles">
               <span class="role-tag tag-h5">H5 driver</span>
               <span class="role-tag tag-admin">Admin 配送看板</span>
@@ -375,19 +375,19 @@
       <div class="card c1">
         <div class="card-icon">📊</div>
         <div class="card-name">库存管理</div>
-        <div class="card-desc">实时库存查询、库存流水、FIFO 批次追踪、移库操作、团期商品库位绑定</div>
+        <div class="card-desc">实时库存查询、库存流水、FIFO 批次解释、移库操作、批次状态和库存锁定释放</div>
       </div>
 
       <div class="card c2">
         <div class="card-icon">🔄</div>
         <div class="card-name">补货管理</div>
-        <div class="card-desc">阈值策略自动触发 / 紧急补货任务 / 补货员 H5 接单执行 / 补货报表</div>
+        <div class="card-desc">仓内补货、采购补货、售后补发三类入口分开；补货员 H5 按系统分配或主管转派执行</div>
       </div>
 
       <div class="card c3">
         <div class="card-icon">📋</div>
         <div class="card-name">即时盘点</div>
-        <div class="card-desc">全盘 / 差异盘点 / 移动盘点 3 种模式；盘点单生成 → 盘点员录入 → 差异 FIFO 处理</div>
+        <div class="card-desc">全盘 / 差异盘点 / 移动盘点 3 种模式；差异审核后生成库存调整单，二次确认后才生效</div>
       </div>
 
       <div class="card c4">
@@ -399,7 +399,7 @@
       <div class="card c5">
         <div class="card-icon">📦</div>
         <div class="card-name">供应商退货</div>
-        <div class="card-desc">退货单（RT）建立、审核、一键出库（FIFO 扣库存），支持批量退货操作</div>
+        <div class="card-desc">退货回仓按商品行选择可售入库、异常库存、报损、退供，关联售后单、责任方、图片凭证和库存流水</div>
       </div>
 
       <div class="card c6">
@@ -411,13 +411,13 @@
       <div class="card c7">
         <div class="card-icon">👥</div>
         <div class="card-name">权限管理 RBAC</div>
-        <div class="card-desc">10 个预设角色（收货员/拣货员/复检员/装车员/司机/补货员/盘点员等）+ 26 个功能点 + 库区数据权</div>
+        <div class="card-desc">收货员、上架员、拣货员、装车员、司机、补货员、盘点员、仓库主管等角色 + 功能权限 + 库区数据权</div>
       </div>
 
       <div class="card c8">
         <div class="card-icon">📈</div>
         <div class="card-name">数据报表</div>
-        <div class="card-desc">12 张配送数据报表、库存报表、损耗台账、拣货统计、收发存汇总</div>
+        <div class="card-desc">第一版只做作业统计：收货量、拣货量、装车量、缺货量、超时任务和任务完成时长，不做司机费用</div>
       </div>
 
     </div>
@@ -441,8 +441,8 @@
       </div>
       <div class="arch-item">
         <h4>移动端</h4>
-        <p>uni-app Vue 3 跨平台<br>
-        双模式：微信小程序（mp-weixin）+ H5 浏览器<br>
+        <p>Vue 3 H5 移动端<br>
+        仓配移动端 H5 浏览器优先<br>
         各岗位独立页面模块</p>
       </div>
     </div>
@@ -462,6 +462,6 @@
 
 </div>
 
-<footer>知花知果 WMS · 生成于 2026-06-08 · v13.x</footer>
+<footer>知花知果 WMS · 更新于 2026-06-22 · v14.x</footer>
 </body>
 </html>

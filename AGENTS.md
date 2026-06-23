@@ -9,7 +9,7 @@
 
 社区团购商城全链路系统：商品 → 发布 → 下单 → 采购入库 → 仓储履约 → 配送 → 售后 → 分账提现。
 
-后端 Java 18 + Spring Boot + Spring Cloud，前端 Vue3，数据库 MySQL 8，中间件 Redis / Nacos / RocketMQ / XXL-Job / Elasticsearch。
+后端 Java 18 + Spring Boot + Spring Cloud，前端 Vue3 + uni-app，数据库 MySQL 8，中间件 Redis / Nacos / RocketMQ / XXL-Job / Elasticsearch。
 
 ---
 
