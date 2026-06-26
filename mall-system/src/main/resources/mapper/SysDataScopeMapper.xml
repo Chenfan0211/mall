@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.system.mapper.SysDataScopeMapper">
+    <select id="selectByAccountId" resultType="com.mall.system.entity.SysDataScope">
+        SELECT ds.*
+        FROM sys_data_scope ds
+        INNER JOIN sys_account_data_scope ads ON ads.scope_id = ds.id AND ads.is_deleted = 0
+        WHERE ads.account_id = #{accountId}
+          AND ds.status = 1
+          AND ds.is_deleted = 0
+        ORDER BY ds.scope_type ASC, ds.id ASC
+    </select>
+</mapper>

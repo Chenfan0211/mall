@@ -1,0 +1,48 @@
+# Apifox 接口自动同步方案
+
+## Summary
+- 生成一份项目统一的 `OpenAPI 3.0.3` 接口文档，包含成功、失败示例。
+- 通过 Apifox 开放 API 自动导入到指定 Apifox 项目。
+- 后续接口修改后，重新运行同步命令即可更新 Apifox；之后可以接入流水线自动同步。
+
+资料依据：
+- [Apifox 支持导入 OpenAPI/Swagger](https://docs.apifox.com/import-openapi-swagger)
+- [Apifox 开放 API：导入 OpenAPI 数据](https://apifox-openapi.apifox.cn/api-173409873)
+
+## Key Changes
+- 新增接口文档生成脚本：
+  - 扫描后端所有 Controller、VO、DTO、统一返回 `Result<T>`、分页 `PageResult<T>`。
+  - 生成 `docs/api/openapi/mall-openapi.json`。
+  - 按模块和端分组：运营后台、仓库后台、用户端、角色工作台、仓库端。
+- 新增 Apifox 同步脚本：
+  - 读取 `APIFOX_PROJECT_ID` 和 `APIFOX_API_TOKEN`。
+  - 调用 Apifox `import-openapi` 接口导入文档。
+  - 使用稳定的 `operationId`，避免重复生成接口。
+- 新增使用说明：
+  - `docs/api/apifox-sync.md`
+  - 说明如何创建 Token、配置项目 ID、执行同步、查看同步结果。
+
+## Sync Rules
+- 不使用 Apifox 账号密码登录。
+- Token 只放本机环境变量或本地私密配置文件，不提交到代码仓库。
+- 默认把所有接口同步到一个 Apifox 项目，按模块/端分目录。
+- 每个接口默认生成：
+  - 成功示例：`code=0`
+  - 参数错误：`400`
+  - 未登录：`401`
+  - 无权限：`403`
+  - 数据不存在：`404`
+  - 状态冲突：`409`
+  - 系统异常：`500`
+
+## Test Plan
+- 校验生成的 OpenAPI JSON 格式合法。
+- 校验接口数量和 Controller 方法数量基本一致。
+- 校验每个接口都有成功和失败示例。
+- 先支持本地手动同步命令。
+- 项目后续有 CI/CD 后，再把同步命令接入流水线，实现代码变更后自动同步 Apifox。
+
+## Assumptions
+- 使用一个 Apifox 项目管理全部接口。
+- Apifox 分组按“端 + 模块”组织，而不是拆成多个 Apifox 项目。
+- 开始实现时，你只需要提供 Apifox 项目 ID 和 API Token，不需要提供账号密码。

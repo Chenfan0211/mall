@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.job.mapper.SysTaskMapper">
+
+    <resultMap id="SysTaskResultMap" type="com.mall.job.entity.SysTask">
+        <id column="id" property="id"/>
+        <result column="task_no" property="taskNo"/>
+        <result column="task_code" property="taskCode"/>
+        <result column="task_name" property="taskName"/>
+        <result column="biz_type" property="bizType"/>
+        <result column="biz_no" property="bizNo"/>
+        <result column="idempotent_key" property="idempotentKey"/>
+        <result column="retry_count" property="retryCount"/>
+        <result column="next_retry_time" property="nextRetryTime"/>
+        <result column="status" property="status"/>
+        <result column="fail_reason" property="failReason"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="selectByIdempotentKey" resultMap="SysTaskResultMap">
+        SELECT id,
+               task_no,
+               task_code,
+               task_name,
+               biz_type,
+               biz_no,
+               idempotent_key,
+               retry_count,
+               next_retry_time,
+               status,
+               fail_reason,
+               create_time,
+               update_time,
+               is_deleted
+        FROM sys_task
+        WHERE idempotent_key = #{idempotentKey}
+          AND is_deleted = 0
+        LIMIT 1
+    </select>
+
+    <update id="markRunning">
+        UPDATE sys_task
+        SET status = 20,
+            fail_reason = NULL,
+            update_time = NOW()
+        WHERE idempotent_key = #{idempotentKey}
+          AND is_deleted = 0
+    </update>
+
+    <update id="markSuccess">
+        UPDATE sys_task
+        SET status = 30,
+            fail_reason = NULL,
+            next_retry_time = NULL,
+            update_time = NOW()
+        WHERE idempotent_key = #{idempotentKey}
+          AND is_deleted = 0
+    </update>
+
+    <update id="markFailed">
+        UPDATE sys_task
+        SET status = 40,
+            fail_reason = #{failReason},
+            retry_count = retry_count + 1,
+            next_retry_time = #{nextRetryTime},
+            update_time = NOW()
+        WHERE idempotent_key = #{idempotentKey}
+          AND is_deleted = 0
+    </update>
+</mapper>

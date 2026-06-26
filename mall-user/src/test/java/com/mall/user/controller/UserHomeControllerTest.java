@@ -1,0 +1,46 @@
+package com.mall.user.controller;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.mall.api.user.dto.UserHomeDTO;
+import com.mall.common.web.GlobalExceptionHandler;
+import com.mall.user.service.UserHomeService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
+
+@WebMvcTest(UserHomeController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@Import(GlobalExceptionHandler.class)
+class UserHomeControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private UserHomeService userHomeService;
+
+    @Test
+    void getHome_success() throws Exception {
+        final UserHomeDTO homeDTO = new UserHomeDTO();
+        homeDTO.setUserId(740001L);
+        homeDTO.setOnlineProductCount(8L);
+        when(userHomeService.getHome(any())).thenReturn(homeDTO);
+
+        mockMvc.perform(get("/api/user/home/summary")
+                .param("userId", "740001")
+                .with(user("tester").authorities(() -> "user:home:view")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("0"))
+                .andExpect(jsonPath("$.data.onlineProductCount").value(8));
+    }
+}

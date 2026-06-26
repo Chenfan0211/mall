@@ -1,0 +1,6 @@
+-- Generate deploy/docker/mysql/init/11-xxl-job.sql with:
+-- bash deploy/scripts/fetch-middleware-schemas.sh
+--
+-- The generated file is intentionally git-ignored because it is sourced
+-- from the XXL-Job release repository and may need to match the deployed
+-- XXL-Job Admin image version.

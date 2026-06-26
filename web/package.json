@@ -1,0 +1,24 @@
+{
+  "name": "mall-web-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:admin": "npm --workspace admin run dev",
+    "dev:wms-admin": "npm --workspace wms-admin run dev",
+    "dev:user-h5": "npm --workspace user-h5 run dev:h5",
+    "dev:role-workbench-h5": "npm --workspace role-workbench-h5 run dev:h5",
+    "dev:warehouse-h5": "npm --workspace warehouse-h5 run dev:h5",
+    "build:admin": "npm --workspace admin run build",
+    "build:wms-admin": "npm --workspace wms-admin run build",
+    "build:user-h5": "npm --workspace user-h5 run build:h5",
+    "build:role-workbench-h5": "npm --workspace role-workbench-h5 run build:h5",
+    "build:warehouse-h5": "npm --workspace warehouse-h5 run build:h5"
+  },
+  "workspaces": [
+    "admin",
+    "wms-admin",
+    "user-h5",
+    "role-workbench-h5",
+    "warehouse-h5"
+  ]
+}

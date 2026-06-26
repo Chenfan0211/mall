@@ -1,0 +1,14 @@
+{
+  "name": "仓配移动端",
+  "appid": "__UNI__MALLWAREHOUSE",
+  "description": "仓库收货、拣货、装车、配送、主管工作台",
+  "versionName": "0.1.0",
+  "versionCode": "10",
+  "transformPx": false,
+  "h5": {
+    "title": "仓配移动端 H5",
+    "router": {
+      "mode": "hash"
+    }
+  }
+}

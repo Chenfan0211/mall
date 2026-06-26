@@ -1,0 +1,88 @@
+server:
+  port: 18000
+
+spring:
+  application:
+    name: mall-gateway
+  config:
+    import:
+      - optional:nacos:mall-common.yaml?group=${NACOS_GROUP:MALL_GROUP}
+      - optional:nacos:mall-gateway.yaml?group=${NACOS_GROUP:MALL_GROUP}
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+      config:
+        namespace: ${NACOS_NAMESPACE:}
+        group: ${NACOS_GROUP:MALL_GROUP}
+        file-extension: yaml
+      discovery:
+        namespace: ${NACOS_NAMESPACE:}
+        group: ${NACOS_GROUP:MALL_GROUP}
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns: "*"
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowed-headers: "*"
+            allow-credentials: true
+      routes:
+        - id: mall-auth
+          uri: ${MALL_ROUTE_AUTH_URI:http://127.0.0.1:18080}
+          predicates:
+            - Path=/api/auth/**
+        - id: mall-system
+          uri: ${MALL_ROUTE_SYSTEM_URI:http://127.0.0.1:18081}
+          predicates:
+            - Path=/api/system/**
+        - id: mall-operation
+          uri: ${MALL_ROUTE_OPERATION_URI:http://127.0.0.1:18082}
+          predicates:
+            - Path=/api/operation/**
+        - id: mall-product
+          uri: ${MALL_ROUTE_PRODUCT_URI:http://127.0.0.1:18083}
+          predicates:
+            - Path=/api/product/**
+        - id: mall-sale
+          uri: ${MALL_ROUTE_SALE_URI:http://127.0.0.1:18084}
+          predicates:
+            - Path=/api/sale/**
+        - id: mall-trade
+          uri: ${MALL_ROUTE_TRADE_URI:http://127.0.0.1:18085}
+          predicates:
+            - Path=/api/trade/**
+        - id: mall-payment
+          uri: ${MALL_ROUTE_PAYMENT_URI:http://127.0.0.1:18086}
+          predicates:
+            - Path=/api/payment/**
+        - id: mall-aftersale
+          uri: ${MALL_ROUTE_AFTERSALE_URI:http://127.0.0.1:18087}
+          predicates:
+            - Path=/api/aftersale/**
+        - id: mall-supplier
+          uri: ${MALL_ROUTE_SUPPLIER_URI:http://127.0.0.1:18088}
+          predicates:
+            - Path=/api/supplier/**
+        - id: mall-finance
+          uri: ${MALL_ROUTE_FINANCE_URI:http://127.0.0.1:18089}
+          predicates:
+            - Path=/api/finance/**
+        - id: mall-wms
+          uri: ${MALL_ROUTE_WMS_URI:http://127.0.0.1:18090}
+          predicates:
+            - Path=/api/wms/**
+        - id: mall-station
+          uri: ${MALL_ROUTE_STATION_URI:http://127.0.0.1:18091}
+          predicates:
+            - Path=/api/station/**
+        - id: mall-user
+          uri: ${MALL_ROUTE_USER_URI:http://127.0.0.1:18092}
+          predicates:
+            - Path=/api/user/**

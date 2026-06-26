@@ -1,0 +1,33 @@
+| 日期 | 操作类型 | 涉及表 | 操作人 | 用途说明 |
+|------|----------|--------|--------|----------|
+| 2026-06-24 | 建表 | sys_account, sys_account_subject, sys_role, sys_account_role, sys_menu, sys_role_menu, sys_role_button, sys_data_scope, sys_account_data_scope, sys_dict_type, sys_dict_item, sys_region, sys_city, sys_config, sys_task, sys_operation_log, sys_export_log, sys_login_log, sys_file_asset | codex | 建立后台、WMS、供应商、自提点、团长账号、权限、数据范围、字典、审计、导出、文件基础表 |
+| 2026-06-24 | 建表 | usr_user, usr_pickup_person, usr_station, usr_leader, usr_station_leader, usr_station_leave, usr_user_favorite, usr_browse_history, usr_comment | codex | 建立C端用户、自提点、团长、休假、收藏、浏览历史和评价基础表 |
+| 2026-06-24 | 建表 | prd_category, prd_product, prd_sku, prd_stock_spec, prd_sku_stock_spec, prd_rank_tag, sale_publish_period, sale_publish_sku, sale_publish_scope, sale_period_snapshot | codex | 建立商品基础资料、SKU、库存规格、榜单标签、团期发布和快照表 |
+| 2026-06-24 | 建表 | ord_cart, ord_order, ord_order_item, ord_order_status_log, ord_fulfillment_track, ord_stockout_record, ord_replenish_order, pay_trade, pay_refund_trade, pay_fund_flow, afs_after_sale, afs_after_sale_item, afs_audit_log, afs_return_record | codex | 建立购物车、订单、订单商品履约、支付退款流水、售后审核与退货记录表 |
+| 2026-06-24 | 建表 | sup_supplier, sup_supplier_contact, sup_qualification, sup_contract, pur_purchase_order, pur_purchase_item, pur_purchase_audit_log, pur_delivery_order, pur_delivery_item, pur_purchase_source_log | codex | 建立供应商主体、资质合同、采购单、采购审核和送货到仓表 |
+| 2026-06-24 | 建表 | wms_warehouse, wms_zone, wms_location, wms_line, wms_line_station, wms_driver, wms_inbound_order, wms_inbound_item, wms_receive_record, wms_quality_file, wms_putaway_task, wms_inventory, wms_inventory_lock, wms_inventory_log, wms_wave_batch, wms_pick_task, wms_pick_item, wms_loading_order, wms_loading_item, wms_outbound_order, wms_delivery_order, wms_delivery_station, wms_driver_sign_record, wms_return_handover, wms_stocktake_order, wms_operation_log | codex | 建立第一版WMS主链路，覆盖收货、上架、库存、波次、拣货、装车出库、司机配送、回仓确认和日志 |
+| 2026-06-24 | 建表 | fin_account, fin_account_flow, fin_commission_detail, fin_split_flow, fin_withdraw_apply, fin_deposit_record, fin_supplier_settlement, fin_reconciliation_batch, op_todo, op_exception_record, msg_template, msg_record, rpt_snapshot, rpt_export_task, search_suggest_word | codex | 建立佣金账户、资金流水、分账提现、对账、待办异常、消息通知、固定报表和搜索联想词表 |
+| 2026-06-24 | 初始化 | sys_dict_type, sys_dict_item, sys_role, sys_menu, sys_role_menu, sys_region, sys_city, wms_warehouse, wms_zone, sys_data_scope | codex | 初始化第一版角色、菜单、角色菜单授权、状态字典、大区城市、采购仓、库区和数据范围 |
+| 2026-06-24 | 改表/初始化 | sys_account, sys_account_subject, sys_role, sys_menu, sys_role_menu, sys_dict_item | codex | 补充角色工作台账号主体绑定、自提点账号、团长账号、供应商工作台账号和菜单初始化 |
+| 2026-06-24 | 初始化 | sys_account, sys_account_subject, sys_account_role, sys_account_data_scope, sys_role_button, sys_config, sys_task, sys_operation_log, sys_export_log, sys_login_log, sys_file_asset, sys_city, sup_supplier, sup_supplier_contact, sup_qualification, sup_contract, usr_user, usr_pickup_person, usr_station, usr_leader, usr_station_leader, usr_station_leave, prd_category, prd_product, prd_sku, prd_stock_spec, prd_sku_stock_spec, prd_rank_tag, sale_publish_period, sale_publish_sku, sale_publish_scope, sale_period_snapshot, ord_cart, ord_order, ord_order_item, ord_order_status_log, ord_fulfillment_track, ord_stockout_record, ord_replenish_order, pay_trade, pay_refund_trade, pay_fund_flow, afs_after_sale, afs_after_sale_item, afs_audit_log, afs_return_record, pur_purchase_order, pur_purchase_item, pur_purchase_audit_log, pur_delivery_order, pur_delivery_item, pur_purchase_source_log, wms_location, wms_line, wms_line_station, wms_driver, wms_inbound_order, wms_inbound_item, wms_receive_record, wms_quality_file, wms_putaway_task, wms_inventory, wms_inventory_lock, wms_inventory_log, wms_wave_batch, wms_pick_task, wms_pick_item, wms_loading_order, wms_loading_item, wms_outbound_order, wms_delivery_order, wms_delivery_station, wms_driver_sign_record, wms_return_handover, wms_stocktake_order, wms_operation_log, fin_account, fin_account_flow, fin_commission_detail, fin_split_flow, fin_withdraw_apply, fin_deposit_record, fin_supplier_settlement, fin_reconciliation_batch, op_todo, op_exception_record, msg_template, msg_record, rpt_snapshot, rpt_export_task, search_suggest_word | codex | 补充全模块页面状态测试数据，覆盖运营后台、仓库后台、仓配H5、角色工作台小程序的关键列表状态 |
+| 2026-06-24 | 初始化 | sys_account | codex | 回填测试账号统一密码 Test@123456 的 BCrypt 哈希，支持 mall-auth 密码登录联调 |
+| 2026-06-24 | 初始化 | sys_role_button | codex | 补充运营待办与异常中心查看权限，支持 mall-operation 查询接口联调 |
+| 2026-06-24 | 初始化 | sys_role_button | codex | 补充商品中心、SKU、类目和团期查询权限，支持 mall-product、mall-sale 首批查询接口联调 |
+| 2026-06-24 | 改表/初始化 | sys_role_button | codex | 修正商品与团期查询权限的供应商角色归属，移除误授予财务角色的商品权限，补齐供应商后台和供应商工作台权限 |
+| 2026-06-24 | 初始化 | sys_account_data_scope, sys_role_button | codex | 补齐采购员测试账号的城市数据范围和商品团期查看权限，确保商品与团期页面可联调 |
+| 2026-06-24 | 初始化 | sys_role_button | codex | 补充订单中心、订单商品、履约跟踪和缺货记录只读权限，支持 mall-trade 查询接口联调 |
+| 2026-06-24 | 初始化 | sys_role_button | codex | 补充支付单、退款单和资金流水只读权限，支持 mall-payment 查询接口联调 |
+| 2026-06-24 | 初始化 | sys_account_data_scope | codex | 补齐财务和售后测试账号的数据范围，确保支付退款读侧接口联调可见数据 |
+| 2026-06-24 | 初始化 | sys_role_button | codex | 补充售后单、售后商品、售后审核日志和退货记录只读权限，支持 mall-aftersale 查询接口联调 |
+| 2026-06-24 | 初始化 | sys_role_button | codex | 补充供应商档案、资质合同、采购单和送货单只读权限，支持 mall-supplier 查询接口联调 |
+| 2026-06-24 | 初始化 | sys_role_button | codex | 补充财务账户、佣金分账、提现押金、供应商结算和对账只读权限，支持 mall-finance 查询接口联调 |
+| 2026-06-25 | 初始化 | sys_role_button | codex | 补充WMS仓储履约只读权限，支持 mall-wms 查询接口联调 |
+| 2026-06-25 | 初始化 | sys_role_button | codex | 补充角色工作台自提点/团长只读权限，支持 mall-station 查询接口联调 |
+| 2026-06-25 | 初始化 | sys_role_button | codex | 补充角色工作台自提点/团长动作权限，支持核销、到货确认、休假、提现和消息已读接口联调 |
+| 2026-06-25 | 初始化 | sys_dict_type, sys_dict_item | codex | 补充账户流水类型字典，区分财务驳回解冻和申请人主动撤回 |
+| 2026-06-25 | 初始化 | sys_role_button | codex | 补充供应商工作台首页聚合权限，支持供应商小程序首页联调 |
+| 2026-06-25 | 初始化 | sys_role, sys_role_button | codex | 补充用户小程序默认角色和首版接口权限，支持 mall-user 浏览、购物车、订单、售后、自提点和消息联调 |
+| 2026-06-25 | 初始化 | sys_role_button | codex | 补充用户小程序下单、取消、支付单创建和售后申请权限 |
+| 2026-06-25 | 修正 | ord_order | codex | 修正未支付关闭订单测试数据支付状态，避免误用部分退款状态 |
+| 2026-06-26 | 初始化 | sys_task, ord_order, ord_order_item, wms_inventory_lock, sale_publish_period, sale_publish_sku, wms_inventory, sup_qualification, sup_contract, op_todo, prd_product, prd_sku | codex | 补充第一版系统任务测试数据，覆盖超时关单、支付提醒、截团生成、失败重试、对账报表、待办超时、供应商到期、低库存和搜索联想词同步 |
+| 2026-06-26 | 修正 | sys_task | codex | 将早期系统任务测试样例编码统一到第一版已开发任务范围，避免杂项任务误导测试 |

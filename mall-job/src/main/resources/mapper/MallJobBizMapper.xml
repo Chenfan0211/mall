@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.job.mapper.MallJobBizMapper">
+
+    <update id="closeTimeoutOrders">
+        UPDATE ord_order
+        SET trade_status = 30,
+            pay_status = 10,
+            fulfill_status = 10,
+            cancel_reason = '系统超时关闭未支付订单',
+            update_time = NOW()
+        WHERE trade_status = 10
+          AND pay_status = 10
+          AND expire_time &lt;= NOW()
+          AND is_deleted = 0
+    </update>
+
+    <update id="releaseTimeoutOrderLocks">
+        UPDATE wms_inventory_lock lock_record
+            INNER JOIN ord_order timeout_order ON timeout_order.order_no = lock_record.biz_no
+        SET lock_record.release_qty = lock_record.lock_qty,
+            lock_record.lock_status = 20,
+            lock_record.update_time = NOW()
+        WHERE lock_record.biz_type = 1
+          AND lock_record.lock_status = 10
+          AND timeout_order.trade_status = 30
+          AND timeout_order.pay_status = 10
+          AND lock_record.is_deleted = 0
+          AND timeout_order.is_deleted = 0
+    </update>
+
+    <insert id="createPayReminderMessages">
+        INSERT INTO msg_record
+        (id, msg_no, template_code, receiver_type, receiver_id, channel_type, title, content, biz_type, biz_no,
+         read_status, send_status, fail_reason, create_time, update_time, is_deleted)
+        SELECT 260626000000000 + o.id,
+               CONCAT('MSG_PAY_REMIND_', o.order_no),
+               'TPL_ORDER_PAY_REMIND',
+               1,
+               o.user_id,
+               2,
+               '订单支付提醒',
+               CONCAT('您的订单 ', o.order_no, ' 即将超时关闭，请尽快完成支付'),
+               'order',
+               o.order_no,
+               0,
+               10,
+               NULL,
+               NOW(),
+               NOW(),
+               0
+        FROM ord_order o
+        WHERE o.trade_status = 10
+          AND o.pay_status = 10
+          AND o.expire_time &gt; NOW()
+          AND o.expire_time &lt;= DATE_ADD(NOW(), INTERVAL 5 MINUTE)
+          AND o.is_deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM msg_record msg
+              WHERE msg.msg_no = CONCAT('MSG_PAY_REMIND_', o.order_no)
+                AND msg.is_deleted = 0
+          )
+    </insert>
+
+    <insert id="generateVirtualPurchaseOrders">
+        INSERT INTO pur_purchase_order
+        (id, purchase_no, source_type, period_id, supplier_id, warehouse_id, region_id, city_id, delivery_date,
+         purchase_status, audit_status, create_account_id, create_reason, expected_arrival_time,
+         create_time, update_time, is_deleted)
+        SELECT 260626100000000 + p.id * 1000 + sku.supplier_id,
+               CONCAT('PUR_SYS_', p.period_no, '_', sku.supplier_id),
+               1,
+               p.id,
+               sku.supplier_id,
+               p.warehouse_id,
+               p.region_id,
+               p.city_id,
+               p.delivery_date,
+               10,
+               20,
+               NULL,
+               '系统截团自动生成采购单',
+               TIMESTAMP(p.delivery_date, '08:00:00'),
+               NOW(),
+               NOW(),
+               0
+        FROM sale_publish_period p
+                 INNER JOIN sale_publish_sku sku ON sku.period_id = p.id
+        WHERE p.stock_mode = 2
+          AND p.status = 20
+          AND p.actual_cutoff_time &lt;= NOW()
+          AND p.is_deleted = 0
+          AND sku.status = 1
+          AND sku.is_deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM pur_purchase_order po
+              WHERE po.purchase_no = CONCAT('PUR_SYS_', p.period_no, '_', sku.supplier_id)
+                AND po.is_deleted = 0
+          )
+        GROUP BY p.id, p.period_no, sku.supplier_id, p.warehouse_id, p.region_id, p.city_id, p.delivery_date
+    </insert>
+
+    <insert id="generateVirtualPurchaseItems">
+        INSERT INTO pur_purchase_item
+        (id, purchase_id, purchase_no, product_id, sku_id, supplier_id, warehouse_id, apply_qty, purchase_qty,
+         received_qty, rejected_qty, purchase_price, status, create_time, update_time, is_deleted)
+        SELECT 260626110000000 + sku.id,
+               po.id,
+               po.purchase_no,
+               sku.product_id,
+               sku.sku_id,
+               sku.supplier_id,
+               p.warehouse_id,
+               GREATEST(sku.sold_qty + sku.locked_qty, 0),
+               GREATEST(sku.sold_qty + sku.locked_qty, 0),
+               0,
+               0,
+               COALESCE(sku.purchase_price, 0.0000),
+               1,
+               NOW(),
+               NOW(),
+               0
+        FROM sale_publish_period p
+                 INNER JOIN sale_publish_sku sku ON sku.period_id = p.id
+                 INNER JOIN pur_purchase_order po
+                            ON po.purchase_no = CONCAT('PUR_SYS_', p.period_no, '_', sku.supplier_id)
+        WHERE p.stock_mode = 2
+          AND p.status = 20
+          AND p.actual_cutoff_time &lt;= NOW()
+          AND p.is_deleted = 0
+          AND sku.status = 1
+          AND sku.is_deleted = 0
+          AND po.is_deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM pur_purchase_item item
+              WHERE item.purchase_no = po.purchase_no
+                AND item.sku_id = sku.sku_id
+                AND item.is_deleted = 0
+          )
+    </insert>
+
+    <insert id="generateWarehouseWaves">
+        INSERT INTO wms_wave_batch
+        (id, wave_no, period_id, warehouse_id, line_id, delivery_date, required_qty, locked_qty, status,
+         create_account_id, create_time, update_time, is_deleted)
+        SELECT 260626120000000 + p.id,
+               CONCAT('WAVE_SYS_', p.period_no, '_', p.warehouse_id),
+               p.id,
+               p.warehouse_id,
+               line.line_id,
+               p.delivery_date,
+               COALESCE(SUM(item.qty), 0),
+               0,
+               10,
+               NULL,
+               NOW(),
+               NOW(),
+               0
+        FROM sale_publish_period p
+                 INNER JOIN ord_order_item item ON item.period_id = p.id
+                 INNER JOIN ord_order o ON o.id = item.order_id
+                 INNER JOIN (
+                     SELECT warehouse_id,
+                            MIN(id) AS line_id
+                     FROM wms_line
+                     WHERE status = 1
+                       AND is_deleted = 0
+                     GROUP BY warehouse_id
+                 ) line ON line.warehouse_id = p.warehouse_id
+        WHERE p.stock_mode = 1
+          AND p.status = 20
+          AND p.actual_cutoff_time &lt;= NOW()
+          AND p.is_deleted = 0
+          AND item.is_deleted = 0
+          AND o.pay_status = 30
+          AND o.trade_status IN (20, 30, 50)
+          AND o.is_deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM wms_wave_batch wave
+              WHERE wave.wave_no = CONCAT('WAVE_SYS_', p.period_no, '_', p.warehouse_id)
+                AND wave.is_deleted = 0
+          )
+        GROUP BY p.id, p.period_no, p.warehouse_id, line.line_id, p.delivery_date
+    </insert>
+
+    <insert id="generatePickTasks">
+        INSERT INTO wms_pick_task
+        (id, pick_no, wave_id, warehouse_id, line_id, assign_account_id, required_qty, actual_qty, shortage_qty,
+         status, complete_time, create_time, update_time, is_deleted)
+        SELECT 260626130000000 + wave.id,
+               CONCAT('PICK_SYS_', wave.wave_no),
+               wave.id,
+               wave.warehouse_id,
+               wave.line_id,
+               NULL,
+               wave.required_qty,
+               0,
+               0,
+               10,
+               NULL,
+               NOW(),
+               NOW(),
+               0
+        FROM wms_wave_batch wave
+        WHERE wave.status = 10
+          AND wave.is_deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM wms_pick_task pick_task
+              WHERE pick_task.pick_no = CONCAT('PICK_SYS_', wave.wave_no)
+                AND pick_task.is_deleted = 0
+          )
+    </insert>
+
+    <insert id="generateLoadingOrders">
+        INSERT INTO wms_loading_order
+        (id, loading_no, wave_id, warehouse_id, line_id, driver_account_id, delivery_date, required_qty, actual_qty,
+         status, load_account_id, load_time, outbound_account_id, outbound_time, create_time, update_time, is_deleted)
+        SELECT 260626140000000 + wave.id,
+               CONCAT('LOAD_SYS_', wave.wave_no),
+               wave.id,
+               wave.warehouse_id,
+               wave.line_id,
+               NULL,
+               wave.delivery_date,
+               wave.required_qty,
+               0,
+               10,
+               NULL,
+               NULL,
+               NULL,
+               NULL,
+               NOW(),
+               NOW(),
+               0
+        FROM wms_wave_batch wave
+        WHERE wave.status = 10
+          AND wave.is_deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM wms_loading_order loading_order
+              WHERE loading_order.loading_no = CONCAT('LOAD_SYS_', wave.wave_no)
+                AND loading_order.is_deleted = 0
+          )
+    </insert>
+
+    <update id="closeDuePublishedPeriods">
+        UPDATE sale_publish_period
+        SET status = 40,
+            update_time = NOW()
+        WHERE status = 20
+          AND actual_cutoff_time &lt;= NOW()
+          AND is_deleted = 0
+    </update>
+
+    <update id="retryFailedMessages">
+        UPDATE msg_record
+        SET send_status = 10,
+            fail_reason = NULL,
+            update_time = NOW()
+        WHERE send_status = 30
+          AND is_deleted = 0
+    </update>
+
+    <update id="retryFailedRefunds">
+        UPDATE pay_refund_trade
+        SET refund_status = 10,
+            fail_reason = NULL,
+            update_time = NOW()
+        WHERE refund_status = 40
+          AND is_deleted = 0
+    </update>
+
+    <update id="retryFailedSplits">
+        UPDATE fin_split_flow
+        SET split_status = 10,
+            fail_reason = NULL,
+            update_time = NOW()
+        WHERE split_status = 40
+          AND is_deleted = 0
+    </update>
+
+    <insert id="createReconciliationBatches">
+        INSERT INTO fin_reconciliation_batch
+        (id, reconcile_no, channel_type, reconcile_date, total_count, success_count, diff_count,
+         total_amount, diff_amount, status, create_time, update_time, is_deleted)
+        SELECT 260626150000000 + channel.channel_type,
+               CONCAT('REC_', DATE_FORMAT(CURDATE(), '%Y%m%d'), '_', channel.channel_type),
+               channel.channel_type,
+               CURDATE(),
+               0,
+               0,
+               0,
+               0.0000,
+               0.0000,
+               10,
+               NOW(),
+               NOW(),
+               0
+        FROM (
+            SELECT 1 AS channel_type
+            UNION ALL SELECT 2
+            UNION ALL SELECT 3
+            UNION ALL SELECT 4
+        ) channel
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM fin_reconciliation_batch batch
+            WHERE batch.reconcile_no = CONCAT('REC_', DATE_FORMAT(CURDATE(), '%Y%m%d'), '_', channel.channel_type)
+              AND batch.is_deleted = 0
+        )
+    </insert>
+
+    <insert id="refreshReportSnapshots">
+        INSERT INTO rpt_snapshot
+        (id, snapshot_no, report_type, stat_date, city_id, supplier_id, station_id, warehouse_id,
+         metric_json, status, create_time, update_time, is_deleted)
+        SELECT 260626160000000 + city_scope.city_id,
+               CONCAT('RPT_CITY_', DATE_FORMAT(CURDATE(), '%Y%m%d'), '_', city_scope.city_id),
+               1,
+               CURDATE(),
+               city_scope.city_id,
+               NULL,
+               NULL,
+               NULL,
+               JSON_OBJECT('order_count', city_scope.order_count, 'pay_amount', city_scope.pay_amount),
+               1,
+               NOW(),
+               NOW(),
+               0
+        FROM (
+            SELECT o.city_id,
+                   COUNT(*) AS order_count,
+                   COALESCE(SUM(o.pay_amount), 0.0000) AS pay_amount
+            FROM ord_order o
+            WHERE DATE(o.create_time) = CURDATE()
+              AND o.is_deleted = 0
+            GROUP BY o.city_id
+        ) city_scope
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM rpt_snapshot snapshot
+            WHERE snapshot.snapshot_no = CONCAT('RPT_CITY_', DATE_FORMAT(CURDATE(), '%Y%m%d'), '_', city_scope.city_id)
+              AND snapshot.is_deleted = 0
+        )
+    </insert>
+
+    <update id="markOverdueTodos">
+        UPDATE op_todo
+        SET status = 60,
+            update_time = NOW()
+        WHERE status IN (10, 20)
+          AND due_time IS NOT NULL
+          AND due_time &lt;= NOW()
+          AND is_deleted = 0
+    </update>
+
+    <insert id="createQualificationExpiryTodos">
+        INSERT INTO op_todo
+        (id, todo_no, todo_type, source_biz_type, source_biz_no, title, priority, process_role_code,
+         process_account_id, city_id, supplier_id, warehouse_id, status, due_time, create_time, update_time, is_deleted)
+        SELECT 260626170000000 + q.id,
+               CONCAT('TODO_QUAL_EXPIRE_', q.qualification_no),
+               80,
+               'supplier_qualification',
+               q.qualification_no,
+               '供应商资质即将到期',
+               2,
+               'supplier_manager',
+               NULL,
+               NULL,
+               q.supplier_id,
+               NULL,
+               10,
+               TIMESTAMP(q.valid_end_date, '23:59:59'),
+               NOW(),
+               NOW(),
+               0
+        FROM sup_qualification q
+        WHERE q.audit_status = 20
+          AND q.valid_end_date IS NOT NULL
+          AND q.valid_end_date &gt;= CURDATE()
+          AND q.valid_end_date &lt;= DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+          AND q.is_deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM op_todo todo
+              WHERE todo.todo_no = CONCAT('TODO_QUAL_EXPIRE_', q.qualification_no)
+                AND todo.is_deleted = 0
+          )
+    </insert>
+
+    <insert id="createContractExpiryTodos">
+        INSERT INTO op_todo
+        (id, todo_no, todo_type, source_biz_type, source_biz_no, title, priority, process_role_code,
+         process_account_id, city_id, supplier_id, warehouse_id, status, due_time, create_time, update_time, is_deleted)
+        SELECT 260626180000000 + c.id,
+               CONCAT('TODO_CONTRACT_EXPIRE_', c.contract_no),
+               81,
+               'supplier_contract',
+               c.contract_no,
+               '供应商合同即将到期',
+               2,
+               'supplier_manager',
+               NULL,
+               NULL,
+               c.supplier_id,
+               NULL,
+               10,
+               TIMESTAMP(c.valid_end_date, '23:59:59'),
+               NOW(),
+               NOW(),
+               0
+        FROM sup_contract c
+        WHERE c.status = 20
+          AND c.valid_end_date &gt;= CURDATE()
+          AND c.valid_end_date &lt;= DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+          AND c.is_deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM op_todo todo
+              WHERE todo.todo_no = CONCAT('TODO_CONTRACT_EXPIRE_', c.contract_no)
+                AND todo.is_deleted = 0
+          )
+    </insert>
+
+    <insert id="detectLowInventory">
+        INSERT INTO op_exception_record
+        (id, exception_no, exception_type, priority, source_module, source_biz_type, source_biz_no, city_id,
+         supplier_id, station_id, warehouse_id, owner_account_id, status, title, description,
+         create_time, update_time, is_deleted)
+        SELECT 260626190000000 + low_inventory.min_inventory_id,
+               CONCAT('EX_LOW_INV_', low_inventory.warehouse_id, '_', low_inventory.sku_id),
+               30,
+               2,
+               'wms',
+               'low_inventory',
+               CONCAT(low_inventory.warehouse_id, '_', low_inventory.sku_id),
+               NULL,
+               low_inventory.supplier_id,
+               NULL,
+               low_inventory.warehouse_id,
+               NULL,
+               10,
+               'SKU库存低于补货阈值',
+               CONCAT('SKU ', low_inventory.sku_id, ' 当前可用库存 ', low_inventory.available_qty, '，低于阈值 10'),
+               NOW(),
+               NOW(),
+               0
+        FROM (
+            SELECT inv.warehouse_id,
+                   inv.sku_id,
+                   inv.supplier_id,
+                   MIN(inv.id) AS min_inventory_id,
+                   SUM(inv.available_qty) AS available_qty
+            FROM wms_inventory inv
+            WHERE inv.inventory_status = 20
+              AND inv.is_deleted = 0
+            GROUP BY inv.warehouse_id, inv.sku_id, inv.supplier_id
+            HAVING SUM(inv.available_qty) &lt; 10
+        ) low_inventory
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM op_exception_record ex
+            WHERE ex.exception_no = CONCAT('EX_LOW_INV_', low_inventory.warehouse_id, '_', low_inventory.sku_id)
+              AND ex.status IN (10, 20)
+              AND ex.is_deleted = 0
+        )
+    </insert>
+
+    <insert id="syncSearchSuggestWords">
+        INSERT INTO search_suggest_word
+        (id, word, source_type, product_id, city_id, hit_count, status, create_time, update_time, is_deleted)
+        SELECT 260626200000000 + p.id,
+               p.product_name,
+               1,
+               p.id,
+               p.city_id,
+               0,
+               1,
+               NOW(),
+               NOW(),
+               0
+        FROM prd_product p
+        WHERE p.sale_status = 1
+          AND p.is_deleted = 0
+          AND p.city_id IS NOT NULL
+          AND NOT EXISTS (
+              SELECT 1
+              FROM search_suggest_word word
+              WHERE word.product_id = p.id
+                AND word.source_type = 1
+                AND word.is_deleted = 0
+          )
+    </insert>
+</mapper>

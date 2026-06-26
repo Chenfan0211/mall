@@ -1,0 +1,6 @@
+-- Generate deploy/docker/mysql/init/10-nacos.sql with:
+-- bash deploy/scripts/fetch-middleware-schemas.sh
+--
+-- The generated file is intentionally git-ignored because it is sourced
+-- from the Nacos release repository and may need to match the deployed
+-- Nacos image version.

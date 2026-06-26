@@ -1,0 +1,14 @@
+{
+  "name": "角色工作台",
+  "appid": "__UNI__MALLROLE",
+  "description": "自提点、团长、供应商工作台 H5",
+  "versionName": "0.1.0",
+  "versionCode": "10",
+  "transformPx": false,
+  "h5": {
+    "title": "角色工作台 H5",
+    "router": {
+      "mode": "hash"
+    }
+  }
+}

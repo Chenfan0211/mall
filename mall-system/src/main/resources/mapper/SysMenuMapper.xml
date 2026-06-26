@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.system.mapper.SysMenuMapper">
+    <select id="selectByAccountIdAndPortal" resultType="com.mall.system.entity.SysMenu">
+        SELECT DISTINCT m.*
+        FROM sys_menu m
+        INNER JOIN sys_role_menu rm ON rm.menu_id = m.id AND rm.is_deleted = 0
+        INNER JOIN sys_account_role ar ON ar.role_id = rm.role_id AND ar.is_deleted = 0
+        WHERE ar.account_id = #{accountId}
+          AND m.portal_code = #{portalCode}
+          AND m.visible_status = 1
+          AND m.status = 1
+          AND m.is_deleted = 0
+        ORDER BY m.parent_id ASC, m.sort_no ASC, m.id ASC
+    </select>
+</mapper>
