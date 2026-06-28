@@ -1,57 +1,72 @@
 <template>
   <view class="page">
-    <view v-for="item in records" :key="item.key" class="section">
-      <text class="title">{{ item.title }}</text>
-      <text class="subtle">{{ item.status }} · {{ item.time || '-' }}</text>
+    <view class="role-header">
+      <view class="status-bar">
+        <text>14:49</text>
+        <text>操作记录</text>
+      </view>
+      <text class="subtle">{{ profile.entity }}</text>
+      <text class="title">本人提交记录</text>
+      <text class="subtle">休假、提现、异常、通知、采购和到仓凭证只读追踪。</text>
     </view>
-    <view v-if="records.length === 0" class="section">
-      <text class="subtle">暂无记录</text>
+
+    <view class="filter-row">
+      <button :class="{ active: type === 'all' }" @click="type = 'all'">全部</button>
+      <button :class="{ active: type === 'wait' }" @click="type = 'wait'">待处理</button>
+      <button :class="{ active: type === 'done' }" @click="type = 'done'">已完成</button>
+    </view>
+
+    <view class="card-list">
+      <view v-for="item in rows" :key="item.no" class="record-card">
+        <view class="card-head">
+          <view class="card-main">
+            <text class="card-title">{{ item.no }} · {{ item.type }}</text>
+            <text class="card-desc">{{ item.time }}</text>
+          </view>
+          <text class="status-pill" :class="statusClass(item.status)">{{ item.status }}</text>
+        </view>
+        <text class="record-copy">内容：{{ item.title }}</text>
+        <text class="record-copy">下一步：{{ item.next }}</text>
+      </view>
+      <view v-if="rows.length === 0" class="empty-panel">
+        <text class="title">暂无操作记录</text>
+        <text class="subtle">提交休假、提现、异常、通知、采购或到仓凭证后会在这里展示。</text>
+      </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { pageLeaves, pageMessages, pageWithdraws } from '@/api/station';
+import { computed, ref } from 'vue';
+import { currentProfile, statusClass } from '@/stores/role';
 
-interface RecordRow {
-    key: string;
-    title: string;
-    status: string;
-    time?: string;
-}
-
-const records = ref<RecordRow[]>([]);
-
-async function loadData() {
-    const [messagePage, withdrawPage, leavePage] = await Promise.all([
-        pageMessages({ pageNum: 1, pageSize: 5, stationId: 720001 }),
-        pageWithdraws({ pageNum: 1, pageSize: 5, stationId: 720001 }),
-        pageLeaves({ pageNum: 1, pageSize: 5, stationId: 720001 })
-    ]);
-    records.value = [
-        ...(messagePage.list || []).map((item) => ({
-            key: `message-${item.id}`,
-            title: item.title,
-            status: `消息状态 ${item.readStatus}`,
-            time: item.createTime
-        })),
-        ...(withdrawPage.list || []).map((item) => ({
-            key: `withdraw-${item.id}`,
-            title: `提现申请 ${item.withdrawNo}`,
-            status: `状态 ${item.status}`,
-            time: undefined
-        })),
-        ...(leavePage.list || []).map((item) => ({
-            key: `leave-${item.id}`,
-            title: `休假申请 ${item.leaveNo}`,
-            status: `状态 ${item.status}`,
-            time: undefined
-        }))
-    ];
-}
-
-onMounted(() => {
-    void loadData();
+const profile = computed(() => currentProfile.value);
+const type = ref<'all' | 'wait' | 'done'>('all');
+const rows = computed(() => {
+    if (type.value === 'wait') {
+        return profile.value.operations.filter((item) => /待|等待|提交/.test(item.status));
+    }
+    if (type.value === 'done') {
+        return profile.value.operations.filter((item) => /完成|发送|到账/.test(item.status));
+    }
+    return profile.value.operations;
 });
 </script>
+
+<style lang="scss" scoped>
+.filter-row {
+  margin-bottom: 18rpx;
+}
+
+.filter-row button {
+  border: 1rpx solid #f0dfd6;
+}
+
+.record-copy {
+  display: block;
+  margin-top: 14rpx;
+  color: #8f6c58;
+  font-size: 24rpx;
+  line-height: 1.55;
+}
+</style>

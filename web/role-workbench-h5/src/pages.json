@@ -3,7 +3,19 @@
     {
       "path": "pages/login/index",
       "style": {
-        "navigationBarTitleText": "登录"
+        "navigationBarTitleText": "角色工作台登录"
+      }
+    },
+    {
+      "path": "pages/login/forgot",
+      "style": {
+        "navigationBarTitleText": "忘记密码"
+      }
+    },
+    {
+      "path": "pages/status/index",
+      "style": {
+        "navigationBarTitleText": "身份状态"
       }
     },
     {
@@ -15,19 +27,115 @@
     {
       "path": "pages/orders/index",
       "style": {
-        "navigationBarTitleText": "提货订单"
+        "navigationBarTitleText": "订单"
+      }
+    },
+    {
+      "path": "pages/orders/detail",
+      "style": {
+        "navigationBarTitleText": "订单详情"
+      }
+    },
+    {
+      "path": "pages/orders/product-summary",
+      "style": {
+        "navigationBarTitleText": "商品汇总"
       }
     },
     {
       "path": "pages/store/index",
       "style": {
-        "navigationBarTitleText": "门店作业"
+        "navigationBarTitleText": "作业"
+      }
+    },
+    {
+      "path": "pages/store/delivery-detail",
+      "style": {
+        "navigationBarTitleText": "到货详情"
+      }
+    },
+    {
+      "path": "pages/store/return-detail",
+      "style": {
+        "navigationBarTitleText": "退货交接"
+      }
+    },
+    {
+      "path": "pages/store/shortage",
+      "style": {
+        "navigationBarTitleText": "缺货标记"
+      }
+    },
+    {
+      "path": "pages/store/notify-preview",
+      "style": {
+        "navigationBarTitleText": "到货通知预览"
+      }
+    },
+    {
+      "path": "pages/store/supplier-purchase",
+      "style": {
+        "navigationBarTitleText": "采购到仓"
+      }
+    },
+    {
+      "path": "pages/store/supplier-purchase-detail",
+      "style": {
+        "navigationBarTitleText": "采购单详情"
+      }
+    },
+    {
+      "path": "pages/store/warehouse-detail",
+      "style": {
+        "navigationBarTitleText": "仓库汇总"
       }
     },
     {
       "path": "pages/finance/index",
       "style": {
-        "navigationBarTitleText": "我的财务"
+        "navigationBarTitleText": "财务"
+      }
+    },
+    {
+      "path": "pages/finance/withdraw",
+      "style": {
+        "navigationBarTitleText": "申请提现"
+      }
+    },
+    {
+      "path": "pages/finance/list",
+      "style": {
+        "navigationBarTitleText": "财务明细"
+      }
+    },
+    {
+      "path": "pages/messages/index",
+      "style": {
+        "navigationBarTitleText": "消息中心"
+      }
+    },
+    {
+      "path": "pages/leave/index",
+      "style": {
+        "navigationBarTitleText": "休假记录"
+      }
+    },
+    {
+      "path": "pages/leave/apply",
+      "style": {
+        "navigationBarTitleText": "休假申请"
+      }
+    },
+    {
+      "path": "pages/records/index",
+      "style": {
+        "navigationBarTitleText": "操作记录"
+      }
+    },
+    {
+      "path": "pages/service/index",
+      "style": {
+        "navigationBarTitleText": "服务工具"
       }
     },
     {
@@ -40,24 +148,6 @@
       "path": "pages/supplier/index",
       "style": {
         "navigationBarTitleText": "供应商工作台"
-      }
-    },
-    {
-      "path": "pages/messages/index",
-      "style": {
-        "navigationBarTitleText": "消息"
-      }
-    },
-    {
-      "path": "pages/leave/index",
-      "style": {
-        "navigationBarTitleText": "休假申请"
-      }
-    },
-    {
-      "path": "pages/records/index",
-      "style": {
-        "navigationBarTitleText": "操作记录"
       }
     }
   ],

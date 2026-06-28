@@ -3,5 +3,5 @@ import './styles/app.scss';
 </script>
 
 <template>
-  <view></view>
+  <view />
 </template>

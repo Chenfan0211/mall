@@ -247,3 +247,124 @@ export function pageLeaves(query: Record<string, string | number | undefined>) {
 export function getSupplierWorkbenchSummary(query: Record<string, string | number | undefined>) {
     return request<SupplierWorkbenchDTO>(`/supplier/workbench/summary?${buildSearch(query)}`);
 }
+
+export function getStationOrderDetail(orderNo: string) {
+    return request<StationOrderDTO>(`/station/workbench/orders/${orderNo}`);
+}
+
+export function verifyPickup(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/workbench/orders/verify-pickup', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function reportStationException(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/workbench/exceptions', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function confirmStationArrival(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/workbench/delivery-stations/confirm-arrival', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function sendArrivalNotice(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/workbench/messages/arrival-notice', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function confirmReturnHandover(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/workbench/returns/confirm-handover', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function applyWithdraw(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/finance/withdraws', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function cancelWithdraw(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/finance/withdraws/cancel', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function applyLeave(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/base/leaves', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function cancelLeave(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/base/leaves/cancel', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function markMessageRead(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/messages/read', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function markAllMessagesRead(payload: Record<string, string | number | undefined>) {
+    return request<void>('/station/messages/read-all', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function pageSupplierPurchases(query: Record<string, string | number | undefined>) {
+    return request<PageResult<Record<string, unknown>>>(`/supplier/purchases?${buildSearch(query)}`);
+}
+
+export function getSupplierPurchaseDetail(purchaseNo: string) {
+    return request<Record<string, unknown>>(`/supplier/purchases/${purchaseNo}`);
+}
+
+export function confirmSupplierPurchase(payload: Record<string, string | number | undefined>) {
+    return request<void>('/supplier/purchases/confirm', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function submitSupplierArrival(payload: Record<string, string | number | undefined>) {
+    return request<void>('/supplier/deliveries/arrival-proof', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function submitSupplierShortage(payload: Record<string, string | number | undefined>) {
+    return request<void>('/supplier/deliveries/shortage', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function applySupplierSupplement(payload: Record<string, string | number | undefined>) {
+    return request<void>('/supplier/purchases/supplement', {
+        method: 'POST',
+        data: payload
+    });
+}
+
+export function pageSupplierSettlements(query: Record<string, string | number | undefined>) {
+    return request<PageResult<Record<string, unknown>>>(`/supplier/settlements?${buildSearch(query)}`);
+}

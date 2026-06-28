@@ -1,5 +1,5 @@
 interface ApiResult<T> {
-    code: string;
+    code: string | number;
     message: string;
     data: T;
 }
@@ -13,6 +13,10 @@ export function getToken() {
 
 export function setToken(token: string) {
     uni.setStorageSync(TOKEN_KEY, token);
+}
+
+export function clearToken() {
+    uni.removeStorageSync(TOKEN_KEY);
 }
 
 export function request<T>(url: string, options: UniApp.RequestOptions = {}): Promise<T> {
@@ -33,12 +37,12 @@ export function request<T>(url: string, options: UniApp.RequestOptions = {}): Pr
                     reject(new Error(`HTTP ${response.statusCode}`));
                     return;
                 }
-                if (result.code !== '0') {
+                if (result && result.code !== undefined && String(result.code) !== '0') {
                     uni.showToast({ title: result.message || '业务处理失败', icon: 'none' });
                     reject(new Error(result.message || 'Business error'));
                     return;
                 }
-                resolve(result.data);
+                resolve(result && result.data !== undefined ? result.data : (response.data as T));
             },
             fail(error) {
                 uni.showToast({ title: '网络不可用', icon: 'none' });
