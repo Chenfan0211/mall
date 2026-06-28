@@ -90,13 +90,13 @@ class StationBaseServiceImplTest {
         leaveDTO.setAuditStatus(10L);
         when(stationMapper.selectById(720001L)).thenReturn(station);
         when(stationLeaveMapper.selectCount(any())).thenReturn(0L);
-        when(stationLeaveMapper.insert(any())).thenReturn(1);
+        when(stationLeaveMapper.insert(any(UsrStationLeave.class))).thenReturn(1);
         when(stationConvert.toStationLeaveDTO(any())).thenReturn(leaveDTO);
 
         final StationLeaveDTO result = stationBaseService.applyLeave(request);
 
         assertEquals(10L, result.getAuditStatus());
-        verify(stationLeaveMapper).insert(any());
+        verify(stationLeaveMapper).insert(any(UsrStationLeave.class));
     }
 
     @Test

@@ -37,7 +37,8 @@ public class GatewayAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         final String username = request.getHeader(AuthHeaderNames.USERNAME);
-        final MallLoginUser loginUser = new MallLoginUser(accountId, username);
+        final String portalCode = request.getHeader(AuthHeaderNames.PORTAL_CODE);
+        final MallLoginUser loginUser = new MallLoginUser(accountId, username, portalCode);
         final Set<SimpleGrantedAuthority> authorities = split(request.getHeader(AuthHeaderNames.AUTHORITIES)).stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());

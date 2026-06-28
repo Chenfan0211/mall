@@ -8,6 +8,8 @@ import com.mall.api.auth.dto.LoginDTO;
 import com.mall.api.auth.vo.PasswordLoginVO;
 import com.mall.api.system.dto.AccountDTO;
 import com.mall.common.exception.BusinessException;
+import com.mall.common.security.LoginTokenCodec;
+import com.mall.common.security.LoginTokenDTO;
 import com.mall.system.convert.SystemConvert;
 import com.mall.system.entity.SysAccount;
 import com.mall.system.service.AccountService;
@@ -44,6 +46,9 @@ class AuthServiceImplTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private LoginTokenCodec loginTokenCodec;
+
     @InjectMocks
     private AuthServiceImpl authService;
 
@@ -66,10 +71,12 @@ class AuthServiceImplTest {
         when(roleService.listAuthoritiesByAccountId(700001L)).thenReturn(List.of("operation:todo:view"));
         when(menuService.listByAccountIdAndPortal(700001L, "admin")).thenReturn(Collections.emptyList());
         when(dataScopeService.listByAccountId(700001L)).thenReturn(Collections.emptyList());
+        when(loginTokenCodec.encode(org.mockito.ArgumentMatchers.any(LoginTokenDTO.class))).thenReturn("signed-token");
 
         final LoginDTO result = authService.passwordLogin(loginVO);
 
         assertEquals(700001L, result.getAccount().getId());
+        assertEquals("signed-token", result.getAccessToken());
         assertEquals("Bearer", result.getTokenType());
         assertEquals("operation:todo:view", result.getAuthorities().get(0));
     }
@@ -88,5 +95,22 @@ class AuthServiceImplTest {
         when(passwordEncoder.matches("wrong", "hash")).thenReturn(false);
 
         assertThrows(BusinessException.class, () -> authService.passwordLogin(loginVO));
+    }
+
+    @Test
+    void passwordLogin_placeholderHash_throwInitializationMessage() {
+        final PasswordLoginVO loginVO = new PasswordLoginVO();
+        loginVO.setUsername("test_platform_admin");
+        loginVO.setPassword("Test@123456");
+        loginVO.setPortalCode("admin");
+        final SysAccount account = new SysAccount();
+        account.setId(700001L);
+        account.setPasswordHash("TEST_HASH_CHANGE_ME");
+
+        when(accountService.findEnabledAccountForLogin("test_platform_admin", "admin")).thenReturn(account);
+
+        final BusinessException exception =
+                assertThrows(BusinessException.class, () -> authService.passwordLogin(loginVO));
+        assertEquals("测试账号密码未初始化，请执行 Sql/mall.sql 末尾密码回填SQL", exception.getMessage());
     }
 }

@@ -3747,3 +3747,1219 @@ SET task_code = 'REPORT_SNAPSHOT_REFRESH',
     biz_type = 'report',
     update_time = NOW()
 WHERE id = 700705;
+
+-- ----------------------------
+-- 操作类型：初始化
+-- 涉及表：sys_role_menu
+-- 日期：2026-06-27
+-- 操作人：codex
+-- 用途说明：补齐运营后台和仓库后台测试角色菜单权限，避免登录后菜单为空或访问后台页面 403
+-- ----------------------------
+INSERT IGNORE INTO sys_role_menu
+(id, role_id, menu_id, create_time, update_time, is_deleted)
+SELECT 802001, 20001, 30001, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802001)
+UNION ALL SELECT 802002, 20001, 30002, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802002)
+UNION ALL SELECT 802003, 20001, 30003, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802003)
+UNION ALL SELECT 802004, 20001, 30004, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802004)
+UNION ALL SELECT 802005, 20001, 30005, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802005)
+UNION ALL SELECT 802006, 20001, 30006, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802006)
+UNION ALL SELECT 802007, 20001, 30007, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802007)
+UNION ALL SELECT 802008, 20001, 30008, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802008)
+UNION ALL SELECT 802009, 20002, 30001, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802009)
+UNION ALL SELECT 802010, 20002, 30002, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802010)
+UNION ALL SELECT 802011, 20002, 30003, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802011)
+UNION ALL SELECT 802012, 20002, 30004, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802012)
+UNION ALL SELECT 802013, 20002, 30005, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802013)
+UNION ALL SELECT 802014, 20002, 30007, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802014)
+UNION ALL SELECT 802015, 20003, 30001, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802015)
+UNION ALL SELECT 802016, 20003, 30003, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802016)
+UNION ALL SELECT 802017, 20003, 30004, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802017)
+UNION ALL SELECT 802018, 20003, 30005, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802018)
+UNION ALL SELECT 802019, 20003, 30007, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802019)
+UNION ALL SELECT 802020, 20004, 30002, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802020)
+UNION ALL SELECT 802021, 20005, 30002, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802021)
+UNION ALL SELECT 802022, 20005, 30005, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802022)
+UNION ALL SELECT 802023, 20006, 30006, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802023)
+UNION ALL SELECT 802024, 20007, 30003, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802024)
+UNION ALL SELECT 802025, 20008, 30002, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802025)
+UNION ALL SELECT 802026, 20008, 30003, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802026)
+UNION ALL SELECT 802027, 20008, 30005, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802027)
+UNION ALL SELECT 802028, 21001, 31001, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802028)
+UNION ALL SELECT 802029, 21001, 31002, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802029)
+UNION ALL SELECT 802030, 21001, 31003, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802030)
+UNION ALL SELECT 802031, 21001, 31004, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802031)
+UNION ALL SELECT 802032, 21001, 31005, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802032)
+UNION ALL SELECT 802033, 21001, 31006, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802033)
+UNION ALL SELECT 802034, 21001, 31007, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802034)
+UNION ALL SELECT 802035, 21001, 31008, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802035)
+UNION ALL SELECT 802036, 21001, 31009, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802036)
+UNION ALL SELECT 802037, 21001, 31010, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802037)
+UNION ALL SELECT 802038, 21001, 31011, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802038)
+UNION ALL SELECT 802039, 21001, 31012, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802039)
+UNION ALL SELECT 802040, 21001, 31013, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_menu WHERE id = 802040);
+
+-- ----------------------------
+-- 操作类型：初始化
+-- 涉及表：sys_role_button
+-- 日期：2026-06-27
+-- 操作人：codex
+-- 用途说明：补齐运营后台系统权限菜单只读权限，避免账号、角色、菜单、字典页面 403
+-- ----------------------------
+INSERT IGNORE INTO sys_role_button
+(id, role_id, portal_code, module_code, button_code, button_name, risk_level, status, create_time, update_time, is_deleted)
+SELECT 802101, 20001, 'admin', 'system:account', 'view', '查看账号', 1, 1, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_button WHERE id = 802101)
+UNION ALL SELECT 802102, 20001, 'admin', 'system:role', 'view', '查看角色', 1, 1, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_button WHERE id = 802102)
+UNION ALL SELECT 802103, 20001, 'admin', 'system:menu', 'view', '查看菜单', 1, 1, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_button WHERE id = 802103)
+UNION ALL SELECT 802104, 20001, 'admin', 'system:dict', 'view', '查看字典', 1, 1, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_button WHERE id = 802104)
+UNION ALL SELECT 802105, 20002, 'admin', 'system:dict', 'view', '查看字典', 1, 1, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_button WHERE id = 802105)
+UNION ALL SELECT 802106, 20003, 'admin', 'system:dict', 'view', '查看字典', 1, 1, NOW(), NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM sys_role_button WHERE id = 802106);
+
+-- ----------------------------
+-- 操作类型：初始化
+-- 涉及表：sup_supplier, sys_account, prd_product, prd_sku, sale_publish_period, sale_publish_sku, ord_cart, ord_order, ord_order_item, ord_fulfillment_track, pay_trade, pay_refund_trade, afs_after_sale, afs_after_sale_item, afs_return_record, pur_purchase_order, pur_purchase_item, pur_delivery_order, pur_delivery_item, wms_inbound_order, wms_inbound_item, wms_receive_record, wms_quality_file, wms_putaway_task, wms_inventory, wms_inventory_lock, wms_inventory_log, wms_wave_batch, wms_pick_task, wms_pick_item, wms_loading_order, wms_loading_item, wms_outbound_order, wms_delivery_order, wms_delivery_station, wms_driver_sign_record, wms_return_handover, wms_stocktake_order, wms_operation_log, fin_account, fin_account_flow, fin_commission_detail, fin_split_flow, fin_withdraw_apply, fin_supplier_settlement, fin_reconciliation_batch, op_todo, op_exception_record, msg_record, rpt_snapshot, rpt_export_task, search_suggest_word
+-- 日期：2026-06-27
+-- 操作人：codex
+-- 用途说明：补充全页面全状态测试数据，覆盖用户端、角色工作台、供应商工作台、仓配H5、运营后台和仓库后台主要列表状态
+-- ----------------------------
+INSERT IGNORE INTO sup_supplier
+(id, supplier_no, supplier_name, city_id, status, audit_status, deposit_required_amount, remark, create_time, update_time, is_deleted)
+VALUES
+(610001, 'SUP_PAGE_FIXED', '页面固定供应商610001', 440100, 1, 20, 6000.0000, '角色工作台供应商页固定ID测试数据', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sup_supplier_contact
+(id, supplier_id, contact_name, contact_mobile, contact_type, default_flag, status, create_time, update_time, is_deleted)
+VALUES
+(806001, 610001, '页面供应商业务联系人', '13800006101', 1, 1, 1, NOW(), NOW(), 0),
+(806002, 610001, '页面供应商送货联系人', '13800006102', 3, 0, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sup_qualification
+(id, qualification_no, supplier_id, qualification_type, certificate_no, valid_start_date, valid_end_date, file_asset_id, audit_status, create_time, update_time, is_deleted)
+VALUES
+(806003, 'QUAL_PAGE_SUP_WAIT', 610001, 1, 'CERT-PAGE-WAIT', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 710201, 10, NOW(), NOW(), 0),
+(806004, 'QUAL_PAGE_SUP_PASS', 610001, 1, 'CERT-PAGE-PASS', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 710201, 20, NOW(), NOW(), 0),
+(806005, 'QUAL_PAGE_SUP_REJECT', 610001, 1, 'CERT-PAGE-REJECT', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 710201, 30, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sup_contract
+(id, contract_no, supplier_id, contract_name, valid_start_date, valid_end_date, deposit_amount, file_asset_id, status, create_time, update_time, is_deleted)
+VALUES
+(806006, 'CON_PAGE_SUP_WAIT', 610001, '页面供应商待生效合同', DATE_ADD(CURDATE(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 6000.0000, 710202, 10, NOW(), NOW(), 0),
+(806007, 'CON_PAGE_SUP_ACTIVE', 610001, '页面供应商生效中合同', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 6000.0000, 710202, 20, NOW(), NOW(), 0),
+(806008, 'CON_PAGE_SUP_EXPIRED', 610001, '页面供应商已到期合同', DATE_SUB(CURDATE(), INTERVAL 1 YEAR), DATE_SUB(CURDATE(), INTERVAL 1 DAY), 6000.0000, 710202, 30, NOW(), NOW(), 0),
+(806009, 'CON_PAGE_SUP_CLOSED', 610001, '页面供应商已解除合同', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 6000.0000, 710202, 40, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sys_account
+(id, account_no, username, mobile, password_hash, account_type, login_portal_code, subject_type, subject_id, status, last_login_time, last_login_ip, remark, create_time, update_time, is_deleted)
+VALUES
+(806010, 'ACC_PAGE_SUPPLIER_610001', 'test_supplier_610001', '13800006110', '$2a$10$oxgynGL/z8Bad5ExH/or0eNrsHypVvBIttfG7BaymYuYhBint5Rhy', 4, 'role-workbench-h5', 2, 610001, 1, NOW(), '127.0.0.1', '供应商工作台固定ID测试账号', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sys_account_subject
+(id, account_id, subject_type, subject_id, subject_name_snapshot, default_flag, status, create_time, update_time, is_deleted)
+VALUES
+(806011, 806010, 2, 610001, '页面固定供应商610001', 1, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sys_account_role
+(id, account_id, role_id, create_time, update_time, is_deleted)
+VALUES
+(806012, 806010, 22003, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sys_data_scope
+(id, scope_code, scope_name, scope_type, scope_object_id, include_child_flag, status, create_time, update_time, is_deleted)
+VALUES
+(806013, 'SUPPLIER_PAGE_FIXED_610001', '页面固定供应商610001数据', 3, 610001, 0, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sys_account_data_scope
+(id, account_id, scope_id, create_time, update_time, is_deleted)
+VALUES
+(806014, 806010, 806013, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO prd_product
+(id, product_no, product_name, front_category_id, stat_category_id, supplier_id, main_image_url, image_json, audit_status, sale_status, city_id, create_account_id, create_time, update_time, is_deleted)
+VALUES
+(806020, 'PRD_PAGE_ORANGE', '页面覆盖赣南鲜橙', 750001, 750003, 610001, '/mock/product/page-orange.jpg', JSON_ARRAY('/mock/product/page-orange-1.jpg', '/mock/product/page-orange-2.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(806021, 'PRD_PAGE_GRAPE_WAIT', '页面覆盖待审核葡萄', 750001, 750003, 610001, '/mock/product/page-grape.jpg', JSON_ARRAY('/mock/product/page-grape-1.jpg'), 10, 1, 440100, 700003, NOW(), NOW(), 0),
+(806022, 'PRD_PAGE_MELON_STOP', '页面覆盖停售蜜瓜', 750001, 750003, 610001, '/mock/product/page-melon.jpg', JSON_ARRAY('/mock/product/page-melon-1.jpg'), 20, 2, 440100, 700003, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO prd_sku
+(id, sku_no, product_id, sku_name, barcode, sale_spec_text, base_unit, supplier_id, weight_gram, status, create_time, update_time, is_deleted)
+VALUES
+(806030, 'SKU_PAGE_ORANGE_3KG', 806020, '鲜橙3kg装', '690000806030', '3kg/箱', '箱', 610001, 3000, 1, NOW(), NOW(), 0),
+(806031, 'SKU_PAGE_GRAPE_1KG', 806021, '葡萄1kg装', '690000806031', '1kg/份', '份', 610001, 1000, 1, NOW(), NOW(), 0),
+(806032, 'SKU_PAGE_MELON_1PC', 806022, '蜜瓜1个装', '690000806032', '1个/份', '份', 610001, 1200, 2, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sale_publish_period
+(id, period_no, period_name, region_id, city_id, warehouse_id, sale_start_time, sale_end_time, actual_cutoff_time, delivery_date, stock_mode, status, publish_account_id, publish_time, create_time, update_time, is_deleted)
+VALUES
+(806040, 'PERIOD_PAGE_DRAFT', '页面覆盖待发布团期', 440000, 440100, 50001, DATE_ADD(NOW(), INTERVAL 2 HOUR), DATE_ADD(NOW(), INTERVAL 1 DAY), DATE_ADD(NOW(), INTERVAL 1 DAY), DATE_ADD(CURDATE(), INTERVAL 2 DAY), 1, 10, NULL, NULL, NOW(), NOW(), 0),
+(806041, 'PERIOD_PAGE_ONLINE', '页面覆盖在线团期', 440000, 440100, 50001, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_ADD(NOW(), INTERVAL 10 HOUR), DATE_ADD(NOW(), INTERVAL 10 HOUR), DATE_ADD(CURDATE(), INTERVAL 1 DAY), 1, 20, 700002, DATE_SUB(NOW(), INTERVAL 2 HOUR), NOW(), NOW(), 0),
+(806042, 'PERIOD_PAGE_OFFLINE', '页面覆盖已下架团期', 440000, 440100, 50001, DATE_SUB(NOW(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 1 DAY), DATE_SUB(NOW(), INTERVAL 1 DAY), CURDATE(), 1, 30, 700002, DATE_SUB(NOW(), INTERVAL 3 DAY), NOW(), NOW(), 0),
+(806043, 'PERIOD_PAGE_EXPIRED', '页面覆盖已过期团期', 440000, 440100, 50001, DATE_SUB(NOW(), INTERVAL 4 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY), DATE_SUB(CURDATE(), INTERVAL 1 DAY), 2, 40, 700002, DATE_SUB(NOW(), INTERVAL 4 DAY), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sale_publish_sku
+(id, period_id, product_id, sku_id, supplier_id, sale_price, purchase_price, limit_qty, min_buy_qty, planned_stock_qty, sold_qty, locked_qty, production_date, shelf_life_days, status, create_time, update_time, is_deleted)
+VALUES
+(806050, 806041, 806020, 806030, 610001, 29.9000, 18.0000, 3, 1, 600, 160, 25, CURDATE(), 10, 1, NOW(), NOW(), 0),
+(806051, 806041, 806021, 806031, 610001, 16.9000, 10.0000, 5, 1, 300, 40, 5, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(806052, 806040, 806022, 806032, 610001, 22.9000, 14.0000, 2, 1, 120, 0, 0, CURDATE(), 7, 2, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO ord_cart
+(id, user_id, city_id, station_id, period_id, product_id, sku_id, qty, selected_flag, valid_status, create_time, update_time, is_deleted)
+VALUES
+(806060, 740001, 440100, 720001, 806041, 806020, 806030, 1, 1, 1, NOW(), NOW(), 0),
+(806061, 740001, 440100, 720001, 806041, 806021, 806031, 2, 0, 1, NOW(), NOW(), 0),
+(806062, 740001, 440100, 720001, 806040, 806022, 806032, 1, 0, 2, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO ord_order
+(id, order_no, user_id, region_id, city_id, station_id, leader_id, pickup_name, pickup_mobile, total_amount, pay_amount, trade_status, pay_status, fulfill_status, expire_time, pay_time, complete_time, cancel_reason, idempotent_key, create_time, update_time, is_deleted)
+VALUES
+(806100, 'ORD_PAGE_WAIT_PAY', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 29.9000, 29.9000, 10, 10, 10, DATE_ADD(NOW(), INTERVAL 8 MINUTE), NULL, NULL, NULL, 'idem_page_order_wait_pay', NOW(), NOW(), 0),
+(806101, 'ORD_PAGE_PAY_PROCESSING', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 16.9000, 16.9000, 10, 20, 10, DATE_ADD(NOW(), INTERVAL 6 MINUTE), NULL, NULL, '支付处理中', 'idem_page_order_pay_processing', NOW(), NOW(), 0),
+(806102, 'ORD_PAGE_WAIT_INBOUND', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 29.9000, 29.9000, 20, 30, 30, DATE_SUB(NOW(), INTERVAL 1 HOUR), DATE_SUB(NOW(), INTERVAL 50 MINUTE), NULL, NULL, 'idem_page_order_wait_inbound', NOW(), NOW(), 0),
+(806103, 'ORD_PAGE_WAIT_PICK', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 29.9000, 29.9000, 20, 30, 40, DATE_SUB(NOW(), INTERVAL 1 HOUR), DATE_SUB(NOW(), INTERVAL 50 MINUTE), NULL, NULL, 'idem_page_order_wait_pick', NOW(), NOW(), 0),
+(806104, 'ORD_PAGE_WAIT_DELIVERY', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 29.9000, 29.9000, 20, 30, 50, DATE_SUB(NOW(), INTERVAL 1 HOUR), DATE_SUB(NOW(), INTERVAL 50 MINUTE), NULL, NULL, 'idem_page_order_wait_delivery', NOW(), NOW(), 0),
+(806105, 'ORD_PAGE_WAIT_PICKUP_FIXED', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 29.9000, 29.9000, 20, 30, 60, DATE_SUB(NOW(), INTERVAL 1 HOUR), DATE_SUB(NOW(), INTERVAL 50 MINUTE), NULL, NULL, 'idem_page_order_wait_pickup_fixed', NOW(), NOW(), 0),
+(806106, 'ORD_PAGE_PICKED_FIXED', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 16.9000, 16.9000, 50, 30, 70, DATE_SUB(NOW(), INTERVAL 2 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY), DATE_SUB(NOW(), INTERVAL 1 DAY), NULL, 'idem_page_order_picked_fixed', NOW(), NOW(), 0),
+(806107, 'ORD_PAGE_CLOSED_USER', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 16.9000, 16.9000, 30, 10, 10, DATE_SUB(NOW(), INTERVAL 1 HOUR), NULL, NULL, '用户取消未支付订单', 'idem_page_order_closed_user', NOW(), NOW(), 0),
+(806108, 'ORD_PAGE_REFUNDING', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 29.9000, 29.9000, 40, 40, 20, DATE_SUB(NOW(), INTERVAL 2 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY), NULL, '已支付取消退款中', 'idem_page_order_refunding', NOW(), NOW(), 0),
+(806109, 'ORD_PAGE_PART_REFUND', 740001, 440000, 440100, 720001, 730001, '页面测试提货人', '13800004101', 59.8000, 59.8000, 50, 50, 70, DATE_SUB(NOW(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 1 DAY), '部分退款后完成', 'idem_page_order_part_refund', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO ord_order_item
+(id, order_id, order_no, order_item_no, period_id, product_id, sku_id, supplier_id, warehouse_id, city_id, station_id, product_name, sku_name, sale_price, qty, picked_qty, refunded_qty, item_amount, fulfill_status, after_sale_status, expected_pickup_date, create_time, update_time, is_deleted)
+VALUES
+(806200, 806100, 'ORD_PAGE_WAIT_PAY', 'ITEM_PAGE_WAIT_PAY', 806041, 806020, 806030, 610001, 50001, 440100, 720001, '页面覆盖赣南鲜橙', '鲜橙3kg装', 29.9000, 1, 0, 0, 29.9000, 10, 0, DATE_ADD(CURDATE(), INTERVAL 1 DAY), NOW(), NOW(), 0),
+(806201, 806101, 'ORD_PAGE_PAY_PROCESSING', 'ITEM_PAGE_PAY_PROCESSING', 806041, 806021, 806031, 610001, 50001, 440100, 720001, '页面覆盖待审核葡萄', '葡萄1kg装', 16.9000, 1, 0, 0, 16.9000, 10, 0, DATE_ADD(CURDATE(), INTERVAL 1 DAY), NOW(), NOW(), 0),
+(806202, 806102, 'ORD_PAGE_WAIT_INBOUND', 'ITEM_PAGE_WAIT_INBOUND', 806041, 806020, 806030, 610001, 50001, 440100, 720001, '页面覆盖赣南鲜橙', '鲜橙3kg装', 29.9000, 1, 0, 0, 29.9000, 30, 0, DATE_ADD(CURDATE(), INTERVAL 1 DAY), NOW(), NOW(), 0),
+(806203, 806103, 'ORD_PAGE_WAIT_PICK', 'ITEM_PAGE_WAIT_PICK', 806041, 806020, 806030, 610001, 50001, 440100, 720001, '页面覆盖赣南鲜橙', '鲜橙3kg装', 29.9000, 1, 0, 0, 29.9000, 40, 0, DATE_ADD(CURDATE(), INTERVAL 1 DAY), NOW(), NOW(), 0),
+(806204, 806104, 'ORD_PAGE_WAIT_DELIVERY', 'ITEM_PAGE_WAIT_DELIVERY', 806041, 806020, 806030, 610001, 50001, 440100, 720001, '页面覆盖赣南鲜橙', '鲜橙3kg装', 29.9000, 1, 0, 0, 29.9000, 50, 0, DATE_ADD(CURDATE(), INTERVAL 1 DAY), NOW(), NOW(), 0),
+(806205, 806105, 'ORD_PAGE_WAIT_PICKUP_FIXED', 'ITEM_PAGE_WAIT_PICKUP_FIXED', 806041, 806020, 806030, 610001, 50001, 440100, 720001, '页面覆盖赣南鲜橙', '鲜橙3kg装', 29.9000, 1, 0, 0, 29.9000, 60, 0, '2026-06-26', NOW(), NOW(), 0),
+(806206, 806106, 'ORD_PAGE_PICKED_FIXED', 'ITEM_PAGE_PICKED_FIXED', 806041, 806021, 806031, 610001, 50001, 440100, 720001, '页面覆盖待审核葡萄', '葡萄1kg装', 16.9000, 1, 1, 0, 16.9000, 70, 0, '2026-06-26', NOW(), NOW(), 0),
+(806207, 806107, 'ORD_PAGE_CLOSED_USER', 'ITEM_PAGE_CLOSED_USER', 806041, 806021, 806031, 610001, 50001, 440100, 720001, '页面覆盖待审核葡萄', '葡萄1kg装', 16.9000, 1, 0, 0, 16.9000, 10, 0, DATE_ADD(CURDATE(), INTERVAL 1 DAY), NOW(), NOW(), 0),
+(806208, 806108, 'ORD_PAGE_REFUNDING', 'ITEM_PAGE_REFUNDING', 806041, 806020, 806030, 610001, 50001, 440100, 720001, '页面覆盖赣南鲜橙', '鲜橙3kg装', 29.9000, 1, 0, 0, 29.9000, 20, 30, DATE_ADD(CURDATE(), INTERVAL 1 DAY), NOW(), NOW(), 0),
+(806209, 806109, 'ORD_PAGE_PART_REFUND', 'ITEM_PAGE_PART_REFUND', 806041, 806020, 806030, 610001, 50001, 440100, 720001, '页面覆盖赣南鲜橙', '鲜橙3kg装', 29.9000, 2, 2, 1, 59.8000, 70, 40, '2026-06-26', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO ord_fulfillment_track
+(id, track_no, order_id, order_item_id, node_type, node_name, biz_no, status, remark, city_id, station_id, warehouse_id, create_time, update_time, is_deleted)
+VALUES
+(806210, 'TRACK_PAGE_WAIT_PAY', 806100, 806200, 1, '待支付', 'ORD_PAGE_WAIT_PAY', 10, '用户端待支付轨迹', 440100, 720001, NULL, NOW(), NOW(), 0),
+(806211, 'TRACK_PAGE_WAIT_INBOUND', 806102, 806202, 3, '待入库', 'INB_PAGE_STATUS_20', 30, '采购已送达待入库', 440100, 720001, 50001, NOW(), NOW(), 0),
+(806212, 'TRACK_PAGE_WAIT_PICK', 806103, 806203, 4, '待分拣', 'PICK_PAGE_STATUS_10', 40, '仓库待分拣', 440100, 720001, 50001, NOW(), NOW(), 0),
+(806213, 'TRACK_PAGE_WAIT_DELIVERY', 806104, 806204, 5, '待配送', 'DELIVERY_PAGE_STATUS_10', 50, '待司机配送', 440100, 720001, 50001, NOW(), NOW(), 0),
+(806214, 'TRACK_PAGE_WAIT_PICKUP', 806105, 806205, 6, '待自提', 'DELIVERY_ST_PAGE_ARRIVED', 60, '已到自提点待核销', 440100, 720001, 50001, NOW(), NOW(), 0),
+(806215, 'TRACK_PAGE_PICKED', 806106, 806206, 7, '已自提', 'PICKUP_PAGE_DONE', 70, '用户已提货', 440100, 720001, 50001, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO pay_trade
+(id, pay_no, order_id, order_no, channel_type, pay_amount, trade_status, channel_trade_no, pay_time, idempotent_key, create_time, update_time, is_deleted)
+VALUES
+(806220, 'PAY_PAGE_WAIT', 806100, 'ORD_PAGE_WAIT_PAY', 1, 29.9000, 10, NULL, NULL, 'idem_page_pay_wait', NOW(), NOW(), 0),
+(806221, 'PAY_PAGE_PROCESSING', 806101, 'ORD_PAGE_PAY_PROCESSING', 1, 16.9000, 20, 'WX_PAGE_PROCESSING', NULL, 'idem_page_pay_processing', NOW(), NOW(), 0),
+(806222, 'PAY_PAGE_SUCCESS', 806102, 'ORD_PAGE_WAIT_INBOUND', 1, 29.9000, 30, 'WX_PAGE_SUCCESS', DATE_SUB(NOW(), INTERVAL 50 MINUTE), 'idem_page_pay_success', NOW(), NOW(), 0),
+(806223, 'PAY_PAGE_FAILED', 806101, 'ORD_PAGE_PAY_PROCESSING', 1, 16.9000, 40, 'WX_PAGE_FAILED', NULL, 'idem_page_pay_failed', NOW(), NOW(), 0),
+(806224, 'PAY_PAGE_CLOSED', 806107, 'ORD_PAGE_CLOSED_USER', 1, 16.9000, 50, NULL, NULL, 'idem_page_pay_closed', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO afs_after_sale
+(id, after_sale_no, order_id, order_no, user_id, city_id, station_id, after_sale_type, status, apply_reason, refund_amount, responsibility_type, create_time, update_time, is_deleted)
+VALUES
+(806230, 'AFS_PAGE_WAIT_AUDIT', 806105, 'ORD_PAGE_WAIT_PICKUP_FIXED', 740001, 440100, 720001, 1, 10, '页面待审核售后', 29.9000, 1, NOW(), NOW(), 0),
+(806231, 'AFS_PAGE_WAIT_RETURN', 806106, 'ORD_PAGE_PICKED_FIXED', 740001, 440100, 720001, 2, 20, '页面待退货售后', 16.9000, 2, NOW(), NOW(), 0),
+(806232, 'AFS_PAGE_WAIT_REFUND', 806108, 'ORD_PAGE_REFUNDING', 740001, 440100, 720001, 1, 30, '页面待退款售后', 29.9000, 3, NOW(), NOW(), 0),
+(806233, 'AFS_PAGE_REFUND_SUCCESS', 806109, 'ORD_PAGE_PART_REFUND', 740001, 440100, 720001, 1, 40, '页面退款成功售后', 29.9000, 1, NOW(), NOW(), 0),
+(806234, 'AFS_PAGE_REFUND_FAILED', 806109, 'ORD_PAGE_PART_REFUND', 740001, 440100, 720001, 1, 50, '页面退款失败售后', 16.9000, 2, NOW(), NOW(), 0),
+(806235, 'AFS_PAGE_REJECTED', 806106, 'ORD_PAGE_PICKED_FIXED', 740001, 440100, 720001, 2, 60, '页面售后驳回', 16.9000, 1, NOW(), NOW(), 0),
+(806236, 'AFS_PAGE_CANCELLED', 806105, 'ORD_PAGE_WAIT_PICKUP_FIXED', 740001, 440100, 720001, 1, 70, '页面用户撤销售后', 29.9000, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO afs_after_sale_item
+(id, after_sale_id, order_item_id, sku_id, supplier_id, apply_qty, approved_qty, refund_amount, create_time, update_time, is_deleted)
+VALUES
+(806240, 806230, 806205, 806030, 610001, 1, 0, 29.9000, NOW(), NOW(), 0),
+(806241, 806231, 806206, 806031, 610001, 1, 1, 16.9000, NOW(), NOW(), 0),
+(806242, 806232, 806208, 806030, 610001, 1, 1, 29.9000, NOW(), NOW(), 0),
+(806243, 806233, 806209, 806030, 610001, 1, 1, 29.9000, NOW(), NOW(), 0),
+(806244, 806234, 806209, 806031, 610001, 1, 1, 16.9000, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO pay_refund_trade
+(id, refund_no, pay_no, order_id, after_sale_id, refund_amount, refund_status, channel_refund_no, refund_time, fail_reason, idempotent_key, create_time, update_time, is_deleted)
+VALUES
+(806250, 'RF_PAGE_WAIT', 'PAY_PAGE_SUCCESS', 806105, 806230, 29.9000, 10, NULL, NULL, NULL, 'idem_page_refund_wait', NOW(), NOW(), 0),
+(806251, 'RF_PAGE_PROCESSING', 'PAY_PAGE_SUCCESS', 806108, 806232, 29.9000, 20, 'WX_PAGE_RF_PROCESSING', NULL, NULL, 'idem_page_refund_processing', NOW(), NOW(), 0),
+(806252, 'RF_PAGE_SUCCESS', 'PAY_PAGE_SUCCESS', 806109, 806233, 29.9000, 30, 'WX_PAGE_RF_SUCCESS', NOW(), NULL, 'idem_page_refund_success', NOW(), NOW(), 0),
+(806253, 'RF_PAGE_FAILED', 'PAY_PAGE_SUCCESS', 806109, 806234, 16.9000, 40, 'WX_PAGE_RF_FAILED', NULL, '页面测试渠道失败', 'idem_page_refund_failed', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO afs_return_record
+(id, return_no, after_sale_id, order_item_id, sku_id, station_id, warehouse_id, return_qty, return_status, proof_file_json, create_time, update_time, is_deleted)
+VALUES
+(806260, 'AFS_RET_PAGE_WAIT', 806231, 806206, 806031, 720001, 50001, 1, 10, JSON_ARRAY('/mock/return/page-wait.jpg'), NOW(), NOW(), 0),
+(806261, 'AFS_RET_PAGE_DONE', 806233, 806209, 806030, 720001, 50001, 1, 20, JSON_ARRAY('/mock/return/page-done.jpg'), NOW(), NOW(), 0),
+(806262, 'AFS_RET_PAGE_CANCEL', 806235, 806206, 806031, 720001, 50001, 1, 30, JSON_ARRAY('/mock/return/page-cancel.jpg'), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO usr_user_favorite
+(id, user_id, product_id, sku_id, station_id, status, create_time, update_time, is_deleted)
+VALUES
+(806270, 740001, 806020, 806030, 720001, 1, NOW(), NOW(), 0),
+(806271, 740001, 806021, 806031, 720001, 2, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO usr_browse_history
+(id, user_id, product_id, sku_id, station_id, browse_time, create_time, update_time, is_deleted)
+VALUES
+(806272, 740001, 806020, 806030, 720001, DATE_SUB(NOW(), INTERVAL 10 MINUTE), NOW(), NOW(), 0),
+(806273, 740001, 806021, 806031, 720001, DATE_SUB(NOW(), INTERVAL 20 MINUTE), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO usr_comment
+(id, comment_no, user_id, order_id, order_item_id, product_id, sku_id, station_id, score, content, image_json, responsibility_type, status, city_id, create_time, update_time, is_deleted)
+VALUES
+(806280, 'CMT_PAGE_SHOW_GOOD', 740001, 806106, 806206, 806020, 806030, 720001, 5, '页面覆盖评价：鲜橙很甜，提货顺利', JSON_ARRAY('/mock/comment/page-good.jpg'), 1, 1, 440100, NOW(), NOW(), 0),
+(806281, 'CMT_PAGE_SHOW_NORMAL', 740001, 806109, 806209, 806020, 806030, 720001, 4, '页面覆盖评价：包装完整', JSON_ARRAY('/mock/comment/page-normal.jpg'), 1, 1, 440100, NOW(), NOW(), 0),
+(806282, 'CMT_PAGE_HIDE', 740001, 806108, 806208, 806020, 806030, 720001, 2, '页面覆盖隐藏评价', NULL, 2, 2, 440100, NOW(), NOW(), 0),
+(806283, 'CMT_PAGE_DELETE', 740001, 806107, 806207, 806021, 806031, 720001, 1, '页面覆盖删除评价', NULL, 3, 3, 440100, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO pur_purchase_order
+(id, purchase_no, source_type, period_id, supplier_id, warehouse_id, region_id, city_id, delivery_date, purchase_status, audit_status, create_account_id, create_reason, expected_arrival_time, create_time, update_time, is_deleted)
+VALUES
+(806300, 'PUR_PAGE_610_WAIT_AUDIT', 1, 806041, 610001, 50001, 440000, 440100, CURDATE(), 10, 10, 700003, '供应商工作台待审核', DATE_ADD(NOW(), INTERVAL 3 HOUR), NOW(), NOW(), 0),
+(806301, 'PUR_PAGE_610_AUDIT_PASS', 2, 806041, 610001, 50001, 440000, 440100, CURDATE(), 20, 20, 700003, '供应商工作台审核通过', DATE_ADD(NOW(), INTERVAL 4 HOUR), NOW(), NOW(), 0),
+(806302, 'PUR_PAGE_610_WAIT_DELIVERY', 2, 806041, 610001, 50001, 440000, 440100, CURDATE(), 30, 20, 700003, '供应商工作台待发货', DATE_ADD(NOW(), INTERVAL 5 HOUR), NOW(), NOW(), 0),
+(806303, 'PUR_PAGE_610_DELIVERING', 4, 806041, 610001, 50001, 440000, 440100, CURDATE(), 40, 20, 806010, '供应商工作台送货中', DATE_ADD(NOW(), INTERVAL 2 HOUR), NOW(), NOW(), 0),
+(806304, 'PUR_PAGE_610_RECEIVED', 5, 806041, 610001, 50001, 440000, 440100, CURDATE(), 50, 20, 700003, '供应商工作台已收货', DATE_SUB(NOW(), INTERVAL 2 HOUR), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO pur_purchase_item
+(id, purchase_id, purchase_no, product_id, sku_id, supplier_id, warehouse_id, apply_qty, purchase_qty, received_qty, rejected_qty, purchase_price, status, create_time, update_time, is_deleted)
+VALUES
+(806310, 806300, 'PUR_PAGE_610_WAIT_AUDIT', 806020, 806030, 610001, 50001, 120, 120, 0, 0, 18.0000, 1, NOW(), NOW(), 0),
+(806311, 806301, 'PUR_PAGE_610_AUDIT_PASS', 806021, 806031, 610001, 50001, 90, 90, 0, 0, 10.0000, 1, NOW(), NOW(), 0),
+(806312, 806302, 'PUR_PAGE_610_WAIT_DELIVERY', 806020, 806030, 610001, 50001, 160, 160, 0, 0, 18.0000, 1, NOW(), NOW(), 0),
+(806313, 806303, 'PUR_PAGE_610_DELIVERING', 806020, 806030, 610001, 50001, 180, 180, 0, 0, 18.0000, 1, NOW(), NOW(), 0),
+(806314, 806304, 'PUR_PAGE_610_RECEIVED', 806020, 806030, 610001, 50001, 200, 200, 190, 10, 18.0000, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO pur_delivery_order
+(id, delivery_no, purchase_id, purchase_no, supplier_id, warehouse_id, expected_arrival_time, arrival_proof_json, contact_name, contact_mobile, vehicle_no, status, create_time, update_time, is_deleted)
+VALUES
+(806320, 'PDEL_PAGE_610_WAIT', 806302, 'PUR_PAGE_610_WAIT_DELIVERY', 610001, 50001, DATE_ADD(CURDATE(), INTERVAL 10 HOUR), NULL, '页面供应商送货联系人', '13800006102', '粤A-P6101', 10, NOW(), NOW(), 0),
+(806321, 'PDEL_PAGE_610_ONROAD', 806303, 'PUR_PAGE_610_DELIVERING', 610001, 50001, DATE_ADD(CURDATE(), INTERVAL 11 HOUR), JSON_OBJECT('photo', '/mock/pur/page-onroad.jpg'), '页面供应商送货联系人', '13800006102', '粤A-P6102', 20, NOW(), NOW(), 0),
+(806322, 'PDEL_PAGE_610_ARRIVED', 806303, 'PUR_PAGE_610_DELIVERING', 610001, 50001, DATE_ADD(CURDATE(), INTERVAL 12 HOUR), JSON_OBJECT('photo', '/mock/pur/page-arrived.jpg'), '页面供应商送货联系人', '13800006102', '粤A-P6103', 30, NOW(), NOW(), 0),
+(806323, 'PDEL_PAGE_610_RECEIVED', 806304, 'PUR_PAGE_610_RECEIVED', 610001, 50001, DATE_SUB(NOW(), INTERVAL 2 HOUR), JSON_OBJECT('photo', '/mock/pur/page-received.jpg'), '页面供应商送货联系人', '13800006102', '粤A-P6104', 40, NOW(), NOW(), 0),
+(806324, 'PDEL_PAGE_610_CLOSED', 806300, 'PUR_PAGE_610_WAIT_AUDIT', 610001, 50001, DATE_ADD(CURDATE(), INTERVAL 1 DAY), NULL, '页面供应商送货联系人', '13800006102', '粤A-P6105', 50, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO pur_delivery_item
+(id, delivery_id, purchase_item_id, sku_id, delivery_qty, received_qty, diff_qty, create_time, update_time, is_deleted)
+VALUES
+(806330, 806320, 806312, 806030, 160, 0, 0, NOW(), NOW(), 0),
+(806331, 806321, 806313, 806030, 180, 0, 0, NOW(), NOW(), 0),
+(806332, 806322, 806313, 806030, 180, 0, 0, NOW(), NOW(), 0),
+(806333, 806323, 806314, 806030, 200, 190, 10, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_inbound_order
+(id, inbound_no, source_type, source_no, purchase_id, delivery_id, supplier_id, warehouse_id, status, receive_account_id, receive_time, create_time, update_time, is_deleted)
+VALUES
+(806400, 'INB_PAGE_STATUS_10', 1, 'PDEL_PAGE_610_WAIT', 806302, 806320, 610001, 50001, 10, NULL, NULL, NOW(), NOW(), 0),
+(806401, 'INB_PAGE_STATUS_20', 1, 'PDEL_PAGE_610_ARRIVED', 806303, 806322, 610001, 50001, 20, NULL, NULL, NOW(), NOW(), 0),
+(806402, 'INB_PAGE_STATUS_30', 1, 'PDEL_PAGE_610_ARRIVED', 806303, 806322, 610001, 50001, 30, 700008, NULL, NOW(), NOW(), 0),
+(806403, 'INB_PAGE_STATUS_40', 1, 'PDEL_PAGE_610_RECEIVED', 806304, 806323, 610001, 50001, 40, 700008, DATE_SUB(NOW(), INTERVAL 1 HOUR), NOW(), NOW(), 0),
+(806404, 'INB_PAGE_STATUS_50', 1, 'PDEL_PAGE_610_RECEIVED', 806304, 806323, 610001, 50001, 50, 700008, DATE_SUB(NOW(), INTERVAL 2 HOUR), NOW(), NOW(), 0),
+(806405, 'INB_PAGE_STATUS_60', 1, 'PDEL_PAGE_610_RECEIVED', 806304, 806323, 610001, 50001, 60, 700008, DATE_SUB(NOW(), INTERVAL 3 HOUR), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_inbound_item
+(id, inbound_id, sku_id, supplier_id, expected_qty, received_qty, rejected_qty, damaged_qty, batch_no, production_date, shelf_life_days, diff_reason, create_time, update_time, is_deleted)
+VALUES
+(806410, 806400, 806030, 610001, 160, 0, 0, 0, 'BATCH_PAGE_INB_10', CURDATE(), 10, NULL, NOW(), NOW(), 0),
+(806411, 806401, 806030, 610001, 180, 0, 0, 0, 'BATCH_PAGE_INB_20', CURDATE(), 10, NULL, NOW(), NOW(), 0),
+(806412, 806402, 806030, 610001, 180, 80, 0, 0, 'BATCH_PAGE_INB_30', CURDATE(), 10, '收货中', NOW(), NOW(), 0),
+(806413, 806403, 806030, 610001, 200, 190, 5, 5, 'BATCH_PAGE_INB_40', CURDATE(), 10, '少收10份', NOW(), NOW(), 0),
+(806414, 806405, 806030, 610001, 200, 190, 5, 5, 'BATCH_PAGE_INB_60', CURDATE(), 10, '已上架样例', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_receive_record
+(id, receive_no, inbound_id, inbound_item_id, sku_id, receive_qty, reject_qty, diff_qty, receive_account_id, quality_status, remark, create_time, update_time, is_deleted)
+VALUES
+(806420, 'RCV_PAGE_PASS', 806403, 806413, 806030, 190, 0, 10, 700008, 1, '页面质检合格', NOW(), NOW(), 0),
+(806421, 'RCV_PAGE_PART', 806402, 806412, 806030, 80, 0, 100, 700008, 2, '页面部分收货', NOW(), NOW(), 0),
+(806422, 'RCV_PAGE_REJECT', 806403, 806413, 806030, 0, 5, 5, 700008, 3, '页面拒收破损', NOW(), NOW(), 0),
+(806423, 'RCV_PAGE_CONFIRM', 806401, 806411, 806030, 0, 0, 0, 700008, 4, '页面待确认', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_quality_file
+(id, quality_no, inbound_id, sku_id, quality_result, file_asset_id, remark, create_time, update_time, is_deleted)
+VALUES
+(806430, 'QUAL_FILE_PAGE_PASS', 806403, 806030, 1, 710204, '页面合格质检图片', NOW(), NOW(), 0),
+(806431, 'QUAL_FILE_PAGE_PART', 806402, 806030, 2, 710204, '页面部分合格质检图片', NOW(), NOW(), 0),
+(806432, 'QUAL_FILE_PAGE_REJECT', 806403, 806030, 3, 710204, '页面拒收质检图片', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_putaway_task
+(id, putaway_no, inbound_id, sku_id, warehouse_id, from_zone_id, target_zone_id, target_location_id, putaway_qty, actual_qty, status, assign_account_id, complete_time, create_time, update_time, is_deleted)
+VALUES
+(806440, 'PUT_PAGE_STATUS_10', 806403, 806030, 50001, 51001, 51003, 780003, 50, 0, 10, 700008, NULL, NOW(), NOW(), 0),
+(806441, 'PUT_PAGE_STATUS_20', 806404, 806030, 50001, 51002, 51003, 780003, 60, 20, 20, 700008, NULL, NOW(), NOW(), 0),
+(806442, 'PUT_PAGE_STATUS_30', 806405, 806030, 50001, 51002, 51003, 780003, 70, 70, 30, 700008, NOW(), NOW(), NOW(), 0),
+(806443, 'PUT_PAGE_STATUS_40', 806401, 806030, 50001, 51001, 51003, 780003, 30, 0, 40, 700008, NULL, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_inventory
+(id, warehouse_id, zone_id, location_id, sku_id, supplier_id, batch_no, production_date, shelf_life_days, in_stock_qty, locked_qty, available_qty, frozen_qty, inventory_status, version, create_time, update_time, is_deleted)
+VALUES
+(806450, 50001, 51002, 780002, 806030, 610001, 'BATCH_PAGE_INV_10', CURDATE(), 10, 50, 0, 0, 0, 10, 1, NOW(), NOW(), 0),
+(806451, 50001, 51003, 780003, 806030, 610001, 'BATCH_PAGE_INV_20', CURDATE(), 10, 200, 20, 180, 0, 20, 1, NOW(), NOW(), 0),
+(806452, 50001, 51004, 780004, 806030, 610001, 'BATCH_PAGE_INV_30', CURDATE(), 10, 40, 10, 30, 0, 30, 1, NOW(), NOW(), 0),
+(806453, 50001, 51006, 780006, 806031, 610001, 'BATCH_PAGE_INV_40', CURDATE(), 5, 20, 0, 20, 0, 40, 1, NOW(), NOW(), 0),
+(806454, 50001, 51001, 780001, 806031, 610001, 'BATCH_PAGE_INV_50', CURDATE(), 5, 10, 0, 0, 10, 50, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_inventory_lock
+(id, lock_no, warehouse_id, inventory_id, sku_id, biz_type, biz_no, lock_qty, release_qty, lock_status, create_time, update_time, is_deleted)
+VALUES
+(806460, 'LOCK_PAGE_STATUS_10', 50001, 806451, 806030, 1, 'ORD_PAGE_WAIT_PICK', 10, 0, 10, NOW(), NOW(), 0),
+(806461, 'LOCK_PAGE_STATUS_20', 50001, 806451, 806030, 1, 'ORD_PAGE_CLOSED_USER', 8, 8, 20, NOW(), NOW(), 0),
+(806462, 'LOCK_PAGE_STATUS_30', 50001, 806451, 806030, 2, 'WAVE_PAGE_STATUS_40', 12, 0, 30, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_inventory_log
+(id, log_no, warehouse_id, zone_id, location_id, sku_id, batch_no, change_type, before_qty, change_qty, after_qty, biz_type, biz_no, operator_account_id, remark, create_time, update_time, is_deleted)
+VALUES
+(806470, 'INV_LOG_PAGE_INBOUND', 50001, 51001, 780001, 806030, 'BATCH_PAGE_INV_10', 1, 0, 50, 50, 'inbound', 'INB_PAGE_STATUS_40', 700008, '页面入库流水', NOW(), NOW(), 0),
+(806471, 'INV_LOG_PAGE_PUTAWAY', 50001, 51003, 780003, 806030, 'BATCH_PAGE_INV_20', 2, 50, 150, 200, 'putaway', 'PUT_PAGE_STATUS_30', 700008, '页面上架流水', NOW(), NOW(), 0),
+(806472, 'INV_LOG_PAGE_LOCK', 50001, 51003, 780003, 806030, 'BATCH_PAGE_INV_20', 3, 200, -20, 180, 'lock', 'LOCK_PAGE_STATUS_10', 700009, '页面锁定流水', NOW(), NOW(), 0),
+(806473, 'INV_LOG_PAGE_RELEASE', 50001, 51003, 780003, 806030, 'BATCH_PAGE_INV_20', 4, 180, 8, 188, 'release', 'LOCK_PAGE_STATUS_20', 700009, '页面释放流水', NOW(), NOW(), 0),
+(806474, 'INV_LOG_PAGE_OUTBOUND', 50001, 51003, 780003, 806030, 'BATCH_PAGE_INV_20', 5, 188, -12, 176, 'outbound', 'OUT_PAGE_STATUS_20', 700010, '页面出库扣减流水', NOW(), NOW(), 0),
+(806475, 'INV_LOG_PAGE_RETURN', 50001, 51006, 780006, 806031, 'BATCH_PAGE_INV_40', 6, 0, 20, 20, 'return', 'RET_PAGE_STATUS_20', 700011, '页面回仓流水', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_wave_batch
+(id, wave_no, period_id, warehouse_id, line_id, delivery_date, required_qty, locked_qty, status, create_account_id, create_time, update_time, is_deleted)
+VALUES
+(806480, 'WAVE_PAGE_STATUS_10', 806041, 50001, 780201, CURDATE(), 60, 0, 10, 700007, NOW(), NOW(), 0),
+(806481, 'WAVE_PAGE_STATUS_20', 806041, 50001, 780201, CURDATE(), 70, 70, 20, 700007, NOW(), NOW(), 0),
+(806482, 'WAVE_PAGE_STATUS_30', 806041, 50001, 780201, CURDATE(), 80, 80, 30, 700007, NOW(), NOW(), 0),
+(806483, 'WAVE_PAGE_STATUS_40', 806041, 50001, 780201, CURDATE(), 90, 90, 40, 700007, NOW(), NOW(), 0),
+(806484, 'WAVE_PAGE_STATUS_50', 806041, 50001, 780201, CURDATE(), 100, 95, 50, 700007, NOW(), NOW(), 0),
+(806485, 'WAVE_PAGE_STATUS_60', 806041, 50001, 780201, CURDATE(), 50, 0, 60, 700007, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_pick_task
+(id, pick_no, wave_id, warehouse_id, line_id, assign_account_id, required_qty, actual_qty, shortage_qty, status, complete_time, create_time, update_time, is_deleted)
+VALUES
+(806490, 'PICK_PAGE_STATUS_10', 806480, 50001, 780201, 700009, 60, 0, 0, 10, NULL, NOW(), NOW(), 0),
+(806491, 'PICK_PAGE_STATUS_20', 806481, 50001, 780201, 700009, 70, 30, 0, 20, NULL, NOW(), NOW(), 0),
+(806492, 'PICK_PAGE_STATUS_30', 806483, 50001, 780201, 700009, 90, 90, 0, 30, NOW(), NOW(), NOW(), 0),
+(806493, 'PICK_PAGE_STATUS_40', 806484, 50001, 780201, 700009, 100, 95, 5, 40, NOW(), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_pick_item
+(id, pick_id, sku_id, inventory_id, location_id, required_qty, actual_qty, shortage_qty, diff_reason, create_time, update_time, is_deleted)
+VALUES
+(806500, 806490, 806030, 806451, 780003, 60, 0, 0, NULL, NOW(), NOW(), 0),
+(806501, 806491, 806030, 806451, 780003, 70, 30, 0, NULL, NOW(), NOW(), 0),
+(806502, 806492, 806030, 806451, 780003, 90, 90, 0, NULL, NOW(), NOW(), 0),
+(806503, 806493, 806030, 806451, 780003, 100, 95, 5, '页面测试少拣5份', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_loading_order
+(id, loading_no, wave_id, warehouse_id, line_id, driver_account_id, delivery_date, required_qty, actual_qty, status, load_account_id, load_time, outbound_account_id, outbound_time, create_time, update_time, is_deleted)
+VALUES
+(806510, 'LOAD_PAGE_STATUS_10', 806480, 50001, 780201, 700011, '2026-06-26', 60, 0, 10, NULL, NULL, NULL, NULL, NOW(), NOW(), 0),
+(806511, 'LOAD_PAGE_STATUS_20', 806481, 50001, 780201, 700011, '2026-06-26', 70, 70, 20, 700010, DATE_SUB(NOW(), INTERVAL 1 HOUR), NULL, NULL, NOW(), NOW(), 0),
+(806512, 'LOAD_PAGE_STATUS_30', 806483, 50001, 780201, 700011, '2026-06-26', 90, 90, 30, 700010, DATE_SUB(NOW(), INTERVAL 2 HOUR), 700007, DATE_SUB(NOW(), INTERVAL 90 MINUTE), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_loading_item
+(id, loading_id, station_id, sku_id, required_qty, actual_qty, outbound_qty, create_time, update_time, is_deleted)
+VALUES
+(806520, 806510, 720001, 806030, 30, 0, 0, NOW(), NOW(), 0),
+(806521, 806511, 720001, 806030, 40, 40, 0, NOW(), NOW(), 0),
+(806522, 806512, 720001, 806030, 50, 50, 50, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_outbound_order
+(id, outbound_no, loading_id, warehouse_id, line_id, outbound_qty, status, outbound_account_id, outbound_time, idempotent_key, create_time, update_time, is_deleted)
+VALUES
+(806530, 'OUT_PAGE_STATUS_10', 806511, 50001, 780201, 0, 10, 700007, NOW(), 'idem_page_out_10', NOW(), NOW(), 0),
+(806531, 'OUT_PAGE_STATUS_20', 806512, 50001, 780201, 90, 20, 700007, DATE_SUB(NOW(), INTERVAL 90 MINUTE), 'idem_page_out_20', NOW(), NOW(), 0),
+(806532, 'OUT_PAGE_STATUS_30', 806510, 50001, 780201, 0, 30, 700007, NOW(), 'idem_page_out_30', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_delivery_order
+(id, delivery_no, outbound_id, loading_id, warehouse_id, line_id, driver_account_id, delivery_date, status, start_time, complete_time, create_time, update_time, is_deleted)
+VALUES
+(806540, 'DELIVERY_PAGE_STATUS_10', 806530, 806511, 50001, 780201, 700011, '2026-06-26', 10, NULL, NULL, NOW(), NOW(), 0),
+(806541, 'DELIVERY_PAGE_STATUS_20', 806531, 806512, 50001, 780201, 700011, '2026-06-26', 20, DATE_SUB(NOW(), INTERVAL 1 HOUR), NULL, NOW(), NOW(), 0),
+(806542, 'DELIVERY_PAGE_STATUS_30', 806531, 806512, 50001, 780201, 700011, '2026-06-26', 30, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_SUB(NOW(), INTERVAL 30 MINUTE), NOW(), NOW(), 0),
+(806543, 'DELIVERY_PAGE_STATUS_40', 806531, 806512, 50001, 780201, 700011, '2026-06-26', 40, DATE_SUB(NOW(), INTERVAL 2 HOUR), NULL, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_delivery_station
+(id, delivery_id, station_id, delivery_sort, status, arrive_time, complete_time, remark, create_time, update_time, is_deleted)
+VALUES
+(806550, 806540, 720001, 1, 10, NULL, NULL, '页面待配送', NOW(), NOW(), 0),
+(806551, 806541, 720001, 1, 20, DATE_SUB(NOW(), INTERVAL 30 MINUTE), NULL, '页面已到达待交接', NOW(), NOW(), 0),
+(806552, 806542, 720001, 1, 30, DATE_SUB(NOW(), INTERVAL 1 HOUR), DATE_SUB(NOW(), INTERVAL 20 MINUTE), '页面交接完成', NOW(), NOW(), 0),
+(806553, 806543, 720001, 1, 40, NULL, NULL, '页面无法送达', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_driver_sign_record
+(id, sign_no, delivery_id, station_id, driver_account_id, sign_type, longitude, latitude, remark, create_time, update_time, is_deleted)
+VALUES
+(806560, 'SIGN_PAGE_ARRIVE', 806541, 720001, 700011, 1, 113.320500, 23.120500, '页面司机到达', NOW(), NOW(), 0),
+(806561, 'SIGN_PAGE_DONE', 806542, 720001, 700011, 2, 113.320600, 23.120600, '页面交接完成', NOW(), NOW(), 0),
+(806562, 'SIGN_PAGE_FAIL', 806543, 720001, 700011, 3, 113.320700, 23.120700, '页面无法送达', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_return_handover
+(id, return_no, delivery_id, station_id, sku_id, warehouse_id, return_qty, reason_type, driver_account_id, supervisor_account_id, status, confirm_time, remark, create_time, update_time, is_deleted)
+VALUES
+(806570, 'RET_PAGE_STATUS_10', 806543, 720001, 806030, 50001, 3, 1, 700011, NULL, 10, NULL, '页面待回仓确认', NOW(), NOW(), 0),
+(806571, 'RET_PAGE_STATUS_20', 806542, 720001, 806031, 50001, 2, 2, 700011, 700007, 20, NOW(), '页面已回仓确认', NOW(), NOW(), 0),
+(806572, 'RET_PAGE_STATUS_30', 806543, 720001, 806030, 50001, 1, 3, 700011, NULL, 30, NULL, '页面待主管处理', NOW(), NOW(), 0),
+(806573, 'RET_PAGE_STATUS_40', 806542, 720001, 806031, 50001, 1, 1, 700011, 700007, 40, DATE_SUB(NOW(), INTERVAL 30 MINUTE), '页面关闭', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_stocktake_order
+(id, stocktake_no, warehouse_id, sku_id, book_qty, actual_qty, diff_qty, status, create_account_id, audit_account_id, create_time, update_time, is_deleted)
+VALUES
+(806580, 'STK_PAGE_STATUS_10', 50001, 806030, 200, 0, 0, 10, 700007, NULL, NOW(), NOW(), 0),
+(806581, 'STK_PAGE_STATUS_20', 50001, 806030, 200, 198, -2, 20, 700007, NULL, NOW(), NOW(), 0),
+(806582, 'STK_PAGE_STATUS_30', 50001, 806030, 200, 198, -2, 30, 700007, 700007, NOW(), NOW(), 0),
+(806583, 'STK_PAGE_STATUS_40', 50001, 806031, 80, 80, 0, 40, 700007, 700007, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO wms_operation_log
+(id, log_no, warehouse_id, account_id, role_code, module_code, action_code, biz_type, biz_no, before_status, after_status, reason, result_status, create_time, update_time, is_deleted)
+VALUES
+(806590, 'WMS_LOG_PAGE_RECEIVE', 50001, 700008, 'wms_receiver', 'wms_inbound', 'receive', 'inbound', 'INB_PAGE_STATUS_40', 20, 40, '页面收货成功', 1, NOW(), NOW(), 0),
+(806591, 'WMS_LOG_PAGE_PICK_DIFF', 50001, 700009, 'wms_picker', 'wms_picking', 'pick_diff', 'pick', 'PICK_PAGE_STATUS_40', 20, 40, '页面拣货差异', 1, NOW(), NOW(), 0),
+(806592, 'WMS_LOG_PAGE_OUT_FAIL', 50001, 700010, 'wms_loader', 'wms_loading', 'outbound', 'loading', 'LOAD_PAGE_STATUS_20', 20, 20, '页面出库失败', 2, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO fin_account
+(id, account_no, subject_type, subject_id, available_amount, frozen_amount, deposit_amount, status, create_time, update_time, is_deleted)
+VALUES
+(806600, 'FIN_ACC_PAGE_SUPPLIER_610001', 1, 610001, 18000.0000, 1200.0000, 6000.0000, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO fin_account_flow
+(id, flow_no, account_id, subject_type, subject_id, flow_type, direction, amount, before_amount, after_amount, biz_no, remark, create_time, update_time, is_deleted)
+VALUES
+(806610, 'ACC_FLOW_PAGE_COMMISSION_IN', 790002, 2, 720001, 1, 1, 8.0000, 800.0000, 808.0000, 'COM_PAGE_STATION_WAIT', '页面佣金入账', NOW(), NOW(), 0),
+(806611, 'ACC_FLOW_PAGE_WITHDRAW_FREEZE', 790002, 2, 720001, 3, 2, 50.0000, 808.0000, 758.0000, 'WD_PAGE_WAIT', '页面提现冻结', NOW(), NOW(), 0),
+(806612, 'ACC_FLOW_PAGE_SUPPLIER_SETTLE', 806600, 1, 610001, 1, 1, 1000.0000, 18000.0000, 19000.0000, 'SETTLE_PAGE_610_ACCOUNTED', '页面供应商结算入账', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO fin_commission_detail
+(id, commission_no, order_id, order_item_id, subject_type, subject_id, supplier_id, station_id, commission_amount, status, create_time, update_time, is_deleted)
+VALUES
+(806620, 'COM_PAGE_STATION_WAIT', 806105, 806205, 1, 720001, 610001, 720001, 4.0000, 10, NOW(), NOW(), 0),
+(806621, 'COM_PAGE_LEADER_WAIT_SPLIT', 806106, 806206, 2, 730001, 610001, 720001, 5.0000, 20, NOW(), NOW(), 0),
+(806622, 'COM_PAGE_SUPPLIER_SPLIT', 806109, 806209, 3, 610001, 610001, 720001, 12.0000, 30, NOW(), NOW(), 0),
+(806623, 'COM_PAGE_STATION_DEDUCT', 806108, 806208, 1, 720001, 610001, 720001, 3.0000, 40, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO fin_split_flow
+(id, split_no, commission_id, order_id, subject_type, subject_id, split_amount, split_status, fail_reason, idempotent_key, create_time, update_time, is_deleted)
+VALUES
+(806630, 'SPLIT_PAGE_WAIT', 806621, 806106, 2, 730001, 5.0000, 10, NULL, 'idem_page_split_wait', NOW(), NOW(), 0),
+(806631, 'SPLIT_PAGE_PROCESSING', 806621, 806106, 2, 730001, 5.0000, 20, NULL, 'idem_page_split_processing', NOW(), NOW(), 0),
+(806632, 'SPLIT_PAGE_SUCCESS', 806622, 806109, 3, 610001, 12.0000, 30, NULL, 'idem_page_split_success', NOW(), NOW(), 0),
+(806633, 'SPLIT_PAGE_FAILED', 806623, 806108, 1, 720001, 3.0000, 40, '页面分账账户异常', 'idem_page_split_failed', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO fin_withdraw_apply
+(id, withdraw_no, account_id, subject_type, subject_id, withdraw_amount, receive_account_name, receive_account_no, audit_status, pay_status, audit_account_id, audit_time, audit_remark, create_time, update_time, is_deleted)
+VALUES
+(806640, 'WD_PAGE_WAIT', 790002, 2, 720001, 50.0000, '自提点负责人A', '622200806640', 10, 10, NULL, NULL, NULL, NOW(), NOW(), 0),
+(806641, 'WD_PAGE_PASS_PAYING', 790002, 2, 720001, 60.0000, '自提点负责人A', '622200806641', 20, 20, 700004, NOW(), '页面审核通过打款中', NOW(), NOW(), 0),
+(806642, 'WD_PAGE_SUCCESS', 790002, 2, 720001, 70.0000, '自提点负责人A', '622200806642', 20, 30, 700004, NOW(), '页面打款成功', NOW(), NOW(), 0),
+(806643, 'WD_PAGE_PAY_FAILED', 806600, 1, 610001, 200.0000, '页面固定供应商610001', '622200806643', 20, 40, 700004, NOW(), '页面银行退回', NOW(), NOW(), 0),
+(806644, 'WD_PAGE_REJECT', 790002, 2, 720001, 80.0000, '自提点负责人A', '622200806644', 30, 10, 700004, NOW(), '页面账户信息不一致', NOW(), NOW(), 0),
+(806645, 'WD_PAGE_CANCEL', 790003, 3, 730001, 90.0000, '测试团长A', '622200806645', 40, 10, NULL, NULL, '页面申请人撤回', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO fin_supplier_settlement
+(id, settlement_no, supplier_id, period_start_date, period_end_date, purchase_amount, diff_amount, payable_amount, status, create_time, update_time, is_deleted)
+VALUES
+(806650, 'SETTLE_PAGE_610_WAIT', 610001, '2026-06-01', '2026-06-30', 12000.0000, 0.0000, 12000.0000, 10, NOW(), NOW(), 0),
+(806651, 'SETTLE_PAGE_610_CONFIRM', 610001, '2026-06-01', '2026-06-30', 12000.0000, -200.0000, 11800.0000, 20, NOW(), NOW(), 0),
+(806652, 'SETTLE_PAGE_610_ACCOUNTED', 610001, '2026-06-01', '2026-06-30', 12000.0000, 0.0000, 12000.0000, 30, NOW(), NOW(), 0),
+(806653, 'SETTLE_PAGE_610_EXCEPTION', 610001, '2026-06-01', '2026-06-30', 12000.0000, 300.0000, 12300.0000, 40, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO fin_reconciliation_batch
+(id, reconcile_no, channel_type, reconcile_date, total_count, success_count, diff_count, total_amount, diff_amount, status, create_time, update_time, is_deleted)
+VALUES
+(806660, 'RECON_PAGE_WAIT', 1, CURDATE(), 0, 0, 0, 0.0000, 0.0000, 10, NOW(), NOW(), 0),
+(806661, 'RECON_PAGE_DOING', 1, CURDATE(), 80, 70, 10, 8000.0000, 88.0000, 20, NOW(), NOW(), 0),
+(806662, 'RECON_PAGE_DONE', 1, DATE_SUB(CURDATE(), INTERVAL 1 DAY), 80, 80, 0, 8000.0000, 0.0000, 30, NOW(), NOW(), 0),
+(806663, 'RECON_PAGE_EXCEPTION', 1, DATE_SUB(CURDATE(), INTERVAL 1 DAY), 80, 76, 4, 8000.0000, 40.0000, 40, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO op_todo
+(id, todo_no, todo_type, source_biz_type, source_biz_no, title, priority, process_role_code, process_account_id, city_id, supplier_id, warehouse_id, status, due_time, create_time, update_time, is_deleted)
+VALUES
+(806670, 'TODO_PAGE_STATUS_10', 1, 'purchase', 'PUR_PAGE_610_WAIT_AUDIT', '页面采购待审核', 1, 'buyer', 700003, 440100, 610001, 50001, 10, DATE_ADD(NOW(), INTERVAL 2 HOUR), NOW(), NOW(), 0),
+(806671, 'TODO_PAGE_STATUS_20', 2, 'after_sale', 'AFS_PAGE_WAIT_AUDIT', '页面售后处理中', 2, 'after_sale_operator', 700005, 440100, 610001, NULL, 20, DATE_ADD(NOW(), INTERVAL 4 HOUR), NOW(), NOW(), 0),
+(806672, 'TODO_PAGE_STATUS_30', 3, 'station_leave', 'LEAVE_TEST_PASS', '页面休假已处理', 2, 'city_operator', 700002, 440100, NULL, NULL, 30, DATE_SUB(NOW(), INTERVAL 1 HOUR), NOW(), NOW(), 0),
+(806673, 'TODO_PAGE_STATUS_40', 4, 'supplier', 'QUAL_PAGE_SUP_REJECT', '页面资质驳回待办', 3, 'platform_operator', 700001, 440100, 610001, NULL, 40, DATE_SUB(NOW(), INTERVAL 1 HOUR), NOW(), NOW(), 0),
+(806674, 'TODO_PAGE_STATUS_50', 5, 'export', 'RPT_EXP_PAGE_FAILED', '页面导出取消待办', 3, 'platform_operator', 700001, 440100, NULL, NULL, 50, NULL, NOW(), NOW(), 0),
+(806675, 'TODO_PAGE_STATUS_60', 6, 'order', 'ORD_PAGE_WAIT_PAY', '页面订单超时待办', 1, 'city_operator', 700002, 440100, NULL, NULL, 60, DATE_SUB(NOW(), INTERVAL 30 MINUTE), NOW(), NOW(), 0),
+(806676, 'TODO_PAGE_STATUS_70', 7, 'exception', 'EXC_PAGE_STATUS_40', '页面待办关闭样例', 3, 'platform_operator', 700001, 440100, NULL, NULL, 70, NULL, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO op_exception_record
+(id, exception_no, exception_type, priority, source_module, source_biz_type, source_biz_no, city_id, supplier_id, station_id, warehouse_id, owner_account_id, status, title, description, create_time, update_time, is_deleted)
+VALUES
+(806680, 'EXC_PAGE_STATUS_10', 1, 1, 'wms', 'pick', 'PICK_PAGE_STATUS_40', 440100, 610001, 720001, 50001, 700007, 10, '页面拣货差异待处理', '页面拣货数量不足', NOW(), NOW(), 0),
+(806681, 'EXC_PAGE_STATUS_20', 2, 2, 'pay', 'refund', 'RF_PAGE_FAILED', 440100, 610001, 720001, NULL, 700004, 20, '页面退款失败处理中', '页面渠道退款失败', NOW(), NOW(), 0),
+(806682, 'EXC_PAGE_STATUS_30', 3, 3, 'supplier', 'settlement', 'SETTLE_PAGE_610_EXCEPTION', 440100, 610001, NULL, NULL, 700003, 30, '页面结算差异已处理', '页面差异已确认', NOW(), NOW(), 0),
+(806683, 'EXC_PAGE_STATUS_40', 4, 2, 'delivery', 'station', 'DELIVERY_PAGE_STATUS_40', 440100, NULL, 720001, 50001, 700007, 40, '页面配送异常关闭', '页面无法送达已关闭', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO msg_record
+(id, msg_no, template_code, receiver_type, receiver_id, channel_type, title, content, biz_type, biz_no, read_status, send_status, fail_reason, create_time, update_time, is_deleted)
+VALUES
+(806690, 'MSG_PAGE_USER_WAIT', 'TPL_ORDER_PAY_REMIND', 1, 740001, 2, '页面用户待发送消息', 'ORD_PAGE_WAIT_PAY 即将关闭', 'order', 'ORD_PAGE_WAIT_PAY', 0, 10, NULL, NOW(), NOW(), 0),
+(806691, 'MSG_PAGE_USER_SUCCESS_UNREAD', 'TPL_ORDER_PAY_REMIND', 1, 740001, 1, '页面用户未读成功消息', '页面订单已到自提点', 'order', 'ORD_PAGE_WAIT_PICKUP_FIXED', 0, 20, NULL, NOW(), NOW(), 0),
+(806692, 'MSG_PAGE_USER_SUCCESS_READ', 'TPL_ORDER_PAY_REMIND', 1, 740001, 1, '页面用户已读成功消息', '页面订单已完成', 'order', 'ORD_PAGE_PICKED_FIXED', 1, 20, NULL, NOW(), NOW(), 0),
+(806693, 'MSG_PAGE_USER_FAILED', 'TPL_ORDER_PAY_REMIND', 1, 740001, 2, '页面用户发送失败消息', '页面公众号发送失败', 'order', 'ORD_PAGE_CLOSED_USER', 0, 30, '用户未关注公众号', NOW(), NOW(), 0),
+(806694, 'MSG_PAGE_STATION_UNREAD', 'TPL_STATION_ARRIVAL', 4, 720001, 1, '页面站点未读消息', '页面到货待接收', 'delivery_station', 'DELIVERY_PAGE_STATUS_20', 0, 20, NULL, NOW(), NOW(), 0),
+(806695, 'MSG_PAGE_STATION_READ', 'TPL_STATION_ARRIVAL', 4, 720001, 1, '页面站点已读消息', '页面到货已完成', 'delivery_station', 'DELIVERY_PAGE_STATUS_30', 1, 20, NULL, NOW(), NOW(), 0),
+(806696, 'MSG_PAGE_SUPPLIER_UNREAD', 'TPL_SUPPLIER_DELIVERY', 2, 610001, 1, '页面供应商送货提醒', 'PDEL_PAGE_610_WAIT 待送货', 'purchase_delivery', 'PDEL_PAGE_610_WAIT', 0, 20, NULL, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO rpt_snapshot
+(id, snapshot_no, report_type, stat_date, city_id, supplier_id, station_id, warehouse_id, metric_json, status, create_time, update_time, is_deleted)
+VALUES
+(806700, 'RPT_PAGE_CITY_ACTIVE', 1, CURDATE(), 440100, NULL, NULL, NULL, JSON_OBJECT('order_count', 20, 'pay_amount', 899.0000), 1, NOW(), NOW(), 0),
+(806701, 'RPT_PAGE_SUPPLIER_ACTIVE', 2, CURDATE(), 440100, 610001, NULL, NULL, JSON_OBJECT('purchase_qty', 750, 'received_qty', 190), 1, NOW(), NOW(), 0),
+(806702, 'RPT_PAGE_STATION_ACTIVE', 3, '2026-06-26', 440100, NULL, 720001, NULL, JSON_OBJECT('pickup_count', 3, 'commission', 9.0000), 1, NOW(), NOW(), 0),
+(806703, 'RPT_PAGE_WAREHOUSE_INVALID', 4, DATE_SUB(CURDATE(), INTERVAL 1 DAY), 440100, NULL, NULL, 50001, JSON_OBJECT('pick_count', 8, 'diff_count', 2), 2, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO rpt_export_task
+(id, export_task_no, report_type, account_id, filter_json, file_asset_id, status, fail_reason, create_time, update_time, is_deleted)
+VALUES
+(806710, 'RPT_EXP_PAGE_CREATING', 1, 700002, JSON_OBJECT('city_id', 440100), NULL, 10, NULL, NOW(), NOW(), 0),
+(806711, 'RPT_EXP_PAGE_DONE', 2, 700004, JSON_OBJECT('supplier_id', 610001), 710203, 20, NULL, NOW(), NOW(), 0),
+(806712, 'RPT_EXP_PAGE_FAILED', 4, 700007, JSON_OBJECT('warehouse_id', 50001), NULL, 30, '页面导出超时', NOW(), NOW(), 0);
+
+INSERT IGNORE INTO search_suggest_word
+(id, word, source_type, product_id, city_id, hit_count, status, create_time, update_time, is_deleted)
+VALUES
+(806720, '鲜橙', 1, 806020, 440100, 180, 1, NOW(), NOW(), 0),
+(806721, '页面葡萄', 1, 806021, 440100, 68, 1, NOW(), NOW(), 0),
+(806722, '页面停用词', 2, NULL, 440100, 3, 2, NOW(), NOW(), 0);
+
+-- ----------------------------
+-- 操作类型：修正
+-- 涉及表：sys_region, sys_city, wms_warehouse, wms_zone, sup_supplier, sup_supplier_contact, sup_contract, usr_station, usr_user, usr_pickup_person, usr_leader, usr_station_leave, sys_account, sys_account_subject, prd_category, prd_product, prd_sku, prd_stock_spec, prd_rank_tag, sale_publish_period, ord_order, ord_order_item, ord_fulfillment_track, pay_refund_trade, afs_after_sale, pur_purchase_order, pur_delivery_order, wms_receive_record, wms_quality_file, wms_pick_item, wms_delivery_station, wms_driver_sign_record, wms_return_handover, wms_operation_log, fin_account_flow, fin_withdraw_apply, fin_supplier_settlement, op_todo, op_exception_record, msg_template, msg_record, rpt_export_task, search_suggest_word
+-- 日期：2026-06-27
+-- 操作人：codex
+-- 用途说明：修复已导入测试数据中文乱码，覆盖用户小程序、运营后台、仓库后台和角色工作台常用展示字段
+-- ----------------------------
+UPDATE sys_region SET region_name = '华南大区', update_time = NOW() WHERE id = 440000;
+
+UPDATE sys_city
+SET city_name = CASE id
+    WHEN 440100 THEN '广州市'
+    WHEN 440300 THEN '深圳市'
+    WHEN 440600 THEN '佛山市'
+    WHEN 441900 THEN '东莞市'
+    ELSE city_name
+END,
+update_time = NOW()
+WHERE id IN (440100, 440300, 440600, 441900);
+
+UPDATE wms_warehouse SET warehouse_name = '广州中心仓', update_time = NOW() WHERE id = 50001;
+
+UPDATE wms_zone
+SET zone_name = CASE id
+    WHEN 51001 THEN '收货暂存区'
+    WHEN 51002 THEN '待上架区'
+    WHEN 51003 THEN '可售存储区'
+    WHEN 51004 THEN '拣货暂存区'
+    WHEN 51005 THEN '装车暂存区'
+    WHEN 51006 THEN '回仓暂存区'
+    ELSE zone_name
+END,
+update_time = NOW()
+WHERE id IN (51001, 51002, 51003, 51004, 51005, 51006);
+
+UPDATE sup_supplier
+SET supplier_name = CASE id
+    WHEN 610001 THEN '页面固定供应商610001'
+    WHEN 710001 THEN '测试鲜果供应商'
+    WHEN 710002 THEN '测试蔬菜供应商'
+    WHEN 710003 THEN '测试冻品供应商'
+    ELSE supplier_name
+END,
+remark = CASE id
+    WHEN 610001 THEN '角色工作台供应商页固定ID测试数据'
+    WHEN 710001 THEN '正常合作供应商'
+    WHEN 710002 THEN '待复核供应商'
+    WHEN 710003 THEN '已驳回供应商'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id IN (610001, 710001, 710002, 710003);
+
+UPDATE sup_supplier_contact
+SET contact_name = CASE id
+    WHEN 710101 THEN '鲜果业务联系人'
+    WHEN 710102 THEN '鲜果财务联系人'
+    WHEN 710103 THEN '鲜果送货联系人'
+    WHEN 710104 THEN '蔬菜无效联系人'
+    WHEN 806001 THEN '页面供应商业务联系人'
+    WHEN 806002 THEN '页面供应商送货联系人'
+    ELSE contact_name
+END,
+update_time = NOW()
+WHERE id IN (710101, 710102, 710103, 710104, 806001, 806002);
+
+UPDATE sup_contract
+SET contract_name = CASE id
+    WHEN 710401 THEN '蔬菜供应合同待生效'
+    WHEN 710402 THEN '鲜果供应合同生效中'
+    WHEN 710403 THEN '鲜果供应合同已到期'
+    WHEN 710404 THEN '冻品供应合同已解除'
+    WHEN 806006 THEN '页面供应商待生效合同'
+    WHEN 806007 THEN '页面供应商生效中合同'
+    WHEN 806008 THEN '页面供应商已到期合同'
+    WHEN 806009 THEN '页面供应商已解除合同'
+    ELSE contract_name
+END,
+update_time = NOW()
+WHERE id IN (710401, 710402, 710403, 710404, 806006, 806007, 806008, 806009);
+
+UPDATE usr_station
+SET station_name = CASE id
+    WHEN 720001 THEN '海珠测试自提点'
+    WHEN 720002 THEN '天河测试休假点'
+    WHEN 720003 THEN '深圳测试停用点'
+    ELSE station_name
+END,
+address = CASE id
+    WHEN 720001 THEN '广州市海珠区测试路1号'
+    WHEN 720002 THEN '广州市天河区测试路2号'
+    WHEN 720003 THEN '深圳市南山区测试路3号'
+    ELSE address
+END,
+contact_name = CASE id
+    WHEN 720001 THEN '自提点负责人A'
+    WHEN 720002 THEN '自提点负责人B'
+    WHEN 720003 THEN '自提点负责人C'
+    ELSE contact_name
+END,
+update_time = NOW()
+WHERE id IN (720001, 720002, 720003);
+
+UPDATE usr_user
+SET nickname = CASE id
+    WHEN 740001 THEN '测试用户正常'
+    WHEN 740002 THEN '测试用户禁用'
+    WHEN 740003 THEN '测试用户注销'
+    ELSE nickname
+END,
+update_time = NOW()
+WHERE id IN (740001, 740002, 740003);
+
+UPDATE usr_pickup_person
+SET pickup_name = CASE id
+    WHEN 740101 THEN '默认提货人'
+    WHEN 740102 THEN '备用提货人'
+    WHEN 740103 THEN '无效提货人'
+    ELSE pickup_name
+END,
+update_time = NOW()
+WHERE id IN (740101, 740102, 740103);
+
+UPDATE usr_leader
+SET leader_name = CASE id
+    WHEN 730001 THEN '测试团长A'
+    WHEN 730002 THEN '测试团长B'
+    ELSE leader_name
+END,
+update_time = NOW()
+WHERE id IN (730001, 730002);
+
+UPDATE usr_station_leave
+SET reason = CASE id
+    WHEN 730201 THEN '临时休息待审核'
+    WHEN 730202 THEN '已通过休假'
+    WHEN 730203 THEN '休假时间冲突'
+    WHEN 730204 THEN '申请人撤回'
+    ELSE reason
+END,
+audit_remark = CASE id
+    WHEN 730202 THEN '同意休假'
+    WHEN 730203 THEN '当前站点有待提订单'
+    WHEN 730204 THEN '用户撤回'
+    ELSE audit_remark
+END,
+update_time = NOW()
+WHERE id IN (730201, 730202, 730203, 730204);
+
+UPDATE sys_account
+SET remark = CASE id
+    WHEN 700001 THEN '平台管理员测试账号'
+    WHEN 700002 THEN '城市运营测试账号'
+    WHEN 700003 THEN '采购员测试账号'
+    WHEN 700004 THEN '财务测试账号'
+    WHEN 700005 THEN '售后运营测试账号'
+    WHEN 700006 THEN '供应商后台测试账号'
+    WHEN 700007 THEN '仓库主管测试账号'
+    WHEN 700008 THEN '收货员测试账号'
+    WHEN 700009 THEN '拣货员测试账号'
+    WHEN 700010 THEN '装车员测试账号'
+    WHEN 700011 THEN '司机测试账号'
+    WHEN 700012 THEN '自提点角色工作台测试账号'
+    WHEN 700013 THEN '团长角色工作台测试账号'
+    WHEN 700014 THEN '供应商工作台测试账号'
+    WHEN 700015 THEN '禁用账号样例'
+    WHEN 700016 THEN '锁定账号样例'
+    WHEN 806010 THEN '供应商工作台固定ID测试账号'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id IN (700001, 700002, 700003, 700004, 700005, 700006, 700007, 700008, 700009, 700010, 700011, 700012, 700013, 700014, 700015, 700016, 806010);
+
+UPDATE sys_account_subject
+SET subject_name_snapshot = CASE id
+    WHEN 700101 THEN '测试鲜果供应商'
+    WHEN 700102 THEN '海珠测试自提点'
+    WHEN 700103 THEN '测试团长A'
+    WHEN 700104 THEN '海珠测试自提点'
+    WHEN 700105 THEN '测试鲜果供应商'
+    WHEN 700106 THEN '深圳测试停用点'
+    WHEN 806011 THEN '页面固定供应商610001'
+    ELSE subject_name_snapshot
+END,
+update_time = NOW()
+WHERE id IN (700101, 700102, 700103, 700104, 700105, 700106, 806011);
+
+UPDATE prd_category
+SET category_name = CASE id
+    WHEN 750001 THEN '水果鲜食'
+    WHEN 750002 THEN '蔬菜豆制'
+    WHEN 750003 THEN '生鲜统计'
+    WHEN 750004 THEN '冻品统计'
+    ELSE category_name
+END,
+update_time = NOW()
+WHERE id IN (750001, 750002, 750003, 750004);
+
+UPDATE prd_product
+SET product_name = CASE id
+    WHEN 751001 THEN '测试红富士苹果'
+    WHEN 751002 THEN '测试香蕉待审核'
+    WHEN 751003 THEN '测试白菜已驳回'
+    WHEN 751004 THEN '测试冻鱼已停用'
+    WHEN 806020 THEN '页面覆盖赣南鲜橙'
+    WHEN 806021 THEN '页面覆盖待审核葡萄'
+    WHEN 806022 THEN '页面覆盖停售蜜瓜'
+    ELSE product_name
+END,
+update_time = NOW()
+WHERE id IN (751001, 751002, 751003, 751004, 806020, 806021, 806022);
+
+UPDATE prd_sku
+SET sku_name = CASE id
+    WHEN 752001 THEN '苹果1kg装'
+    WHEN 752002 THEN '香蕉2kg装'
+    WHEN 752003 THEN '白菜500g'
+    WHEN 752004 THEN '冻鱼1条'
+    WHEN 806030 THEN '鲜橙3kg装'
+    WHEN 806031 THEN '葡萄1kg装'
+    WHEN 806032 THEN '蜜瓜1个装'
+    ELSE sku_name
+END,
+sale_spec_text = CASE id
+    WHEN 752001 THEN '1kg/份'
+    WHEN 752002 THEN '2kg/份'
+    WHEN 752003 THEN '500g/份'
+    WHEN 752004 THEN '1条/份'
+    WHEN 806030 THEN '3kg/箱'
+    WHEN 806031 THEN '1kg/份'
+    WHEN 806032 THEN '1个/份'
+    ELSE sale_spec_text
+END,
+base_unit = CASE id
+    WHEN 752004 THEN '条'
+    WHEN 806030 THEN '箱'
+    ELSE '份'
+END,
+update_time = NOW()
+WHERE id IN (752001, 752002, 752003, 752004, 806030, 806031, 806032);
+
+UPDATE prd_stock_spec
+SET spec_name = CASE id
+    WHEN 753001 THEN '按份'
+    WHEN 753002 THEN '按箱'
+    WHEN 753003 THEN '停用规格'
+    ELSE spec_name
+END,
+unit_name = CASE id
+    WHEN 753002 THEN '箱'
+    WHEN 753003 THEN '袋'
+    ELSE '份'
+END,
+update_time = NOW()
+WHERE id IN (753001, 753002, 753003);
+
+UPDATE prd_rank_tag
+SET tag_name = CASE id
+    WHEN 754001 THEN '热销榜'
+    WHEN 754002 THEN '新品榜'
+    WHEN 754003 THEN '停用榜单'
+    ELSE tag_name
+END,
+update_time = NOW()
+WHERE id IN (754001, 754002, 754003);
+
+UPDATE sale_publish_period
+SET period_name = CASE id
+    WHEN 755001 THEN '测试待发布团期'
+    WHEN 755002 THEN '测试已发布团期'
+    WHEN 755003 THEN '测试已下架团期'
+    WHEN 755004 THEN '测试已过期团期'
+    WHEN 806040 THEN '页面覆盖待发布团期'
+    WHEN 806041 THEN '页面覆盖在线团期'
+    WHEN 806042 THEN '页面覆盖已下架团期'
+    WHEN 806043 THEN '页面覆盖已过期团期'
+    ELSE period_name
+END,
+update_time = NOW()
+WHERE id IN (755001, 755002, 755003, 755004, 806040, 806041, 806042, 806043);
+
+UPDATE ord_order
+SET pickup_name = '页面测试提货人',
+cancel_reason = CASE id
+    WHEN 806101 THEN '支付处理中'
+    WHEN 806107 THEN '用户取消未支付订单'
+    WHEN 806108 THEN '已支付取消退款中'
+    WHEN 806109 THEN '部分退款后完成'
+    ELSE cancel_reason
+END,
+update_time = NOW()
+WHERE id BETWEEN 806100 AND 806109;
+
+UPDATE ord_order_item
+SET product_name = CASE product_id
+    WHEN 751001 THEN '测试红富士苹果'
+    WHEN 751002 THEN '测试香蕉待审核'
+    WHEN 751003 THEN '测试白菜已驳回'
+    WHEN 751004 THEN '测试冻鱼已停用'
+    WHEN 806020 THEN '页面覆盖赣南鲜橙'
+    WHEN 806021 THEN '页面覆盖待审核葡萄'
+    WHEN 806022 THEN '页面覆盖停售蜜瓜'
+    ELSE product_name
+END,
+sku_name = CASE sku_id
+    WHEN 752001 THEN '苹果1kg装'
+    WHEN 752002 THEN '香蕉2kg装'
+    WHEN 752003 THEN '白菜500g'
+    WHEN 752004 THEN '冻鱼1条'
+    WHEN 806030 THEN '鲜橙3kg装'
+    WHEN 806031 THEN '葡萄1kg装'
+    WHEN 806032 THEN '蜜瓜1个装'
+    ELSE sku_name
+END,
+update_time = NOW()
+WHERE id IN (762001, 762002, 762003, 762004, 762005, 762006, 762007, 806200, 806201, 806202, 806203, 806204, 806205, 806206, 806207, 806208, 806209);
+
+UPDATE ord_fulfillment_track
+SET node_name = CASE id
+    WHEN 806210 THEN '待支付'
+    WHEN 806211 THEN '待入库'
+    WHEN 806212 THEN '待分拣'
+    WHEN 806213 THEN '待配送'
+    WHEN 806214 THEN '待自提'
+    WHEN 806215 THEN '已自提'
+    ELSE node_name
+END,
+remark = CASE id
+    WHEN 806210 THEN '用户端待支付轨迹'
+    WHEN 806211 THEN '采购已送达待入库'
+    WHEN 806212 THEN '仓库待分拣'
+    WHEN 806213 THEN '待司机配送'
+    WHEN 806214 THEN '已到自提点待核销'
+    WHEN 806215 THEN '用户已提货'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id BETWEEN 806210 AND 806215;
+
+UPDATE pay_refund_trade SET fail_reason = '页面测试渠道失败', update_time = NOW() WHERE id = 806253;
+
+UPDATE afs_after_sale
+SET apply_reason = CASE id
+    WHEN 806230 THEN '页面待审核售后'
+    WHEN 806231 THEN '页面待退货售后'
+    WHEN 806232 THEN '页面待退款售后'
+    WHEN 806233 THEN '页面退款成功售后'
+    WHEN 806234 THEN '页面退款失败售后'
+    WHEN 806235 THEN '页面售后驳回'
+    WHEN 806236 THEN '页面用户撤销售后'
+    ELSE apply_reason
+END,
+update_time = NOW()
+WHERE id BETWEEN 806230 AND 806236;
+
+UPDATE pur_purchase_order
+SET create_reason = CASE id
+    WHEN 806300 THEN '供应商工作台待审核'
+    WHEN 806301 THEN '供应商工作台审核通过'
+    WHEN 806302 THEN '供应商工作台待发货'
+    WHEN 806303 THEN '供应商工作台送货中'
+    WHEN 806304 THEN '供应商工作台已收货'
+    ELSE create_reason
+END,
+update_time = NOW()
+WHERE id BETWEEN 806300 AND 806304;
+
+UPDATE pur_delivery_order
+SET contact_name = '页面供应商送货联系人',
+update_time = NOW()
+WHERE id BETWEEN 806320 AND 806324;
+
+UPDATE wms_receive_record
+SET remark = CASE id
+    WHEN 806420 THEN '页面质检合格'
+    WHEN 806421 THEN '页面部分收货'
+    WHEN 806422 THEN '页面拒收破损'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id IN (806420, 806421, 806422);
+
+UPDATE wms_quality_file
+SET remark = CASE id
+    WHEN 806430 THEN '页面质检待处理'
+    WHEN 806431 THEN '页面质检通过'
+    WHEN 806432 THEN '页面质检拒收'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id IN (806430, 806431, 806432);
+
+UPDATE wms_pick_item SET diff_reason = '页面测试少拣5份', update_time = NOW() WHERE id = 806503;
+
+UPDATE wms_delivery_station
+SET remark = CASE id
+    WHEN 806550 THEN '页面待配送'
+    WHEN 806551 THEN '页面已到达待交接'
+    WHEN 806552 THEN '页面交接完成'
+    WHEN 806553 THEN '页面无法送达'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id BETWEEN 806550 AND 806553;
+
+UPDATE wms_driver_sign_record
+SET remark = CASE id
+    WHEN 806560 THEN '页面司机到达'
+    WHEN 806561 THEN '页面交接完成'
+    WHEN 806562 THEN '页面无法送达'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id BETWEEN 806560 AND 806562;
+
+UPDATE wms_return_handover
+SET remark = CASE id
+    WHEN 806570 THEN '页面待回仓确认'
+    WHEN 806571 THEN '页面已回仓确认'
+    WHEN 806572 THEN '页面待主管处理'
+    WHEN 806573 THEN '页面关闭'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id BETWEEN 806570 AND 806573;
+
+UPDATE wms_operation_log
+SET reason = CASE id
+    WHEN 806590 THEN '页面收货成功'
+    WHEN 806591 THEN '页面拣货差异'
+    WHEN 806592 THEN '页面出库失败'
+    ELSE reason
+END,
+update_time = NOW()
+WHERE id BETWEEN 806590 AND 806592;
+
+UPDATE fin_account_flow
+SET remark = CASE id
+    WHEN 806610 THEN '页面佣金入账'
+    WHEN 806611 THEN '页面提现冻结'
+    WHEN 806612 THEN '页面供应商结算入账'
+    ELSE remark
+END,
+update_time = NOW()
+WHERE id BETWEEN 806610 AND 806612;
+
+UPDATE fin_withdraw_apply
+SET receive_account_name = CASE id
+    WHEN 806645 THEN '测试团长A'
+    WHEN 806643 THEN '页面固定供应商610001'
+    ELSE '自提点负责人A'
+END,
+audit_remark = CASE id
+    WHEN 806641 THEN '页面审核通过打款中'
+    WHEN 806642 THEN '页面打款成功'
+    WHEN 806643 THEN '页面银行退回'
+    WHEN 806644 THEN '页面账户信息不一致'
+    WHEN 806645 THEN '页面申请人撤回'
+    ELSE audit_remark
+END,
+update_time = NOW()
+WHERE id BETWEEN 806640 AND 806645;
+
+UPDATE fin_supplier_settlement SET update_time = NOW() WHERE id BETWEEN 806650 AND 806653;
+
+UPDATE op_todo
+SET title = CASE id
+    WHEN 806670 THEN '页面采购待审核'
+    WHEN 806671 THEN '页面售后处理中'
+    WHEN 806672 THEN '页面休假已处理'
+    WHEN 806673 THEN '页面资质驳回待办'
+    WHEN 806674 THEN '页面导出取消待办'
+    WHEN 806675 THEN '页面订单超时待办'
+    WHEN 806676 THEN '页面待办关闭样例'
+    ELSE title
+END,
+update_time = NOW()
+WHERE id BETWEEN 806670 AND 806676;
+
+UPDATE op_exception_record
+SET title = CASE id
+    WHEN 806680 THEN '页面拣货差异待处理'
+    WHEN 806681 THEN '页面退款失败处理中'
+    WHEN 806682 THEN '页面结算差异已处理'
+    WHEN 806683 THEN '页面配送异常关闭'
+    ELSE title
+END,
+description = CASE id
+    WHEN 806680 THEN '页面拣货数量不足'
+    WHEN 806681 THEN '页面渠道退款失败'
+    WHEN 806682 THEN '页面差异已确认'
+    WHEN 806683 THEN '页面无法送达已关闭'
+    ELSE description
+END,
+update_time = NOW()
+WHERE id BETWEEN 806680 AND 806683;
+
+UPDATE msg_template
+SET template_name = CASE id
+    WHEN 792001 THEN '订单支付提醒'
+    WHEN 792002 THEN '自提点到货通知'
+    WHEN 792003 THEN '供应商送货提醒'
+    WHEN 792004 THEN '停用模板'
+    ELSE template_name
+END,
+title_template = CASE id
+    WHEN 792001 THEN '订单待支付'
+    WHEN 792002 THEN '商品已到达'
+    WHEN 792003 THEN '送货任务提醒'
+    WHEN 792004 THEN '停用模板'
+    ELSE title_template
+END,
+content_template = CASE id
+    WHEN 792001 THEN '您的订单即将关闭，请及时支付'
+    WHEN 792002 THEN '请及时完成到货接收'
+    WHEN 792003 THEN '请按时送货到仓'
+    WHEN 792004 THEN '停用内容'
+    ELSE content_template
+END,
+update_time = NOW()
+WHERE id IN (792001, 792002, 792003, 792004);
+
+UPDATE msg_record
+SET title = CASE id
+    WHEN 806690 THEN '页面用户待发送消息'
+    WHEN 806691 THEN '页面用户未读成功消息'
+    WHEN 806692 THEN '页面用户已读成功消息'
+    WHEN 806693 THEN '页面用户发送失败消息'
+    WHEN 806694 THEN '页面站点未读消息'
+    WHEN 806695 THEN '页面站点已读消息'
+    WHEN 806696 THEN '页面供应商送货提醒'
+    WHEN 792101 THEN '订单待支付'
+    WHEN 792102 THEN '商品已到达'
+    WHEN 792103 THEN '送货任务提醒'
+    WHEN 792104 THEN '发送失败样例'
+    ELSE title
+END,
+content = CASE id
+    WHEN 806690 THEN 'ORD_PAGE_WAIT_PAY 即将关闭'
+    WHEN 806691 THEN '页面订单已到自提点'
+    WHEN 806692 THEN '页面订单已完成'
+    WHEN 806693 THEN '页面公众号发送失败'
+    WHEN 806694 THEN '页面到货待接收'
+    WHEN 806695 THEN '页面到货已完成'
+    WHEN 806696 THEN 'PDEL_PAGE_610_WAIT 待送货'
+    WHEN 792101 THEN 'ORD_TEST_WAIT_PAY 即将关闭'
+    WHEN 792102 THEN '请接收今日到货商品'
+    WHEN 792103 THEN 'PDEL_TEST_WAIT 待送货'
+    WHEN 792104 THEN '公众号发送失败'
+    ELSE content
+END,
+fail_reason = CASE id
+    WHEN 806693 THEN '用户未关注公众号'
+    WHEN 792104 THEN '用户未关注'
+    ELSE fail_reason
+END,
+update_time = NOW()
+WHERE id IN (806690, 806691, 806692, 806693, 806694, 806695, 806696, 792101, 792102, 792103, 792104);
+
+UPDATE rpt_export_task SET fail_reason = '页面导出超时', update_time = NOW() WHERE id = 806712;
+
+UPDATE search_suggest_word
+SET word = CASE id
+    WHEN 794001 THEN '苹果'
+    WHEN 794002 THEN '香蕉'
+    WHEN 794003 THEN '今日生鲜'
+    WHEN 794004 THEN '停用联想词'
+    WHEN 806720 THEN '鲜橙'
+    WHEN 806721 THEN '页面葡萄'
+    WHEN 806722 THEN '页面停用词'
+    ELSE word
+END,
+update_time = NOW()
+WHERE id IN (794001, 794002, 794003, 794004, 806720, 806721, 806722);
+
+-- ----------------------------
+-- 操作类型：初始化
+-- 涉及表：sys_role_button
+-- 日期：2026-06-27
+-- 操作人：codex
+-- 用途说明：幂等补强运营后台、仓库后台常用只读权限，避免历史库未执行早期权限段时页面 403
+-- ----------------------------
+INSERT IGNORE INTO sys_role_button
+(id, role_id, portal_code, module_code, button_code, button_name, risk_level, status, create_time, update_time, is_deleted)
+VALUES
+(802201, 20001, 'admin', 'operation:dashboard', 'view', '查看运营驾驶舱摘要', 1, 1, NOW(), NOW(), 0),
+(802202, 20001, 'admin', 'operation:todo', 'view', '查看待办', 1, 1, NOW(), NOW(), 0),
+(802203, 20001, 'admin', 'operation:exception', 'view', '查看异常', 1, 1, NOW(), NOW(), 0),
+(802204, 20001, 'admin', 'product:product', 'view', '查看商品', 1, 1, NOW(), NOW(), 0),
+(802205, 20001, 'admin', 'product:sku', 'view', '查看SKU', 1, 1, NOW(), NOW(), 0),
+(802206, 20001, 'admin', 'product:category', 'view', '查看类目', 1, 1, NOW(), NOW(), 0),
+(802207, 20001, 'admin', 'sale:period', 'view', '查看团期', 1, 1, NOW(), NOW(), 0),
+(802208, 20001, 'admin', 'trade:order', 'view', '查看订单', 1, 1, NOW(), NOW(), 0),
+(802209, 20001, 'admin', 'trade:order:item', 'view', '查看订单商品', 1, 1, NOW(), NOW(), 0),
+(802210, 20001, 'admin', 'trade:fulfillment', 'view', '查看履约跟踪', 1, 1, NOW(), NOW(), 0),
+(802211, 20001, 'admin', 'trade:stockout', 'view', '查看缺货记录', 1, 1, NOW(), NOW(), 0),
+(802212, 20001, 'admin', 'payment:trade', 'view', '查看支付单', 1, 1, NOW(), NOW(), 0),
+(802213, 20001, 'admin', 'payment:refund', 'view', '查看退款单', 1, 1, NOW(), NOW(), 0),
+(802214, 20001, 'admin', 'payment:fund-flow', 'view', '查看资金流水', 1, 1, NOW(), NOW(), 0),
+(802215, 20001, 'admin', 'aftersale:after-sale', 'view', '查看售后单', 1, 1, NOW(), NOW(), 0),
+(802216, 20001, 'admin', 'aftersale:item', 'view', '查看售后商品', 1, 1, NOW(), NOW(), 0),
+(802217, 20001, 'admin', 'aftersale:audit-log', 'view', '查看售后审核日志', 1, 1, NOW(), NOW(), 0),
+(802218, 20001, 'admin', 'aftersale:return-record', 'view', '查看退货记录', 1, 1, NOW(), NOW(), 0),
+(802219, 20001, 'admin', 'supplier:profile', 'view', '查看供应商档案', 1, 1, NOW(), NOW(), 0),
+(802220, 20001, 'admin', 'supplier:contact', 'view', '查看供应商联系人', 1, 1, NOW(), NOW(), 0),
+(802221, 20001, 'admin', 'supplier:qualification', 'view', '查看供应商资质', 1, 1, NOW(), NOW(), 0),
+(802222, 20001, 'admin', 'supplier:contract', 'view', '查看供应商合同', 1, 1, NOW(), NOW(), 0),
+(802223, 20001, 'admin', 'purchase:order', 'view', '查看采购单', 1, 1, NOW(), NOW(), 0),
+(802224, 20001, 'admin', 'purchase:item', 'view', '查看采购明细', 1, 1, NOW(), NOW(), 0),
+(802225, 20001, 'admin', 'purchase:audit-log', 'view', '查看采购审核日志', 1, 1, NOW(), NOW(), 0),
+(802226, 20001, 'admin', 'purchase:source-log', 'view', '查看采购来源日志', 1, 1, NOW(), NOW(), 0),
+(802227, 20001, 'admin', 'delivery:order', 'view', '查看送货单', 1, 1, NOW(), NOW(), 0),
+(802228, 20001, 'admin', 'delivery:item', 'view', '查看送货明细', 1, 1, NOW(), NOW(), 0),
+(802229, 20001, 'admin', 'finance:account', 'view', '查看财务账户', 1, 1, NOW(), NOW(), 0),
+(802230, 20001, 'admin', 'finance:account-flow', 'view', '查看账户流水', 1, 1, NOW(), NOW(), 0),
+(802231, 20001, 'admin', 'finance:commission', 'view', '查看佣金明细', 1, 1, NOW(), NOW(), 0),
+(802232, 20001, 'admin', 'finance:split', 'view', '查看分账流水', 1, 1, NOW(), NOW(), 0),
+(802233, 20001, 'admin', 'finance:withdraw', 'view', '查看提现申请', 1, 1, NOW(), NOW(), 0),
+(802234, 20001, 'admin', 'finance:deposit', 'view', '查看押金记录', 1, 1, NOW(), NOW(), 0),
+(802235, 20001, 'admin', 'finance:supplier-settlement', 'view', '查看供应商结算', 1, 1, NOW(), NOW(), 0),
+(802236, 20001, 'admin', 'finance:reconciliation', 'view', '查看对账批次', 1, 1, NOW(), NOW(), 0),
+(802237, 20003, 'admin', 'operation:dashboard', 'view', '查看运营驾驶舱摘要', 1, 1, NOW(), NOW(), 0),
+(802238, 20003, 'admin', 'operation:todo', 'view', '查看城市待办', 1, 1, NOW(), NOW(), 0),
+(802239, 20003, 'admin', 'operation:exception', 'view', '查看城市异常', 1, 1, NOW(), NOW(), 0),
+(802240, 20003, 'admin', 'trade:order', 'view', '查看城市订单', 1, 1, NOW(), NOW(), 0),
+(802241, 20003, 'admin', 'trade:order:item', 'view', '查看城市订单商品', 1, 1, NOW(), NOW(), 0),
+(802242, 20003, 'admin', 'trade:fulfillment', 'view', '查看城市履约跟踪', 1, 1, NOW(), NOW(), 0),
+(802243, 20003, 'admin', 'trade:stockout', 'view', '查看城市缺货记录', 1, 1, NOW(), NOW(), 0),
+(802244, 20003, 'admin', 'payment:trade', 'view', '查看城市支付单', 1, 1, NOW(), NOW(), 0),
+(802245, 20003, 'admin', 'payment:refund', 'view', '查看城市退款单', 1, 1, NOW(), NOW(), 0),
+(802246, 20003, 'admin', 'payment:fund-flow', 'view', '查看城市资金流水', 1, 1, NOW(), NOW(), 0),
+(802247, 20003, 'admin', 'supplier:profile', 'view', '查看城市供应商档案', 1, 1, NOW(), NOW(), 0),
+(802248, 20003, 'admin', 'purchase:order', 'view', '查看城市采购单', 1, 1, NOW(), NOW(), 0),
+(802249, 20003, 'admin', 'delivery:order', 'view', '查看城市送货单', 1, 1, NOW(), NOW(), 0),
+(802250, 20003, 'admin', 'finance:account', 'view', '查看城市财务账户', 1, 1, NOW(), NOW(), 0),
+(802251, 20003, 'admin', 'finance:commission', 'view', '查看城市佣金明细', 1, 1, NOW(), NOW(), 0),
+(802252, 21001, 'wms-admin', 'wms:warehouse', 'view', '查看仓库', 1, 1, NOW(), NOW(), 0),
+(802253, 21001, 'wms-admin', 'wms:zone', 'view', '查看库区', 1, 1, NOW(), NOW(), 0),
+(802254, 21001, 'wms-admin', 'wms:location', 'view', '查看库位', 1, 1, NOW(), NOW(), 0),
+(802255, 21001, 'wms-admin', 'wms:inbound', 'view', '查看入库单', 1, 1, NOW(), NOW(), 0),
+(802256, 21001, 'wms-admin', 'wms:receive', 'view', '查看收货记录', 1, 1, NOW(), NOW(), 0),
+(802257, 21001, 'wms-admin', 'wms:putaway', 'view', '查看上架任务', 1, 1, NOW(), NOW(), 0),
+(802258, 21001, 'wms-admin', 'wms:inventory', 'view', '查看库存', 1, 1, NOW(), NOW(), 0),
+(802259, 21001, 'wms-admin', 'wms:wave', 'view', '查看波次', 1, 1, NOW(), NOW(), 0),
+(802260, 21001, 'wms-admin', 'wms:pick', 'view', '查看拣货任务', 1, 1, NOW(), NOW(), 0),
+(802261, 21001, 'wms-admin', 'wms:loading', 'view', '查看装车单', 1, 1, NOW(), NOW(), 0),
+(802262, 21001, 'wms-admin', 'wms:outbound', 'view', '查看出库单', 1, 1, NOW(), NOW(), 0),
+(802263, 21001, 'wms-admin', 'wms:delivery', 'view', '查看配送单', 1, 1, NOW(), NOW(), 0),
+(802264, 21001, 'wms-admin', 'wms:return', 'view', '查看回仓交接', 1, 1, NOW(), NOW(), 0),
+(802265, 21001, 'wms-admin', 'wms:stocktake', 'view', '查看盘点单', 1, 1, NOW(), NOW(), 0),
+(802266, 21001, 'wms-admin', 'wms:operation-log', 'view', '查看WMS操作日志', 1, 1, NOW(), NOW(), 0);

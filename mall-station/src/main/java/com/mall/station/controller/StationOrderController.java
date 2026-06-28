@@ -16,7 +16,6 @@ import com.mall.common.page.PageResult;
 import com.mall.common.result.Result;
 import com.mall.station.service.StationOrderService;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,37 +36,31 @@ public class StationOrderController {
     }
 
     @GetMapping("/summary")
-    @PreAuthorize("hasAuthority('station:workbench:view')")
     public Result<StationWorkbenchDTO> getWorkbench(@Valid final StationWorkbenchQueryVO query) {
         return Result.success(stationOrderService.getWorkbench(query));
     }
 
     @GetMapping("/orders")
-    @PreAuthorize("hasAuthority('station:order:view')")
     public Result<PageResult<OrderDTO>> pageOrders(@Valid final StationOrderQueryVO query) {
         return Result.success(stationOrderService.pageOrders(query));
     }
 
     @GetMapping("/orders/{id}")
-    @PreAuthorize("hasAuthority('station:order:view')")
     public Result<OrderDTO> getOrder(@PathVariable final Long id) {
         return Result.success(stationOrderService.getOrder(id));
     }
 
     @GetMapping("/order-items")
-    @PreAuthorize("hasAuthority('station:order:view')")
     public Result<PageResult<OrderItemDTO>> pageOrderItems(@Valid final StationOrderQueryVO query) {
         return Result.success(stationOrderService.pageOrderItems(query));
     }
 
     @GetMapping("/order-items/{id}")
-    @PreAuthorize("hasAuthority('station:order:view')")
     public Result<OrderItemDTO> getOrderItem(@PathVariable final Long id) {
         return Result.success(stationOrderService.getOrderItem(id));
     }
 
     @PostMapping("/order-items/{id}/pickup-confirm")
-    @PreAuthorize("hasAuthority('station:order:pickup-confirm')")
     public Result<OrderItemDTO> confirmPickup(
             @PathVariable final Long id,
             @Valid @RequestBody(required = false) final StationPickupConfirmVO request) {
@@ -75,31 +68,26 @@ public class StationOrderController {
     }
 
     @GetMapping("/deliveries")
-    @PreAuthorize("hasAuthority('station:arrival:view')")
     public Result<PageResult<DeliveryOrderDTO>> pageDeliveryOrders(@Valid final StationDeliveryQueryVO query) {
         return Result.success(stationOrderService.pageDeliveryOrders(query));
     }
 
     @GetMapping("/deliveries/{id}")
-    @PreAuthorize("hasAuthority('station:arrival:view')")
     public Result<DeliveryOrderDTO> getDeliveryOrder(@PathVariable final Long id) {
         return Result.success(stationOrderService.getDeliveryOrder(id));
     }
 
     @GetMapping("/delivery-stations")
-    @PreAuthorize("hasAuthority('station:arrival:view')")
     public Result<PageResult<DeliveryStationDTO>> pageDeliveryStations(@Valid final StationDeliveryQueryVO query) {
         return Result.success(stationOrderService.pageDeliveryStations(query));
     }
 
     @GetMapping("/delivery-stations/{id}")
-    @PreAuthorize("hasAuthority('station:arrival:view')")
     public Result<DeliveryStationDTO> getDeliveryStation(@PathVariable final Long id) {
         return Result.success(stationOrderService.getDeliveryStation(id));
     }
 
     @PostMapping("/delivery-stations/{id}/arrival-confirm")
-    @PreAuthorize("hasAuthority('station:arrival:confirm')")
     public Result<DeliveryStationDTO> confirmArrival(
             @PathVariable final Long id,
             @Valid @RequestBody(required = false) final StationArrivalConfirmVO request) {
@@ -107,19 +95,16 @@ public class StationOrderController {
     }
 
     @GetMapping("/returns")
-    @PreAuthorize("hasAuthority('station:return:view')")
     public Result<PageResult<ReturnHandoverDTO>> pageReturnHandovers(@Valid final StationDeliveryQueryVO query) {
         return Result.success(stationOrderService.pageReturnHandovers(query));
     }
 
     @GetMapping("/returns/{id}")
-    @PreAuthorize("hasAuthority('station:return:view')")
     public Result<ReturnHandoverDTO> getReturnHandover(@PathVariable final Long id) {
         return Result.success(stationOrderService.getReturnHandover(id));
     }
 
     @GetMapping("/exceptions")
-    @PreAuthorize("hasAuthority('station:exception:view')")
     public Result<PageResult<ExceptionRecordDTO>> pageExceptions(@Valid final StationDeliveryQueryVO query) {
         return Result.success(stationOrderService.pageExceptions(query));
     }

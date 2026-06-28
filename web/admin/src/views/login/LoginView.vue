@@ -34,7 +34,7 @@ const form = reactive({
 
 async function submit() {
     const result = await passwordLogin({ ...form, portalCode: 'admin' });
-    sessionStore.setSession(result.accessToken || result.token || '', result.username);
+    sessionStore.setSession(result.accessToken || result.token || '', result.account?.username || form.username);
     router.push('/dashboard');
 }
 </script>

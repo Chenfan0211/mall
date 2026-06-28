@@ -4,6 +4,7 @@ public final class AuthHeaderNames {
 
     public static final String ACCOUNT_ID = "X-Mall-Account-Id";
     public static final String USERNAME = "X-Mall-Username";
+    public static final String PORTAL_CODE = "X-Mall-Portal-Code";
     public static final String AUTHORITIES = "X-Mall-Authorities";
     public static final String CITY_IDS = "X-Mall-City-Ids";
     public static final String SUPPLIER_IDS = "X-Mall-Supplier-Ids";

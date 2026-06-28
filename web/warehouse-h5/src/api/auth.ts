@@ -10,9 +10,20 @@ export interface LoginPayload {
 export interface LoginResult {
     accessToken?: string;
     token?: string;
-    username: string;
-    role: string;
-    warehouseName: string;
+    account?: {
+        id?: number;
+        username?: string;
+    };
+    roles?: Array<{
+        roleCode?: string;
+        roleName?: string;
+    }>;
+    menus?: Array<{
+        menuCode?: string;
+        menuName?: string;
+        routePath?: string;
+    }>;
+    authorities?: string[];
 }
 
 export function passwordLogin(payload: LoginPayload) {

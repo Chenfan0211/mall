@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { pageComments, type UserCommentDTO } from '@/api/user';
+import { showUserToast, useUserState } from '@/stores/userState';
 
 const filters = [
     { label: '全部评价', score: undefined },
@@ -30,16 +31,36 @@ const filters = [
 const productId = ref<number | undefined>();
 const score = ref<number | undefined>();
 const reviews = ref<UserCommentDTO[]>([]);
+const state = useUserState();
 
 async function loadReviews() {
-    const page = await pageComments({
-        pageNum: 1,
-        pageSize: 20,
-        productId: productId.value,
-        score: score.value,
-        stationId: 720001
-    });
-    reviews.value = page.list || [];
+    try {
+        const page = await pageComments({
+            pageNum: 1,
+            pageSize: 20,
+            productId: productId.value,
+            score: score.value,
+            stationId: state.station.id
+        });
+        reviews.value = page.list || [];
+    } catch (error) {
+        reviews.value = state.localReviews
+            .filter((item) => !productId.value || item.productId === productId.value)
+            .filter((item) => !score.value || (score.value === 2 ? item.score <= 2 : item.score === score.value))
+            .map((item) => ({
+                id: item.id,
+                commentNo: `LOCAL${item.id}`,
+                userId: state.user.id,
+                productId: item.productId,
+                skuId: 0,
+                stationId: state.station.id,
+                score: item.score,
+                content: item.content,
+                status: item.status,
+                createTime: item.createTime
+            }));
+        showUserToast('评价接口暂不可用，已展示本地评价状态', 'warn');
+    }
 }
 
 function selectScore(value?: number) {

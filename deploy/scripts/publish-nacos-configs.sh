@@ -22,6 +22,7 @@ MYSQL_DB="$(get_env MYSQL_APP_DATABASE mall)"
 MYSQL_USER="$(get_env MYSQL_APP_USER mall)"
 MYSQL_PASS="$(get_env MYSQL_APP_PASSWORD '')"
 REDIS_PASS="$(get_env REDIS_PASSWORD '')"
+TOKEN_SECRET="$(get_env MALL_TOKEN_SECRET '')"
 MINIO_USER="$(get_env MINIO_ROOT_USER '')"
 MINIO_PASS="$(get_env MINIO_ROOT_PASSWORD '')"
 
@@ -53,7 +54,7 @@ cat > "${tmpdir}/mall-common.yaml" <<EOF
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mall-mysql:3306/${MYSQL_DB}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://mall-mysql:3306/${MYSQL_DB}?useUnicode=true&connectionCollation=utf8mb4_unicode_ci&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: ${MYSQL_USER}
     password: ${MYSQL_PASS}
   data:
@@ -77,6 +78,8 @@ rocketmq:
   name-server: mall-rocketmq-namesrv:9876
 
 mall:
+  security:
+    token-secret: ${TOKEN_SECRET}
   minio:
     endpoint: http://mall-minio:9000
     access-key: ${MINIO_USER}

@@ -79,10 +79,11 @@ public class SupplierWorkbenchServiceImpl implements SupplierWorkbenchService {
         final LambdaQueryWrapper<PurDeliveryOrder> wrapper = new LambdaQueryWrapper<PurDeliveryOrder>()
                 .eq(query.getSupplierId() != null, PurDeliveryOrder::getSupplierId, query.getSupplierId())
                 .eq(query.getWarehouseId() != null, PurDeliveryOrder::getWarehouseId, query.getWarehouseId())
-                .eq(status != null, PurDeliveryOrder::getStatus, status)
-                .ge(deliveryDate != null, PurDeliveryOrder::getExpectedArrivalTime, deliveryDate.atStartOfDay())
-                .lt(deliveryDate != null, PurDeliveryOrder::getExpectedArrivalTime,
-                        deliveryDate.plusDays(1L).atStartOfDay());
+                .eq(status != null, PurDeliveryOrder::getStatus, status);
+        if (deliveryDate != null) {
+            wrapper.ge(PurDeliveryOrder::getExpectedArrivalTime, deliveryDate.atStartOfDay())
+                    .lt(PurDeliveryOrder::getExpectedArrivalTime, deliveryDate.plusDays(1L).atStartOfDay());
+        }
         return deliveryOrderMapper.selectCount(wrapper);
     }
 

@@ -15,6 +15,7 @@ import com.mall.common.exception.BusinessException;
 import com.mall.common.page.PageResult;
 import com.mall.station.convert.StationConvert;
 import com.mall.station.entity.FinAccount;
+import com.mall.station.entity.FinAccountFlow;
 import com.mall.station.entity.FinWithdrawApply;
 import com.mall.station.entity.MsgRecord;
 import com.mall.station.mapper.FinAccountFlowMapper;
@@ -99,16 +100,16 @@ class StationFinanceServiceImplTest {
         dto.setAuditStatus(10L);
         when(accountMapper.selectById(790002L)).thenReturn(account);
         when(accountMapper.updateById(account)).thenReturn(1);
-        when(withdrawApplyMapper.insert(any())).thenReturn(1);
-        when(accountFlowMapper.insert(any())).thenReturn(1);
+        when(withdrawApplyMapper.insert(any(FinWithdrawApply.class))).thenReturn(1);
+        when(accountFlowMapper.insert(any(FinAccountFlow.class))).thenReturn(1);
         when(stationConvert.toWithdrawApplyDTO(any())).thenReturn(dto);
 
         final WithdrawApplyDTO result = stationFinanceService.applyWithdraw(request);
 
         assertEquals(10L, result.getAuditStatus());
         assertEquals(new java.math.BigDecimal("700.0000"), account.getAvailableAmount());
-        verify(withdrawApplyMapper).insert(any());
-        verify(accountFlowMapper).insert(any());
+        verify(withdrawApplyMapper).insert(any(FinWithdrawApply.class));
+        verify(accountFlowMapper).insert(any(FinAccountFlow.class));
     }
 
     @Test
@@ -132,7 +133,7 @@ class StationFinanceServiceImplTest {
         when(accountMapper.selectById(790002L)).thenReturn(account);
         when(accountMapper.updateById(account)).thenReturn(1);
         when(withdrawApplyMapper.updateById(apply)).thenReturn(1);
-        when(accountFlowMapper.insert(any())).thenReturn(1);
+        when(accountFlowMapper.insert(any(FinAccountFlow.class))).thenReturn(1);
         when(stationConvert.toWithdrawApplyDTO(apply)).thenReturn(dto);
 
         final WithdrawApplyDTO result = stationFinanceService.cancelWithdraw(790401L);

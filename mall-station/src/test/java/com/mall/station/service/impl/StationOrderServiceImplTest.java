@@ -3,6 +3,7 @@ package com.mall.station.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,6 +22,7 @@ import com.mall.station.entity.FinAccount;
 import com.mall.station.entity.FinCommissionDetail;
 import com.mall.station.entity.OrdOrder;
 import com.mall.station.entity.OrdOrderItem;
+import com.mall.station.entity.OrdOrderStatusLog;
 import com.mall.station.entity.WmsDeliveryOrder;
 import com.mall.station.entity.WmsDeliveryStation;
 import com.mall.station.mapper.FinAccountMapper;
@@ -154,7 +156,7 @@ class StationOrderServiceImplTest {
         when(orderItemMapper.selectList(any())).thenReturn(List.of(item));
         when(orderMapper.selectById(761005L)).thenReturn(order);
         when(orderMapper.updateById(order)).thenReturn(1);
-        when(orderStatusLogMapper.insert(any())).thenReturn(1);
+        when(orderStatusLogMapper.insert(any(OrdOrderStatusLog.class))).thenReturn(1);
         when(stationConvert.toOrderItemDTO(item)).thenReturn(dto);
 
         final OrderItemDTO result = stationOrderService.confirmPickup(762005L, new StationPickupConfirmVO());
@@ -162,7 +164,7 @@ class StationOrderServiceImplTest {
         assertEquals(70L, result.getFulfillStatus());
         assertEquals(70L, item.getFulfillStatus());
         assertEquals(50L, order.getTradeStatus());
-        verify(orderStatusLogMapper).insert(any());
+        verify(orderStatusLogMapper, times(2)).insert(any(OrdOrderStatusLog.class));
     }
 
     @Test

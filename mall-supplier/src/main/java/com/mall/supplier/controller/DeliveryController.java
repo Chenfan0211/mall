@@ -27,25 +27,25 @@ public class DeliveryController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('delivery:order:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('delivery:order:view')")
     public Result<PageResult<DeliveryOrderDTO>> pageDeliveryOrders(@Valid final DeliveryOrderQueryVO query) {
         return Result.success(deliveryService.pageDeliveryOrders(query));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('delivery:order:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('delivery:order:view')")
     public Result<DeliveryOrderDTO> getDeliveryOrder(@PathVariable final Long id) {
         return Result.success(deliveryService.getDeliveryOrder(id));
     }
 
     @GetMapping("/items")
-    @PreAuthorize("hasAuthority('delivery:item:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('delivery:item:view')")
     public Result<PageResult<DeliveryItemDTO>> pageDeliveryItems(@Valid final DeliveryItemQueryVO query) {
         return Result.success(deliveryService.pageDeliveryItems(query));
     }
 
     @GetMapping("/items/{id}")
-    @PreAuthorize("hasAuthority('delivery:item:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('delivery:item:view')")
     public Result<DeliveryItemDTO> getDeliveryItem(@PathVariable final Long id) {
         return Result.success(deliveryService.getDeliveryItem(id));
     }

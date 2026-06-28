@@ -271,6 +271,19 @@ export function updateCartItem(id: number, payload: Record<string, PayloadValue>
     });
 }
 
+export function deleteCartItem(id: number, query: Record<string, QueryValue>) {
+    return request<boolean>(`/user/cart/items/${id}?${buildSearch(query)}`, {
+        method: 'DELETE'
+    });
+}
+
+export function selectCartItems(payload: Record<string, PayloadValue>) {
+    return request<boolean>('/user/cart/items/select', {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+    });
+}
+
 export function pageOrders(query: Record<string, QueryValue>) {
     return request<PageResult<UserOrderDTO>>(`/user/orders?${buildSearch(query)}`);
 }
@@ -297,8 +310,36 @@ export function createPaymentTrade(id: number, payload: Record<string, PayloadVa
     });
 }
 
+export function cancelOrder(id: number, payload: Record<string, PayloadValue>) {
+    return request<boolean>(`/user/orders/${id}/cancel`, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
+}
+
+export function confirmOrderReceipt(id: number, payload: Record<string, PayloadValue>) {
+    return request<boolean>(`/user/orders/${id}/receipt`, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
+}
+
+export function reorder(id: number, payload: Record<string, PayloadValue>) {
+    return request<boolean>(`/user/orders/${id}/reorder`, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
+}
+
 export function pageAfterSales(query: Record<string, QueryValue>) {
     return request<PageResult<UserAfterSaleDTO>>(`/user/after-sales?${buildSearch(query)}`);
+}
+
+export function applyAfterSale(payload: Record<string, PayloadValue>) {
+    return request<UserAfterSaleDTO>('/user/after-sales', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
 }
 
 export function getAfterSale(id: number, query: Record<string, QueryValue>) {
@@ -313,6 +354,27 @@ export function listReturnRecords(id: number, query: Record<string, QueryValue>)
     return request<UserReturnRecordDTO[]>(`/user/after-sales/${id}/returns?${buildSearch(query)}`);
 }
 
+export function cancelAfterSale(id: number, payload: Record<string, PayloadValue>) {
+    return request<boolean>(`/user/after-sales/${id}/cancel`, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
+}
+
 export function pageMessages(query: Record<string, QueryValue>) {
     return request<PageResult<UserMessageDTO>>(`/user/messages?${buildSearch(query)}`);
+}
+
+export function markMessageReadApi(id: number, payload: Record<string, PayloadValue>) {
+    return request<boolean>(`/user/messages/${id}/read`, {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+    });
+}
+
+export function markAllMessagesReadApi(payload: Record<string, PayloadValue>) {
+    return request<boolean>('/user/messages/read-all', {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+    });
 }

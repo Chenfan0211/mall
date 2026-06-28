@@ -13,6 +13,12 @@
       }
     },
     {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "授权登录"
+      }
+    },
+    {
       "path": "pages/category/index",
       "style": {
         "navigationBarTitleText": "分类"
@@ -34,6 +40,18 @@
       "path": "pages/order/index",
       "style": {
         "navigationBarTitleText": "订单"
+      }
+    },
+    {
+      "path": "pages/order/detail",
+      "style": {
+        "navigationBarTitleText": "订单详情"
+      }
+    },
+    {
+      "path": "pages/order/review",
+      "style": {
+        "navigationBarTitleText": "订单评价"
       }
     },
     {
@@ -79,6 +97,12 @@
       }
     },
     {
+      "path": "pages/payment/index",
+      "style": {
+        "navigationBarTitleText": "订单支付"
+      }
+    },
+    {
       "path": "pages/aftersale/index",
       "style": {
         "navigationBarTitleText": "售后"
@@ -88,6 +112,12 @@
       "path": "pages/aftersale/detail",
       "style": {
         "navigationBarTitleText": "售后详情"
+      }
+    },
+    {
+      "path": "pages/aftersale/apply",
+      "style": {
+        "navigationBarTitleText": "申请售后"
       }
     },
     {
@@ -106,6 +136,24 @@
       "path": "pages/history/index",
       "style": {
         "navigationBarTitleText": "浏览历史"
+      }
+    },
+    {
+      "path": "pages/notice/index",
+      "style": {
+        "navigationBarTitleText": "商品通知"
+      }
+    },
+    {
+      "path": "pages/receivers/index",
+      "style": {
+        "navigationBarTitleText": "提货人"
+      }
+    },
+    {
+      "path": "pages/reviews/mine",
+      "style": {
+        "navigationBarTitleText": "我的评价"
       }
     },
     {

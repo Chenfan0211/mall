@@ -8,7 +8,6 @@ import com.mall.common.page.PageResult;
 import com.mall.common.result.Result;
 import com.mall.user.service.UserCartService;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,19 +30,16 @@ public class UserCartController {
     }
 
     @GetMapping("/items")
-    @PreAuthorize("hasAuthority('user:cart:view')")
     public Result<PageResult<UserCartItemDTO>> pageCartItems(@Valid final UserCartQueryVO query) {
         return Result.success(userCartService.pageCartItems(query));
     }
 
     @PostMapping("/items")
-    @PreAuthorize("hasAuthority('user:cart:add')")
     public Result<UserCartItemDTO> addCartItem(@Valid @RequestBody final UserCartAddVO request) {
         return Result.success(userCartService.addCartItem(request));
     }
 
     @PutMapping("/items/{id}")
-    @PreAuthorize("hasAuthority('user:cart:update')")
     public Result<UserCartItemDTO> updateCartItem(
             @PathVariable final Long id,
             @Valid @RequestBody final UserCartUpdateVO request) {
@@ -51,7 +47,6 @@ public class UserCartController {
     }
 
     @DeleteMapping("/items/{id}")
-    @PreAuthorize("hasAuthority('user:cart:remove')")
     public Result<UserCartItemDTO> removeCartItem(
             @PathVariable final Long id,
             @Valid @RequestBody final UserCartUpdateVO request) {

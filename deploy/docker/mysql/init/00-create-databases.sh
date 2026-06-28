@@ -7,7 +7,7 @@ XXL_DB="${XXL_JOB_DATABASE:-xxl_job}"
 APP_USER="${MYSQL_APP_USER:-mall}"
 APP_PASSWORD="${MYSQL_APP_PASSWORD:?MYSQL_APP_PASSWORD is required}"
 
-mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" <<EOSQL
+mysql --default-character-set=utf8mb4 -uroot -p"${MYSQL_ROOT_PASSWORD}" <<EOSQL
 CREATE DATABASE IF NOT EXISTS \`${APP_DB}\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE DATABASE IF NOT EXISTS \`${NACOS_DB}\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE DATABASE IF NOT EXISTS \`${XXL_DB}\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -20,5 +20,5 @@ FLUSH PRIVILEGES;
 EOSQL
 
 if [ -f /app-sql/mall.sql ]; then
-  mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" "${APP_DB}" < /app-sql/mall.sql
+  mysql --default-character-set=utf8mb4 -uroot -p"${MYSQL_ROOT_PASSWORD}" "${APP_DB}" < /app-sql/mall.sql
 fi

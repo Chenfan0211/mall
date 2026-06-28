@@ -10,7 +10,6 @@ import com.mall.common.result.Result;
 import com.mall.user.service.UserAfterSaleService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,25 +31,21 @@ public class UserAfterSaleController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('user:aftersale:view')")
     public Result<PageResult<AfterSaleDTO>> pageAfterSales(@Valid final UserAfterSaleQueryVO query) {
         return Result.success(userAfterSaleService.pageAfterSales(query));
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('user:aftersale:apply')")
     public Result<AfterSaleDTO> applyAfterSale(@Valid @RequestBody final UserAfterSaleApplyVO request) {
         return Result.success(userAfterSaleService.applyAfterSale(request));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('user:aftersale:view')")
     public Result<AfterSaleDTO> getAfterSale(@PathVariable final Long id, @RequestParam final Long userId) {
         return Result.success(userAfterSaleService.getAfterSale(id, userId));
     }
 
     @GetMapping("/{id}/items")
-    @PreAuthorize("hasAuthority('user:aftersale:view')")
     public Result<List<AfterSaleItemDTO>> listAfterSaleItems(
             @PathVariable final Long id,
             @RequestParam final Long userId) {
@@ -58,7 +53,6 @@ public class UserAfterSaleController {
     }
 
     @GetMapping("/{id}/returns")
-    @PreAuthorize("hasAuthority('user:aftersale:view')")
     public Result<List<UserReturnRecordDTO>> listReturnRecords(
             @PathVariable final Long id,
             @RequestParam final Long userId) {

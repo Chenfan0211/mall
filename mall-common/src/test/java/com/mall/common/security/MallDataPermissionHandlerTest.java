@@ -246,7 +246,9 @@ class MallDataPermissionHandlerTest {
         assertEquals("(fin_split_flow.subject_type = 2 AND fin_split_flow.subject_id IN (730001)) OR EXISTS "
                         + "(SELECT 1 FROM fin_commission_detail dfs_c WHERE dfs_c.id = "
                         + "fin_split_flow.commission_id AND dfs_c.is_deleted = 0 AND "
-                        + "(dfs_c.subject_type = 2 AND dfs_c.subject_id IN (730001)))",
+                        + "(dfs_c.subject_type = 2 AND dfs_c.subject_id IN (730001))) OR EXISTS "
+                        + "(SELECT 1 FROM ord_order dfs_o WHERE dfs_o.id = fin_split_flow.order_id "
+                        + "AND dfs_o.is_deleted = 0 AND dfs_o.leader_id IN (730001))",
                 handler.getSqlSegment(new Table("fin_split_flow"), null, "test").toString());
     }
 

@@ -1,6 +1,7 @@
 package com.mall.user.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,12 +11,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mall.api.user.dto.UserHomeDTO;
 import com.mall.common.web.GlobalExceptionHandler;
 import com.mall.user.service.UserHomeService;
+import java.lang.reflect.Method;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(UserHomeController.class)
@@ -42,5 +45,12 @@ class UserHomeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("0"))
                 .andExpect(jsonPath("$.data.onlineProductCount").value(8));
+    }
+
+    @Test
+    void getHome_mobileEndpoint_hasNoPreAuthorize() throws Exception {
+        final Method method = UserHomeController.class.getDeclaredMethod("getHome", com.mall.api.user.vo.UserHomeQueryVO.class);
+
+        assertNull(method.getAnnotation(PreAuthorize.class));
     }
 }

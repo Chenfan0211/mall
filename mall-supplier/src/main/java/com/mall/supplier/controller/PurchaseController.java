@@ -30,37 +30,37 @@ public class PurchaseController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('purchase:order:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('purchase:order:view')")
     public Result<PageResult<PurchaseOrderDTO>> pagePurchaseOrders(@Valid final PurchaseOrderQueryVO query) {
         return Result.success(purchaseService.pagePurchaseOrders(query));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('purchase:order:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('purchase:order:view')")
     public Result<PurchaseOrderDTO> getPurchaseOrder(@PathVariable final Long id) {
         return Result.success(purchaseService.getPurchaseOrder(id));
     }
 
     @GetMapping("/items")
-    @PreAuthorize("hasAuthority('purchase:item:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('purchase:item:view')")
     public Result<PageResult<PurchaseItemDTO>> pagePurchaseItems(@Valid final PurchaseItemQueryVO query) {
         return Result.success(purchaseService.pagePurchaseItems(query));
     }
 
     @GetMapping("/items/{id}")
-    @PreAuthorize("hasAuthority('purchase:item:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('purchase:item:view')")
     public Result<PurchaseItemDTO> getPurchaseItem(@PathVariable final Long id) {
         return Result.success(purchaseService.getPurchaseItem(id));
     }
 
     @GetMapping("/{id}/audit-logs")
-    @PreAuthorize("hasAuthority('purchase:audit-log:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('purchase:audit-log:view')")
     public Result<List<PurchaseAuditLogDTO>> listAuditLogs(@PathVariable final Long id) {
         return Result.success(purchaseService.listAuditLogs(id));
     }
 
     @GetMapping("/{id}/source-logs")
-    @PreAuthorize("hasAuthority('purchase:source-log:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') or hasAuthority('purchase:source-log:view')")
     public Result<List<PurchaseSourceLogDTO>> listSourceLogs(@PathVariable final Long id) {
         return Result.success(purchaseService.listSourceLogs(id));
     }

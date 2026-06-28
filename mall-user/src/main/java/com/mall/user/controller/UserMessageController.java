@@ -6,7 +6,6 @@ import com.mall.common.page.PageResult;
 import com.mall.common.result.Result;
 import com.mall.user.service.UserMessageService;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,19 +26,16 @@ public class UserMessageController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('user:message:view')")
     public Result<PageResult<UserMessageDTO>> pageMessages(@Valid final UserMessageQueryVO query) {
         return Result.success(userMessageService.pageMessages(query));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('user:message:view')")
     public Result<UserMessageDTO> getMessage(@PathVariable final Long id, @RequestParam final Long userId) {
         return Result.success(userMessageService.getMessage(id, userId));
     }
 
     @PostMapping("/{id}/read")
-    @PreAuthorize("hasAuthority('user:message:read')")
     public Result<UserMessageDTO> markMessageRead(@PathVariable final Long id, @RequestParam final Long userId) {
         return Result.success(userMessageService.markMessageRead(id, userId));
     }

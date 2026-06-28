@@ -22,6 +22,7 @@ class GatewayAuthenticationFilterTest {
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(AuthHeaderNames.ACCOUNT_ID, "700001");
         request.addHeader(AuthHeaderNames.USERNAME, "test_platform_admin");
+        request.addHeader(AuthHeaderNames.PORTAL_CODE, "admin");
         request.addHeader(AuthHeaderNames.AUTHORITIES, "operation:todo:view,operation:exception:view");
         request.addHeader(AuthHeaderNames.ALL_PLATFORM, "true");
         request.addHeader(AuthHeaderNames.CITY_IDS, "440100,440300");
@@ -30,6 +31,7 @@ class GatewayAuthenticationFilterTest {
             final MallLoginUser loginUser =
                     (MallLoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             assertEquals(700001L, loginUser.getAccountId());
+            assertEquals("admin", loginUser.getPortalCode());
             assertTrue(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                     .anyMatch(authority -> "operation:todo:view".equals(authority.getAuthority())));
             assertTrue(DataScopeContext.get().isAllPlatform());

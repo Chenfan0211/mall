@@ -28,49 +28,49 @@ public class WmsInventoryController {
     }
 
     @GetMapping("/stocks")
-    @PreAuthorize("hasAuthority('wms:inventory:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('warehouse-h5') or hasAuthority('wms:inventory:view')")
     public Result<PageResult<InventoryDTO>> pageInventories(@Valid final WmsInventoryQueryVO query) {
         return Result.success(wmsInventoryService.pageInventories(query));
     }
 
     @GetMapping("/stocks/{id}")
-    @PreAuthorize("hasAuthority('wms:inventory:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('warehouse-h5') or hasAuthority('wms:inventory:view')")
     public Result<InventoryDTO> getInventory(@PathVariable final Long id) {
         return Result.success(wmsInventoryService.getInventory(id));
     }
 
     @GetMapping("/locks")
-    @PreAuthorize("hasAuthority('wms:inventory-lock:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('warehouse-h5') or hasAuthority('wms:inventory-lock:view')")
     public Result<PageResult<InventoryLockDTO>> pageInventoryLocks(@Valid final WmsInventoryQueryVO query) {
         return Result.success(wmsInventoryService.pageInventoryLocks(query));
     }
 
     @GetMapping("/locks/{id}")
-    @PreAuthorize("hasAuthority('wms:inventory-lock:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('warehouse-h5') or hasAuthority('wms:inventory-lock:view')")
     public Result<InventoryLockDTO> getInventoryLock(@PathVariable final Long id) {
         return Result.success(wmsInventoryService.getInventoryLock(id));
     }
 
     @GetMapping("/logs")
-    @PreAuthorize("hasAuthority('wms:inventory-log:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('warehouse-h5') or hasAuthority('wms:inventory-log:view')")
     public Result<PageResult<InventoryLogDTO>> pageInventoryLogs(@Valid final WmsInventoryQueryVO query) {
         return Result.success(wmsInventoryService.pageInventoryLogs(query));
     }
 
     @GetMapping("/logs/{id}")
-    @PreAuthorize("hasAuthority('wms:inventory-log:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('warehouse-h5') or hasAuthority('wms:inventory-log:view')")
     public Result<InventoryLogDTO> getInventoryLog(@PathVariable final Long id) {
         return Result.success(wmsInventoryService.getInventoryLog(id));
     }
 
     @GetMapping("/stocktakes")
-    @PreAuthorize("hasAuthority('wms:stocktake:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('warehouse-h5') or hasAuthority('wms:stocktake:view')")
     public Result<PageResult<StocktakeOrderDTO>> pageStocktakeOrders(@Valid final WmsInventoryQueryVO query) {
         return Result.success(wmsInventoryService.pageStocktakeOrders(query));
     }
 
     @GetMapping("/stocktakes/{id}")
-    @PreAuthorize("hasAuthority('wms:stocktake:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('warehouse-h5') or hasAuthority('wms:stocktake:view')")
     public Result<StocktakeOrderDTO> getStocktakeOrder(@PathVariable final Long id) {
         return Result.success(wmsInventoryService.getStocktakeOrder(id));
     }

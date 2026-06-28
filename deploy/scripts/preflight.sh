@@ -19,7 +19,7 @@ if [ ! -f deploy/.env ]; then
   exit 1
 fi
 
-for name in MYSQL_ROOT_PASSWORD MYSQL_APP_PASSWORD REDIS_PASSWORD MINIO_ROOT_USER MINIO_ROOT_PASSWORD; do
+for name in MYSQL_ROOT_PASSWORD MYSQL_APP_PASSWORD REDIS_PASSWORD MALL_TOKEN_SECRET MINIO_ROOT_USER MINIO_ROOT_PASSWORD; do
   if ! grep -Eq "^${name}=.+" deploy/.env; then
     echo "${name} is missing in deploy/.env"
     exit 1

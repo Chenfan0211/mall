@@ -86,3 +86,7 @@ spring:
           uri: ${MALL_ROUTE_USER_URI:http://127.0.0.1:18092}
           predicates:
             - Path=/api/user/**
+
+mall:
+  security:
+    token-secret: ${MALL_TOKEN_SECRET:}

@@ -1,32 +1,69 @@
 <template>
-  <view class="page">
+  <view class="page no-tab activity-page">
     <view class="section hero">
       <text class="title">周末鲜果专题</text>
       <text class="subtle">活动只影响展示，不改变价格库存校验。</text>
     </view>
-    <view v-for="item in products" :key="item.publishSkuId" class="section product-row" @click="openDetail(item.productId)">
-      <view>
-        <text class="title">{{ item.productName }}</text>
-        <text class="subtle">{{ item.skuName }} · 库存 {{ item.availableQty }}</text>
-      </view>
-      <text class="price">¥{{ item.salePrice }}</text>
-    </view>
+
+    <ProductCard
+      v-for="item in products"
+      :key="item.publishSkuId"
+      :product="item"
+      :favorite="state.favorites.has(item.productId)"
+      @open="openDetail(item.productId)"
+      @favorite="toggleFavorite(item.productId)"
+      @notice="toggleNotice(item.productId)"
+      @add="addProduct(item)"
+    />
+
+    <EmptyActionCard
+      v-if="products.length === 0"
+      title="活动商品暂未上架"
+      sub="当前自提点暂无活动商品，可先返回首页。"
+      icon="活"
+      button-text="返回首页"
+      @action="goHome"
+    />
+    <UserToast />
   </view>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { pageProducts, type UserProductCardDTO } from '@/api/user';
 
+import EmptyActionCard from '@/components/EmptyActionCard.vue';
+import ProductCard from '@/components/ProductCard.vue';
+import UserToast from '@/components/UserToast.vue';
+import { pageProducts, type UserProductCardDTO } from '@/api/user';
+import { addProductToCart, navigateUser, showUserToast, toggleFavorite, toggleNotice, useUserState } from '@/stores/userState';
+
+const state = useUserState();
 const products = ref<UserProductCardDTO[]>([]);
 
 async function loadData() {
-    const page = await pageProducts({ pageNum: 1, pageSize: 20, cityId: 440100, stationId: 720001 });
-    products.value = page.list || [];
+    try {
+        const page = await pageProducts({ pageNum: 1, pageSize: 20, cityId: state.city.id, stationId: state.station.id });
+        products.value = page.list || [];
+    } catch (error) {
+        showUserToast('活动商品接口暂不可用', 'warn');
+    }
+}
+
+function addProduct(item: UserProductCardDTO) {
+    if (!state.authenticated) {
+        state.afterLoginUrl = '/pages/activity/index';
+        navigateUser('/pages/login/index');
+        return;
+    }
+    addProductToCart(item);
 }
 
 function openDetail(productId: number) {
-    uni.navigateTo({ url: `/pages/product/detail?id=${productId}` });
+    navigateUser(`/pages/product/detail?id=${productId}`);
+}
+
+function goHome() {
+    uni.switchTab({ url: '/pages/home/index' });
 }
 
 onMounted(() => {
@@ -35,6 +72,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.activity-page {
+  padding-bottom: 40rpx;
+}
+
 .hero {
   color: #ffffff;
   background: linear-gradient(135deg, #d94b34 0%, #ef7a37 62%, #f7b36c 100%);
@@ -45,15 +86,5 @@ onMounted(() => {
 .hero .title,
 .hero .subtle {
   color: #ffffff;
-}
-
-.product-row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.price {
-  color: #d94b34;
-  font-weight: 700;
 }
 </style>
