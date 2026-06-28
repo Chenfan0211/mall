@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商城全链路业务流程图 - 2026-06-27</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d9e2ef;
+      --op: #265c9d;
+      --op-bg: #eaf3ff;
+      --user: #238269;
+      --user-bg: #eaf8f2;
+      --wms: #9a6517;
+      --wms-bg: #fff5df;
+      --risk: #b42318;
+      --risk-bg: #fff0ee;
+      --finance: #6750a4;
+      --finance-bg: #f1edff;
+      --gray: #4b5563;
+      --gray-bg: #f2f4f7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      line-height: 1.58;
+    }
+
+    header {
+      background:
+        linear-gradient(135deg, rgba(23, 32, 51, .92), rgba(38, 92, 157, .9)),
+        radial-gradient(circle at 92% 18%, rgba(255, 255, 255, .18), transparent 30%);
+      color: #fff;
+      padding: 28px 32px 24px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0;
+    }
+
+    header p {
+      max-width: 1100px;
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, .82);
+      font-size: 14px;
+    }
+
+    .wrap {
+      width: min(1560px, calc(100% - 40px));
+      margin: 20px auto 36px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .toolbar button {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      color: #243044;
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 22px rgba(16, 24, 40, .07);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcff;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .body {
+      padding: 18px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 3px 10px;
+      color: #374151;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--gray);
+    }
+
+    .tag.op .dot { background: var(--op); }
+    .tag.user .dot { background: var(--user); }
+    .tag.wms .dot { background: var(--wms); }
+    .tag.risk .dot { background: var(--risk); }
+    .tag.finance .dot { background: var(--finance); }
+
+    .main-flow {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(128px, 1fr));
+      gap: 14px 18px;
+      align-items: stretch;
+    }
+
+    .node {
+      position: relative;
+      min-height: 108px;
+      padding: 12px 12px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .node::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -18px;
+      width: 18px;
+      height: 2px;
+      background: #aebacc;
+    }
+
+    .node:nth-child(8n)::after,
+    .node.no-arrow::after {
+      display: none;
+    }
+
+    .node b {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .node p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .op { border-color: #b9d6f6; background: var(--op-bg); }
+    .user { border-color: #b9e5d8; background: var(--user-bg); }
+    .wms { border-color: #efd19b; background: var(--wms-bg); }
+    .risk { border-color: #f0b8b1; background: var(--risk-bg); }
+    .finance { border-color: #d1c5ff; background: var(--finance-bg); }
+    .gray { border-color: #d6dce6; background: var(--gray-bg); }
+
+    .branch {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .lane-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .lane {
+      display: grid;
+      grid-template-columns: 148px minmax(0, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .lane-title {
+      display: flex;
+      align-items: center;
+      padding: 14px;
+      background: #f3f6fb;
+      border-right: 1px solid var(--line);
+      font-weight: 700;
+      color: #344054;
+    }
+
+    .lane-body {
+      padding: 12px;
+    }
+
+    .lane-flow {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(118px, 1fr));
+      gap: 12px 18px;
+    }
+
+    .lane-flow .node {
+      min-height: 86px;
+    }
+
+    .table-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #edf1f6;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f6fb;
+      color: #344054;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 1px 8px;
+      color: #344054;
+      background: #eef2f7;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .pill.op { color: var(--op); background: var(--op-bg); border: 0; }
+    .pill.user { color: var(--user); background: var(--user-bg); border: 0; }
+    .pill.wms { color: var(--wms); background: var(--wms-bg); border: 0; }
+    .pill.risk { color: var(--risk); background: var(--risk-bg); border: 0; }
+    .pill.finance { color: var(--finance); background: var(--finance-bg); border: 0; }
+
+    .note-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .note {
+      min-height: 98px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .note b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 1180px) {
+      .main-flow { grid-template-columns: repeat(4, minmax(128px, 1fr)); }
+      .node:nth-child(8n)::after { display: block; }
+      .node:nth-child(4n)::after { display: none; }
+      .lane-flow { grid-template-columns: repeat(3, minmax(118px, 1fr)); }
+      .table-grid { grid-template-columns: 1fr; }
+      .note-list { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .wrap { width: calc(100% - 20px); }
+      header { padding: 22px 18px; }
+      header h1 { font-size: 22px; }
+      .section-head { display: block; }
+      .section-head span { display: block; margin-top: 4px; }
+      .main-flow,
+      .branch,
+      .lane-flow { grid-template-columns: 1fr; }
+      .node::after { display: none !important; }
+      .lane { grid-template-columns: 1fr; }
+      .lane-title { border-right: 0; border-bottom: 1px solid var(--line); }
+    }
+
+    @media print {
+      body { background: #fff; }
+      header,
+      section { break-inside: avoid; box-shadow: none; }
+      .toolbar { display: none; }
+      .wrap { width: 100%; margin: 12px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>商城全链路业务流程图</h1>
+    <p>依据《功能清单-商城全链路》《商城项目流程文档》《仓库单据流转流程》整理。覆盖商品发布、下单支付、采购入库、仓储履约、配送自提、售后退款、分账提现和异常闭环。</p>
+  </header>
+
+  <main class="wrap">
+    <div class="toolbar">
+      <span>版本日期：2026-06-27 ｜ 当前阶段：UI 交互原型与功能清单对齐，不代表开始业务代码实现</span>
+      <button type="button" onclick="window.print()">打印 / 导出 PDF</button>
+    </div>
+
+    <section>
+      <div class="section-head">
+        <h2>图例</h2>
+        <span>颜色代表职责域，箭头代表状态或数据流转</span>
+      </div>
+      <div class="body legend">
+        <span class="tag op"><i class="dot"></i>运营后台 / 商品团期</span>
+        <span class="tag user"><i class="dot"></i>用户 / 自提点 / 供应商 H5</span>
+        <span class="tag wms"><i class="dot"></i>WMS / 仓配 / 配送</span>
+        <span class="tag risk"><i class="dot"></i>售后 / 异常 / 缺货</span>
+        <span class="tag finance"><i class="dot"></i>资金 / 分账 / 提现</span>
+        <span class="tag"><i class="dot"></i>边界 / 暂缓能力</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>1. 全链路主流程</h2>
+        <span>商品 -> 团期 -> 订单 -> 仓配 -> 自提 -> 售后/分账</span>
+      </div>
+      <div class="body">
+        <div class="main-flow">
+          <div class="node op"><b>基础资料</b><p>供应商、自提点、城市、仓库、线路、司机、账号和数据权限。</p></div>
+          <div class="node op"><b>商品建档</b><p>SPU/SKU、规格、类目、供应商、采购员、城市价格和搜索词。</p></div>
+          <div class="node op"><b>团期发布</b><p>销售时间、截团时间、配送日、采购仓、价格、库存模式。</p></div>
+          <div class="node user"><b>用户浏览</b><p>选择城市/自提点后浏览首页、类目、搜索、活动和商品详情。</p></div>
+          <div class="node user"><b>购物车/下单</b><p>校验团期、可售范围、价格快照、库存售卖模式和提货信息。</p></div>
+          <div class="node finance"><b>支付处理</b><p>微信支付成功后生成支付单、资金流水和订单已付款状态。</p></div>
+          <div class="node op"><b>截团汇总</b><p>按团期、SKU、自提点、配送日汇总需求，进入采购/库存准备。</p></div>
+          <div class="node wms"><b>采购协同</b><p>采购单、供应商送货单、到仓凭证和采购审核记录。</p></div>
+
+          <div class="node wms"><b>入库收货</b><p>入库单、收货接单、扫码实收、质检、差异说明。</p></div>
+          <div class="node wms"><b>上架库存</b><p>上架任务完成后库存落到仓库、库区、库位、批次。</p></div>
+          <div class="node wms"><b>配送数据</b><p>按配送日、仓库、线路、自提点、SKU 汇总生成配送数据。</p></div>
+          <div class="node wms"><b>波次下放</b><p>基于配送数据生成波次单、拣货任务、装车单。</p></div>
+          <div class="node wms"><b>拣货装车</b><p>按库位拣货，缺货标记，装车确认；装车不正式扣库存。</p></div>
+          <div class="node wms"><b>确认出库</b><p>出库只能扣减一次库存，写库存流水，开放司机任务。</p></div>
+          <div class="node wms"><b>司机配送</b><p>司机发车、线路配送、到店签到、配送异常上报。</p></div>
+          <div class="node user"><b>自提完成</b><p>自提点签收，到货通知，用户提货；订单商品进入完成口径。</p></div>
+
+          <div class="node finance"><b>佣金生成</b><p>订单商品已自提后可生成佣金明细。</p></div>
+          <div class="node finance"><b>订单分账</b><p>订单主表完成后生成最终分账，非支付后分账。</p></div>
+          <div class="node finance"><b>提现申请</b><p>自提点、团长、供应商提交提现，冻结可提现金额。</p></div>
+          <div class="node finance"><b>财务审核</b><p>提现不能自动通过；通过后进入打款，驳回释放冻结金额。</p></div>
+          <div class="node risk"><b>售后入口</b><p>已发货后禁止取消，只能走仅退款或退货退款。</p></div>
+          <div class="node risk"><b>退款/退货</b><p>仅退款审核后直接退款；退货退款需退货确认后退款。</p></div>
+          <div class="node risk"><b>异常中心</b><p>缺货、配送异常、退款失败、分账失败、对账差异统一闭环。</p></div>
+          <div class="node gray no-arrow"><b>报表审计</b><p>订单、履约、库存、售后、资金、权限变更全链路留痕。</p></div>
+        </div>
+
+        <div class="branch">
+          <div class="node risk no-arrow"><b>未支付分支</b><p>提交订单后未支付：用户可取消；15 分钟超时关闭；最后 5 分钟公众号提醒。</p></div>
+          <div class="node risk no-arrow"><b>缺货分支</b><p>拣货缺货影响履约，进入缺货处理，可补货、替换、部分退款或关闭。</p></div>
+          <div class="node risk no-arrow"><b>退货回仓</b><p>退货单由退货订单生成，司机取回，仓库交接后合格入库或报损。</p></div>
+          <div class="node gray no-arrow"><b>第一版暂缓</b><p>优惠券、积分中心、箱码、地图线路、复杂 WMS 统计、温区/水果仓不纳入主流程。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>2. 分角色泳道</h2>
+        <span>同一业务对象跨多端协同，按角色和数据权限隔离</span>
+      </div>
+      <div class="body lane-grid">
+        <div class="lane">
+          <div class="lane-title">运营后台</div>
+          <div class="lane-body">
+            <div class="lane-flow">
+              <div class="node op"><b>经营驾驶舱</b><p>GMV、订单、退款、缺货、履约率和待办异常。</p></div>
+              <div class="node op"><b>商品团期</b><p>商品档案、类目、团期、发布/下架和消息触达。</p></div>
+              <div class="node op"><b>订单履约</b><p>订单中心、履约轨迹、缺货处理。</p></div>
+              <div class="node risk"><b>售后审核</b><p>退款、退货退款、责任方认定。</p></div>
+              <div class="node finance"><b>财务风控</b><p>资金流水、分账、提现、对账和异常资金。</p></div>
+              <div class="node gray no-arrow"><b>权限审计</b><p>角色、数据权限、导出权限和操作日志。</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lane">
+          <div class="lane-title">用户小程序</div>
+          <div class="lane-body">
+            <div class="lane-flow">
+              <div class="node user"><b>选择自提点</b><p>城市、自提点、休假和可售范围校验。</p></div>
+              <div class="node user"><b>浏览商品</b><p>首页、分类、搜索、活动、详情、评价。</p></div>
+              <div class="node user"><b>下单支付</b><p>购物车、确认订单、微信支付、支付结果。</p></div>
+              <div class="node user"><b>订单查看</b><p>待付款、备货中、待提货、已完成。</p></div>
+              <div class="node risk"><b>申请售后</b><p>仅退款、退货退款、售后详情。</p></div>
+              <div class="node gray no-arrow"><b>消息触达</b><p>支付提醒、到货通知、售后通知。</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lane">
+          <div class="lane-title">自提点/团长</div>
+          <div class="lane-body">
+            <div class="lane-flow">
+              <div class="node user"><b>工作台</b><p>今日提货、到店、异常、资金摘要。</p></div>
+              <div class="node user"><b>门店作业</b><p>配送汇总、商品明细、到货通知。</p></div>
+              <div class="node wms"><b>签收协同</b><p>司机到点签到后确认到货和待提货。</p></div>
+              <div class="node risk"><b>异常反馈</b><p>少件、破损、错货、用户未取。</p></div>
+              <div class="node finance"><b>佣金提现</b><p>佣金明细、提现申请、审核结果。</p></div>
+              <div class="node gray no-arrow"><b>休假申请</b><p>影响用户选点和未支付订单继续支付。</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lane">
+          <div class="lane-title">供应商</div>
+          <div class="lane-body">
+            <div class="lane-flow">
+              <div class="node user"><b>销售摘要</b><p>商品销售、采购待办、货款摘要。</p></div>
+              <div class="node wms"><b>采购单</b><p>采购明细、审核状态、到仓计划。</p></div>
+              <div class="node wms"><b>送货单</b><p>提交预计到仓、送货数量、联系人和凭证。</p></div>
+              <div class="node risk"><b>缺货反馈</b><p>可供数量不足、预计补货时间、缺货说明。</p></div>
+              <div class="node finance"><b>货款结算</b><p>结算单、扣款、索赔、可提现金额。</p></div>
+              <div class="node gray no-arrow"><b>操作记录</b><p>采购、到仓、提现、缺货记录只读留痕。</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lane">
+          <div class="lane-title">WMS / 仓配</div>
+          <div class="lane-body">
+            <div class="lane-flow">
+              <div class="node wms"><b>基础数据</b><p>仓库、库区、库位、线路、司机。</p></div>
+              <div class="node wms"><b>入库</b><p>收货、质检、上架、库存流水。</p></div>
+              <div class="node wms"><b>库存</b><p>实时库存、锁定、盘点、移库、报损。</p></div>
+              <div class="node wms"><b>出库</b><p>波次、拣货、装车、确认出库。</p></div>
+              <div class="node wms"><b>配送</b><p>司机任务、发车、签到、回仓。</p></div>
+              <div class="node risk no-arrow"><b>差异留痕</b><p>收货、上架、拣货、装车、回仓差异必须填原因。</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>3. WMS 单据链与生成规则</h2>
+        <span>采购 -> 入库 -> 上架 -> 波次 -> 拣货 -> 装车 -> 出库 -> 配送 -> 回仓</span>
+      </div>
+      <div class="body">
+        <div class="main-flow">
+          <div class="node wms"><b>采购单</b><p>供应商发起、采购发起、订单自动生成。</p></div>
+          <div class="node wms"><b>入库单</b><p>采购入库、其他入库、退货入库。</p></div>
+          <div class="node wms"><b>上架任务</b><p>指定库区库位，库存增加，写入库流水。</p></div>
+          <div class="node wms"><b>配送单</b><p>仓库发起或订单自动生成。</p></div>
+          <div class="node wms"><b>波次单</b><p>按配送数据下放，生成拣货任务。</p></div>
+          <div class="node wms"><b>出库单</b><p>其他出库或配送波次生成。</p></div>
+          <div class="node wms"><b>司机配送单</b><p>确认出库后开放司机执行。</p></div>
+          <div class="node wms no-arrow"><b>回仓确认单</b><p>退货取回、仓库交接、库存处理。</p></div>
+        </div>
+
+        <div class="table-grid" style="margin-top:16px">
+          <table>
+            <thead>
+              <tr><th>单据</th><th>生成来源</th><th>审核规则</th><th>后续动作</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="pill wms">采购单</span></td><td>供应商发起；采购发起；订单自动生成</td><td>供应商发起需采购审核和仓库审核；采购发起需仓库审核；订单自动生成无需审核</td><td>供应商按采购单送货到指定仓库</td></tr>
+              <tr><td><span class="pill wms">入库单</span></td><td>采购入库；仓库其他入库；司机退货入库</td><td>采购入库无需审核；仓库自发起需要审核；退货入库无需审核</td><td>接单、扫码收货、质检、上架、库存增加</td></tr>
+              <tr><td><span class="pill wms">配送单</span></td><td>仓库发起；订单自动生成</td><td>仓库发起需仓库审核；订单自动生成无需审核</td><td>波次下放、拣货、标记缺货、生成出库单</td></tr>
+              <tr><td><span class="pill wms">出库单</span></td><td>仓库其他出库；配送单波次下放</td><td>其他出库需仓库审核；波次生成无需审核</td><td>装车、出库/部分出库、扣减库存</td></tr>
+              <tr><td><span class="pill risk">配送退货单</span></td><td>根据退货订单自动生成</td><td>无需审核</td><td>司机取回退货，回仓后生成退货入库单</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead>
+              <tr><th>库存规则</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>库存定位</td><td>库存必须落到仓库、库区、库位、批次；可售库存只来自已上架可售存储区。</td></tr>
+              <tr><td>库存扣减</td><td>拣货和装车不正式扣库存，确认出库才扣减库存。</td></tr>
+              <tr><td>幂等提交</td><td>关键提交动作必须幂等，重复提交只返回第一次有效结果。</td></tr>
+              <tr><td>差异处理</td><td>收货、上架、拣货、装车、回仓差异必须填写原因并留痕。</td></tr>
+              <tr><td>权限边界</td><td>普通员工只处理分配任务；主管可转派、关闭、查看失败提交。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>4. 订单、售后与资金状态</h2>
+        <span>订单主状态、售后状态、资金状态分线管理</span>
+      </div>
+      <div class="body table-grid">
+        <table>
+          <thead>
+            <tr><th>订单状态</th><th>进入条件</th><th>可执行动作 / 限制</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="pill user">未支付</span></td><td>用户提交订单但未支付</td><td>用户取消、支付、系统超时关闭；后台不提供手动取消。</td></tr>
+            <tr><td><span class="pill finance">已付款/待发货</span></td><td>支付成功，未出库</td><td>可按权限取消并退款；取消必须填写原因、二次确认、记录日志。</td></tr>
+            <tr><td><span class="pill wms">已发货/待收货</span></td><td>出库完成并进入配送/待自提</td><td>禁止取消，只能走售后。</td></tr>
+            <tr><td><span class="pill user">已完成</span></td><td>订单下所有订单商品已自提</td><td>可售后、评价、分账；售后不回退履约状态。</td></tr>
+            <tr><td><span class="pill gray">已关闭</span></td><td>未支付超时或用户取消未支付订单</td><td>只读查看，不产生退款。</td></tr>
+            <tr><td><span class="pill risk">已取消</span></td><td>已支付未发货被后台取消</td><td>进入退款链路，需要退款流水。</td></tr>
+          </tbody>
+        </table>
+
+        <table>
+          <thead>
+            <tr><th>售后/资金状态</th><th>流程</th><th>规则</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="pill risk">仅退款</span></td><td>用户申请 -> 后台审核 -> 直接退款</td><td>支持部分退款，退款失败可重试并进入异常中心。</td></tr>
+            <tr><td><span class="pill risk">退货退款</span></td><td>用户申请 -> 后台审核 -> 退货取回 -> 仓库/运营确认 -> 退款</td><td>退货进度和退款明细在用户端只读展示。</td></tr>
+            <tr><td><span class="pill finance">分佣</span></td><td>订单商品已自提后生成佣金明细</td><td>退款完成后按商品和退款金额扣回佣金。</td></tr>
+            <tr><td><span class="pill finance">分账</span></td><td>订单主表完成后生成最终分账</td><td>非支付后分账；失败进入异常资金处理。</td></tr>
+            <tr><td><span class="pill finance">提现</span></td><td>提交提现 -> 财务审核 -> 打款</td><td>不能自动通过；驳回释放冻结金额。</td></tr>
+            <tr><td><span class="pill risk">对账差异</span></td><td>支付、退款、提现、分账对账</td><td>必须进入异常中心或异常资金处理，不能只在报表展示。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>5. 异常入口与第一版边界</h2>
+        <span>高风险动作必须二次确认或留痕</span>
+      </div>
+      <div class="body note-list">
+        <div class="note risk"><b>履约异常</b><p>缺货、配送延误、无法送达、地址异常、少件、破损、错货进入履约/异常处理；用户商品问题走售后。</p></div>
+        <div class="note risk"><b>资金异常</b><p>退款失败、分账失败、提现异常、押金不足、对账差异进入异常资金处理。</p></div>
+        <div class="note op"><b>高风险操作</b><p>发布、下架、取消已支付订单、退款、提现、分账、导出、权限变更、确认出库必须二次确认或留痕。</p></div>
+        <div class="note gray"><b>数据隔离</b><p>平台管理员看全局；城市运营看授权城市；供应商、自提点、仓库角色只能看自身或授权范围。</p></div>
+        <div class="note gray"><b>暂缓能力</b><p>优惠券、积分中心、箱码、地图线路、复杂 WMS 统计、车辆装载优化、温区/水果仓不进入当前第一版主流程。</p></div>
+        <div class="note gray"><b>文档同步</b><p>后续 UI 原型增删页面、调整字段或修改流程时，需要同步追加更新功能清单变更记录。</p></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
