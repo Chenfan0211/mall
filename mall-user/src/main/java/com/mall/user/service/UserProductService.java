@@ -13,6 +13,8 @@ public interface UserProductService {
 
     PageResult<UserProductCardDTO> pageProducts(UserProductQueryVO query);
 
+    PageResult<UserProductCardDTO> pageActivityProducts(String activityCode, UserProductQueryVO query);
+
     UserProductDetailDTO getProductDetail(Long id, UserProductQueryVO query);
 
     PageResult<UserCommentDTO> pageComments(UserProductQueryVO query);

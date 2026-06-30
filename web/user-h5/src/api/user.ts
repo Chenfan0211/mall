@@ -31,10 +31,47 @@ export interface UserStationDTO {
 export interface UserCategoryDTO {
     id: number;
     categoryName: string;
+    categoryCode?: string;
+    imageUrl?: string;
     parentId?: number;
     level?: number;
     sortNo?: number;
     status: number;
+}
+
+export interface UserHomeCategoryAssetDTO {
+    categoryId: number;
+    categoryCode?: string;
+    categoryName: string;
+    imageUrl?: string;
+    sortNo?: number;
+}
+
+export interface UserHomeBannerDTO {
+    code: string;
+    title: string;
+    subTitle?: string;
+    description?: string;
+    imageUrl?: string;
+    linkUrl?: string;
+    activityCode?: string;
+    sortNo?: number;
+}
+
+export interface UserHomePromoDTO {
+    code: string;
+    title: string;
+    actionText?: string;
+    imageUrl?: string;
+    linkUrl?: string;
+    activityCode?: string;
+    sortNo?: number;
+}
+
+export interface UserHomeAssetDTO {
+    categories: UserHomeCategoryAssetDTO[];
+    banners: UserHomeBannerDTO[];
+    promos: UserHomePromoDTO[];
 }
 
 export interface UserProductCardDTO {
@@ -218,6 +255,9 @@ export interface UserReturnRecordDTO {
 
 type QueryValue = string | number | undefined;
 type PayloadValue = string | number | number[] | undefined;
+type ApiOptions = {
+    silent?: boolean;
+};
 
 function buildSearch(query: Record<string, QueryValue>) {
     const search = new URLSearchParams();
@@ -229,32 +269,43 @@ function buildSearch(query: Record<string, QueryValue>) {
     return search.toString();
 }
 
-export function getHomeSummary(query: Record<string, QueryValue>) {
-    return request<HomeSummary>(`/user/home/summary?${buildSearch(query)}`);
+export function getHomeSummary(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<HomeSummary>(`/user/home/summary?${buildSearch(query)}`, options);
 }
 
-export function pageStations(query: Record<string, QueryValue>) {
-    return request<PageResult<UserStationDTO>>(`/user/stations?${buildSearch(query)}`);
+export function getHomeAssets(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<UserHomeAssetDTO>(`/user/home/assets?${buildSearch(query)}`, options);
 }
 
-export function pageCategories(query: Record<string, QueryValue>) {
-    return request<PageResult<UserCategoryDTO>>(`/user/products/categories?${buildSearch(query)}`);
+export function pageStations(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserStationDTO>>(`/user/stations?${buildSearch(query)}`, options);
 }
 
-export function pageProducts(query: Record<string, QueryValue>) {
-    return request<PageResult<UserProductCardDTO>>(`/user/products?${buildSearch(query)}`);
+export function pageCategories(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserCategoryDTO>>(`/user/products/categories?${buildSearch(query)}`, options);
 }
 
-export function getProductDetail(id: number, query: Record<string, QueryValue>) {
-    return request<UserProductDetailDTO>(`/user/products/${id}?${buildSearch(query)}`);
+export function pageProducts(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserProductCardDTO>>(`/user/products?${buildSearch(query)}`, options);
 }
 
-export function pageComments(query: Record<string, QueryValue>) {
-    return request<PageResult<UserCommentDTO>>(`/user/products/comments?${buildSearch(query)}`);
+export function pageActivityProducts(activityCode: string, query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserProductCardDTO>>(
+        `/user/activities/${encodeURIComponent(activityCode)}/products?${buildSearch(query)}`,
+        options
+    );
 }
 
-export function pageCartItems(query: Record<string, QueryValue>) {
-    return request<PageResult<UserCartItemDTO>>(`/user/cart/items?${buildSearch(query)}`);
+export function getProductDetail(id: number, query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<UserProductDetailDTO>(`/user/products/${id}?${buildSearch(query)}`, options);
+}
+
+export function pageComments(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserCommentDTO>>(`/user/products/comments?${buildSearch(query)}`, options);
+}
+
+export function pageCartItems(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserCartItemDTO>>(`/user/cart/items?${buildSearch(query)}`, options);
 }
 
 export function addCartItem(payload: Record<string, PayloadValue>) {
@@ -284,8 +335,8 @@ export function selectCartItems(payload: Record<string, PayloadValue>) {
     });
 }
 
-export function pageOrders(query: Record<string, QueryValue>) {
-    return request<PageResult<UserOrderDTO>>(`/user/orders?${buildSearch(query)}`);
+export function pageOrders(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserOrderDTO>>(`/user/orders?${buildSearch(query)}`, options);
 }
 
 export function submitOrder(payload: Record<string, PayloadValue>) {
@@ -331,8 +382,8 @@ export function reorder(id: number, payload: Record<string, PayloadValue>) {
     });
 }
 
-export function pageAfterSales(query: Record<string, QueryValue>) {
-    return request<PageResult<UserAfterSaleDTO>>(`/user/after-sales?${buildSearch(query)}`);
+export function pageAfterSales(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserAfterSaleDTO>>(`/user/after-sales?${buildSearch(query)}`, options);
 }
 
 export function applyAfterSale(payload: Record<string, PayloadValue>) {
@@ -342,16 +393,16 @@ export function applyAfterSale(payload: Record<string, PayloadValue>) {
     });
 }
 
-export function getAfterSale(id: number, query: Record<string, QueryValue>) {
-    return request<UserAfterSaleDTO>(`/user/after-sales/${id}?${buildSearch(query)}`);
+export function getAfterSale(id: number, query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<UserAfterSaleDTO>(`/user/after-sales/${id}?${buildSearch(query)}`, options);
 }
 
-export function listAfterSaleItems(id: number, query: Record<string, QueryValue>) {
-    return request<UserAfterSaleItemDTO[]>(`/user/after-sales/${id}/items?${buildSearch(query)}`);
+export function listAfterSaleItems(id: number, query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<UserAfterSaleItemDTO[]>(`/user/after-sales/${id}/items?${buildSearch(query)}`, options);
 }
 
-export function listReturnRecords(id: number, query: Record<string, QueryValue>) {
-    return request<UserReturnRecordDTO[]>(`/user/after-sales/${id}/returns?${buildSearch(query)}`);
+export function listReturnRecords(id: number, query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<UserReturnRecordDTO[]>(`/user/after-sales/${id}/returns?${buildSearch(query)}`, options);
 }
 
 export function cancelAfterSale(id: number, payload: Record<string, PayloadValue>) {
@@ -361,8 +412,8 @@ export function cancelAfterSale(id: number, payload: Record<string, PayloadValue
     });
 }
 
-export function pageMessages(query: Record<string, QueryValue>) {
-    return request<PageResult<UserMessageDTO>>(`/user/messages?${buildSearch(query)}`);
+export function pageMessages(query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserMessageDTO>>(`/user/messages?${buildSearch(query)}`, options);
 }
 
 export function markMessageReadApi(id: number, payload: Record<string, PayloadValue>) {

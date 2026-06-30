@@ -139,6 +139,114 @@
     .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .grid.admin { grid-template-columns: 220px minmax(0, 1fr); }
+    .ui-rule-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+      gap: 16px;
+      align-items: start;
+    }
+    .ui-rule-main-zone {
+      min-width: 0;
+    }
+    .ui-rule-main-zone .shop-two-box-layout,
+    .ui-rule-main-zone .warehouse-two-box-layout,
+    .ui-rule-main-zone .role-showcase-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .ui-rule-main-zone > br,
+    .ui-rule-sidebar > br {
+      display: none;
+    }
+    .ui-rule-sidebar {
+      position: sticky;
+      top: 76px;
+      height: auto;
+      max-height: calc(100vh - 96px);
+      overflow: auto;
+      background: transparent;
+      color: var(--text);
+      padding: 0;
+      display: grid;
+      gap: 12px;
+      align-self: start;
+    }
+    .ui-rule-sidebar-head {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0f172a;
+      color: white;
+      padding: 12px 14px;
+    }
+    .ui-rule-sidebar-head b {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .ui-rule-sidebar-head span {
+      display: block;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .ui-rule-sidebar-stack {
+      display: grid;
+      gap: 12px;
+    }
+    .ui-rule-sidebar .canvas,
+    .ui-rule-sidebar .ops-panel,
+    .ui-rule-sidebar .card,
+    .ui-rule-sidebar .role-showcase-box,
+    .ui-rule-sidebar .warehouse-rule-box,
+    .ui-rule-sidebar .shop-flow-box,
+    .ui-rule-sidebar .grid {
+      margin: 0;
+      box-shadow: none;
+    }
+    .ui-rule-sidebar .canvas-head,
+    .ui-rule-sidebar .ops-panel-head,
+    .ui-rule-sidebar .role-showcase-head {
+      min-height: 42px;
+      padding: 10px 12px;
+    }
+    .ui-rule-sidebar .body,
+    .ui-rule-sidebar .ops-panel-body,
+    .ui-rule-sidebar .role-info-stack {
+      padding: 12px;
+    }
+    .ui-rule-sidebar .grid,
+    .ui-rule-sidebar .grid.two,
+    .ui-rule-sidebar .grid.three,
+    .ui-rule-sidebar .grid.four,
+    .ui-rule-sidebar .role-flow-grid,
+    .ui-rule-sidebar .ops-checklist,
+    .ui-rule-sidebar .ops-action-matrix,
+    .ui-rule-sidebar .ops-timeline-grid {
+      grid-template-columns: 1fr;
+    }
+    .ui-rule-sidebar .table-wrap table,
+    .ui-rule-sidebar table {
+      min-width: 0;
+      font-size: 12px;
+    }
+    .ui-rule-sidebar .flow-table table {
+      min-width: 760px;
+    }
+    .ui-rule-sidebar .dash-list-card {
+      grid-template-columns: 1fr;
+      cursor: default;
+    }
+    .ui-rule-sidebar .warehouse-rule-list {
+      max-height: none;
+    }
+    .ui-rule-empty {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+      color: var(--muted);
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
     .card {
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -800,6 +908,13 @@
     }
     .ops-check-item.fail b { color: var(--red); }
     @media (max-width: 1180px) {
+      .ui-rule-layout {
+        grid-template-columns: 1fr;
+      }
+      .ui-rule-sidebar {
+        position: static;
+        max-height: none;
+      }
       .dashboard-core-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .dash-rank-row { grid-template-columns: 28px minmax(0, 1fr) repeat(2, minmax(80px, auto)); }
       .ops-first-screen,
@@ -980,10 +1095,13 @@
     .modal-mask.show { display: flex; }
     .action-modal {
       width: min(640px, 100%);
+      max-height: calc(100vh - 36px);
       background: white;
       border-radius: 10px;
       box-shadow: 0 24px 70px rgba(15,23,42,.28);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     .action-modal-head {
       background: #0f172a;
@@ -1005,7 +1123,10 @@
       cursor: pointer;
       font-size: 18px;
     }
-    .action-modal-body { padding: 16px 18px 18px; }
+    .action-modal-body {
+      padding: 16px 18px 18px;
+      overflow: auto;
+    }
     .action-modal-body p { margin: 0 0 12px; color: var(--muted); }
     .action-data {
       display: grid;
@@ -1040,11 +1161,48 @@
       color: #27445f;
       font-size: 13px;
     }
+    .crud-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+    .crud-form-grid label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .crud-form-grid .full { grid-column: 1 / -1; }
+    .crud-form-tip {
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .crud-error {
+      display: none;
+      margin-top: 10px;
+      color: var(--red);
+      font-size: 13px;
+    }
+    .crud-error.show { display: block; }
     .modal-actions {
       display: flex;
       justify-content: flex-end;
       gap: 10px;
       margin-top: 14px;
+      position: sticky;
+      bottom: -18px;
+      margin-left: -18px;
+      margin-right: -18px;
+      margin-bottom: -18px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--line);
+      background: white;
     }
     .edit-form {
       display: grid;
@@ -1084,6 +1242,9 @@
       grid-template-columns: repeat(4, minmax(0,1fr));
       gap: 10px;
     }
+    .sku-field-grid .spec-field-wide {
+      grid-column: span 2;
+    }
     .sku-field-grid label {
       margin-bottom: 4px;
     }
@@ -1092,6 +1253,55 @@
       color: var(--muted);
       font-size: 12px;
       line-height: 1.5;
+    }
+    .product-spec-workbench {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .product-spec-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+    .product-spec-form .full { grid-column: 1 / -1; }
+    .spec-binding-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+    }
+    .spec-inline-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .product-spec-form label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .product-spec-form .input[readonly],
+    .product-spec-form .select[disabled],
+    .sku-field-grid .input[readonly] {
+      background: #eef2f7;
+      color: #667085;
+      cursor: not-allowed;
+    }
+    .product-spec-link {
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 700;
+      padding: 0;
+    }
+    @media (max-width: 980px) {
+      .product-spec-workbench { grid-template-columns: 1fr; }
+      .product-spec-form { grid-template-columns: 1fr; }
+      .spec-binding-row { grid-template-columns: 1fr; }
+      .spec-inline-row { grid-template-columns: 1fr; }
     }
     .image-upload-board {
       display: grid;
@@ -36389,6 +36599,264 @@
   line-height: 1 !important;
 }
     /* v2.116 user H5 category top gap and sale meta readability ends */
+
+    /* v2.117 user H5 first-entry warm layout polish begins */
+.shop-phone[data-mobile="user"] .entry-select-page {
+  padding: 0 12px 20px !important;
+  background:
+    radial-gradient(circle at 86% 2%, rgba(255, 190, 116, .42), transparent 27%),
+    linear-gradient(180deg, #fff0df 0%, #fff7ed 154px, #fffaf6 155px, #fffaf6 100%) !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .status-bar,
+.shop-phone[data-mobile="user"] .entry-select-page .shop-bottom {
+  display: none !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-shell {
+  display: grid !important;
+  gap: 12px !important;
+  padding-top: 18px !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-welcome {
+  min-height: 126px !important;
+  padding: 18px 16px 14px !important;
+  border-radius: 0 0 22px 22px !important;
+  background: linear-gradient(135deg, #e85d3f 0%, #f39a4f 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 14px 28px rgba(232, 93, 63, .18) !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-welcome-kicker {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 24px !important;
+  padding: 0 9px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, .18) !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-welcome h2 {
+  margin: 12px 0 6px !important;
+  color: #fff !important;
+  font-size: 23px !important;
+  line-height: 1.22 !important;
+  letter-spacing: 0 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-welcome p {
+  max-width: 236px !important;
+  margin: 0 !important;
+  color: rgba(255, 255, 255, .9) !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-step-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-step {
+  min-height: 58px !important;
+  padding: 10px !important;
+  border: 1px solid #f3dccf !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  box-shadow: 0 8px 18px rgba(111, 62, 31, .06) !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-step b {
+  display: block !important;
+  color: #7c2d12 !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-step span {
+  display: block !important;
+  margin-top: 4px !important;
+  color: #8f6b59 !important;
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-card {
+  margin: 0 !important;
+  padding: 14px !important;
+  border: 1px solid #f0dfd6 !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, .98) !important;
+  box-shadow: 0 12px 24px rgba(111, 62, 31, .08) !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-section-head {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-section-head h3 {
+  margin: 0 !important;
+  color: #172033 !important;
+  font-size: 17px !important;
+  line-height: 1.25 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-section-head p {
+  margin: 4px 0 0 !important;
+  color: #8f6b59 !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-section-head em {
+  flex: 0 0 auto !important;
+  min-height: 24px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  background: #fff1e9 !important;
+  color: #e85d3f !important;
+  font-size: 12px !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  line-height: 24px !important;
+  white-space: nowrap !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-city-panel,
+.shop-phone[data-mobile="user"] .entry-station-panel {
+  display: grid !important;
+  gap: 10px !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-station-panel {
+  margin-top: 14px !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-city-row {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  overflow-x: auto !important;
+  padding: 1px 0 3px !important;
+  scrollbar-width: none !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-city-row::-webkit-scrollbar {
+  display: none !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-city-row button {
+  flex: 0 0 auto !important;
+  min-width: auto !important;
+  min-height: 36px !important;
+  padding: 0 14px !important;
+  border: 1px solid #f0dfd6 !important;
+  border-radius: 999px !important;
+  background: #fffaf6 !important;
+  color: #7b5f51 !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-city-row button.active {
+  border-color: #e85d3f !important;
+  background: #e85d3f !important;
+  color: #fff !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-city-row button.locating {
+  border-color: #f3dccf !important;
+  background: #fff3ea !important;
+  color: #a06743 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list {
+  display: grid !important;
+  gap: 10px !important;
+  margin-top: 0 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list button {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  min-height: 88px !important;
+  padding: 13px 12px !important;
+  border: 1px solid #f0dfd6 !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  color: #172033 !important;
+  box-shadow: 0 8px 18px rgba(111, 62, 31, .06) !important;
+  text-align: left !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list button b {
+  display: block !important;
+  color: #172033 !important;
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list button span {
+  display: block !important;
+  margin-top: 5px !important;
+  color: #7b5f51 !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  -webkit-line-clamp: unset !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list button em {
+  align-self: start !important;
+  min-height: 26px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  background: #fff1e9 !important;
+  color: #e85d3f !important;
+  font-size: 11px !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  line-height: 26px !important;
+  white-space: nowrap !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list button.abnormal,
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list button:disabled {
+  border-color: #ead8cf !important;
+  background: #fff7f1 !important;
+  color: #9a7868 !important;
+  box-shadow: none !important;
+  opacity: .78 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list button.abnormal em,
+.shop-phone[data-mobile="user"] .entry-select-page .entry-station-list button:disabled em {
+  background: #f3e6dc !important;
+  color: #9a7868 !important;
+}
+
+.shop-phone[data-mobile="user"] .entry-select-page .station-empty-note {
+  padding: 14px !important;
+  border: 1px dashed #efc8b7 !important;
+  border-radius: 14px !important;
+  background: #fff7f1 !important;
+  color: #8f6b59 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+    /* v2.117 user H5 first-entry warm layout polish ends */
   </style>
 </head>
 <body>
@@ -36424,7 +36892,7 @@
 
         <section class="nav-section" data-nav-section data-nav-searchable="true">
           <button class="nav-section-toggle" type="button" data-nav-toggle aria-expanded="true">
-            <span class="nav-icon-text">营</span><span>运营后台</span><small>8组</small><span class="nav-caret">⌄</span>
+            <span class="nav-icon-text">营</span><span>运营后台</span><small>9组</small><span class="nav-caret">⌄</span>
           </button>
           <div class="nav-items">
             <div class="nav-subgroup collapsed" data-nav-subgroup>
@@ -36517,10 +36985,26 @@
 
             <div class="nav-subgroup collapsed" data-nav-subgroup>
               <button class="nav-subgroup-toggle" type="button" data-nav-sub-toggle aria-expanded="false">
-                <span class="nav-sub-icon">系</span><span>报表与系统</span><small>5</small><span class="nav-sub-caret">⌄</span>
+                <span class="nav-sub-icon">报</span><span>报表中心</span><small>9</small><span class="nav-sub-caret">⌄</span>
               </button>
               <div class="nav-subitems">
-                <button class="nav-btn" data-go="adminReport"><span class="nav-leaf-icon">报</span><span>报表中心</span><small>经营报表</small></button>
+                <button class="nav-btn" data-go="adminReport"><span class="nav-leaf-icon">总</span><span>报表总览</span><small>口径/导出</small></button>
+                <button class="nav-btn" data-go="adminReportBusiness"><span class="nav-leaf-icon">营</span><span>经营报表</span><small>GMV/订单</small></button>
+                <button class="nav-btn" data-go="adminReportSalePeriod"><span class="nav-leaf-icon">期</span><span>团期报表</span><small>截团复盘</small></button>
+                <button class="nav-btn" data-go="adminReportProduct"><span class="nav-leaf-icon">品</span><span>商品报表</span><small>SKU销售</small></button>
+                <button class="nav-btn" data-go="adminReportStation"><span class="nav-leaf-icon">点</span><span>自提点报表</span><small>履约佣金</small></button>
+                <button class="nav-btn" data-go="adminReportSupplier"><span class="nav-leaf-icon">供</span><span>供应商报表</span><small>供货结算</small></button>
+                <button class="nav-btn" data-go="adminReportFulfillment"><span class="nav-leaf-icon">履</span><span>履约报表</span><small>节点效率</small></button>
+                <button class="nav-btn" data-go="adminReportAfterSale"><span class="nav-leaf-icon">售</span><span>售后报表</span><small>退款责任</small></button>
+                <button class="nav-btn" data-go="adminReportFinance"><span class="nav-leaf-icon">财</span><span>财务报表</span><small>资金核算</small></button>
+              </div>
+            </div>
+
+            <div class="nav-subgroup collapsed" data-nav-subgroup>
+              <button class="nav-subgroup-toggle" type="button" data-nav-sub-toggle aria-expanded="false">
+                <span class="nav-sub-icon">系</span><span>报表与系统</span><small>4</small><span class="nav-sub-caret">⌄</span>
+              </button>
+              <div class="nav-subitems">
                 <button class="nav-btn" data-go="adminPermission"><span class="nav-leaf-icon">权</span><span>权限中心</span><small>菜单/按钮</small></button>
                 <button class="nav-btn" data-go="adminConfig"><span class="nav-leaf-icon">配</span><span>基础配置</span><small>参数/主体</small></button>
                 <button class="nav-btn" data-go="systemJobs"><span class="nav-leaf-icon">任</span><span>系统任务</span><small>MQ/Job</small></button>
@@ -36670,8 +37154,10 @@
                   <div class="menu-item" data-go="adminFinance">分账中心</div><div class="menu-item" data-go="adminCommission">佣金中心</div><div class="menu-item" data-go="adminWithdrawAudit">提现审核</div><div class="menu-item" data-go="adminReconciliation">对账中心</div><div class="menu-item" data-go="adminRiskFund">异常资金</div><div class="menu-item" data-go="adminRiskRules">风控规则</div>
                   <div class="menu-group-title">用户与营销</div>
                   <div class="menu-item" data-go="adminUser">用户中心</div><div class="menu-item" data-go="adminComment">评论中心</div><div class="menu-item" data-go="adminActivity">活动页</div><div class="menu-item" data-go="adminMessage">消息触达</div>
+                  <div class="menu-group-title">报表中心</div>
+                  <div class="menu-item" data-go="adminReport">报表总览</div><div class="menu-item" data-go="adminReportBusiness">经营报表</div><div class="menu-item" data-go="adminReportSalePeriod">团期报表</div><div class="menu-item" data-go="adminReportProduct">商品报表</div><div class="menu-item" data-go="adminReportStation">自提点报表</div><div class="menu-item" data-go="adminReportSupplier">供应商报表</div><div class="menu-item" data-go="adminReportFulfillment">履约报表</div><div class="menu-item" data-go="adminReportAfterSale">售后报表</div><div class="menu-item" data-go="adminReportFinance">财务报表</div>
                   <div class="menu-group-title">报表与系统</div>
-                  <div class="menu-item" data-go="adminReport">报表中心</div><div class="menu-item" data-go="adminPermission">权限中心</div><div class="menu-item" data-go="adminConfig">基础配置</div><div class="menu-item" data-go="systemJobs">系统任务</div><div class="menu-item" data-go="adminOperationLog">操作日志</div>
+                  <div class="menu-item" data-go="adminPermission">权限中心</div><div class="menu-item" data-go="adminConfig">基础配置</div><div class="menu-item" data-go="systemJobs">系统任务</div><div class="menu-item" data-go="adminOperationLog">操作日志</div>
                 </div>
                 <div class="table-wrap">
                   <table><thead><tr><th>菜单</th><th>页面</th><th>按钮</th><th>数据流转</th></tr></thead><tbody>
@@ -36682,7 +37168,8 @@
                     <tr><td>供应商/采购</td><td>供应商、采购协同、送货单、售后、结算</td><td>确认采购、到仓交接、退供、结算</td><td>supplier → purchase_order → delivery_order → settle</td></tr>
                     <tr><td>财务风控</td><td>分账、佣金、提现、对账、异常资金、风控规则</td><td>审核提现、对账、差异处理、重试分账、审批留痕</td><td>pay_trade / refund_trade / fin_split_flow / sys_operation_log</td></tr>
                     <tr><td>用户与营销</td><td>用户、评论、活动、触达</td><td>打标签、删除评论、配置活动、发消息</td><td>usr_user → usr_review → activity_page → msg_touch</td></tr>
-                    <tr><td>报表与系统</td><td>报表、权限、基础配置、系统任务、操作日志</td><td>导出、配置权限、维护参数、查看审计</td><td>sys_role / sys_config / sys_operation_log</td></tr>
+                    <tr><td>报表中心</td><td>报表总览、经营、团期、商品、自提点、供应商、履约、售后、财务报表</td><td>查询、导出、查看口径、查看导出日志</td><td>rpt_snapshot / ord_order / fin_flow / sys_export_log</td></tr>
+                    <tr><td>报表与系统</td><td>权限、基础配置、系统任务、操作日志</td><td>配置权限、维护参数、任务补偿、查看审计</td><td>sys_role / sys_config / sys_job / sys_operation_log</td></tr>
                   </tbody></table>
                 </div>
               </div>
@@ -36699,7 +37186,7 @@
                     <table><thead><tr><th>优先级</th><th>页面/模块</th><th>第一轮处理方式</th></tr></thead><tbody>
                       <tr><td><span class="tag red">P0</span></td><td>运营驾驶舱、团期管理、异常中心、自提点/团长管理、对账中心</td><td>新增或重做，作为第一轮 UI 重点；运营驾驶舱作为后台默认首页。</td></tr>
                       <tr><td><span class="tag yellow">P1</span></td><td>供应商/采购、商品中心、类目中心、订单中心、售后中心、分账中心、佣金中心、用户中心、评论中心、活动页、消息触达</td><td>先调整一级菜单归属和入口；积分中心和优惠券按 v24 暂缓，不进入当前第一版。</td></tr>
-                      <tr><td><span class="tag">P2</span></td><td>报表中心、权限中心、系统任务、基础配置、操作日志</td><td>只做收口和辅助证据，不作为第一轮重点；操作日志不能替代异常中心。</td></tr>
+                      <tr><td><span class="tag">P2</span></td><td>报表中心、权限中心、系统任务、基础配置、操作日志</td><td>报表中心独立为一级菜单并拆固定报表；系统能力只做收口和辅助证据，操作日志不能替代异常中心。</td></tr>
                       <tr><td><span class="tag red">暂缓</span></td><td>高级活动编排、复杂 BI、多级审批流配置器</td><td>第一版先不做，避免运营后台过重。</td></tr>
                     </tbody></table>
                   </div>
@@ -36779,6 +37266,14 @@
         <section class="view" id="adminActivity"></section>
         <section class="view" id="adminMessage"></section>
         <section class="view" id="adminReport"></section>
+        <section class="view" id="adminReportBusiness"></section>
+        <section class="view" id="adminReportSalePeriod"></section>
+        <section class="view" id="adminReportProduct"></section>
+        <section class="view" id="adminReportStation"></section>
+        <section class="view" id="adminReportSupplier"></section>
+        <section class="view" id="adminReportFulfillment"></section>
+        <section class="view" id="adminReportAfterSale"></section>
+        <section class="view" id="adminReportFinance"></section>
         <section class="view" id="adminConfig"></section>
         <section class="view" id="adminOperationLog"></section>
         <section class="view" id="wmsDocumentFlow"></section>
@@ -36840,6 +37335,25 @@
         <div class="modal-actions">
           <button class="btn ghost" data-close-confirm>再检查一下</button>
           <button class="btn primary" data-confirm-submit>确认执行</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="crudModal" data-crud-modal>
+    <div class="action-modal">
+      <div class="action-modal-head">
+        <h3 id="crudModalTitle">新增数据</h3>
+        <button type="button" data-close-crud>×</button>
+      </div>
+      <div class="action-modal-body">
+        <p id="crudModalDesc"></p>
+        <div class="crud-form-tip" id="crudModalTip">提交后会刷新当前运营后台列表。</div>
+        <div class="crud-form-grid" id="crudModalFields"></div>
+        <span class="crud-error" id="crudModalError">请至少填写第一项必填字段。</span>
+        <div class="modal-actions">
+          <button class="btn ghost" data-close-crud>取消</button>
+          <button class="btn primary" data-save-crud>提交保存</button>
         </div>
       </div>
     </div>
@@ -37081,17 +37595,18 @@
       },
       adminProduct: {
         title: '运营后台 / 商品中心与类目规则（v20）',
-        desc: '商品中心只管理商品基础资料、SKU、类目、标签和上下架状态；真正可售由团期管理决定，商品本身不直接代表正在售卖。',
-        actions: [['新建商品档案','adminProduct','primary'],['提交商品审核','adminProduct','green'],['维护 SKU/库存规格','adminProduct','yellow'],['查看发布前校验','adminPublish','red'],['停用商品','adminProduct','red'],['导出商品','adminProduct','']],
-        filters: ['商品名称','供应商','前台展示类目','统计类目','商品状态','SKU 绑定','审核状态'],
-        table: ['商品名称','供应商','前台展示类目','统计类目','SKU/库存规格','状态','审核','保质期信息','参考价','团期关系','操作'],
+        desc: '商品中心只管理商品基础资料、销售规格、库存规格、类目、标签和上下架状态；真正可售由团期管理决定，商品本身不直接代表正在售卖。',
+        actions: [['新建商品档案','adminProduct','primary'],['提交商品审核','adminProduct','green'],['维护销售规格','adminProduct','yellow'],['维护库存规格','adminProduct',''],['查看发布前校验','adminPublish','red'],['停用商品','adminProduct','red'],['导出商品','adminProduct','']],
+        filters: ['商品名称','供应商','前台展示类目','统计类目','商品状态','审核状态'],
+        table: ['商品名称','供应商','前台展示类目','统计类目','销售规格/库存规格','状态','审核','保质期信息','参考价','团期关系','操作'],
         rows: [
-          ['云南蓝莓 125g','华南果业','产地水果','生鲜水果','3 个 SKU / 已绑定 3 个库存规格','已启用','已审核','生产日期 + 7 天保质期','建议零售价 12.90','已进 2 个团期','编辑商品/维护SKU/变更影响范围/加入团期'],
-          ['海南贵妃芒 5斤装','海南供应链','产地水果','生鲜水果','2 个 SKU / 未绑定 1 个库存规格','待审核','资料待补齐','按批次生产日期 + 5 天保质期','参考价 45.90','未进入团期','编辑商品/自动生成库存规格/提交审核/启用商品']
+          ['云南蓝莓 125g','华南果业','产地水果','生鲜水果','3 个销售规格 / 已绑定 3 个库存规格','已启用','已审核','生产日期 + 7 天保质期','建议零售价 12.90','已进 2 个团期','编辑商品/维护销售规格/维护库存规格'],
+          ['海南贵妃芒 5斤装','海南供应链','产地水果','生鲜水果','2 个销售规格 / 已绑定 2 个库存规格','待审核','资料待补齐','按批次生产日期 + 5 天保质期','参考价 45.90','未进入团期','编辑商品/维护销售规格/维护库存规格/提交审核/启用商品']
         ],
         functionScopeRows: [
-          ['商品中心','商品基础资料、商品状态、图片、描述、规格、供应商、类目'],
-          ['SKU 管理','SKU 编码、销售规格、库存规格、转换系数、条码、单位、保质期、生产日期字段'],
+          ['商品中心','商品基础资料、商品编码、商品条码、商品状态、图片、描述、供应商、类目'],
+          ['维护销售规格','规格名称、进价、售价、原价、销售单位、单位数量、转换系数、库存规格、状态'],
+          ['维护库存规格','规格名称、进价、销售单位、单位数量、编码、条码、长、宽、高、重量、状态'],
           ['类目中心','前台展示类目、后台统计类目'],
           ['标签管理','榜单、推荐、新品、热销等展示标签'],
           ['商品审核','商品新增、重要资料变更审核或二次确认'],
@@ -37104,7 +37619,9 @@
           ['快照规则','已进入团期的商品，关键资料修改必须保留快照，不能回改历史订单商品信息。']
         ],
         fieldRuleRows: [
-          ['必填资料','商品名称、主图、规格、单位、供应商、统计类目、前台展示类目、保质期相关信息必须完整。'],
+          ['编码条码','商品编码由系统生成只读；商品条码由运营在商品基础资料中填写。'],
+          ['基础资料','商品名称、主图、供应商、统计类目、前台展示类目、保质期相关信息必须完整。'],
+          ['规格尺寸','商品层级不维护长、宽、高、重量；这些字段拆到库存规格中维护。'],
           ['类目绑定','一个商品必须绑定统计类目，也必须绑定前台展示类目。'],
           ['保质期','生鲜、食品类商品必须维护生产日期、保质期或保质期规则。'],
           ['展示与售卖','商品图片、详情描述用于前台展示，实际售卖价格、库存、配送日期由团期决定。'],
@@ -37112,19 +37629,26 @@
           ['参考价','商品可以配置建议零售价或参考价，但团期价格才是实际售卖价格。']
         ],
         skuRuleRows: [
-          ['最小单位','SKU 是库存、采购、订单商品、售后、分佣、报表统计的最小商品单位。'],
-          ['编码唯一','SKU 编码必须唯一，同一商品可有多个 SKU。'],
+          ['销售规格字段','销售规格只维护规格名称、进价、售价、原价、销售单位、单位数量、转换系数、库存规格、状态。'],
+          ['库存规格字段','库存规格维护规格名称、进价、销售单位、单位数量、编码、条码、长、宽、高、重量、状态。'],
           ['规格绑定','商品销售规格必须绑定一个库存规格，销售规格用于前台、订单和团期，库存规格用于仓库入库、库存流水和出库扣减。'],
-          ['转换系数','销售规格和库存规格之间必须有转换系数；多个销售规格可绑定同一库存规格但转换系数可不同。'],
-          ['SPU 边界','同一个库存规格只能被同一个 SPU 下的 SKU 绑定，不允许跨 SPU 共用库存规格。'],
-          ['默认生成','运营未手动绑定库存规格时，系统默认生成库存规格并自动绑定，转换系数默认为 1:1。'],
-          ['停用追溯','SKU 停用后不能进入新团期，但历史订单、采购、售后、库存流水仍可追溯。'],
-          ['不做合并拆分','SKU 合并、拆分第一版不做，避免库存和财务口径混乱。']
+          ['转换系数','销售规格和库存规格之间必须填写正整数转换系数；多个销售规格可绑定同一库存规格但转换系数可不同。'],
+          ['SPU 边界','同一个库存规格只能被同一个 SPU 下的销售规格绑定，不允许跨 SPU 共用库存规格。'],
+          ['默认生成','运营保存销售规格时未选择库存规格，系统默认生成库存规格并自动绑定，转换系数默认为 1。'],
+          ['停用联动','当同一商品下所有销售规格都停用时，商品状态自动变更为已停用。'],
+          ['停用追溯','销售规格停用后不能进入新团期，但历史订单、采购、售后、库存流水仍可追溯。'],
+          ['不做库存数量','商品中心只维护规格资料和绑定关系，不处理仓库实际库存数量。']
         ],
         skuRows: [
-          ['SKU-001','125g/盒','INV-BLUE-125','盒','1:1','6930001001258','生产日期 + 7 天','已绑定','可进团期'],
-          ['SKU-002','125g*4盒','INV-BLUE-125','盒','4:1','6930001001265','生产日期 + 7 天','已绑定同 SPU 库存规格','可进团期'],
-          ['SKU-003','家庭分享装','待自动生成','份','1:1 默认','待生成','按批次 + 7 天','未绑定','发布前自动生成后才可进团期']
+          ['125g/盒','7.80','9.90','12.90','盒','1','1','INV-BLUE-125','启用'],
+          ['125g*4盒','30.80','35.90','45.90','组','4','4','INV-BLUE-125','启用'],
+          ['家庭分享装','58.00','68.80','88.00','份','1','1','INV-BLUE-FAMILY','启用']
+        ],
+        stockSpecTable: ['规格名称','进价','销售单位','单位数量','编码','条码','长','宽','高','重量','状态','操作'],
+        stockSpecRows: [
+          ['云南蓝莓 125g 库存盒','7.80','盒','1','INV-BLUE-125','6930001001258','120','80','60','0.125','启用','编辑库存规格'],
+          ['海南贵妃芒 5斤库存箱','32.00','箱','1','INV-MANGO-5J','6930001002255','420','300','260','2.5','启用','编辑库存规格'],
+          ['蓝莓家庭装库存份','58.00','份','1','INV-BLUE-FAMILY','6930001001265','320','220','120','1.0','启用','编辑库存规格']
         ],
         statusRows: [
           ['待审核','商品所有必填数据填写完整后，才允许提交审核；审核通过后变为已启用。'],
@@ -37140,17 +37664,18 @@
         ],
         publishCheckRows: [
           ['商品状态','团期发布时校验商品状态必须为已启用。'],
-          ['资料完整','校验 SKU、销售规格、库存规格、转换系数、供应商、统计类目、前台展示类目完整。'],
-          ['库存规格绑定','必须校验 SKU 已绑定库存规格，销售规格与库存规格转换系数有效。'],
-          ['自动生成','运营未绑定库存规格时，系统必须先自动生成默认库存规格并绑定，再允许进入团期发布。'],
-          ['SPU 规则','同一 SPU 下多个 SKU 可绑定同一个库存规格，不同 SPU 的 SKU 不允许绑定同一个库存规格。'],
+          ['资料完整','校验销售规格、库存规格、转换系数、供应商、统计类目、前台展示类目完整。'],
+          ['库存规格绑定','必须校验销售规格已绑定库存规格，销售规格与库存规格转换系数有效。'],
+          ['自动生成','运营保存销售规格时未选择库存规格，系统必须先生成默认库存规格并绑定，再允许进入团期发布。'],
+          ['SPU 规则','同一 SPU 下多个销售规格可绑定同一个库存规格，不同 SPU 的销售规格不允许绑定同一个库存规格。'],
           ['售后和自提点','不校验商品级售后规则，不配置自提点黑白名单，沿用 v6。']
         ],
         warehouseBoundaryRows: [
-          ['维护范围','商品中心只维护销售规格、库存规格和转换系数。'],
+          ['维护范围','商品中心只维护商品基础资料、销售规格、库存规格和转换系数。'],
           ['仓库范围','仓库后台后续按库存规格做入库、库存、出库、库存流水。'],
           ['库存数量','商品中心不处理实际库存数量调整。'],
-          ['转换系数变更','转换系数变更必须二次确认，并记录修改前后值、操作人和原因。'],
+          ['库存规格字段','库存规格在库存规格维护页编辑；销售规格和商品编辑只选择库存规格。'],
+          ['转换系数变更','转换系数变更必须填写正整数，变更时二次确认并记录修改前后值、操作人和原因。'],
           ['历史快照','已有库存流水或已生成订单的规格，确需修改转换系数时必须保留历史转换快照。']
         ],
         permissionRuleRows: [
@@ -37165,11 +37690,11 @@
           ['不处理库存调整','商品中心不处理库存调整，库存调整归库存/仓库相关流程。'],
           ['不处理售后审核','商品中心不处理售后审核，只提供统计类目和商品快照。'],
           ['规格边界','前台、订单、团期使用销售规格；仓库、入库、库存流水、出库使用库存规格；两边通过转换系数换算。'],
-          ['第一版重点','商品资料准确、SKU 口径清晰、类目规则稳定、历史快照可追溯。']
+          ['第一版重点','商品资料准确、销售规格口径清晰、库存规格字段完整、类目规则稳定、历史快照可追溯。']
         ],
         readinessRows: [
           ['图片资料','主图 1 张、轮播 3 张、详情 2 张；缺资质图','不会阻止保存，但进入团期前提示补齐'],
-          ['规格与库存绑定','3 个销售 SKU，2 个已绑定库存规格','未绑定规格进入团期前必须自动生成或手动绑定'],
+          ['规格与库存绑定','3 个销售规格，3 个已绑定库存规格','未选择库存规格的销售规格保存时必须自动生成并绑定'],
           ['类目与保质期','前台展示类目、统计类目和保质期规则已配置','缺类目或保质期信息时不允许审核通过'],
           ['供应商与采购员','供应商华南果业、采购员陈采购已配置','缺供应商会阻断团期发布校验'],
           ['ES 与联想词','ES 已同步，联想词 8 个','待同步商品可保存，但团期发布前必须提示搜索不可见风险'],
@@ -37189,7 +37714,7 @@
           ['异常','EX20260618001 / 库存不足','跳异常中心或缺货处理','adminException'],
           ['操作日志','OP202606180271 / 价格变更','查看操作人、原因和前后状态','adminOperationLog']
         ],
-        detail: '商品作为基础资料维护商品、SKU、销售规格、库存规格、类目、标签和上下架状态；商品本身不是可售单元，需要进入团期后才在小程序可售。商品进入团期前必须校验已启用、SKU 绑定库存规格、转换系数有效、供应商和类目完整；关键资料变更保留快照并记录原因。'
+        detail: '商品作为基础资料维护商品、销售规格、库存规格、类目、标签和上下架状态；商品本身不是可售单元，需要进入团期后才在小程序可售。商品进入团期前必须校验已启用、销售规格绑定库存规格、转换系数有效、供应商和类目完整；关键资料变更保留快照并记录原因。'
       },
       adminCategory: {
         title: '运营后台 / 类目中心（v20）',
@@ -38746,7 +39271,7 @@
           ['团长/自提点禁用','必须确认影响范围，不能影响已支付订单履约','二次确认','自提点/团长','自提点管理','记录影响订单'],
           ['评论删除','必须二次确认，填写原因，保留删除前内容摘要和操作日志','二次确认 + 原文摘要','用户与营销','评论中心','保留删除前摘要'],
           ['权限变更','角色、菜单、按钮、数据范围变更必须记录操作日志，建议二次确认','二次确认 + 留痕','报表与系统','权限中心','记录权限前后状态'],
-          ['导出数据','涉及用户、订单、财务、手机号时必须受权限控制，并记录导出日志','权限控制 + 导出日志','报表与系统','报表中心','记录导出人和范围']
+          ['导出数据','涉及用户、订单、财务、手机号时必须受权限控制，并记录导出日志','权限控制 + 导出日志','报表中心','报表总览 / 固定报表','记录导出人和范围']
         ],
         principles: [
           ['资金类动作必须审批','提现、退款、分账、佣金重算、对账差异处理必须审批或二次确认。'],
@@ -39037,6 +39562,134 @@
           ['更新时间','报表页面必须展示数据更新时间，避免运营误以为都是实时数据。']
         ],
         detail: '报表中心承接经营结果查看、指标口径说明和分析导出；资金差异走对账中心，业务异常走异常中心，实时经营指标以运营驾驶舱为准。'
+      },
+      adminReportBusiness: {
+        title: '运营后台 / 经营报表',
+        desc: '经营报表用于查看整体经营结果，覆盖 GMV、订单数、支付金额、退款金额、客单价和净销售额；报表只展示、筛选、口径说明和导出。',
+        reportType: '经营报表',
+        reportSummary: '看整体经营',
+        actions: [['查询','adminReportBusiness','primary'],['导出 Excel','adminReportBusiness','green'],['查看数据口径','adminReportBusiness','yellow'],['查看导出日志','adminOperationLog','']],
+        filters: ['时间范围','统计时间口径','城市','大区','自提点','团期'],
+        table: ['统计日期','城市/范围','GMV','支付订单数','支付金额','退款金额','净销售额','客单价','数据更新时间','操作'],
+        rows: [
+          ['2026-06-19','广州 / 全城','126840.00','3280','126840.00','2320.00','124520.00','38.67','2026-06-19 12:35','导出/查看口径/导出日志'],
+          ['2026-06-18','深圳 / 全城','98210.00','2510','98210.00','1860.00','96350.00','39.13','2026-06-19 00:35','导出/查看口径/导出日志']
+        ],
+        metricCards: [['GMV','126840.00'],['支付订单','3280'],['退款金额','2320.00'],['净销售额','124520.00']],
+        timeRule: '默认按支付时间统计',
+        permissionScope: '平台管理员 / 城市运营'
+      },
+      adminReportSalePeriod: {
+        title: '运营后台 / 团期报表',
+        desc: '团期报表用于复盘团期销售、截团、缺货和售后结果，默认按截团时间统计，可按配送日筛选。',
+        reportType: '团期报表',
+        reportSummary: '复盘团期',
+        actions: [['查询','adminReportSalePeriod','primary'],['导出 Excel','adminReportSalePeriod','green'],['查看数据口径','adminReportSalePeriod','yellow'],['查看导出日志','adminOperationLog','']],
+        filters: ['时间范围','统计时间口径','城市','团期','配送日','供应商'],
+        table: ['团期','城市','截团时间','配送日','销售额','商品销量','缺货数量','售后数量','数据更新时间','操作'],
+        rows: [
+          ['早餐烘焙团','广州','2026-06-18 22:00','2026-06-19','98210.00','5680','18','42','2026-06-19 12:35','导出/查看口径/查看团期'],
+          ['产地水果团','深圳','2026-06-18 22:00','2026-06-19','78640.00','4210','12','31','2026-06-19 12:35','导出/查看口径/查看团期']
+        ],
+        metricCards: [['团期销售额','98210.00'],['商品销量','5680'],['缺货数量','18'],['售后数量','42']],
+        timeRule: '默认按截团时间统计，支持配送日筛选',
+        permissionScope: '平台管理员 / 城市运营'
+      },
+      adminReportProduct: {
+        title: '运营后台 / 商品报表',
+        desc: '商品报表用于 SKU 销量、销售额、退款率、缺货率和复购情况分析，辅助选品和汰换。',
+        reportType: '商品报表',
+        reportSummary: '选品和汰换',
+        actions: [['查询','adminReportProduct','primary'],['导出 Excel','adminReportProduct','green'],['查看数据口径','adminReportProduct','yellow'],['查看导出日志','adminOperationLog','']],
+        filters: ['时间范围','统计时间口径','城市','供应商','统计类目','SKU'],
+        table: ['SKU','商品','供应商','统计类目','销量','销售额','退款率','缺货率','复购情况','操作'],
+        rows: [
+          ['SP-BLUE-125','蓝莓 125g','华南果业','莓果葡萄','6200','55800.00','1.7%','0.8%','近 30 日复购 18.6%','导出/查看口径/查看 SKU'],
+          ['SP-PEAR-5J','库尔勒香梨 5斤','新疆供应链','苹果梨桃','4180','75240.00','2.1%','1.2%','近 30 日复购 16.4%','导出/查看口径/查看 SKU']
+        ],
+        metricCards: [['SKU销量','6200'],['销售额','55800.00'],['退款率','1.7%'],['缺货率','0.8%']],
+        timeRule: '默认按支付时间统计',
+        permissionScope: '运营 / 供应商自身'
+      },
+      adminReportStation: {
+        title: '运营后台 / 自提点报表',
+        desc: '自提点报表用于查看自提点 GMV、订单数、履约率、售后率和佣金，辅助门店运营管理。',
+        reportType: '自提点报表',
+        reportSummary: '管理自提点',
+        actions: [['查询','adminReportStation','primary'],['导出 Excel','adminReportStation','green'],['查看数据口径','adminReportStation','yellow'],['查看导出日志','adminOperationLog','']],
+        filters: ['时间范围','统计时间口径','城市','自提点','团长','履约状态'],
+        table: ['自提点','城市','GMV','订单数','履约率','售后率','佣金','数据更新时间','权限范围','操作'],
+        rows: [
+          ['王府花园','广州','36800.00','860','96.8%','1.2%','8640.00','2026-06-19 12:35','城市运营 / 自提点自身','导出/查看口径/查看自提点'],
+          ['越秀东湖店','广州','29860.00','710','95.4%','1.5%','6920.00','2026-06-19 12:35','城市运营 / 自提点自身','导出/查看口径/查看自提点']
+        ],
+        metricCards: [['GMV','36800.00'],['订单数','860'],['履约率','96.8%'],['佣金','8640.00']],
+        timeRule: '默认按用户自提时间统计',
+        permissionScope: '城市运营 / 自提点自身'
+      },
+      adminReportSupplier: {
+        title: '运营后台 / 供应商报表',
+        desc: '供应商报表用于查看采购数量、入库数量、缺货率、售后责任和结算金额，辅助供应商管理。',
+        reportType: '供应商报表',
+        reportSummary: '管理供应商',
+        actions: [['查询','adminReportSupplier','primary'],['导出 Excel','adminReportSupplier','green'],['查看数据口径','adminReportSupplier','yellow'],['查看导出日志','adminOperationLog','']],
+        filters: ['时间范围','统计时间口径','城市','供应商','采购仓','售后责任'],
+        table: ['供应商','采购数量','入库数量','缺货率','售后责任数','结算金额','数据更新时间','权限范围','操作'],
+        rows: [
+          ['华南果业','3200箱','3168箱','1.9%','12','56800.00','2026-06-19 12:35','采购 / 供应商自身','导出/查看口径/查看供应商'],
+          ['新疆供应链','2180箱','2160箱','1.4%','9','43200.00','2026-06-19 12:35','采购 / 供应商自身','导出/查看口径/查看供应商']
+        ],
+        metricCards: [['采购数量','3200箱'],['入库数量','3168箱'],['缺货率','1.9%'],['结算金额','56800.00']],
+        timeRule: '默认按入库时间统计',
+        permissionScope: '采购 / 供应商自身'
+      },
+      adminReportFulfillment: {
+        title: '运营后台 / 履约报表',
+        desc: '履约报表用于查看入库、分拣、出库、配送、待自提和已自提节点效率，按订单商品履约状态统计。',
+        reportType: '履约报表',
+        reportSummary: '看履约效率',
+        actions: [['查询','adminReportFulfillment','primary'],['导出 Excel','adminReportFulfillment','green'],['查看数据口径','adminReportFulfillment','yellow'],['查看导出日志','adminOperationLog','']],
+        filters: ['时间范围','履约节点','城市','采购仓','线路','自提点'],
+        table: ['统计范围','入库','分拣','出库','配送中','待自提','已自提','履约率','数据更新时间','操作'],
+        rows: [
+          ['广州 / 2026-06-19','10240','10080','9860','9720','290','9430','95.6%','2026-06-19 12:35','导出/查看口径/查看履约'],
+          ['深圳 / 2026-06-19','8420','8300','8160','8020','240','7780','95.3%','2026-06-19 12:35','导出/查看口径/查看履约']
+        ],
+        metricCards: [['已出库','9860'],['配送中','9720'],['待自提','290'],['已自提','9430']],
+        timeRule: '按履约节点时间统计',
+        permissionScope: '运营 / 仓库只读授权'
+      },
+      adminReportAfterSale: {
+        title: '运营后台 / 售后报表',
+        desc: '售后报表用于查看售后单量、退款金额、原因、责任方和处理时长，控制售后质量。',
+        reportType: '售后报表',
+        reportSummary: '控制售后质量',
+        actions: [['查询','adminReportAfterSale','primary'],['导出 Excel','adminReportAfterSale','green'],['查看数据口径','adminReportAfterSale','yellow'],['查看导出日志','adminOperationLog','']],
+        filters: ['时间范围','统计时间口径','城市','售后类型','责任方','供应商'],
+        table: ['统计日期','售后单量','退款金额','主要原因','主要责任方','平均处理时长','售后率','数据更新时间','权限范围','操作'],
+        rows: [
+          ['2026-06-19','86','2320.00','破损 / 少件','仓库','2.6小时','1.8%','2026-06-19 12:35','客服 / 运营','导出/查看口径/查看售后'],
+          ['2026-06-18','73','1980.00','质量问题','供应商','2.9小时','1.6%','2026-06-19 00:35','客服 / 运营','导出/查看口径/查看售后']
+        ],
+        metricCards: [['售后单量','86'],['退款金额','2320.00'],['平均处理','2.6小时'],['售后率','1.8%']],
+        timeRule: '默认按售后申请时间统计，退款金额支持按退款成功时间',
+        permissionScope: '客服 / 运营'
+      },
+      adminReportFinance: {
+        title: '运营后台 / 财务报表',
+        desc: '财务报表用于财务核算，覆盖支付、退款、分账、佣金、提现、押金和异常资金。',
+        reportType: '财务报表',
+        reportSummary: '财务核算',
+        actions: [['查询','adminReportFinance','primary'],['导出 Excel','adminReportFinance','green'],['查看数据口径','adminReportFinance','yellow'],['查看导出日志','adminOperationLog','']],
+        filters: ['时间范围','资金流水时间','城市','主体类型','资金类型','状态'],
+        table: ['统计日期','支付金额','退款金额','分账金额','佣金金额','提现金额','押金余额','异常资金','数据更新时间','操作'],
+        rows: [
+          ['2026-06-19','126840.00','2320.00','48260.00','18640.00','9800.00','52000.00','3 笔','2026-06-19 12:35','导出/查看口径/查看对账'],
+          ['2026-06-18','98210.00','1860.00','38640.00','14280.00','7600.00','52000.00','1 笔','2026-06-19 00:35','导出/查看口径/查看对账']
+        ],
+        metricCards: [['支付金额','126840.00'],['退款金额','2320.00'],['佣金金额','18640.00'],['异常资金','3 笔']],
+        timeRule: '默认按资金流水时间统计',
+        permissionScope: '财务 / 管理员'
       },
       adminConfig: {
         title: '运营后台 / 大区、城市、采购仓配置规则（v26）',
@@ -39850,8 +40503,8 @@
           title: '报表与系统',
           buttons: [['生成报表','adminReport','primary'],['保存权限','adminPermission','green'],['维护基础配置','adminConfig','yellow'],['查询操作日志','adminOperationLog','']],
           steps: [
-            '报表中心、权限中心、系统任务和基础配置归到 P2，只做收口，不作为第一轮重点。',
-            '权限中心控制 8 个一级菜单、页面和按钮权限，并保持数据隔离。',
+            '报表中心拆为独立一级菜单，报表与系统只保留权限中心、系统任务、基础配置和操作日志。',
+            '权限中心控制 9 个一级菜单、页面和按钮权限，并保持数据隔离。',
             '基础配置承接城市、仓库、截团时间、售后时效等系统参数。',
             '操作日志只作为辅助证据，不能替代异常中心的业务处理台定位。'
           ]
@@ -40107,12 +40760,16 @@
       }
     };
 
-    const navTargets = new Set(['overview','menu','adminDashboard','adminTodo','adminException','adminCityRank','adminProduct','adminCategory','adminRankTag','adminUser','adminComment','adminPublish','adminPermission','adminOrder','adminAfterSale','adminFulfillment','adminStockout','adminStation','adminLeaderAudit','adminStationLeave','adminStationSign','adminLeaderScore','adminSupplier','adminPurchaseCoord','adminDeliveryOrder','adminSupplierAfterSale','adminSupplierSettle','adminFinance','adminCommission','adminWithdrawAudit','adminReconciliation','adminRiskFund','adminRiskRules','adminActivity','adminMessage','adminReport','adminConfig','adminOperationLog','h5User','h5Station','h5Supplier','h5Warehouse','wmsDocumentFlow','wmsPurchase','wmsInbound','wmsPutaway','wmsOutbound','wmsPicking','wmsLoading','wmsDelivery','wmsReturn','wmsBase','wmsInventory','wmsStockFlow','wmsOperationLog','systemJobs']);
+    const navTargets = new Set(['overview','menu','adminDashboard','adminTodo','adminException','adminCityRank','adminProduct','adminCategory','adminRankTag','adminUser','adminComment','adminPublish','adminPermission','adminOrder','adminAfterSale','adminFulfillment','adminStockout','adminStation','adminLeaderAudit','adminStationLeave','adminStationSign','adminLeaderScore','adminSupplier','adminPurchaseCoord','adminDeliveryOrder','adminSupplierAfterSale','adminSupplierSettle','adminFinance','adminCommission','adminWithdrawAudit','adminReconciliation','adminRiskFund','adminRiskRules','adminActivity','adminMessage','adminReport','adminReportBusiness','adminReportSalePeriod','adminReportProduct','adminReportStation','adminReportSupplier','adminReportFulfillment','adminReportAfterSale','adminReportFinance','adminConfig','adminOperationLog','h5User','h5Station','h5Supplier','h5Warehouse','wmsDocumentFlow','wmsPurchase','wmsInbound','wmsPutaway','wmsOutbound','wmsPicking','wmsLoading','wmsDelivery','wmsReturn','wmsBase','wmsInventory','wmsStockFlow','wmsOperationLog','systemJobs']);
+    const reportPageIds = new Set(['adminReport','adminReportBusiness','adminReportSalePeriod','adminReportProduct','adminReportStation','adminReportSupplier','adminReportFulfillment','adminReportAfterSale','adminReportFinance']);
     const navWords = /返回|进入|打开|查看|单据流转|用户下单|团期管理|商品发布|仓配履约|分账提现/;
     function isNavButton(text, go) {
       if (!go || go === '#') return false;
       if (String(go).includes(':')) return true;
       return navTargets.has(go) && navWords.test(text);
+    }
+    function isReportUtilityAction(text, go) {
+      return /导出 Excel|查看数据口径|查看导出日志/.test(text || '') && (reportPageIds.has(go) || go === 'adminOperationLog');
     }
     function buttons(list) {
       return `<div class="btns">${list.map(([text, go, cls]) => {
@@ -40120,12 +40777,12 @@
         if (/^重置/.test(text)) return `<button class="btn ${cls||'ghost'}" data-local-reset>${text}</button>`;
         if (isAddTestButton(text)) return `<button class="btn ${cls||'primary'}" data-add-test>${text}</button>`;
         const actionTarget = go && go !== '#' && go !== 'overview' ? go : '';
-        const attr = isNavButton(text, go) ? `data-go="${go}"` : `data-action="${text}" data-action-target="${actionTarget}"`;
+        const attr = !isReportUtilityAction(text, go) && isNavButton(text, go) ? `data-go="${go}"` : `data-action="${text}" data-action-target="${actionTarget}"`;
         return `<button class="btn ${cls||''}" ${attr}>${text}</button>`;
       }).join('')}</div>`;
     }
     function isAddTestButton(text) {
-      return /^(新增|新建|人工新增|自动生成|生成补货|新建发布|生成出库单|按配送日生成|生成退货交接单|原料入库|新建生产批次|维护采购仓)/.test(text || '');
+      return /^(新增|添加|创建|新建|人工新增|自动生成|生成补货|新建发布|生成出库单|按配送日生成|生成退货交接单|原料入库|新建生产批次|维护采购仓)/.test(text || '');
     }
     function renderMenuLogic(targetId, items) {
       const target = document.getElementById(targetId);
@@ -40143,8 +40800,101 @@
         </div>
       `).join('');
     }
+    function ruleSidebarTitle(view) {
+      const title = view?.querySelector('.page-head h2')?.textContent?.trim()
+        || view?.querySelector('h2, h3')?.textContent?.trim()
+        || '当前页面';
+      return `${title} / 规则说明`;
+    }
+    function isRuleCandidate(node) {
+      if (!node || node.nodeType !== 1) return false;
+      if (node.matches('.page-head, .ui-rule-layout, .ui-rule-sidebar, .ui-rule-main-zone, script, style')) return false;
+      if (node.matches('.shop-flow-box, .warehouse-rule-box')) return true;
+      if (node.matches('.role-showcase-box') && /融合规则|角色差异/.test(node.textContent || '')) return true;
+      if (node.matches('.canvas') && node.querySelector('.role-flow-grid')) return true;
+      if (node.querySelector('.ui-rule-layout, .modal-mask, [data-mobile], .shop-phone, .phone, .warehouse-screen, .role-screen')) return false;
+      const text = (node.textContent || '').trim();
+      if (!text) return false;
+      const hasInteractive = Boolean(node.querySelector('button, input, select, textarea, [data-action], [data-go], [data-local-search], [data-local-reset], [data-add-test], [data-save-product-edit]'));
+      const hasBusinessTable = Boolean(node.querySelector('[data-standard-page], [data-table-body], .filters, .product-spec-form, [data-sales-spec-form], [data-stock-spec-form]'));
+      if (hasInteractive || hasBusinessTable) return false;
+      const heading = node.querySelector('.canvas-head h3, .ops-panel-head h3, h3, h4')?.textContent || '';
+      const ruleWords = /规则|说明|口径|边界|验收|暂缓|流程|流转|权限|日志|风险|审批|快照|状态|证据|字段|范围|差异|留痕/;
+      return ruleWords.test(heading) || (ruleWords.test(text) && text.length > 28);
+    }
+    function collectRuleNodes(view) {
+      const directNodes = [...view.children].filter(node => !node.matches('.page-head, .ui-rule-layout'));
+      const picked = [];
+      directNodes.forEach(node => {
+        if (isRuleCandidate(node)) picked.push(node);
+      });
+      const layouts = [...view.querySelectorAll(':scope > .grid.two, :scope > .grid.three, :scope > .grid.four')];
+      layouts.forEach(layout => {
+        if (picked.includes(layout)) return;
+        [...layout.children].forEach(child => {
+          if (isRuleCandidate(child)) picked.push(child);
+        });
+      });
+      const nestedRuleNodes = [...view.querySelectorAll('.shop-flow-box, .warehouse-rule-box, .role-showcase-box, .canvas')].filter(node => {
+        if (picked.includes(node)) return false;
+        return isRuleCandidate(node);
+      });
+      picked.push(...nestedRuleNodes);
+      return [...new Set(picked)];
+    }
+    function layoutRulesBeside(view) {
+      if (!view) return;
+      if (view.dataset.ruleLayoutReady === '1' && view.querySelector(':scope > .ui-rule-layout')) return;
+      if (view.id === 'overview' || view.id === 'menu') return;
+      const pageHead = view.querySelector(':scope > .page-head');
+      if (!pageHead) return;
+      const ruleNodes = collectRuleNodes(view);
+      if (!ruleNodes.length) return;
+      const layout = document.createElement('div');
+      layout.className = 'ui-rule-layout';
+      const main = document.createElement('div');
+      main.className = 'ui-rule-main-zone';
+      const sidebar = document.createElement('aside');
+      sidebar.className = 'ui-rule-sidebar';
+      sidebar.innerHTML = `<div class="ui-rule-sidebar-head"><b>${safeText(ruleSidebarTitle(view))}</b><span>说明性卡片、规则口径、边界限制、验收和暂缓说明统一放在这里，主界面只保留可操作业务内容。</span></div><div class="ui-rule-sidebar-stack"></div>`;
+      const stack = sidebar.querySelector('.ui-rule-sidebar-stack');
+      [...view.children].forEach(child => {
+        if (child === pageHead) return;
+        if (ruleNodes.includes(child)) return;
+        main.appendChild(child);
+      });
+      ruleNodes.forEach(node => {
+        if (node.parentElement && node.parentElement.classList.contains('grid')) {
+          node.parentElement.removeChild(node);
+        }
+        stack.appendChild(node);
+      });
+      if (!stack.children.length) stack.innerHTML = '<div class="ui-rule-empty">当前页面没有可迁移的说明性规则。</div>';
+      layout.appendChild(main);
+      layout.appendChild(sidebar);
+      pageHead.after(layout);
+      view.dataset.ruleLayoutReady = '1';
+    }
+    function applyRuleSidebars(root = document) {
+      const views = root.matches?.('.view') ? [root] : [...root.querySelectorAll('.view')];
+      views.forEach(layoutRulesBeside);
+    }
     function filters(list) {
       return `<div class="filters" data-filter-panel>${list.map(x => `<div><label>${x}</label><input class="input" placeholder="请输入${x}" data-filter-input></div>`).join('')}<div><label>&nbsp;</label><div class="btns"><button class="btn primary" data-local-search>查询</button><button class="btn ghost" data-local-reset>重置</button></div></div></div>`;
+    }
+    function productFilters(list) {
+      const options = {
+        '供应商': ['全部供应商','华南果业','海南供应链','天山果仓'],
+        '前台展示类目': ['全部展示类目','产地水果','乳品烘焙','海鲜水产'],
+        '统计类目': ['全部统计类目','生鲜水果','乳品','冷链生鲜'],
+        '商品状态': ['全部状态','待审核','已启用','已停用','已删除'],
+        '审核状态': ['全部审核','资料待补齐','待审核','已审核','已驳回']
+      };
+      return `<div class="filters" data-filter-panel>${list.map(x => {
+        if (x === '商品名称') return `<div><label>${x}</label><input class="input" placeholder="请输入${x}" data-filter-input></div>`;
+        const choices = options[x] || [`全部${x}`];
+        return `<div><label>${x}</label><select class="select" data-filter-input>${choices.map(item => `<option>${item}</option>`).join('')}</select></div>`;
+      }).join('')}<div><label>&nbsp;</label><div class="btns"><button class="btn primary" data-local-search>查询</button><button class="btn ghost" data-local-reset>重置</button></div></div></div>`;
     }
     function table(headers, rows) {
       const safeHeaders = Array.isArray(headers) ? headers : [];
@@ -40186,6 +40936,15 @@
       return index === 0 ? 'primary' : 'ghost';
     }
     function actionTarget(text) {
+      if (/查看数据口径|查看口径|^口径$/.test(text)) return '';
+      if (/查看导出日志|导出日志/.test(text)) return 'adminOperationLog';
+      if (/查看团期/.test(text)) return 'adminPublish';
+      if (/查看 SKU/.test(text)) return 'adminProduct';
+      if (/查看自提点/.test(text)) return 'adminStation';
+      if (/查看供应商/.test(text)) return 'adminSupplier';
+      if (/查看履约/.test(text)) return 'adminFulfillment';
+      if (/查看售后/.test(text)) return 'adminAfterSale';
+      if (/查看对账/.test(text)) return 'adminReconciliation';
       if (/权限|角色|菜单|按钮|数据范围|完整手机号|敏感字段|明文导出|跨城市|跨仓库|跨供应商|代操作|后台账号/.test(text)) return 'adminPermission';
       if (/待办|指派|任务触达/.test(text)) return 'adminTodo';
       if (/异常预警|异常中心|异常记录/.test(text)) return 'adminException';
@@ -40202,7 +40961,7 @@
       if (/配送记录/.test(text)) return 'wmsDelivery';
       if (/分佣扣回记录/.test(text)) return 'adminCommission';
       if (/数据口径|报表分类|更新时间/.test(text)) return 'adminReport';
-      if (/资料完整度|变更影响范围/.test(text)) return 'adminProduct';
+      if (/资料完整度/.test(text)) return 'adminProduct';
       if (/统计类目/.test(text)) return 'adminCategory';
       if (/影响范围/.test(text)) return 'adminRiskRules';
       if (/城市排行|经营明细/.test(text)) return 'adminCityRank';
@@ -40319,47 +41078,39 @@
           <b>${title}</b><span>${status}<br>${rule}</span>
         </div>
       `).join('');
-      const impacts = cfg.changeImpactRows.map(([title, scope, rule]) => `
-        <div class="ops-check-item ${/价格|规格|上下架|供应商/.test(title) ? 'fail' : ''}">
-          <b>${title}</b><span>${scope}<br>${rule}</span>
-        </div>
-      `).join('');
       el.innerHTML = `
         <div class="page-head"><div><h2>${cfg.title}</h2><p>${cfg.desc}</p></div>${buttons(cfg.actions)}</div>
         <div class="dashboard-core-grid">
           <button class="dash-card-btn green" data-go="adminPublish"><b>真正可售单元</b><strong>团期</strong><span>商品只做基础资料，价格、库存、配送日由团期决定</span></button>
-          <button class="dash-card-btn yellow" data-action="维护 SKU/库存规格" data-action-target="adminProduct"><b>SKU 口径</b><strong>3</strong><span>销售规格绑定库存规格，转换系数必须有效</span></button>
-          <button class="dash-card-btn red" data-action="变更影响范围" data-action-target="adminProduct" data-row="${encodeURIComponent(JSON.stringify({ 商品名称: '海南贵妃芒 5斤装', 状态: '待审核', 变更类型: '统计类目/供应商/规格/转换系数' }))}"><b>关键变更</b><strong>二确</strong><span>统计类目、供应商、规格、转换系数变更必须留痕</span></button>
+          <button class="dash-card-btn yellow" data-product-subpage="sales-spec"><b>维护销售规格</b><strong>规格</strong><span>新增或编辑销售规格，选择库存规格并填写正整数转换系数</span></button>
+          <button class="dash-card-btn primary" data-product-subpage="stock-spec"><b>维护库存规格</b><strong>库存</strong><span>维护库存规格资料，不处理仓库实际库存数量</span></button>
           <button class="dash-card-btn primary" data-go="adminOperationLog"><b>历史快照</b><strong>只读</strong><span>团期、订单商品、库存流水和售后记录不回改</span></button>
         </div>
         <br>
         <div class="grid two">
-          <div class="canvas"><div class="canvas-head"><h3>第一版功能范围</h3><span class="tag green">商品 / SKU / 类目 / 标签 / 审核</span></div><div class="body">${table(['页面','第一版规则'], cfg.functionScopeRows)}</div></div>
+          <div class="canvas"><div class="canvas-head"><h3>第一版功能范围</h3><span class="tag green">商品 / 销售规格 / 库存规格 / 类目 / 审核</span></div><div class="body">${table(['页面','第一版规则'], cfg.functionScopeRows)}</div></div>
           <div class="canvas"><div class="canvas-head"><h3>商品与团期关系</h3><span class="tag red">商品不是可售单元</span></div><div class="body">${ruleCards(cfg.productPeriodRows, '关系')}</div></div>
         </div>
         <br>
         <div class="canvas" data-standard-page="adminProduct">
           <div class="canvas-head"><h3>商品中心 / 基础资料列表</h3><span class="tag red">2026-06-20 v20 拍板</span></div>
           <div class="body">
-            ${filters(cfg.filters)}
-            <div class="action-result" data-local-result>商品中心只维护基础资料和 SKU 口径；商品资料停用不影响已发布团期和已支付订单履约，关键资料修改必须保留快照。</div>
+            ${productFilters(cfg.filters)}
+            <div class="action-result" data-local-result>商品中心只维护基础资料、销售规格和库存规格口径；商品资料停用不影响已发布团期和已支付订单履约，关键资料修改必须保留快照。</div>
             ${table(cfg.table, cfg.rows)}
           </div>
         </div>
         <br>
-        <div class="grid two">
-          <div class="ops-panel"><div class="ops-panel-head"><h3>发布前资料完整度</h3><span class="tag yellow">SKU / 库存规格 / 类目 / 供应商 / 保质期</span></div><div class="ops-panel-body"><div class="ops-checklist">${readiness}</div></div></div>
-          <div class="ops-panel"><div class="ops-panel-head"><h3>商品变更影响范围</h3><span class="tag red">保存前二次确认</span></div><div class="ops-panel-body"><div class="ops-checklist">${impacts}</div></div></div>
-        </div>
+        <div class="ops-panel"><div class="ops-panel-head"><h3>发布前资料完整度</h3><span class="tag yellow">销售规格 / 库存规格 / 类目 / 供应商 / 保质期</span></div><div class="ops-panel-body"><div class="ops-checklist">${readiness}</div></div></div>
         <br>
         <div class="grid two">
           <div class="canvas"><div class="canvas-head"><h3>商品字段规则</h3><span class="tag">必填 / 展示 / 参考价</span></div><div class="body">${ruleCards(cfg.fieldRuleRows, '字段')}</div></div>
-          <div class="canvas"><div class="canvas-head"><h3>SKU 与库存规格规则</h3><span class="tag red">销售规格 ↔ 库存规格</span></div><div class="body">${ruleCards(cfg.skuRuleRows, 'SKU')}</div></div>
+          <div class="canvas"><div class="canvas-head"><h3>销售规格与库存规格规则</h3><span class="tag red">销售规格 ↔ 库存规格</span></div><div class="body">${ruleCards(cfg.skuRuleRows, '规格')}</div></div>
         </div>
         <br>
         <div class="canvas">
-          <div class="canvas-head"><h3>SKU 管理 / 库存规格绑定</h3><span class="tag yellow">转换系数 / 条码 / 保质期</span></div>
-          <div class="body">${table(['SKU 编码','销售规格','库存规格','库存单位','转换系数','条码','保质期','绑定状态','发布状态'], cfg.skuRows)}</div>
+          <div class="canvas-head"><h3>销售规格 / 库存规格绑定</h3><div class="btns"><button class="btn yellow" data-product-subpage="sales-spec">维护销售规格</button><button class="btn ghost" data-product-subpage="stock-spec">维护库存规格</button></div></div>
+          <div class="body">${table(productSkuHeaders(), cfg.skuRows)}</div>
         </div>
         <br>
         <div class="grid two">
@@ -40378,7 +41129,7 @@
         </div>
         <br>
         <div class="canvas">
-          <div class="canvas-head"><h3>商品中心边界规则</h3><span class="tag">资料准确 / SKU 清晰 / 快照追溯</span></div>
+          <div class="canvas-head"><h3>商品中心边界规则</h3><span class="tag">资料准确 / 规格清晰 / 快照追溯</span></div>
           <div class="body">${ruleCards(cfg.boundaryRuleRows, '边界')}</div>
         </div>
         <br>
@@ -40392,6 +41143,323 @@
         ${globalFormValidationPanel()}
         <br>
         ${globalListStatePanel()}`;
+    }
+    function renderProductSalesSpecPage(rowData = {}) {
+      const el = document.getElementById('adminProduct');
+      const cfg = pages.adminProduct;
+      if (!el || !cfg) return;
+      const selectedProduct = rowData['商品名称'] || cfg.rows[0]?.[0] || '云南蓝莓 125g';
+      el.innerHTML = `
+        <div class="page-head"><div><h2>商品中心 / 维护销售规格</h2><p>当前商品：${selectedProduct}。销售规格用于前台、订单和团期；库存规格只允许选择或保存时自动生成。</p></div><div class="btns"><button class="btn ghost" data-product-subpage="main">返回商品中心</button><button class="btn" data-product-subpage="stock-spec">维护库存规格</button></div></div>
+        <div class="dashboard-core-grid">
+          <button class="dash-card-btn yellow" data-add-sales-spec><b>新增销售规格</b><strong>+</strong><span>提交后直接插入销售规格列表</span></button>
+          <button class="dash-card-btn green" data-save-sales-spec><b>保存销售规格</b><strong>校验</strong><span>未选库存规格会自动生成并绑定</span></button>
+          <button class="dash-card-btn primary" data-product-subpage="stock-spec"><b>库存规格池</b><strong>${cfg.stockSpecRows.length}</strong><span>库存规格在本页选择，未选保存时自动生成</span></button>
+        </div>
+        <br>
+        <div class="product-spec-workbench">
+          <div class="canvas" data-product-sales-page>
+            <div class="canvas-head"><h3>销售规格列表</h3><span class="tag yellow">销售规格必须绑定库存规格</span></div>
+            <div class="body">
+              <div class="action-result" data-sales-spec-result>已加载 ${cfg.skuRows.length} 个销售规格；转换系数必须为正整数，库存规格未选择时保存自动生成并绑定；全部销售规格停用后商品自动停用。</div>
+              <div data-sales-spec-table>${productSalesSpecTable()}</div>
+            </div>
+          </div>
+          <div class="canvas" data-sales-spec-form-card>
+            <div class="canvas-head"><h3 data-sales-spec-form-title>新增销售规格</h3><span class="tag primary">即时刷新</span></div>
+            <div class="body">${salesSpecForm()}</div>
+          </div>
+        </div>`;
+      applyRuleSidebars(el);
+    }
+    function renderProductStockSpecPage(rowData = {}) {
+      const el = document.getElementById('adminProduct');
+      const cfg = pages.adminProduct;
+      if (!el || !cfg) return;
+      el.innerHTML = `
+        <div class="page-head"><div><h2>商品中心 / 维护库存规格</h2><p>库存规格用于 WMS 入库、库存流水和出库扣减；本页只维护规格资料，不调整库存数量。</p></div><div class="btns"><button class="btn ghost" data-product-subpage="main">返回商品中心</button><button class="btn yellow" data-product-subpage="sales-spec">维护销售规格</button></div></div>
+        <div class="product-spec-workbench">
+          <div class="canvas" data-product-stock-page>
+            <div class="canvas-head"><h3>库存规格数据</h3><span class="tag yellow">编码系统生成 / 条码运营填写</span></div>
+            <div class="body">
+              <div class="action-result" data-stock-spec-result>已加载 ${cfg.stockSpecRows.length} 个库存规格；允许新增和编辑库存规格资料，库存数量不在本页处理。</div>
+              <div data-stock-spec-table>${productStockSpecTable()}</div>
+            </div>
+          </div>
+          <div class="canvas" data-stock-spec-form-card>
+            <div class="canvas-head"><h3 data-stock-spec-form-title>新增库存规格</h3><span class="tag green">手动新增</span></div>
+            <div class="body">${stockSpecForm()}</div>
+          </div>
+        </div>`;
+      applyRuleSidebars(el);
+    }
+    function productSkuHeaders() {
+      return ['规格名称','进价','售价','原价','销售单位','单位数量','转换系数','库存规格','状态'];
+    }
+    function productStockHeaders() {
+      return pages.adminProduct.stockSpecTable || ['规格名称','进价','销售单位','单位数量','编码','条码','长','宽','高','重量','状态','操作'];
+    }
+    function productSalesSpecTable() {
+      const headers = [...productSkuHeaders(), '操作'];
+      const rows = pages.adminProduct.skuRows.map((row, index) => [...row, `编辑销售规格`]);
+      return table(headers, rows).replace(/data-action="编辑销售规格"/g, 'data-action="编辑销售规格" data-edit-sales-spec');
+    }
+    function productStockSpecTable() {
+      return table(productStockHeaders(), pages.adminProduct.stockSpecRows).replace(/data-action="编辑库存规格"/g, 'data-action="编辑库存规格" data-edit-stock-spec');
+    }
+    function stockSpecFromRow(row = []) {
+      return {
+        name: row[0] || '',
+        cost: row[1] || '',
+        unit: row[2] || '',
+        qty: row[3] || '',
+        code: row[4] || '',
+        barcode: row[5] || '',
+        length: row[6] || '',
+        width: row[7] || '',
+        height: row[8] || '',
+        weight: row[9] || '',
+        status: row[10] || ''
+      };
+    }
+    function findStockSpec(code) {
+      return (pages.adminProduct.stockSpecRows || []).find(row => row[4] === code);
+    }
+    function stockSpecOptions(selected = '') {
+      return `<option value="">未选择，保存时系统生成</option>${(pages.adminProduct.stockSpecRows || []).map(row => {
+        const spec = stockSpecFromRow(row);
+        return `<option value="${safeText(spec.code)}" ${spec.code === selected ? 'selected' : ''}>${safeText(spec.code)} / ${safeText(spec.name)} / ${safeText(spec.unit)}</option>`;
+      }).join('')}`;
+    }
+    function salesSpecForm(row = null, index = -1) {
+      const data = row || ['', '', '', '', '份', '1', '1', '', '启用'];
+      const stock = findStockSpec(data[7]) || [];
+      const spec = stockSpecFromRow(stock);
+      return `<div class="product-spec-form" data-sales-spec-form data-sales-edit-index="${index}">
+        <div><label>规格名称 *</label><input class="input" data-sales-field="salesName" value="${safeText(data[0])}" placeholder="例：家庭装 500g"></div>
+        <div><label>进价 *</label><input class="input" data-sales-field="costPrice" value="${safeText(data[1])}" placeholder="例：7.80"></div>
+        <div><label>售价 *</label><input class="input" data-sales-field="salePrice" value="${safeText(data[2])}" placeholder="例：9.90"></div>
+        <div><label>原价 *</label><input class="input" data-sales-field="originPrice" value="${safeText(data[3])}" placeholder="例：12.90"></div>
+        <div class="full spec-inline-row"><div><label>销售单位</label><input class="input" data-sales-field="salesUnit" value="${safeText(data[4] || spec.unit || '份')}" placeholder="盒/份/组"></div><div><label>单位数量 *</label><input class="input" data-sales-field="unitQty" value="${safeText(data[5] || '1')}" placeholder="正整数，如 1、4、12"></div><div><label>状态</label><select class="select" data-sales-field="status"><option ${data[8] === '启用' ? 'selected' : ''}>启用</option><option ${data[8] === '停用' ? 'selected' : ''}>停用</option></select></div></div>
+        <div class="full spec-binding-row"><div><label>库存规格</label><select class="select" data-sales-field="stockCode" data-stock-select>${stockSpecOptions(data[7])}</select></div><div><label>转换系数 *</label><input class="input" data-sales-field="ratio" value="${safeText(data[6] || '1')}" placeholder="正整数，如 1、4、12"></div></div>
+        <div class="full"><span class="crud-error" data-sales-spec-error>请填写规格名称、价格、单位数量，并确保转换系数为正整数。</span></div>
+        <div class="full btns"><button class="btn ghost" data-reset-sales-form>清空</button><button class="btn primary" data-save-sales-spec>保存销售规格</button></div>
+      </div>`;
+    }
+    function stockSpecForm(row = null, index = -1) {
+      const data = row || ['', '', '份', '1', '', '', '', '', '', '', '启用', '编辑库存规格'];
+      return `<div class="product-spec-form" data-stock-spec-form data-stock-edit-index="${index}">
+        <div><label>规格名称 *</label><input class="input" data-stock-field="name" value="${safeText(data[0])}" placeholder="例：蓝莓家庭装库存份"></div>
+        <div><label>进价 *</label><input class="input" data-stock-field="cost" value="${safeText(data[1])}" placeholder="例：7.80"></div>
+        <div><label>销售单位</label><input class="input" data-stock-field="unit" value="${safeText(data[2] || '份')}" placeholder="盒/份/箱"></div>
+        <div><label>单位数量 *</label><input class="input" data-stock-field="qty" value="${safeText(data[3] || '1')}" placeholder="正整数"></div>
+        <div><label>编码</label><input class="input" data-stock-field="code" value="${safeText(data[4])}" readonly placeholder="保存时系统生成"></div>
+        <div><label>条码</label><input class="input" data-stock-field="barcode" value="${safeText(data[5])}" placeholder="运营填写库存规格条码"></div>
+        <div><label>长</label><input class="input" data-stock-field="length" value="${safeText(data[6])}" placeholder="大于 0，可小数"></div>
+        <div><label>宽</label><input class="input" data-stock-field="width" value="${safeText(data[7])}" placeholder="大于 0，可小数"></div>
+        <div><label>高</label><input class="input" data-stock-field="height" value="${safeText(data[8])}" placeholder="大于 0，可小数"></div>
+        <div><label>重量</label><input class="input" data-stock-field="weight" value="${safeText(data[9])}" placeholder="大于 0，可小数"></div>
+        <div><label>状态</label><select class="select" data-stock-field="status"><option ${data[10] === '启用' ? 'selected' : ''}>启用</option><option ${data[10] === '停用' ? 'selected' : ''}>停用</option></select></div>
+        <div class="full"><span class="crud-error" data-stock-spec-error>请填写库存规格名称、进价、单位数量、条码、长宽高重量；数值必须大于 0。</span></div>
+        <div class="full btns"><button class="btn ghost" data-reset-stock-form>清空</button><button class="btn primary" data-save-stock-spec>保存库存规格</button></div>
+      </div>`;
+    }
+    function productSpecSeq() {
+      return String(Math.floor(Math.random() * 900000) + 100000);
+    }
+    function generatedStockSpecRow(specName, unit, source = '系统生成', cost = '0.01', qty = '1') {
+      const seq = productSpecSeq();
+      const code = `INV-AUTO-${seq}`;
+      return [`${specName || '销售规格'}库存规格`, cost || '0.01', unit || '份', qty || '1', code, `69${seq}${String(Math.floor(Math.random() * 9000) + 1000)}`, '100', '80', '60', '1.0', '启用', '编辑库存规格'];
+    }
+    function refreshProductSkuSummary(message = '') {
+      const cfg = pages.adminProduct;
+      const skuCount = cfg.skuRows.length;
+      const boundCount = cfg.skuRows.filter(row => row[7] && !/待/.test(row[7])).length;
+      const summary = `${skuCount} 个销售规格 / 已绑定 ${boundCount} 个库存规格`;
+      const row = cfg.rows[0];
+      if (row && cfg.table.includes('销售规格/库存规格')) row[cfg.table.indexOf('销售规格/库存规格')] = summary;
+      const result = document.querySelector('#adminProduct [data-local-result], #adminProduct [data-sales-spec-result], #adminProduct [data-stock-spec-result]');
+      if (result && message) result.textContent = message;
+    }
+    function allSalesSpecsStopped(rows = pages.adminProduct.skuRows || []) {
+      return Array.isArray(rows) && rows.length > 0 && rows.every(row => String(row[8] || '').includes('停用'));
+    }
+    function applyProductStoppedBySalesSpecs(messagePrefix = '') {
+      const cfg = pages.adminProduct;
+      if (!cfg?.table || !Array.isArray(cfg.rows) || !cfg.rows.length) return '';
+      const statusIndex = cfg.table.indexOf('状态');
+      if (statusIndex >= 0) cfg.rows[0][statusIndex] = '已停用';
+      const auditIndex = cfg.table.indexOf('审核');
+      if (auditIndex >= 0) cfg.rows[0][auditIndex] = '销售规格全停用';
+      const actionIndex = cfg.table.indexOf('操作');
+      if (actionIndex >= 0) cfg.rows[0][actionIndex] = '编辑商品/维护销售规格/维护库存规格/启用商品';
+      return `${messagePrefix ? `${messagePrefix}；` : ''}所有销售规格已停用，商品状态已自动变更为已停用。`;
+    }
+    function refreshSalesSpecView(message) {
+      const wrap = document.querySelector('[data-sales-spec-table]');
+      if (wrap) wrap.innerHTML = productSalesSpecTable();
+      refreshProductSkuSummary(message);
+    }
+    function refreshStockSpecView(message) {
+      const wrap = document.querySelector('[data-stock-spec-table]');
+      if (wrap) wrap.innerHTML = productStockSpecTable();
+      const salesForm = document.querySelector('[data-sales-spec-form]');
+      if (salesForm) {
+        const selected = salesForm.querySelector('[data-sales-field="stockCode"]')?.value || '';
+        const holder = salesForm.parentElement;
+        if (holder) holder.innerHTML = salesSpecForm(null, -1);
+        const select = document.querySelector('[data-sales-field="stockCode"]');
+        if (select) select.value = selected;
+      }
+      refreshProductSkuSummary(message);
+    }
+    function updateStockPreview(select) {
+      const form = select.closest('[data-sales-spec-form]');
+      if (!form) return;
+      const spec = stockSpecFromRow(findStockSpec(select.value) || []);
+      const salesUnit = form.querySelector('[data-sales-field="salesUnit"]')?.value || '';
+      const code = form.querySelector('[data-stock-preview="code"]');
+      const barcode = form.querySelector('[data-stock-preview="barcode"]');
+      const unit = form.querySelector('[data-stock-preview="unit"]');
+      if (code) code.value = spec.code || '';
+      if (barcode) barcode.value = spec.barcode || '';
+      if (unit) unit.value = spec.unit || salesUnit;
+    }
+    function editSalesSpec(button) {
+      const row = button.closest('tr');
+      const specName = row?.children?.[0]?.textContent?.trim();
+      const index = pages.adminProduct.skuRows.findIndex(item => item[0] === specName);
+      const formCard = document.querySelector('[data-sales-spec-form-card] .body');
+      const title = document.querySelector('[data-sales-spec-form-title]');
+      if (formCard) formCard.innerHTML = salesSpecForm(pages.adminProduct.skuRows[index], index);
+      if (title) title.textContent = '编辑销售规格';
+    }
+    function editStockSpec(button) {
+      const row = button.closest('tr');
+      const code = row?.children?.[4]?.textContent?.trim();
+      const index = pages.adminProduct.stockSpecRows.findIndex(item => item[4] === code);
+      const formCard = document.querySelector('[data-stock-spec-form-card] .body');
+      const title = document.querySelector('[data-stock-spec-form-title]');
+      if (formCard) formCard.innerHTML = stockSpecForm(pages.adminProduct.stockSpecRows[index], index);
+      if (title) title.textContent = '编辑库存规格';
+    }
+    function addSalesSpec() {
+      const formCard = document.querySelector('[data-sales-spec-form-card] .body');
+      const title = document.querySelector('[data-sales-spec-form-title]');
+      if (formCard) formCard.innerHTML = salesSpecForm(null, -1);
+      if (title) title.textContent = '新增销售规格';
+    }
+    function addStockSpec() {
+      const formCard = document.querySelector('[data-stock-spec-form-card] .body');
+      const title = document.querySelector('[data-stock-spec-form-title]');
+      if (formCard) formCard.innerHTML = stockSpecForm(null, -1);
+      if (title) title.textContent = '新增库存规格';
+    }
+    function isPositiveIntegerValue(value) {
+      return /^[1-9]\d*$/.test(String(value || '').trim());
+    }
+    function isPositiveNumberValue(value) {
+      const text = String(value || '').trim();
+      return /^([1-9]\d*|0)(\.\d+)?$/.test(text) && Number(text) > 0;
+    }
+    function saveSalesSpec() {
+      const form = document.querySelector('[data-sales-spec-form]');
+      if (!form) return;
+      const error = form.querySelector('[data-sales-spec-error]');
+      const salesName = form.querySelector('[data-sales-field="salesName"]')?.value.trim() || '';
+      const costPrice = form.querySelector('[data-sales-field="costPrice"]')?.value.trim() || '';
+      const salePrice = form.querySelector('[data-sales-field="salePrice"]')?.value.trim() || '';
+      const originPrice = form.querySelector('[data-sales-field="originPrice"]')?.value.trim() || '';
+      const salesUnit = form.querySelector('[data-sales-field="salesUnit"]')?.value.trim() || '份';
+      const unitQty = form.querySelector('[data-sales-field="unitQty"]')?.value.trim() || '';
+      const ratio = form.querySelector('[data-sales-field="ratio"]')?.value.trim() || '';
+      const status = form.querySelector('[data-sales-field="status"]')?.value || '启用';
+      let stockCode = form.querySelector('[data-sales-field="stockCode"]')?.value || '';
+      if (!salesName || !isPositiveNumberValue(costPrice) || !isPositiveNumberValue(salePrice) || !isPositiveNumberValue(originPrice) || !isPositiveIntegerValue(unitQty) || !isPositiveIntegerValue(ratio)) {
+        if (error) error.classList.add('show');
+        return;
+      }
+      if (error) error.classList.remove('show');
+      let stockRow = findStockSpec(stockCode);
+      let autoGenerated = false;
+      if (!stockRow) {
+        stockRow = generatedStockSpecRow(salesName, salesUnit, '系统生成', costPrice, unitQty);
+        pages.adminProduct.stockSpecRows.unshift(stockRow);
+        stockCode = stockRow[4];
+        autoGenerated = true;
+      }
+      const stock = stockSpecFromRow(stockRow);
+      const nextRow = [salesName, costPrice, salePrice, originPrice, salesUnit, unitQty, ratio, stock.code, status];
+      const index = Number(form.dataset.salesEditIndex || -1);
+      const oldRow = index >= 0 ? pages.adminProduct.skuRows[index] : null;
+      const changedRatio = oldRow && String(oldRow[6]) !== String(ratio);
+      if (index >= 0) pages.adminProduct.skuRows.splice(index, 1, nextRow);
+      else pages.adminProduct.skuRows.unshift(nextRow);
+      addSalesSpec();
+      let message = `${index >= 0 ? '已更新' : '已新增'}销售规格：${salesName}，${autoGenerated ? `系统已生成 ${stock.code} 并绑定` : `已绑定 ${stock.code}`}。`;
+      if (allSalesSpecsStopped()) message = applyProductStoppedBySalesSpecs(message);
+      refreshSalesSpecView(message);
+      const payload = {
+        商品名称: pages.adminProduct.rows[0]?.[0] || '当前商品',
+        规格名称: salesName,
+        进价: costPrice,
+        售价: salePrice,
+        原价: originPrice,
+        销售单位: salesUnit,
+        单位数量: unitQty,
+        库存规格: stock.code,
+        转换系数: ratio,
+        状态: status,
+        页面结果: message
+      };
+      if (changedRatio) showConfirmModal('转换系数变更', 'adminProduct', payload);
+      else showActionModal(index >= 0 ? '编辑销售规格' : '新增销售规格', 'adminProduct', payload);
+    }
+    function saveStockSpec() {
+      const form = document.querySelector('[data-stock-spec-form]');
+      if (!form) return;
+      const error = form.querySelector('[data-stock-spec-error]');
+      const index = Number(form.dataset.stockEditIndex || -1);
+      const old = index >= 0 ? pages.adminProduct.stockSpecRows[index] : null;
+      const name = form.querySelector('[data-stock-field="name"]')?.value.trim() || '';
+      const cost = form.querySelector('[data-stock-field="cost"]')?.value.trim() || '';
+      const unit = form.querySelector('[data-stock-field="unit"]')?.value.trim() || '份';
+      const qty = form.querySelector('[data-stock-field="qty"]')?.value.trim() || '';
+      const barcode = form.querySelector('[data-stock-field="barcode"]')?.value.trim() || '';
+      const length = form.querySelector('[data-stock-field="length"]')?.value.trim() || '';
+      const width = form.querySelector('[data-stock-field="width"]')?.value.trim() || '';
+      const height = form.querySelector('[data-stock-field="height"]')?.value.trim() || '';
+      const weight = form.querySelector('[data-stock-field="weight"]')?.value.trim() || '';
+      const status = form.querySelector('[data-stock-field="status"]')?.value || '启用';
+      if (!name || !isPositiveNumberValue(cost) || !unit || !isPositiveIntegerValue(qty) || !barcode || !isPositiveNumberValue(length) || !isPositiveNumberValue(width) || !isPositiveNumberValue(height) || !isPositiveNumberValue(weight)) {
+        if (error) error.classList.add('show');
+        return;
+      }
+      if (error) error.classList.remove('show');
+      const seq = productSpecSeq();
+      const nextRow = old
+        ? [name, cost, unit, qty, old[4], barcode, length, width, height, weight, status, '编辑库存规格']
+        : [name, cost, unit, qty, `INV-MANUAL-${seq}`, barcode, length, width, height, weight, status, '编辑库存规格'];
+      if (old) pages.adminProduct.stockSpecRows.splice(index, 1, nextRow);
+      else pages.adminProduct.stockSpecRows.unshift(nextRow);
+      addStockSpec();
+      const message = `${old ? '已更新' : '已新增'}库存规格：${nextRow[4]} / ${name}，库存数量未发生变化。`;
+      refreshStockSpecView(message);
+      showActionModal(old ? '编辑库存规格' : '新增库存规格', 'adminProduct', {
+        规格名称: name,
+        进价: cost,
+        销售单位: unit,
+        单位数量: qty,
+        编码: nextRow[4],
+        条码: barcode,
+        长: length,
+        宽: width,
+        高: height,
+        重量: weight,
+        状态: status,
+        页面结果: message
+      });
     }
     function renderDisplayCategoryTree(keyword = '') {
       const kw = keyword.trim();
@@ -41790,7 +42858,8 @@
         ['供应商 / 采购','保留一级菜单','按 v1 定案'],
         ['财务风控','保留一级菜单','按 v1 定案'],
         ['用户与营销','保留一级菜单','隐藏积分、优惠券、复杂营销入口'],
-        ['报表与系统','保留一级菜单','只保留固定报表、固定看板和系统能力'],
+        ['报表中心','新增独立一级菜单','下设报表总览和 8 个固定报表'],
+        ['报表与系统','保留一级菜单','只保留权限、配置、任务和日志等系统能力'],
         ['二级入口','按后续拍板规则收口隐藏','不再按早期草案全量展示']
       ];
       const doRows = [
@@ -41913,7 +42982,7 @@
       </div>
       <br>
       <div class="grid two">
-        <div class="canvas"><div class="canvas-head"><h3>菜单验收</h3><span class="tag primary">8 个一级菜单</span></div><div class="body">${table(['菜单项','验收规则','处理'], menuRows)}</div></div>
+        <div class="canvas"><div class="canvas-head"><h3>菜单验收</h3><span class="tag primary">9 个一级菜单</span></div><div class="body">${table(['菜单项','验收规则','处理'], menuRows)}</div></div>
         <div class="canvas"><div class="canvas-head"><h3>页面验收</h3><span class="tag red">无假入口</span></div><div class="body">${table(['页面项','验收规则','处理'], pageRows)}</div></div>
       </div>
       <br>
@@ -42040,13 +43109,13 @@
         ['定版结论','最终定版结论','签收材料']
       ];
       const confirmRows = [
-        ['菜单','8 个一级菜单不再调整','签收前确认'],
+        ['菜单','9 个一级菜单不再调整，报表中心已独立拆出','签收前确认'],
         ['隐藏入口','优惠券、积分、客服、IM、机器人、仓库角色运营后台入口已隐藏','签收前确认'],
         ['登录边界','C 端用户、自提点 / 团长、仓库角色不进入运营后台 PC','签收前确认'],
         ['供应商数据','供应商只看自身数据','签收前确认'],
         ['城市数据','城市运营只看权限城市数据','签收前确认'],
         ['敏感字段','敏感字段展示和导出不脱敏，也不做字段级权限控制','签收前确认'],
-        ['主流程闭环','商品、团期、订单、售后、采购、财务、供应商、自提点 / 团长、报表与系统主流程能闭环','签收前确认'],
+        ['主流程闭环','商品、团期、订单、售后、采购、财务、供应商、自提点 / 团长、报表中心、报表与系统主流程能闭环','签收前确认'],
         ['P0 / P1','P0 问题全部解决，关键 P1 已解决或明确不阻断定版','签收前确认']
       ];
       const allowedRows = [
@@ -42190,7 +43259,8 @@
         ['供应商/采购','供应商管理、供应商详情、供应商资质管理、供应商合同管理、采购单管理、采购审核、供应商创建采购单、采购单详情、送货单/到货追踪、供应商结算数据'],
         ['财务风控','分账中心、佣金中心、结算中心、提现审核、押金管理、资金流水、对账中心、退款对账、异常资金处理'],
         ['用户与营销','用户中心、用户详情、评论中心、评论隐藏/删除、前台运营位配置、Banner/入口图配置、活动页基础配置'],
-        ['报表与系统','报表中心、固定看板、权限中心、后台账号管理、角色管理、基础配置（大区、城市、采购仓、截团时间）、数据字典、系统任务、操作日志、审批待办、导入记录、消息通知配置']
+        ['报表中心','报表总览、经营报表、团期报表、商品报表、自提点报表、供应商报表、履约报表、售后报表、财务报表、固定看板和固定统计口径'],
+        ['报表与系统','权限中心、后台账号管理、角色管理、基础配置（大区、城市、采购仓、截团时间）、数据字典、系统任务、操作日志、审批待办、导入记录、消息通知配置']
       ];
       const hiddenRows = [
         ['积分/优惠券','积分中心、优惠券','不进入当前第一版'],
@@ -42214,7 +43284,7 @@
       </div>
       <br>
       <div class="canvas">
-        <div class="canvas-head"><h3>第一版保留页面</h3><span class="tag primary">8 个一级菜单</span></div>
+        <div class="canvas-head"><h3>第一版保留页面</h3><span class="tag primary">9 个一级菜单</span></div>
         <div class="body">${table(['一级菜单','第一版保留页面'], scopeRows)}</div>
       </div>
       <br>
@@ -42462,7 +43532,7 @@
         ['范围控制','检查过程中不新增第一版业务范围']
       ];
       const checkRows = [
-        ['第一轮：页面范围','检查 8 个一级菜单是否固定、v57 保留页面是否存在、v57 必须隐藏页面是否全部隐藏、入口是否重复、不做项是否有灰色占位/敬请期待/未开放入口、页面命名是否和业务范围一致','页面范围差异清单'],
+        ['第一轮：页面范围','检查 9 个一级菜单是否固定、报表中心是否独立拆出、v57 保留页面是否存在、v57 必须隐藏页面是否全部隐藏、入口是否重复、不做项是否有灰色占位/敬请期待/未开放入口、页面命名是否和业务范围一致','页面范围差异清单'],
         ['第二轮：核心流程','检查商品到团期发布、订单履约、采购与供应商协同、出库配送自提、售后与退款、分佣结算提现、异常中心、权限与追溯是否闭环','流程闭环差异清单'],
         ['第三轮：账号权限和数据范围','检查允许登录角色、禁止登录角色、平台管理员/城市运营/供应商/财务/采购/售后运营数据范围、导出权限、详情跳转权限、敏感字段不脱敏且不误做字段级权限','权限数据差异清单'],
         ['第四轮：字段、状态、按钮','检查字段名称统一、状态符合枚举、按钮符合业务状态和角色权限、高风险操作有二次确认/审批/日志、第一版不做按钮隐藏、商品团期订单售后采购财务关键状态正确','字段状态按钮差异清单'],
@@ -42844,7 +43914,7 @@
         ['绕过禁止','第一版明确不做的能力，不能通过隐藏按钮、灰色入口、后门 URL、默认接口返回等方式绕过']
       ];
       const devSplitRows = [
-        ['8 个一级菜单','运营驾驶舱、商品与团期、交易履约、自提点/团长、供应商/采购、财务风控、用户与营销、报表与系统'],
+        ['9 个一级菜单','运营驾驶舱、商品与团期、交易履约、自提点/团长、供应商/采购、财务风控、用户与营销、报表中心、报表与系统'],
         ['模块基础能力','每个模块都必须包含列表、详情、筛选、状态、按钮权限、操作日志和数据范围'],
         ['跨模块链路','跨模块链路必须能跳转或追溯，不允许只展示孤立数据'],
         ['优先级','财务、采购、售后、订单、团期等核心链路优先保证闭环，再优化页面体验']
@@ -42914,7 +43984,7 @@
       </div>
       <br>
       <div class="grid two">
-        <div class="canvas"><div class="canvas-head"><h3>研发拆分建议</h3><span class="tag primary">8 个一级菜单</span></div><div class="body">${table(['拆分项','要求'], devSplitRows)}</div></div>
+        <div class="canvas"><div class="canvas-head"><h3>研发拆分建议</h3><span class="tag primary">9 个一级菜单</span></div><div class="body">${table(['拆分项','要求'], devSplitRows)}</div></div>
         <div class="canvas"><div class="canvas-head"><h3>上线前准入</h3><span class="tag red">必须通过</span></div><div class="body">${table(['准入项','验收'], releaseRows)}</div></div>
       </div>
       <br>
@@ -44418,6 +45488,7 @@
             </div>
           </div>
         </div>`;
+      applyRuleSidebars(el);
     }
     function ruleCards(rows, note = '') {
       return `<div class="dash-list">${rows.map((row, index) => {
@@ -44967,6 +46038,22 @@
       const el = document.getElementById('adminReport');
       const cfg = pages.adminReport;
       if (!el || !cfg) return;
+      const reportTargets = [
+        ['经营报表','GMV、订单数、支付金额、退款金额、客单价','adminReportBusiness','primary'],
+        ['团期报表','团期销售额、商品销量、截团数量、缺货数量、售后数量','adminReportSalePeriod','green'],
+        ['商品报表','SKU 销量、销售额、退款率、缺货率、复购情况','adminReportProduct','yellow'],
+        ['自提点报表','GMV、订单数、履约率、售后率、佣金','adminReportStation','primary'],
+        ['供应商报表','采购数量、入库数量、缺货率、售后责任、结算金额','adminReportSupplier','green'],
+        ['履约报表','入库、分拣、出库、配送、待自提、已自提','adminReportFulfillment','yellow'],
+        ['售后报表','售后单量、退款金额、原因、责任方、处理时长','adminReportAfterSale','red'],
+        ['财务报表','支付、退款、分账、佣金、提现、押金、异常资金','adminReportFinance','primary']
+      ].map(([title, desc, target, tone]) => `
+        <button class="dash-card-btn ${tone || ''}" data-go="${target}">
+          <b>${title}</b>
+          <strong>固定</strong>
+          <span>${desc}</span>
+        </button>
+      `).join('');
       const summary = [
         ['报表定位','查看经营结果和导出分析','adminReport','primary'],
         ['核心口径','GMV / 支付 / 退款 / 净销售额','adminReport','green'],
@@ -44983,8 +46070,16 @@
         <div class="page-head"><div><h2>${cfg.title}</h2><p>${cfg.desc}</p></div>${buttons(cfg.actions)}</div>
         <div class="dashboard-core-grid">${summary}</div>
         <br>
+        <div class="canvas">
+          <div class="canvas-head"><h3>报表菜单</h3><span class="tag primary">独立一级菜单 / 8 个固定报表</span></div>
+          <div class="body">
+            <div class="dashboard-core-grid">${reportTargets}</div>
+            <div class="action-result">报表中心已从“报表与系统”拆出为独立一级菜单；报表与系统只保留权限、基础配置、系统任务和操作日志。</div>
+          </div>
+        </div>
+        <br>
         <div class="canvas" data-standard-page="adminReport">
-          <div class="canvas-head"><h3>报表列表 / 数据更新时间</h3><span class="tag red">2026-06-18 v13 拍板</span></div>
+          <div class="canvas-head"><h3>报表总览 / 数据更新时间</h3><span class="tag red">2026-06-18 v13 拍板</span></div>
           <div class="body">
             <div class="ops-report-alert">
               <div><b>口径版本：OPS-REPORT-v13.5 / 数据更新时间：2026-06-19 12:35</b><br>经营实时指标以运营驾驶舱为准，报表中心允许 T+1 汇总。导出需要独立权限、导出原因和操作日志；当前导出文件不包含优惠券和积分相关列。</div>
@@ -45021,6 +46116,113 @@
             <div class="action-result">${cfg.detail}</div>
           </div>
         </div>`;
+      applyRuleSidebars(el);
+    }
+    function reportMetaPayload(id, extra = {}) {
+      const cfg = pages[id] || pages.adminReport || {};
+      return encodeURIComponent(JSON.stringify({
+        报表类型: cfg.reportType || '报表中心',
+        统计时间范围: '2026-06-19 00:00 至 2026-06-19 12:30',
+        默认时间口径: cfg.timeRule || '按当前报表选择的时间口径统计',
+        口径版本: 'OPS-REPORT-v13.5',
+        数据更新时间: '2026-06-19 12:35',
+        是否T1: /财务/.test(cfg.reportType || '') ? '财务流水准实时，汇总结果可 T+1' : '允许 T+1 汇总',
+        当前权限范围: cfg.permissionScope || '按当前账号数据范围',
+        筛选条件: '时间范围=今日；城市=当前授权范围；隐藏优惠券/积分相关列',
+        数据范围: cfg.permissionScope || '按当前账号数据权限',
+        预计条数: String((cfg.rows || []).length * 643),
+        ...extra
+      }));
+    }
+    function reportActionTarget(action, id) {
+      if (/查看数据口径|查看口径/.test(action || '')) return id;
+      if (/查看导出日志|导出日志/.test(action || '')) return 'adminOperationLog';
+      return actionTarget(action) || id;
+    }
+    function reportActionButton(action, id, cls = 'ghost', extra = {}) {
+      return `<button class="btn ${cls}" data-action="${action}" data-action-target="${reportActionTarget(action, id)}" data-row="${reportMetaPayload(id, extra)}">${action}</button>`;
+    }
+    function reportDrillRows(cfg, label, value) {
+      const subject = cfg.rows?.[0]?.[0] || cfg.reportType;
+      return [
+        ['报表类型', cfg.reportType || '固定报表'],
+        ['下钻指标', label],
+        ['当前数值', value],
+        ['统计对象', subject],
+        ['统计时间范围', '2026-06-19 00:00 至 2026-06-19 12:30'],
+        ['默认时间口径', cfg.timeRule || '按当前报表口径统计'],
+        ['口径版本', 'OPS-REPORT-v13.5'],
+        ['数据更新时间', '2026-06-19 12:35'],
+        ['当前权限范围', cfg.permissionScope || '按当前账号数据范围'],
+        ['下钻结果', `${cfg.reportType}已按“${label}”刷新下方列表，只展示分析和追溯入口`]
+      ];
+    }
+    function handleReportDrill(button) {
+      const id = button.dataset.reportDrill;
+      const cfg = pages[id];
+      if (!cfg) return;
+      const label = button.dataset.reportMetric || '核心指标';
+      const value = button.dataset.reportValue || '';
+      const canvas = document.querySelector(`#${id} [data-standard-page="${id}"]`);
+      const result = canvas?.querySelector('[data-local-result]');
+      if (result) result.textContent = `${cfg.reportType}指标下钻：${label}=${value}；统计范围=2026-06-19 00:00 至 2026-06-19 12:30，权限范围=${cfg.permissionScope || '按当前账号数据范围'}。`;
+      showActionModal('下钻指标', id, Object.fromEntries(reportDrillRows(cfg, label, value)));
+    }
+    function renderFixedReportPage(id, cfg) {
+      const el = document.getElementById(id);
+      const base = pages.adminReport;
+      if (!el || !cfg || !base) return;
+      const cards = (cfg.metricCards || []).map(([label, value], index) => `
+        <button class="dash-card-btn ${index === 0 ? 'primary' : index === 1 ? 'green' : index === 2 ? 'yellow' : ''}" data-report-drill="${id}" data-report-metric="${label}" data-report-value="${value}">
+          <b>${label}</b>
+          <strong>${value}</strong>
+          <span>${cfg.reportType}核心指标 / 点击下钻</span>
+        </button>
+      `).join('');
+      const metricRows = [
+        ['报表名称', cfg.reportType, cfg.reportSummary || '固定报表'],
+        ['统计时间范围', '2026-06-19 00:00 至 2026-06-19 12:30', '默认今日 / 近 7 日 / 近 30 日，可自定义'],
+        ['默认时间口径', cfg.timeRule || '按当前报表口径统计', '不同报表不混用时间口径'],
+        ['口径版本', 'OPS-REPORT-v13.5', '导出文件同步写入口径版本'],
+        ['数据更新时间', '2026-06-19 12:35', '实时经营看驾驶舱，固定报表允许延迟'],
+        ['是否 T+1', /财务/.test(cfg.reportType) ? '财务流水准实时，汇总结果可 T+1' : '允许 T+1 汇总', '页面顶部明确标识，避免跨口径对账'],
+        ['当前权限范围', cfg.permissionScope || '按当前账号数据范围', '导出沿用当前账号数据权限']
+      ];
+      el.innerHTML = `
+        <div class="page-head"><div><h2>${cfg.title}</h2><p>${cfg.desc}</p></div>${buttons(cfg.actions)}</div>
+        <div class="dashboard-core-grid">${cards}</div>
+        <br>
+        <div class="canvas" data-standard-page="${id}">
+          <div class="canvas-head"><h3>${cfg.reportType} / 口径与数据更新时间</h3><span class="tag red">固定报表</span></div>
+          <div class="body">
+            <div class="ops-report-alert">
+              <div><b>口径版本：OPS-REPORT-v13.5 / 数据更新时间：2026-06-19 12:35</b><br>${cfg.timeRule || '按当前报表口径统计'}；导出需要独立权限、导出原因和操作日志；当前导出文件不包含优惠券和积分相关列。</div>
+              ${reportActionButton('导出报表', id, 'yellow')}
+            </div>
+            ${table(['口径项','当前值','说明'], metricRows)}
+            <br>
+            ${filters(cfg.filters)}
+            <div class="action-result" data-local-result>${cfg.reportType}只做展示、筛选、口径说明和导出；对账差异去对账中心，业务异常去异常中心。</div>
+            ${table(cfg.table, cfg.rows)}
+            <br>
+            <div class="btns">
+              ${reportActionButton('查看数据口径', id, 'yellow')}
+              ${reportActionButton('查看导出日志', id, 'ghost')}
+              ${reportActionButton('导出 Excel', id, 'green')}
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="grid two">
+          <div class="canvas"><div class="canvas-head"><h3>权限与数据范围</h3><span class="tag red">按角色隔离</span></div><div class="body">${ruleCards(base.permissionRules, '权限')}</div></div>
+          <div class="canvas"><div class="canvas-head"><h3>导出日志规则</h3><span class="tag red">原因必填 / 留痕</span></div><div class="body">${ruleCards(base.exportRules, '导出')}</div></div>
+        </div>
+        <br>
+        <div class="canvas">
+          <div class="canvas-head"><h3>报表边界</h3><span class="tag">不处理业务单据</span></div>
+          <div class="body">${ruleCards(base.boundaryRules, '边界')}</div>
+        </div>`;
+      applyRuleSidebars(el);
     }
     function renderMessageRules() {
       const el = document.getElementById('adminMessage');
@@ -45369,6 +46571,7 @@
       if (id === 'adminUser') return renderUserMarketingRules();
       if (id === 'adminComment') return renderCommentCenter();
       if (id === 'adminReport') return renderReportCenter();
+      if (/^adminReport(?:Business|SalePeriod|Product|Station|Supplier|Fulfillment|AfterSale|Finance)$/.test(id)) return renderFixedReportPage(id, cfg);
       if (id === 'adminMessage') return renderMessageRules();
       if (id === 'adminConfig') return renderConfigRules();
       if (id === 'adminOrder') return renderOrderRules();
@@ -45420,11 +46623,12 @@
       if (!cfg) return;
       const keywords = [...canvas.querySelectorAll('[data-filter-input]')]
         .map(input => input.value.trim())
+        .filter(value => value && !/^全部/.test(value))
         .filter(Boolean);
       const matched = keywords.length
         ? cfg.rows.filter(row => keywords.every(keyword => row.join(' ').toLowerCase().includes(keyword.toLowerCase())))
         : cfg.rows;
-      const body = canvas.querySelector('[data-table-body]');
+      const body = findStandardTableBody(canvas, cfg.table);
       if (body) body.innerHTML = (matched.length ? matched : cfg.rows.slice(0, 1)).map(row => tableRow(cfg.table, row)).join('');
       const result = canvas.querySelector('[data-local-result]');
       if (result) result.textContent = matched.length
@@ -45437,31 +46641,232 @@
       const id = canvas.dataset.standardPage;
       const cfg = pages[id];
       if (!cfg) return;
-      canvas.querySelectorAll('[data-filter-input]').forEach(input => input.value = '');
-      const body = canvas.querySelector('[data-table-body]');
+      canvas.querySelectorAll('[data-filter-input]').forEach(input => {
+        if (input.tagName === 'SELECT') input.selectedIndex = 0;
+        else input.value = '';
+      });
+      const body = findStandardTableBody(canvas, cfg.table);
       if (body) body.innerHTML = cfg.rows.map(row => tableRow(cfg.table, row)).join('');
       const result = canvas.querySelector('[data-local-result]');
       if (result) result.textContent = `已重置筛选条件，恢复 ${cfg.rows.length} 条列表数据。`;
     }
+    function findStandardTableBody(canvas, headers = []) {
+      const bodies = [...canvas.querySelectorAll('[data-table-body]')];
+      if (!bodies.length) return null;
+      const expected = (headers || []).join('|');
+      const exact = bodies.find(body => {
+        const tableHeaders = [...body.closest('table')?.querySelectorAll('thead th') || []].map(th => th.textContent.trim()).join('|');
+        return tableHeaders === expected;
+      });
+      return exact || bodies[bodies.length - 1];
+    }
     function addTestRow(button) {
+      showCrudModal(button, 'create');
+    }
+    let pendingCrudAction = null;
+    function safeText(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+    function standardCanvasFrom(source) {
+      return source?.closest?.('[data-standard-page]') || source?.closest?.('.view')?.querySelector?.('[data-standard-page]') || null;
+    }
+    function rowArrayFromData(headers, rowData = {}) {
+      return headers.map(header => rowData[header] ?? defaultCellByHeader(header, headers.indexOf(header)));
+    }
+    function fillRowToTableLength(row, cfg) {
+      const headers = cfg?.table || [];
+      const next = Array.isArray(row) ? [...row] : [];
+      while (next.length < headers.length) next.push(defaultCellByHeader(headers[next.length], next.length));
+      return next.slice(0, headers.length);
+    }
+    function refreshStandardTable(canvas, cfg, message) {
+      if (!canvas || !cfg) return;
+      const body = findStandardTableBody(canvas, cfg.table);
+      if (body) body.innerHTML = cfg.rows.map(row => tableRow(cfg.table, row)).join('');
+      const result = canvas.querySelector('[data-local-result]');
+      if (result && message) result.textContent = message;
+    }
+    function rowObjectFromArray(headers, row) {
+      return (headers || []).slice(0, -1).reduce((obj, header, index) => {
+        obj[header] = row?.[index] ?? '';
+        return obj;
+      }, {});
+    }
+    function findRowIndexByData(cfg, rowData = {}) {
+      if (!cfg || !Array.isArray(cfg.rows)) return -1;
+      const headers = cfg.table || [];
+      const firstHeader = headers[0];
+      const firstValue = rowData[firstHeader];
+      if (firstHeader && firstValue !== undefined) {
+        const byFirst = cfg.rows.findIndex(row => String(row[0]) === String(firstValue));
+        if (byFirst >= 0) return byFirst;
+      }
+      const keys = Object.keys(rowData).filter(key => headers.includes(key));
+      return cfg.rows.findIndex(row => keys.length && keys.every(key => String(row[headers.indexOf(key)] ?? '') === String(rowData[key] ?? '')));
+    }
+    function shouldOpenCrud(action = '') {
+      if (/维护销售规格|维护库存规格/.test(action || '')) return false;
+      return /^(编辑|维护|配置|调整|保存当前资料|取消修改)/.test(action || '') && !/查看|日志|明细|导出|口径|发布前校验|审核|通过|驳回|确认|处理|重试|发布|停用|启用|删除|下架|退款|提现|分账|佣金|缺货|补货|责任方|影响范围|排序|榜单/.test(action || '');
+    }
+    function crudFieldsFor(cfg) {
+      return (cfg?.table || []).filter(header => !/操作/.test(header));
+    }
+    function showCrudModal(button, mode = 'create', rowData = null) {
       const canvas = button.closest('[data-standard-page]') || button.closest('.view')?.querySelector('[data-standard-page]');
       if (!canvas) {
-        showActionModal(button.textContent || '新增测试数据', '', {
-          '处理结果': '当前区域不是列表页，已模拟生成一条测试数据',
-          '数据状态': '已写入测试缓存',
-          '页面提示': '进入对应列表模块后可查看新增行'
+        showActionModal(button.textContent || '按钮操作', '', {
+          '处理结果': '当前区域没有标准列表，已打开操作反馈',
+          '交互方式': '通过弹窗展示表单结果或跳转追溯信息',
+          '页面提示': '进入对应运营后台列表模块后可新增、编辑并刷新数据'
         });
         return;
       }
       const id = canvas.dataset.standardPage;
       const cfg = pages[id];
       if (!cfg) return;
-      const row = buildTestRow(id, cfg);
-      cfg.rows.unshift(row);
-      const body = canvas.querySelector('[data-table-body]');
-      if (body) body.insertAdjacentHTML('afterbegin', tableRow(cfg.table, row));
-      const result = canvas.querySelector('[data-local-result]');
-      if (result) result.textContent = `已新增 1 条测试数据：${row[0]}，当前列表共 ${cfg.rows.length} 条。`;
+      const modal = document.getElementById('crudModal');
+      const fields = document.getElementById('crudModalFields');
+      const title = document.getElementById('crudModalTitle');
+      const desc = document.getElementById('crudModalDesc');
+      const tip = document.getElementById('crudModalTip');
+      const error = document.getElementById('crudModalError');
+      if (!modal || !fields) return;
+      const action = button.textContent?.trim() || button.dataset.action || (mode === 'edit' ? '编辑' : '新增');
+      const rowDataKeys = rowData ? Object.keys(rowData).filter(key => (cfg.table || []).includes(key)) : [];
+      const defaultEditIndex = mode === 'edit' && !rowDataKeys.length && cfg.rows.length ? 0 : -1;
+      const currentRowIndex = mode === 'edit' ? (defaultEditIndex >= 0 ? defaultEditIndex : findRowIndexByData(cfg, rowData || {})) : -1;
+      const baseRow = mode === 'edit'
+        ? fillRowToTableLength(currentRowIndex >= 0 ? cfg.rows[currentRowIndex] : rowArrayFromData(cfg.table, rowData || {}), cfg)
+        : buildTestRow(id, cfg);
+      const editableHeaders = crudFieldsFor(cfg);
+      const values = editableHeaders.map(header => baseRow[cfg.table.indexOf(header)] ?? defaultCellByHeader(header, cfg.table.indexOf(header)));
+      fields.innerHTML = editableHeaders.map((header, index) => {
+        const value = safeText(values[index]);
+        const full = /说明|备注|原因|规则|影响|内容|描述|限制|操作建议|处理建议|动作/.test(header) ? ' full' : '';
+        const input = /说明|备注|原因|规则|影响|内容|描述|限制|操作建议|处理建议/.test(header)
+          ? `<textarea class="textarea" data-crud-field="${safeText(header)}">${value}</textarea>`
+          : `<input class="input" data-crud-field="${safeText(header)}" value="${value}">`;
+        return `<div class="${full.trim()}"><label>${safeText(header)}${index === 0 ? ' *' : ''}</label>${input}</div>`;
+      }).join('');
+      pendingCrudAction = {
+        mode,
+        id,
+        cfg,
+        canvas,
+        rowIndex: currentRowIndex,
+        originalRowData: rowData || {},
+        action
+      };
+      if (title) title.textContent = `${cfg.title || titles[id] || id} / ${mode === 'edit' ? '编辑数据' : action}`;
+      if (desc) desc.textContent = mode === 'edit'
+        ? '修改当前行字段，保存后会即时更新页面列表、状态标签和操作结果。'
+        : '填写新增数据，提交后会插入当前列表第一行，并同步刷新页面数据源。';
+      if (tip) tip.textContent = `静态原型交互：本次只更新 ${titles[id] || cfg.title || id} 页面内存数据，不写后端接口或数据库。`;
+      if (error) error.classList.remove('show');
+      modal.classList.add('show');
+    }
+    function closeCrudModal() {
+      const modal = document.getElementById('crudModal');
+      if (modal) modal.classList.remove('show');
+      pendingCrudAction = null;
+    }
+    function saveCrudModal() {
+      if (!pendingCrudAction) return;
+      const { mode, cfg, canvas, rowIndex, action } = pendingCrudAction;
+      const error = document.getElementById('crudModalError');
+      const values = {};
+      document.querySelectorAll('#crudModal [data-crud-field]').forEach(input => {
+        values[input.dataset.crudField] = input.value.trim();
+      });
+      const headers = crudFieldsFor(cfg);
+      if (headers[0] && !values[headers[0]]) {
+        if (error) error.classList.add('show');
+        return;
+      }
+      const pageId = pendingCrudAction.id;
+      const current = mode === 'edit' && rowIndex >= 0 ? cfg.rows[rowIndex] : buildTestRow(pageId, cfg);
+      const nextRow = fillRowToTableLength([...(current || [])], cfg);
+      headers.forEach(header => {
+        const index = cfg.table.indexOf(header);
+        if (index >= 0) nextRow[index] = values[header] || defaultCellByHeader(header, index);
+      });
+      if (mode === 'edit' && rowIndex >= 0) cfg.rows.splice(rowIndex, 1, nextRow);
+      else cfg.rows.unshift(nextRow);
+      closeCrudModal();
+      const message = mode === 'edit'
+        ? `已保存编辑结果：${nextRow[0]}，当前列表已刷新并写入操作日志提示。`
+        : `已新增 1 条数据：${nextRow[0]}，当前列表共 ${cfg.rows.length} 条。`;
+      refreshStandardTable(canvas, cfg, message);
+      showActionModal(mode === 'edit' ? (action || '编辑保存') : (action || '新增保存'), pageId, {
+        ...rowObjectFromArray(cfg.table, nextRow),
+        页面结果: message
+      });
+    }
+    function actionStatusValue(action = '') {
+      if (/驳回|退回/.test(action)) return '已驳回';
+      if (/通过|审核通过/.test(action)) return '已通过';
+      if (/停用|禁用|下架|关闭/.test(action)) return '已停用';
+      if (/启用/.test(action)) return '已启用';
+      if (/发布/.test(action)) return '已发布';
+      if (/重试|重跑|补偿/.test(action)) return '已重试';
+      if (/缺货|补货|处理|确认|完成|结算|退款|提现|打款|分账|责任方|索赔|退供/.test(action)) return '已处理';
+      if (/提交审核/.test(action)) return '待审核';
+      return '已更新';
+    }
+    function applyRowAction(button, action, rowData = {}, reason = '') {
+      const canvas = standardCanvasFrom(button);
+      if (!canvas) return null;
+      const id = canvas.dataset.standardPage;
+      const cfg = pages[id];
+      if (!cfg || !Array.isArray(cfg.rows)) return null;
+      const rowIndex = findRowIndexByData(cfg, rowData || {});
+      if (rowIndex < 0) {
+        const message = `已执行${action || '操作'}：当前页面已刷新操作结果${reason ? `，原因：${reason}` : ''}，并生成操作日志摘要。`;
+        const result = canvas.querySelector('[data-local-result]');
+        if (result) result.textContent = message;
+        return { message, row: null };
+      }
+      const current = fillRowToTableLength(cfg.rows[rowIndex], cfg);
+      if (/删除/.test(action || '')) {
+        const removed = cfg.rows.splice(rowIndex, 1)[0];
+        const message = `已删除：${removed?.[0] || '当前行'}，当前列表剩余 ${cfg.rows.length} 条，操作原因已写入日志提示。`;
+        refreshStandardTable(canvas, cfg, message);
+        return { message, row: removed };
+      }
+      const statusIndex = cfg.table.findIndex(header => /状态|结果|审核|处理|发布/.test(header) && !/操作/.test(header));
+      const nextStatus = actionStatusValue(action);
+      if (statusIndex >= 0) current[statusIndex] = nextStatus;
+      const actionIndex = cfg.table.findIndex(header => /操作/.test(header));
+      if (actionIndex >= 0) current[actionIndex] = current[actionIndex] || '详情/日志';
+      cfg.rows.splice(rowIndex, 1, current);
+      const message = `已执行${action}：${current[0]} 状态更新为「${statusIndex >= 0 ? nextStatus : '已记录'}」${reason ? `，原因：${reason}` : ''}。`;
+      refreshStandardTable(canvas, cfg, message);
+      return { message, row: current };
+    }
+    function applyProductEditRow(rowData = {}, reason = '') {
+      const canvas = document.querySelector('#adminProduct [data-standard-page="adminProduct"]');
+      const cfg = pages.adminProduct;
+      if (!canvas || !cfg || !Array.isArray(cfg.rows)) return null;
+      const originalName = rowData['原商品名称'] || rowData['商品名称'];
+      const rowIndex = cfg.rows.findIndex(row => String(row[0]) === String(originalName));
+      const targetIndex = rowIndex >= 0 ? rowIndex : 0;
+      const current = fillRowToTableLength(cfg.rows[targetIndex], cfg);
+      current[0] = rowData['商品名称'] || current[0];
+      if (cfg.table.includes('供应商')) current[cfg.table.indexOf('供应商')] = rowData['供应商'] || current[cfg.table.indexOf('供应商')];
+      const allStopped = rowData['规格全停用'] === '是';
+      if (cfg.table.includes('状态')) current[cfg.table.indexOf('状态')] = allStopped ? '已停用' : '已编辑待同步';
+      if (cfg.table.includes('审核')) current[cfg.table.indexOf('审核')] = allStopped ? '销售规格全停用' : '资料已更新';
+      if (allStopped && cfg.table.includes('操作')) current[cfg.table.indexOf('操作')] = '编辑商品/维护销售规格/维护库存规格/启用商品';
+      cfg.rows.splice(targetIndex, 1, current);
+      const message = `已保存商品资料：${current[0]}，列表已刷新${allStopped ? '；所有销售规格已停用，商品状态已自动变更为已停用' : ''}${reason ? `，原因：${reason}` : ''}。`;
+      refreshStandardTable(canvas, cfg, message);
+      return { message, row: current };
     }
     function nextSeq(prefix) {
       return `${prefix}${String(Math.floor(Math.random() * 9000) + 1000)}`;
@@ -45473,7 +46878,7 @@
         adminTodo: [`TODO20260610${seq}`, '售后审核', `测试对象${seq}`, '高', '测试负责人', '今日 18:00', '待处理', '处理/指派/查看日志'],
         adminException: [`EX20260610${seq}`, '库存不足', `测试团期${seq}`, '高', '待处理', '生成补货并通知用户', '履约测试', '处理异常/缺货处理'],
         adminCityRank: ['测试城市', '3680.00', '120', '1.6%', '0.8%', '97.2%', '上升 1 名', '经营明细/异常预警'],
-        adminProduct: ['新疆库尔勒香梨 5斤装', '天山果仓', '新疆供应链', '3', '自动生成 3 个库存规格', '420*280*180mm / 5kg', '广州/深圳/长沙', '待同步', '编辑商品/维护规格/提交审核/发布商品'],
+        adminProduct: ['新疆库尔勒香梨 5斤装', '天山果仓', '产地水果', '生鲜水果', '3 个销售规格 / 已绑定 3 个库存规格', '待审核', '资料待补齐', '按批次生产日期 + 5 天保质期', '参考价 45.90', '未进入团期', '编辑商品/维护销售规格/维护库存规格/提交审核/启用商品'],
         adminCategory: [`测试类目${seq}`, '展示类目', '2', '产地水果', '12', '启用', '编辑/新增子级'],
         adminRankTag: [`测试榜单${seq}`, '新疆库尔勒香梨 5斤装', '第1名', '榜单页/商品详情', '2026-06-18 至 2026-06-25', '后台配置排序', '启用', '编辑/调整排序'],
         adminUser: [`测试用户${seq}`, '1389000' + String(seq).slice(-4), '用户小程序', '风险关注', '6 单 / 1 售后', '2026-06-10 12:08', '正常', '详情/订单/售后/风险标签'],
@@ -45505,6 +46910,14 @@
         adminActivity: [`测试运营位${seq}`, '首页轮播图', `团期 GP20260610${seq}`, '广州/深圳', '1', '商品启用 / 团期已发布 / 城市可见', '草稿', '编辑/发布/预览'],
         adminMessage: [`MSG20260610${seq}`, '运营', '待处理售后', '运营后台待办 + 站内消息', `售后单 SH20260610${seq}`, '待处理', '售后中心', '处理待办/查看发送记录'],
         adminReport: [`经营日报${seq}`, 'GMV、订单数、支付金额、退款金额、客单价', '支付时间', 'GMV 3680.00 / 净销售额 3520.00', '2026-06-18 12:30', '平台管理员', '导出/查看口径/导出日志'],
+        adminReportBusiness: [`2026-06-${String(seq).slice(-2)}`, '广州 / 全城', '3680.00', '120', '3680.00', '160.00', '3520.00', '30.67', '2026-06-19 12:35', '导出/查看口径/导出日志'],
+        adminReportSalePeriod: [`测试团期${seq}`, '广州', '2026-06-18 22:00', '2026-06-19', '3680.00', '420', '3', '2', '2026-06-19 12:35', '导出/查看口径/查看团期'],
+        adminReportProduct: [`SP-TEST-${seq}`, '测试商品', '测试供应商', '统计类目', '420', '3680.00', '1.2%', '0.8%', '复购 12.4%', '导出/查看口径/查看 SKU'],
+        adminReportStation: [`测试自提点${seq}`, '广州', '3680.00', '120', '96.8%', '1.2%', '320.00', '2026-06-19 12:35', '城市运营 / 自提点自身', '导出/查看口径/查看自提点'],
+        adminReportSupplier: [`测试供应商${seq}`, '120箱', '118箱', '1.6%', '2', '3680.00', '2026-06-19 12:35', '采购 / 供应商自身', '导出/查看口径/查看供应商'],
+        adminReportFulfillment: ['广州 / 测试范围', '420', '410', '398', '390', '18', '372', '95.4%', '2026-06-19 12:35', '导出/查看口径/查看履约'],
+        adminReportAfterSale: [`2026-06-${String(seq).slice(-2)}`, '12', '320.00', '破损 / 少件', '仓库', '2.4小时', '1.5%', '2026-06-19 12:35', '客服 / 运营', '导出/查看口径/查看售后'],
+        adminReportFinance: [`2026-06-${String(seq).slice(-2)}`, '3680.00', '160.00', '1280.00', '420.00', '300.00', '5000.00', '1 笔', '2026-06-19 12:35', '导出/查看口径/查看对账'],
         adminConfig: [`测试大区配置${seq}`, '大区配置', `测试城市${seq}`, '截团时间 22:00:00', '影响新发布团期实际截团时刻，不回改历史团期', '启用', '编辑/停用/日志'],
         adminOperationLog: [`OP20260610${seq}`, '缺货处理', '广东运营', '确认缺货', `SO20260610${seq}`, '测试原因', '2026-06-10 15:02:30', '详情'],
         wmsDocumentFlow: [`测试单据${seq}`, '仓库发起 / 订单自动生成', '仓库发起需审核；订单自动生成无需审核', '生成 → 审核 → 作业 → 库存流水', '完成', '查看单据'],
@@ -45539,7 +46952,10 @@
       if (/数量|箱数|件数|订单数|SKU/.test(header)) return '12';
       return `测试数据${index}`;
     }
-    Object.entries(pages).forEach(([id,cfg]) => renderStandard(id,cfg));
+    Object.entries(pages).forEach(([id,cfg]) => {
+      renderStandard(id,cfg);
+      applyRuleSidebars(document.getElementById(id) || document);
+    });
     function appendWmsOperationLog(task, role, data, log) {
       const cfg = pages.wmsLogs;
       if (!cfg || !task || !log) return;
@@ -45592,6 +47008,7 @@
             <div class="card"><h3>页面跳转与流程交互</h3>${table(['页面','按钮','跳转/处理','数据流转'], Object.entries(cfg.pages).map(([id,p])=>[p.title, p.buttons.map(b=>b[0]).join('、'), p.buttons.map(b=>b[1]).join(' / '), p.content.slice(-1)[0] || '读取当前角色数据']))}</div>
           </div>
         </div>`;
+      applyRuleSidebars(el);
     }
     renderMenuLogic('adminMenuLogic', menuLogics.admin);
     renderMenuLogic('wmsMenuLogic', menuLogics.wms);
@@ -47277,6 +48694,7 @@
             ])}</div></div>
           </div>
         </div>`;
+      applyRuleSidebars(el);
     }
     function shopHeader() {
       return `<div class="shop-header">
@@ -47288,12 +48706,27 @@
     function shopEntryPage() {
       return `<div class="shop-page entry-select-page active" data-m-page="entry">
         <div class="status-bar"><span>14:49</span><span>▮▮▮  WiFi  80</span></div>
-        <div class="entry-select-card">
-          <h2>先选城市和自提点</h2>
-          <p>选择离你最近的自提点后，即可浏览并下单。</p>
-          <div class="entry-city-row" data-entry-city-row>${renderEntryCityButtons()}</div>
-          <div class="entry-station-list" data-entry-station-list>
-            ${renderEntryStationList()}
+        <div class="entry-select-shell">
+          <div class="entry-welcome">
+            <span class="entry-welcome-kicker">今日鲜选</span>
+            <h2>先选好自提点<br>再看附近好货</h2>
+            <p>商品价格、库存和预计提货日会按你选择的自提点展示。</p>
+          </div>
+          <div class="entry-step-row">
+            <div class="entry-step"><b>1 选择城市</b><span>先确认当前服务城市</span></div>
+            <div class="entry-step"><b>2 选择自提点</b><span>下单后到该点提货</span></div>
+          </div>
+          <div class="entry-select-card">
+            <div class="entry-city-panel">
+              <div class="entry-section-head"><div><h3>选择城市</h3><p>定位失败时可手动切换已开通城市</p></div><em>必选</em></div>
+              <div class="entry-city-row" data-entry-city-row>${renderEntryCityButtons()}</div>
+            </div>
+            <div class="entry-station-panel">
+              <div class="entry-section-head"><div><h3>选择自提点</h3><p>优先选择离你近、营业中的自提点</p></div><em>下一步</em></div>
+              <div class="entry-station-list" data-entry-station-list>
+                ${renderEntryStationList()}
+              </div>
+            </div>
           </div>
         </div>
         ${bottom('home')}
@@ -58776,6 +60209,7 @@
         </div>`;
       const phone = el.querySelector(`[data-mobile="${cfg.appName}"]`);
       if (phone) renderWarehousePhone(phone, cfg, cfg.defaultRole);
+      applyRuleSidebars(el);
     }
 
     const roleHubData = {
@@ -60434,10 +61868,6 @@
           <div class="role-section">
             <div class="role-section-head"><h3>我已提交，等待处理</h3><span>只看本人 / 本主体</span></div>
             <div class="role-task-list">${waitingRows.length ? waitingRows.map(item => `<button class="role-task" data-m-go="operations"><b>${item.no} · ${item.type}</b><span>${item.title}<br>状态：${item.status} · 下一步：${item.next}</span></button>`).join('') : '<div class="role-empty" style="margin:0">暂无等待处理事项</div>'}</div>
-          </div>
-          <div class="role-section">
-            <div class="role-section-head"><h3>快捷入口</h3><span>固定入口</span></div>
-            <div class="role-quick-grid">${(data.quicks || []).map(([title,desc,page])=>`<button class="role-quick-btn" data-m-go="${page || 'home'}"><b>${title}</b><span>${desc}</span></button>`).join('')}</div>
           </div>
         </div>
         ${roleHubBottom('home', isSupplier ? 'supplier' : 'station')}
@@ -62766,6 +64196,7 @@
         </div>`;
       const phone = el.querySelector(`[data-mobile="${cfg.appName}"]`);
       if (phone) renderRolePhone(phone, cfg, cfg.defaultRole);
+      applyRuleSidebars(el);
     }
 
     const titles = {
@@ -62776,14 +64207,17 @@
       adminStation:'自提点管理', adminLeaderAudit:'团长审核', adminStationLeave:'休假管理', adminStationSign:'签收到店追踪', adminLeaderScore:'团长评分',
       adminSupplier:'供应商管理', adminPurchaseCoord:'采购协同', adminDeliveryOrder:'送货单', adminSupplierAfterSale:'供应商售后', adminSupplierSettle:'供应商结算',
       adminFinance:'分账中心', adminCommission:'佣金中心', adminWithdrawAudit:'提现审核', adminReconciliation:'对账中心', adminRiskFund:'异常资金', adminRiskRules:'风控规则',
-      adminActivity:'活动页', adminMessage:'消息触达', adminReport:'报表中心', adminConfig:'基础配置', adminOperationLog:'操作日志',
+      adminActivity:'活动页', adminMessage:'消息触达', adminReport:'报表中心', adminReportBusiness:'经营报表', adminReportSalePeriod:'团期报表', adminReportProduct:'商品报表', adminReportStation:'自提点报表', adminReportSupplier:'供应商报表', adminReportFulfillment:'履约报表', adminReportAfterSale:'售后报表', adminReportFinance:'财务报表', adminConfig:'基础配置', adminOperationLog:'操作日志',
       h5User:'用户小程序', h5Station:'角色工作台小程序', h5Supplier:'角色工作台小程序 / 供应商视角', h5Warehouse:'仓配移动端',
       wmsDocumentFlow:'主管工作台', wmsPurchase:'采购到仓', wmsInbound:'收货入库', wmsPutaway:'上架管理', wmsOutbound:'波次管理', wmsPicking:'拣货管理', wmsLoading:'装车出库', wmsPick:'历史页：拣货装车出库', wmsDelivery:'线路配送',
       wmsVehicle:'二期暂缓：车辆装载', wmsRouteMap:'二期暂缓：地图线路', wmsReturn:'回仓确认', wmsDriverFee:'二期暂缓：复杂作业统计',
       wmsBase:'仓库基础数据',
       wmsInventory:'库存管理', wmsFruit:'二期暂缓：水果仓专区', wmsStockFlow:'库存流水', wmsOperationLog:'操作日志', wmsLogs:'历史页：日志中心', systemJobs:'系统任务'
     };
-    Object.entries(mobileApps).forEach(([id,cfg]) => renderMobile(id,cfg));
+    Object.entries(mobileApps).forEach(([id,cfg]) => {
+      renderMobile(id,cfg);
+      applyRuleSidebars(document.getElementById(id) || document);
+    });
     function go(id) {
       if (!id || id === '#') return;
       if (id.includes(':')) {
@@ -62805,7 +64239,14 @@
         const toggle = activeSection.querySelector('[data-nav-toggle]');
         if (toggle) toggle.setAttribute('aria-expanded', 'true');
       }
+      const activeSubgroup = activeBtn && activeBtn.closest('[data-nav-subgroup]');
+      if (activeSubgroup && activeSubgroup.classList.contains('collapsed')) {
+        activeSubgroup.classList.remove('collapsed');
+        const subToggle = activeSubgroup.querySelector('[data-nav-sub-toggle]');
+        if (subToggle) subToggle.setAttribute('aria-expanded', 'true');
+      }
       document.getElementById('crumb').textContent = `${titles[id] || id} / 交互原型`;
+      applyRuleSidebars(target);
       window.scrollTo({top:0, behavior:'smooth'});
     }
     function setNavSectionCollapsed(section, collapsed) {
@@ -63138,7 +64579,8 @@
       const rows = stations.map(station => {
         const abnormal = isStationAbnormal(station);
         const disabledAttrs = abnormal ? 'disabled data-station-disabled="true" aria-disabled="true"' : '';
-        return `<button type="button" onclick="return handleEntryStationSelect(this,event)" class="${abnormal ? 'abnormal' : ''}" data-entry-station-id="${station.id}" ${disabledAttrs}><b>${station.name}</b><span>${station.addr}<br>${stationMetaLine(station)}${abnormal ? `<br>${station.abnormalReason || '当前自提点休假或停用，暂不可选'}` : ''}</span></button>`;
+        const statusText = abnormal ? '暂不可选' : '可选';
+        return `<button type="button" onclick="return handleEntryStationSelect(this,event)" class="${abnormal ? 'abnormal' : ''}" data-entry-station-id="${station.id}" ${disabledAttrs}><span><b>${station.name}</b><span>${station.addr}<br>${stationMetaLine(station)}${abnormal ? `<br>${station.abnormalReason || '当前自提点休假或停用，暂不可选'}` : ''}</span></span><em>${statusText}</em></button>`;
       }).join('');
       return `${singleTip}${rows || '<div class="station-empty-note">当前城市暂无可用自提点，请选择其他已开通城市。</div>'}`;
     }
@@ -63312,7 +64754,7 @@
       }
       const phone = button && button.closest('[data-mobile]');
       if (!phone) return false;
-      if (selectStation(phone, button.dataset.entryStationId)) setMobile(phone, 'home');
+      if (selectStation(phone, button.dataset.entryStationId, true)) setMobile(phone, 'home');
       return false;
     }
     function handleShareStationSwitch(button) {
@@ -64293,7 +65735,122 @@
       if (!raw) return null;
       try { return JSON.parse(decodeURIComponent(raw)); } catch (e) { return null; }
     }
+    function reportIdFromName(name) {
+      const map = {
+        报表中心: 'adminReport',
+        经营报表: 'adminReportBusiness',
+        团期报表: 'adminReportSalePeriod',
+        商品报表: 'adminReportProduct',
+        自提点报表: 'adminReportStation',
+        供应商报表: 'adminReportSupplier',
+        履约报表: 'adminReportFulfillment',
+        售后报表: 'adminReportAfterSale',
+        财务报表: 'adminReportFinance'
+      };
+      return map[name] || '';
+    }
+    function reportIdFromActionButton(button, rowData = {}) {
+      const rowReport = reportIdFromName(rowData?.['报表'] || rowData?.['报表类型']);
+      if (rowReport) return rowReport;
+      const viewId = button?.closest('.view')?.id || '';
+      if (reportPageIds.has(viewId)) return viewId;
+      const target = button?.dataset?.actionTarget || '';
+      return reportPageIds.has(target) ? target : '';
+    }
+    function enrichReportRowData(button, rowData) {
+      const action = button?.dataset?.action || '';
+      const id = reportIdFromActionButton(button, rowData || {});
+      if (!id || !/导出|口径|日志|下钻|^查看$|查看团期|查看 SKU|查看自提点|查看供应商|查看履约|查看售后|查看对账/.test(action)) return rowData;
+      const cfg = pages[id] || pages.adminReport || {};
+      return {
+        报表类型: cfg.reportType || rowData?.['报表'] || '报表中心',
+        统计时间范围: '2026-06-19 00:00 至 2026-06-19 12:30',
+        默认时间口径: cfg.timeRule || rowData?.['默认时间口径'] || '按当前报表选择的时间口径统计',
+        口径版本: 'OPS-REPORT-v13.5',
+        数据更新时间: rowData?.['数据更新时间'] || '2026-06-19 12:35',
+        是否T1: /财务/.test(cfg.reportType || rowData?.['报表'] || '') ? '财务流水准实时，汇总结果可 T+1' : '允许 T+1 汇总',
+        当前权限范围: cfg.permissionScope || rowData?.['权限范围'] || '按当前账号数据范围',
+        筛选条件: '时间范围=今日；城市=当前授权范围；隐藏优惠券/积分相关列',
+        数据范围: cfg.permissionScope || rowData?.['权限范围'] || '当前账号授权范围',
+        预计条数: String((cfg.rows || []).length * 643 || 1286),
+        ...rowData
+      };
+    }
+    function reportTraceObject(rowData = {}) {
+      return rowData['团期'] || rowData['SKU'] || rowData['商品'] || rowData['自提点'] || rowData['供应商'] || rowData['统计范围'] || rowData['统计日期'] || rowData['城市/范围'] || rowData['报表'] || rowData['报表类型'] || '当前报表数据';
+    }
+    function reportActionData(action, target, rowData = {}) {
+      if (!rowData?.['报表类型']) return null;
+      const reportType = rowData['报表类型'];
+      const baseRows = [
+        ['报表类型', reportType],
+        ['统计时间范围', rowData['统计时间范围'] || '2026-06-19 00:00 至 2026-06-19 12:30'],
+        ['默认时间口径', rowData['默认时间口径'] || '按当前报表口径统计'],
+        ['口径版本', rowData['口径版本'] || 'OPS-REPORT-v13.5'],
+        ['数据更新时间', rowData['数据更新时间'] || '2026-06-19 12:35'],
+        ['是否 T+1', rowData['是否T1'] || '允许 T+1 汇总'],
+        ['当前权限范围', rowData['当前权限范围'] || '按当前账号数据范围']
+      ];
+      if (/下钻指标/.test(action || '')) {
+        return [
+          ['下钻指标', rowData['下钻指标'] || '核心指标'],
+          ['当前数值', rowData['当前数值'] || '-'],
+          ...baseRows.slice(1),
+          ['下钻维度', rowData['统计对象'] || reportTraceObject(rowData)],
+          ['页面结果', '列表已按当前指标刷新，仅提供分析、导出和业务追溯入口']
+        ];
+      }
+      if (/查看数据口径|查看口径/.test(action || '')) {
+        return [
+          ...baseRows,
+          ['核心指标', 'GMV、支付金额、退款金额、净销售额、履约率、售后率等按固定口径展示'],
+          ['导出口径', '导出文件写入口径版本、统计时间、筛选条件和导出原因'],
+          ['隐藏列', '不包含优惠券报表、积分报表、券核销、积分流水或积分变动列'],
+          ['业务边界', '只做展示、筛选、口径说明和导出，不处理退款、提现、分账、缺货、售后动作']
+        ];
+      }
+      if (/查看导出日志|导出日志/.test(action || '')) {
+        return [
+          ...baseRows,
+          ['最近导出 1', `${reportType} / 广东运营 / 2026-06-19 12:40 / 原因：日报复盘`],
+          ['最近导出 2', `${reportType} / 财务复核 / 2026-06-19 10:20 / 原因：对账核验`],
+          ['日志字段', '导出人、时间、模块、筛选条件、数据范围、原因、文件标识'],
+          ['页面结果', '可追溯到操作日志；日志导出本身也必须再次留痕']
+        ];
+      }
+      if (/导出/.test(action || '')) {
+        return [
+          ...baseRows,
+          ['筛选条件', rowData['筛选条件'] || '沿用当前页面筛选条件'],
+          ['数据范围', rowData['数据范围'] || '当前账号授权范围'],
+          ['预计条数', rowData['预计条数'] || '约 1,286 条'],
+          ['敏感字段', '涉及订单、手机号、用户、财务、佣金、供应商结算时按权限明文导出'],
+          ['导出日志', '确认后记录导出原因、筛选条件、权限范围和文件标识']
+        ];
+      }
+      if (/查看团期|查看 SKU|查看自提点|查看供应商|查看履约|查看售后|查看对账/.test(action || '')) {
+        return [
+          ...baseRows,
+          ['追溯对象', reportTraceObject(rowData)],
+          ['追溯落点', titles[target] || target || '当前业务追溯页'],
+          ['来源行数据', Object.entries(rowData).filter(([k]) => !/报表类型|统计时间范围|默认时间口径|口径版本|是否T1|当前权限范围|筛选条件|数据范围|预计条数/.test(k)).slice(0, 4).map(([k, v]) => `${k}=${v}`).join('；')],
+          ['操作边界', '只查看来源对象和链路摘要，不在报表页处理业务动作'],
+          ['页面结果', '已打开追溯摘要；需处理业务时进入对应业务页面']
+        ];
+      }
+      if (/^查看$/.test(action || '')) {
+        return [
+          ...baseRows,
+          ['报表入口', reportTraceObject(rowData)],
+          ['页面结果', '已打开该固定报表的入口摘要，可通过左侧报表中心二级菜单进入明细页'],
+          ['操作边界', '总览页只做入口和口径说明，不承载全部明细分析']
+        ];
+      }
+      return null;
+    }
     function actionData(action, target, rowData) {
+      const reportRows = reportActionData(action, target, rowData || {});
+      if (reportRows) return reportRows;
       if (rowData) {
         const entries = Object.entries(rowData).filter(([, value]) => value !== undefined && value !== '');
         const selected = entries.slice(0, 5).map(([label, value]) => [label, value]);
@@ -65435,18 +66992,18 @@
     function needsConfirm(action) {
       const text = action || '';
       if (/明文导出|跨城市|跨仓库|跨供应商|代操作/.test(text)) return true;
-      if (/变更影响范围|编辑统计类目影响范围|发布榜单校验|调整榜单排序|确认结算|查看差异明细|维护 SKU|维护SKU|库存规格|转换系数|提交商品审核/.test(text)) return true;
+      if (/编辑统计类目影响范围|发布榜单校验|调整榜单排序|确认结算|查看差异明细|转换系数|换化系数|提交商品审核/.test(text)) return true;
       if (/团期下架|调整团期价格|调整团期库存|已发布团期关键修改|库存模式选择/.test(text)) return true;
       if (/发布活动页|停用活动页|发送消息/.test(text)) return true;
       if (/关闭任务|确认出库|装车|完成收货|完成上架|完成拣货/.test(text)) return true;
       if (/查询|筛选|查看|详情|明细|预览|返回|重置|保存为待发布/.test(text)) return false;
       return /发布|发布前校验|配置售卖库存模式|保存配置变更|复制旧版生成新版|停用当前版本|下架|停用|启用|删除评论|释放团长粉丝|安排订单转移|确认影响范围|取消订单|审核通过|审核驳回|通过|驳回|确认退款|退款|提现|打款|分账|佣金重算|重算佣金|对账差异|处理差异|异常资金|缺货|补货|报损|盘点差异|手工调整|退供|索赔|人工重跑|立即执行任务|失败重试|补偿处理|强制停业|调整服务等级|权限变更|保存权限|保存权限变更|新增角色|配置菜单权限|配置按钮权限|数据范围|明文导出|跨城市|跨仓库|跨供应商|代操作|导出/.test(text);
     }
-    function showConfirmModal(action, target, rowData) {
+    function showConfirmModal(action, target, rowData, sourceButton = null) {
       const modal = document.getElementById('confirmModal');
       if (!modal) return;
       const safeRowData = rowData || {};
-      pendingConfirmAction = { action, target, rowData: safeRowData };
+      pendingConfirmAction = { action, target, rowData: safeRowData, sourceButton };
       document.getElementById('confirmModalTitle').textContent = `${action} / 二次确认`;
       document.getElementById('confirmModalDesc').textContent = confirmDesc(action, safeRowData);
       document.getElementById('confirmModalData').innerHTML = confirmData(action, safeRowData).map(([label, value]) => `<div class="data-item"><span>${label}</span><b>${value}</b></div>`).join('');
@@ -65457,9 +67014,10 @@
       modal.classList.add('show');
     }
     function confirmDesc(action, rowData = {}) {
+      if (/导出/.test(action || '') && rowData['报表类型']) return `${rowData['报表类型']}导出必须填写导出原因，并记录口径版本、统计时间、筛选条件、权限范围、预计条数和文件标识；当前不导出优惠券、积分、券核销或积分流水相关列。`;
       if (/仓配忘记密码/.test(action)) return '系统会按当前仓配账号发起密码找回流程，可通过短信验证码或主管重置完成。';
       if (/删除评论/.test(action)) return '删除后该评论不再在小程序商品详情展示，系统会记录删除原因、操作人和删除前内容摘要。';
-      if (/保存商品资料|变更影响范围|维护 SKU|维护SKU|库存规格|转换系数/.test(action)) return '商品中心只维护基础资料、SKU、销售规格、库存规格和转换系数；关键资料变更必须确认团期、订单商品快照、库存流水、售后、报表和操作日志影响，历史订单商品信息不回改。';
+      if (/保存商品资料|维护销售规格|维护库存规格|转换系数|换化系数/.test(action)) return '商品中心只维护基础资料、销售规格、库存规格和转换系数；关键资料变更必须确认团期、订单商品快照、库存流水、售后、报表和操作日志影响，历史订单商品信息不回改。';
       if (/提交商品审核/.test(action)) return '商品必填数据完整后才允许提交审核；审核通过后变为已启用并可进入团期发布，资料不完整时不允许通过。';
       if (/编辑统计类目影响范围|编辑展示类目/.test(action)) return '前台展示类目只影响小程序展示，统计类目会影响后续售后规则和报表统计；保存前必须确认新业务范围和历史订单不回改。';
       if (/发布榜单校验|调整榜单排序/.test(action)) return '榜单发布前必须校验同周期排名重复、商品下架、团期不可售和城市不可售；异常项标红并禁止发布。';
@@ -65499,6 +67057,23 @@
       return '请确认当前表单和行数据无误，确认后会写入业务表并记录操作日志。';
     }
     function confirmData(action, rowData = {}) {
+      if (/导出/.test(action || '') && rowData['报表类型']) {
+        return [
+          ['报表类型', rowData['报表类型']],
+          ['统计时间范围', rowData['统计时间范围'] || '2026-06-19 00:00 至 2026-06-19 12:30'],
+          ['默认时间口径', rowData['默认时间口径'] || '按当前报表口径统计'],
+          ['口径版本', rowData['口径版本'] || 'OPS-REPORT-v13.5'],
+          ['数据更新时间', rowData['数据更新时间'] || '2026-06-19 12:35'],
+          ['是否 T+1', rowData['是否T1'] || '允许 T+1 汇总'],
+          ['当前权限范围', rowData['当前权限范围'] || rowData['数据范围'] || '按当前账号数据范围'],
+          ['筛选条件', rowData['筛选条件'] || '沿用当前页面筛选条件'],
+          ['预计条数', rowData['预计条数'] || '约 1,286 条'],
+          ['敏感字段', '手机号、用户、财务金额、佣金、供应商结算按权限明文导出'],
+          ['隐藏导出列', '不导出优惠券、积分、券核销、积分流水或积分变动相关列'],
+          ['导出日志', '记录导出人、时间、模块、筛选条件、数据范围、原因和文件标识'],
+          ['必填原因', '导出原因不能为空']
+        ];
+      }
       const isCommentDelete = /删除评论/.test(action || '');
       const isFundAction = /提现|退款|分账|佣金|对账|差异|异常资金|打款/.test(action || '');
       const isStockoutAction = /缺货|补货/.test(action || '');
@@ -65510,7 +67085,7 @@
       const isStationStop = /停用自提点|团长.*停用|确认影响范围/.test(action || '');
       const isConfigAction = /保存配置变更|复制旧版生成新版|停用当前版本/.test(action || '');
       const isJobAction = /启用任务|停用任务|立即执行任务|失败重试|人工重跑|补偿处理/.test(action || '');
-      const isProductChange = /保存商品资料|变更影响范围|维护 SKU|维护SKU|库存规格|转换系数|提交商品审核/.test(action || '');
+      const isProductChange = /保存商品资料|维护销售规格|维护库存规格|转换系数|换化系数|提交商品审核/.test(action || '');
       const isPeriodAction = /发布|发布前校验|团期下架|调整团期价格|调整团期库存|已发布团期关键修改|库存模式选择|售卖库存模式/.test(action || '');
       const isCategoryStatChange = /编辑统计类目影响范围|编辑展示类目/.test(action || '');
       const isRankAction = /发布榜单校验|调整榜单排序/.test(action || '');
@@ -65542,7 +67117,7 @@
                 : isPeriodAction
                   ? '团期状态、销售城市、所属大区、实际截团时刻、商品池快照、价格、库存模式、采购仓、已支付订单和操作日志'
                   : isProductChange
-                    ? '商品基础资料、SKU、库存规格、转换系数、团期校验、订单商品快照、库存流水和操作日志'
+                    ? '商品基础资料、销售规格、库存规格、转换系数、团期校验、订单商品快照、库存流水和操作日志'
                     : isCategoryStatChange
                       ? '报表口径、售后默认规则、新业务范围、历史单据快照和操作日志'
                       : isRankAction
@@ -65577,6 +67152,12 @@
         ['必填原因', '处理原因、影响对象、操作前后状态'],
         ['操作人', '广东运营']
       ];
+      if (isProductChange && rowData['销售规格状态']) {
+        rows.splice(4, 0, ['销售规格状态', rowData['销售规格状态']]);
+      }
+      if (isProductChange && rowData['规格全停用']) {
+        rows.splice(5, 0, ['规格全停用', rowData['规格全停用']]);
+      }
       if (isConfigAction) {
         rows.splice(4, 0,
           ['影响模块', rowData['影响模块'] || '团期管理、订单中心、售后中心、消息触达、系统任务'],
@@ -65609,7 +67190,7 @@
           ['所属大区', rowData['大区/城市'] || rowData['所属大区'] || '华南大区 / 广州'],
           ['大区截团时间快照', rowData['大区截团时间快照'] || '22:00:00'],
           ['实际截团时刻', rowData['大区/实际截团'] || rowData['实际截团时刻'] || '2026-06-23 22:00:00'],
-          ['商品池快照', rowData['商品池'] || '18 SKU，商品/SKU/类目/库存规格/转换系数已快照'],
+          ['商品池快照', rowData['商品池'] || '18 个销售规格，商品/销售规格/类目/库存规格/转换系数已快照'],
           ['库存模式', rowData['库存模式'] || '虚拟库存，发布后不允许切换'],
           ['采购仓', rowData['采购仓'] || '广州采购仓'],
           ['订单影响', rowData['订单影响'] || (/下架/.test(action || '') ? '已支付订单继续履约，不自动取消' : '历史订单商品快照不回改，已支付订单权益不受影响')]
@@ -65617,7 +67198,7 @@
       }
       if (isProductChange) {
         rows.splice(4, 0,
-          ['SKU 校验', rowData['规格校验'] || '销售规格必须绑定库存规格，转换系数必须有效'],
+          ['规格校验', rowData['规格校验'] || '销售规格必须绑定库存规格，转换系数必须有效'],
           ['类目校验', rowData['类目校验'] || '统计类目、前台展示类目必须完整'],
           ['影响团期', rowData['影响团期'] || '未截团团期 2 个，已发布团期按快照保留'],
           ['影响订单', rowData['影响订单'] || '历史订单商品快照不回改，已支付订单权益不受影响'],
@@ -65700,8 +67281,12 @@
         reason.focus();
         return;
       }
-      const { action, target, rowData } = pendingConfirmAction;
+      const { action, target, rowData, sourceButton } = pendingConfirmAction;
       const confirmedRowData = { ...(rowData || {}), '处理原因': reason ? reason.value.trim() : '' };
+      const rowUpdate = /保存商品资料/.test(action || '')
+        ? applyProductEditRow(confirmedRowData, confirmedRowData['处理原因'])
+        : (sourceButton ? applyRowAction(sourceButton, action, confirmedRowData, confirmedRowData['处理原因']) : null);
+      if (rowUpdate?.message) confirmedRowData['页面结果'] = rowUpdate.message;
       closeConfirmModal();
       if (target === 'warehouseManagerDocAction' && typeof applyManagerDocConfirmedAction === 'function') {
         applyManagerDocConfirmedAction(confirmedRowData);
@@ -65715,45 +67300,44 @@
       if (!modal || !body) return;
       const name = rowData['商品名称'] || '云南蓝莓 125g';
       const supplier = rowData['供应商'] || '华南果业';
-      const size = rowData['长宽高/重量'] || '120*80*60mm / 0.125kg';
       const brand = rowData['品牌'] || (name.includes('蓝莓') ? '云岭鲜果' : name.includes('芒') ? '海南果仓' : '产地优选');
+      const productCode = rowData['商品编码'] || `PRD-${String(Math.abs(name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0))).padStart(6, '0').slice(0, 6)}`;
+      const productBarcode = rowData['商品条码'] || (name.includes('蓝莓') ? '6930001000001' : name.includes('芒') ? '6930001000002' : '');
       body.innerHTML = `<div class="edit-form">
+        <div><label>商品编码</label><input class="input" data-edit-code value="${productCode}" readonly></div>
+        <div><label>商品条码</label><input class="input" data-edit-barcode value="${productBarcode}" placeholder="运营填写商品条码"></div>
         <div><label>商品名称</label><input class="input" data-edit-name value="${name}"></div>
         <div><label>品牌</label><input class="input" data-edit-brand value="${brand}" placeholder="请输入商品品牌，如 云岭鲜果"></div>
         <div><label>供应商</label><select class="select" data-edit-supplier><option>${supplier}</option><option>海南供应链</option><option>新疆供应链</option></select></div>
         <div><label>展示类目</label><select class="select"><option>产地水果</option><option>乳品烘焙</option><option>海鲜水产</option></select></div>
         <div><label>统计类目</label><select class="select"><option>水果</option><option>乳品</option><option>冷链生鲜</option></select></div>
-        <div><label>长宽高 / 重量</label><input class="input" value="${size}"></div>
         <div class="full"><label>商品卖点</label><textarea class="textarea">产地直采，按团点统一配送，适合家庭分享。</textarea></div>
         <div class="full"><label>商品图片信息</label>${productImageUploadBoard(name)}</div>
-        <div class="full"><label>规格与价格</label><div class="sku-edit-list">
-          ${skuEditRow('SKU-001','125g/盒','9.90','12.90','480','盒','0.125kg','120*80*60mm','INV-BLUE-125','6930001001258','1:1','生产日期 + 7 天','已绑定','基础单盒规格，小程序默认展示')}
-          ${skuEditRow('SKU-002','125g*4盒','35.90','45.90','120','组','0.5kg','240*160*90mm','INV-BLUE-125','6930001001265','4:1','生产日期 + 7 天','已绑定','家庭组合规格，绑定同 SPU 库存规格')}
-          ${skuEditRow('SKU-003','家庭分享装','68.80','88.00','60','份','1.0kg','320*220*120mm','','','1:1','按批次生产日期 + 7 天','未绑定','大包装规格，发布前需自动生成库存规格')}
+        <div class="full"><label>销售规格与库存规格绑定</label><div class="sku-edit-list">
+          ${skuEditRow('125g/盒','7.80','9.90','12.90','盒','1','1','INV-BLUE-125','启用','基础单盒规格，小程序默认展示')}
+          ${skuEditRow('125g*4盒','30.80','35.90','45.90','组','4','4','INV-BLUE-125','启用','家庭组合规格，绑定同 SPU 库存规格')}
+          ${skuEditRow('家庭分享装','58.00','68.80','88.00','份','1','1','INV-BLUE-FAMILY','启用','大包装规格，已绑定库存规格，可在维护销售规格页调整')}
         </div></div>
+        <div class="full"><span class="crud-error" data-product-edit-error>销售规格必须绑定库存规格；未选择时系统会自动生成。转换系数必须为正整数。</span></div>
       </div>`;
       modal.dataset.row = encodeURIComponent(JSON.stringify(rowData));
       modal.classList.add('show');
     }
-    function skuEditRow(code, name, salePrice, marketPrice, stock, unit, weight, volume, stockCode, barcode, convertRate, shelfLife, bindStatus, note) {
-      const isBound = bindStatus === '已绑定';
+    function skuEditRow(name, costPrice, salePrice, originPrice, unit, unitQty, convertRate, stockCode, statusValue, note) {
+      const isBound = Boolean(stockCode);
+      const bindStatus = isBound ? '已绑定' : '未绑定';
       return `<div class="sku-edit-row" data-sku-edit-row>
         <div class="sku-edit-head"><b>${name}</b><span class="tag ${isBound ? 'green' : 'yellow'}" data-stock-bind-status>${bindStatus}</span></div>
         <div class="sku-field-grid">
           <div><label>规格名称</label><input class="input" value="${name}" placeholder="例：125g/盒"></div>
-          <div><label>SKU 编码</label><input class="input" value="${code}" placeholder="必须唯一"></div>
-          <div><label>建议零售价(元)</label><input class="input" value="${salePrice}" placeholder="仅作参考，团期价格才是实际售卖价"></div>
-          <div><label>参考价(元)</label><input class="input" value="${marketPrice}" placeholder="前台展示参考价"></div>
-          <div><label>参考数量</label><input class="input" value="${stock}" placeholder="商品资料不处理实际库存调整"></div>
+          <div><label>进价</label><input class="input" value="${costPrice}" placeholder="例：7.80"></div>
+          <div><label>售价</label><input class="input" value="${salePrice}" placeholder="例：9.90"></div>
+          <div><label>原价</label><input class="input" value="${originPrice}" placeholder="例：12.90"></div>
           <div><label>销售单位</label><input class="input" value="${unit}" placeholder="盒/组/份/箱"></div>
-          <div><label>单规格重量</label><input class="input" value="${weight}" placeholder="用于配送和装载校验"></div>
-          <div><label>包装长宽高</label><input class="input" value="${volume}" placeholder="长*宽*高 mm"></div>
-          <div><label>库存规格编码</label><input class="input" data-stock-code value="${stockCode}" placeholder="未绑定时可自动生成"></div>
-          <div><label>库存规格条码</label><input class="input" data-stock-barcode value="${barcode}" placeholder="用于仓库扫码和入出库"></div>
-          <div><label>库存规格单位</label><input class="input" value="${unit}" placeholder="仓库库存单位"></div>
-          <div><label>转换系数</label><input class="input" value="${convertRate}" placeholder="例：4:1"></div>
-          <div><label>保质期规则</label><input class="input" value="${shelfLife}" placeholder="生产日期 + 保质期"></div>
-          <div><label>绑定操作</label><div class="btns"><button class="btn yellow" data-auto-stock-spec>自动生成并绑定</button><button class="btn ghost" data-create-stock-spec>手动创建</button></div></div>
+          <div><label>单位数量</label><input class="input" value="${unitQty}" placeholder="正整数"></div>
+          <div><label>状态</label><select class="select" data-edit-sales-status><option ${statusValue === '启用' ? 'selected' : ''}>启用</option><option ${statusValue === '停用' ? 'selected' : ''}>停用</option></select></div>
+          <div class="spec-field-wide"><label>库存规格</label><select class="select" data-edit-stock-select>${stockSpecOptions(stockCode)}</select></div>
+          <div class="spec-field-wide"><label>转换系数</label><input class="input" data-convert-rate value="${convertRate}" placeholder="正整数，如 1、4、12"></div>
         </div>
         <div class="sku-help">${note}</div>
       </div>`;
@@ -65840,46 +67424,84 @@
       }
       updateUploadStatus();
     }
-    function bindStockSpec(button, mode = 'auto') {
-      const row = button.closest('[data-sku-edit-row]');
+    function updateEditStockPreview(select) {
+      const row = select.closest('[data-sku-edit-row]');
       if (!row) return;
-      const seq = String(Math.floor(Math.random() * 900000) + 100000);
-      const codeInput = row.querySelector('[data-stock-code]');
-      const barcodeInput = row.querySelector('[data-stock-barcode]');
+      const spec = stockSpecFromRow(findStockSpec(select.value) || []);
       const status = row.querySelector('[data-stock-bind-status]');
-      if (codeInput && !codeInput.value) codeInput.value = mode === 'manual' ? `INV-MANUAL-${seq}` : `INV-AUTO-${seq}`;
-      if (barcodeInput && !barcodeInput.value) barcodeInput.value = `69${seq}${String(Math.floor(Math.random() * 9000) + 1000)}`;
       if (status) {
-        status.textContent = mode === 'manual' ? '手动创建并绑定' : '自动生成并绑定';
-        status.className = 'tag green';
+        status.textContent = spec.code ? '已绑定' : '未绑定';
+        status.className = `tag ${spec.code ? 'green' : 'yellow'}`;
       }
-      const help = row.querySelector('.sku-help');
-      if (help) help.textContent = mode === 'manual'
-        ? '已手动创建库存规格，仓库可按库存规格编码和条码进行扫码入库、出库、盘点。'
-        : '系统已按销售规格自动生成库存规格，并完成销售SKU与库存SKU绑定。';
+    }
+    function ensureProductEditSkuBindings() {
+      let generated = 0;
+      let invalid = false;
+      document.querySelectorAll('[data-sku-edit-row]').forEach(row => {
+        const ratioInput = row.querySelector('[data-convert-rate]');
+        const ratio = ratioInput?.value.trim() || '';
+        if (!isPositiveIntegerValue(ratio)) invalid = true;
+        const stockSelect = row.querySelector('[data-edit-stock-select]');
+        const status = row.querySelector('[data-stock-bind-status]');
+        if (!stockSelect?.value) {
+          const skuName = row.querySelector('.sku-edit-head b')?.textContent?.trim() || row.querySelector('.sku-field-grid input')?.value || '销售规格';
+          const unit = row.querySelectorAll('.sku-field-grid input')?.[4]?.value || '份';
+          const stockRow = generatedStockSpecRow(skuName, unit, '系统生成');
+          pages.adminProduct.stockSpecRows.unshift(stockRow);
+          const stock = stockSpecFromRow(stockRow);
+          stockSelect.insertAdjacentHTML('beforeend', `<option value="${stock.code}">${stock.code} / ${stock.name} / ${stock.unit}</option>`);
+          stockSelect.value = stock.code;
+          if (status) {
+            status.textContent = '自动生成并绑定';
+            status.className = 'tag green';
+          }
+          generated += 1;
+        }
+      });
+      return { generated, invalid };
     }
     function countBoundStockSpecs() {
       return [...document.querySelectorAll('[data-sku-edit-row]')].filter(row => {
-        return row.querySelector('[data-stock-code]')?.value && row.querySelector('[data-stock-barcode]')?.value;
+        return row.querySelector('[data-edit-stock-select]')?.value;
       }).length;
+    }
+    function productEditAllSalesSpecsStopped() {
+      const rows = [...document.querySelectorAll('[data-sku-edit-row]')];
+      return rows.length > 0 && rows.every(row => row.querySelector('[data-edit-sales-status]')?.value === '停用');
     }
     function saveProductEdit() {
       const modal = document.getElementById('productEditModal');
       const rowData = parseRowData(modal && modal.dataset.row) || {};
       const editedName = document.querySelector('[data-edit-name]')?.value || rowData['商品名称'] || '商品资料';
       const brand = document.querySelector('[data-edit-brand]')?.value || '未填写品牌';
+      const supplier = document.querySelector('[data-edit-supplier]')?.value || rowData['供应商'] || '未填写供应商';
       const imageCounts = countProductImages();
       const skuCount = document.querySelectorAll('[data-sku-edit-row]').length;
+      const bindingResult = ensureProductEditSkuBindings();
+      if (bindingResult.invalid) {
+        const error = document.querySelector('[data-product-edit-error]');
+        if (error) error.classList.add('show');
+        return;
+      }
+      const error = document.querySelector('[data-product-edit-error]');
+      if (error) error.classList.remove('show');
       const boundStockCount = countBoundStockSpecs();
+      const allStopped = productEditAllSalesSpecsStopped();
       closeProductEditModal();
       showConfirmModal('保存商品资料', 'adminProduct', {
         ...rowData,
+        '原商品名称': rowData['商品名称'] || editedName,
         '商品名称': editedName,
         '品牌': brand,
+        '供应商': supplier,
+        '商品编码': document.querySelector('[data-edit-code]')?.value || '',
+        '商品条码': document.querySelector('[data-edit-barcode]')?.value || '',
         '规格数': '3',
-        '规格校验': `${skuCount} 个销售 SKU，已绑定 ${boundStockCount} 个库存规格；未绑定规格保存时会自动生成库存规格编码和条码，转换系数默认 1:1`,
+        '规格校验': `${skuCount} 个销售规格，已绑定 ${boundStockCount} 个库存规格；本次自动生成 ${bindingResult.generated} 个库存规格，转换系数均为正整数`,
+        '销售规格状态': allStopped ? '全部销售规格已停用，保存确认后商品状态自动变更为已停用' : '仍有销售规格启用，商品状态不因规格停用自动变化',
         '类目校验': '前台展示类目、统计类目和保质期规则必须完整',
-        '库存规格': '已有库存流水或已生成订单的规格，转换系数变更需保留历史快照',
+        '库存规格': '编辑商品中只选择库存规格，不手填库存规格编码、条码、长宽高重量；已有库存流水或已生成订单的规格，转换系数变更需保留历史快照',
+        '规格全停用': allStopped ? '是' : '否',
         '图片信息': `主图${imageCounts.main}张 / 轮播${imageCounts.banner}张 / 详情${imageCounts.detail}张 / 资质${imageCounts.cert}张`,
         '影响团期': '未截团团期 2 个，已截团团期只读不回改',
         '影响订单': '已支付订单权益不受影响，未支付购物车按最新商品状态提示',
@@ -66018,7 +67640,7 @@
           showShopToast(phone, '当前自提点休假或停用，暂不可选', 'warn');
           return;
         }
-        if (selectStation(phone, entryStation.dataset.entryStationId) && phone) setMobile(phone, 'home');
+        if (selectStation(phone, entryStation.dataset.entryStationId, true) && phone) setMobile(phone, 'home');
         return;
       }
       const reviewBackBtn = e.target.closest('[data-review-back]');
@@ -66195,6 +67817,11 @@
         resetLocalSearch(localReset);
         return;
       }
+      const reportDrill = e.target.closest('[data-report-drill]');
+      if (reportDrill) {
+        handleReportDrill(reportDrill);
+        return;
+      }
       const categorySearch = e.target.closest('[data-category-search]');
       if (categorySearch) {
         refreshCategoryTree(document.querySelector('[data-category-keyword]')?.value || '');
@@ -66233,6 +67860,60 @@
         addTestRow(addTest);
         return;
       }
+      const productSubpage = e.target.closest('[data-product-subpage]');
+      if (productSubpage) {
+        const mode = productSubpage.dataset.productSubpage;
+        const rowData = parseRowData(productSubpage.dataset.row) || {};
+        if (mode === 'sales-spec') renderProductSalesSpecPage(rowData);
+        else if (mode === 'stock-spec') renderProductStockSpecPage(rowData);
+        else renderProductCenter();
+        return;
+      }
+      const addSalesSpecBtn = e.target.closest('[data-add-sales-spec]');
+      if (addSalesSpecBtn) {
+        addSalesSpec();
+        return;
+      }
+      const editSalesSpecBtn = e.target.closest('[data-edit-sales-spec]');
+      if (editSalesSpecBtn) {
+        editSalesSpec(editSalesSpecBtn);
+        return;
+      }
+      const saveSalesSpecBtn = e.target.closest('[data-save-sales-spec]');
+      if (saveSalesSpecBtn) {
+        saveSalesSpec();
+        return;
+      }
+      const resetSalesFormBtn = e.target.closest('[data-reset-sales-form]');
+      if (resetSalesFormBtn) {
+        addSalesSpec();
+        return;
+      }
+      const stockSelect = e.target.closest('[data-stock-select]');
+      if (stockSelect) {
+        updateStockPreview(stockSelect);
+        return;
+      }
+      const editStockSelect = e.target.closest('[data-edit-stock-select]');
+      if (editStockSelect) {
+        updateEditStockPreview(editStockSelect);
+        return;
+      }
+      const editStockSpecBtn = e.target.closest('[data-edit-stock-spec]');
+      if (editStockSpecBtn) {
+        editStockSpec(editStockSpecBtn);
+        return;
+      }
+      const saveStockSpecBtn = e.target.closest('[data-save-stock-spec]');
+      if (saveStockSpecBtn) {
+        saveStockSpec();
+        return;
+      }
+      const resetStockFormBtn = e.target.closest('[data-reset-stock-form]');
+      if (resetStockFormBtn) {
+        addStockSpec();
+        return;
+      }
       const opsTab = e.target.closest('[data-ops-tab]');
       if (opsTab) {
         const wrap = opsTab.closest('[data-ops-tabs]');
@@ -66250,6 +67931,16 @@
       const confirmSubmit = e.target.closest('[data-confirm-submit]');
       if (confirmSubmit) {
         confirmPendingAction();
+        return;
+      }
+      const closeCrud = e.target.closest('[data-close-crud]');
+      if (closeCrud || (e.target && e.target.matches && e.target.matches('[data-crud-modal]'))) {
+        closeCrudModal();
+        return;
+      }
+      const saveCrudBtn = e.target.closest('[data-save-crud]');
+      if (saveCrudBtn) {
+        saveCrudModal();
         return;
       }
       const closeProductEdit = e.target.closest('[data-close-product-edit]');
@@ -66270,16 +67961,6 @@
       const removeImageBtn = e.target.closest('[data-remove-image]');
       if (removeImageBtn) {
         removeProductImage(removeImageBtn);
-        return;
-      }
-      const autoStockSpec = e.target.closest('[data-auto-stock-spec]');
-      if (autoStockSpec) {
-        bindStockSpec(autoStockSpec, 'auto');
-        return;
-      }
-      const createStockSpec = e.target.closest('[data-create-stock-spec]');
-      if (createStockSpec) {
-        bindStockSpec(createStockSpec, 'manual');
         return;
       }
       const defaultReceiver = e.target.closest('[data-default-receiver]');
@@ -67173,13 +68854,25 @@
           closeCouponMask(mask);
           return;
         }
-        const rowData = parseRowData(actionBtn.dataset.row);
+        const rowData = enrichReportRowData(actionBtn, parseRowData(actionBtn.dataset.row));
         if (actionBtn.hasAttribute('data-edit-product')) {
           showProductEditModal(rowData);
           return;
         }
+        if (/维护销售规格/.test(actionBtn.dataset.action || '')) {
+          renderProductSalesSpecPage(rowData);
+          return;
+        }
+        if (/维护库存规格/.test(actionBtn.dataset.action || '')) {
+          renderProductStockSpecPage(rowData);
+          return;
+        }
+        if (shouldOpenCrud(actionBtn.dataset.action || '')) {
+          showCrudModal(actionBtn, 'edit', rowData);
+          return;
+        }
         if (needsConfirm(actionBtn.dataset.action)) {
-          showConfirmModal(actionBtn.dataset.action, actionBtn.dataset.actionTarget, rowData);
+          showConfirmModal(actionBtn.dataset.action, actionBtn.dataset.actionTarget, rowData, actionBtn);
           return;
         }
         showActionModal(actionBtn.dataset.action, actionBtn.dataset.actionTarget, rowData);

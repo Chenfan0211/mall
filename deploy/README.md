@@ -30,7 +30,9 @@ Elasticsearch, MinIO, or XXL-Job Admin to the public network for this first depl
 | `docker/mysql/init/00-create-databases.sh` | Creates app, Nacos, and XXL-Job databases and grants |
 | `scripts/fetch-middleware-schemas.sh` | Downloads Nacos and XXL-Job initialization SQL |
 | `scripts/prepare-host.sh` | Creates host directories and opens 80/443 when firewalld exists |
-| `scripts/verify-deploy.sh` | Basic deployment smoke checks |
+| `scripts/redeploy-current-workspace.sh` | Packages the current local workspace and redeploys it to the target host |
+| `scripts/verify-deploy.sh` | Full deployment smoke checks for middleware, backend services, Nginx, and public pages |
+| `scripts/diagnose-deploy.sh` | Collects failed container state, logs, ports, disk, memory, and Nacos config checks |
 
 ## First Deployment
 
@@ -70,14 +72,45 @@ docker compose --env-file deploy/.env -f deploy/docker-compose.yml up -d
 
 If Docker Hub is slow or blocked, edit `deploy/.env` and replace Docker Hub images with a reachable mirror.
 
+## Redeploy Current Workspace
+
+Use this flow when the server should receive the exact local workspace, including uncommitted and untracked files.
+The script excludes `.git`, `target`, `node_modules`, `dist`, local logs, local data, and local `deploy/.env`.
+
+Run from the repository root:
+
+```bash
+bash deploy/scripts/redeploy-current-workspace.sh
+```
+
+Defaults:
+
+| Variable | Default |
+| --- | --- |
+| `DEPLOY_HOST` | `192.168.28.211` |
+| `DEPLOY_USER` | `root` |
+| `SSH_PORT` | `22` |
+| `MALL_DEPLOY_ROOT` | `/opt/mall-deploy` |
+
+Example override:
+
+```bash
+DEPLOY_HOST=192.168.28.211 DEPLOY_USER=root bash deploy/scripts/redeploy-current-workspace.sh
+```
+
+The script preserves the existing server-side `/opt/mall-deploy/source/deploy/.env`. It does not store or pass
+passwords in the repository. If the server has no `deploy/.env`, the script creates it from `.env.example`, stops,
+and requires replacing every `change-*` value before rerunning.
+
+Deployment failure does not roll back automatically. The failed source tree is left at `/opt/mall-deploy/source`, and
+the previous source tree is kept under `/opt/mall-deploy/backups/source-YYYYMMDD-HHMMSS`. Inspect the diagnostic report
+before deciding whether to fix forward or restore a backup.
+
 ## Verification
 
 Load the same environment variables used by Compose and run:
 
 ```bash
-set -a
-. deploy/.env
-set +a
 bash deploy/scripts/verify-deploy.sh
 ```
 
@@ -100,6 +133,73 @@ http://<PUBLIC_IP>/wms/
 http://<PUBLIC_IP>/user/
 http://<PUBLIC_IP>/workbench/
 http://<PUBLIC_IP>/warehouse/
+```
+
+If verification fails, collect a diagnostic report without restarting or deleting anything:
+
+```bash
+bash deploy/scripts/diagnose-deploy.sh
+```
+
+Reports are written to `/opt/mall-deploy/logs/deploy-diagnose-YYYYMMDD-HHMMSS.log`.
+
+## Warehouse H5 Hot Deploy
+
+Use this flow when only `web/warehouse-h5` changed and the server already has the Docker Compose stack running.
+
+```bash
+DEPLOY_HOST=192.168.28.211 DEPLOY_USER=root bash deploy/scripts/deploy-warehouse-h5.sh
+```
+
+The script builds the H5 bundle with `VITE_PUBLIC_BASE=/warehouse/`, uploads it, replaces
+`/usr/share/nginx/html/warehouse/` inside the `mall-nginx` container, runs `nginx -t`, then checks that the public
+bundle contains `/auth/password-login`, `接口数据`, and `作业统计`.
+
+After deploying, run the Windows smoke check from the repository root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File deploy/scripts/verify-warehouse-h5.ps1
+```
+
+For local visual and interaction validation while `npm run dev:h5` is serving `http://localhost:5177/`, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File deploy/scripts/verify-warehouse-h5-local.ps1 -Url http://localhost:5177/
+```
+
+The local check opens Chrome at `375 x 812`, verifies the login role selector, all six role navigations, data-source
+labels, horizontal overflow, and console/runtime errors.
+
+The smoke check verifies:
+
+- `http://192.168.28.211/warehouse/` serves the latest warehouse H5 bundle.
+- unauthenticated `/api/wms/*` requests return `401/403`.
+- `POST /api/auth/password-login` succeeds for `test_wms_receiver / Test@123456`.
+- all six Warehouse H5 role accounts can log in with `Test@123456`:
+  `test_wms_receiver`, `test_wms_buyer`, `test_wms_picker`, `test_wms_loader`, `test_wms_driver`, `test_wms_manager`.
+- the five WMS read-only lists return `code=0` and `total > 0`.
+
+If the bundle check passes but `test_wms_buyer` or `test_wms_manager` fails, import the 2026-06-29 warehouse H5
+test-data block appended in `Sql/mall.sql`, then rerun the smoke check. To temporarily verify only the deployed bundle
+and receiver API path before SQL import, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File deploy/scripts/verify-warehouse-h5.ps1 -SkipRoleAccounts
+```
+
+To export only the Warehouse H5 test-data block from the large SQL file:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File deploy/scripts/export-warehouse-h5-test-sql.ps1
+```
+
+This writes `Sql/warehouse-h5-test-data-20260629.sql`, which can be imported by the DBA or ops account. It does not
+connect to MySQL by itself.
+
+After importing the SQL but before redeploying the frontend, you can verify only the six role accounts:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File deploy/scripts/verify-warehouse-h5.ps1 -OnlyRoleAccounts
 ```
 
 ## Production Notes

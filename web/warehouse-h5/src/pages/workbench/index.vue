@@ -1,267 +1,294 @@
 <template>
-  <view class="page warehouse-page">
-    <view class="warehouse-work-head hero">
-      <view class="warehouse-brand-row">
-        <view class="warehouse-brand">
-          <text>仓配工作台</text>
-          <text>WMS MOBILE</text>
+  <view class="page phone-shell workbench-page" :class="{ 'manager-home-page': role === 'manager' }">
+    <template v-if="role === 'manager'">
+      <view class="manager-top">
+        <view class="status-row manager-status">
+          <text>14:49</text>
+          <text>WiFi 80%</text>
         </view>
-        <text class="warehouse-badge">仓库主管</text>
-      </view>
-      <view class="warehouse-work-title">
-        <view>
-          <text class="title">广州中心仓</text>
-          <text class="subtle">收货、上架、拣货、配送按仓库隔离</text>
+        <view class="manager-top-title">
+          <view></view>
+          <text>仓库主管</text>
+          <text class="manager-capsule">· ·</text>
         </view>
-        <text class="warehouse-chip">实时</text>
-      </view>
-    </view>
-
-    <view class="warehouse-main">
-      <view class="warehouse-kpis">
-        <view v-for="item in metrics" :key="item.label" class="metric warehouse-kpi">
-          <text class="title">{{ item.value }}</text>
-          <text class="subtle">{{ item.label }}</text>
-        </view>
-      </view>
-
-      <view class="section warehouse-section">
-        <view class="warehouse-section-head">
+        <view class="manager-home-hero">
+          <view class="manager-avatar">仓</view>
           <view>
-            <text class="title">仓内作业</text>
-            <text class="subtle">按仓库和库区隔离任务</text>
+            <view class="manager-user-name">
+              <text>{{ profile.account }}</text>
+              <text class="manager-role-chip">中心仓-主管</text>
+            </view>
+            <text class="manager-user-line">仓库：{{ profile.warehouse }}</text>
+            <text class="manager-user-line">ID: 266</text>
           </view>
-          <text class="pill">今日</text>
         </view>
-        <view class="warehouse-quick-grid">
-          <button v-for="item in shortcuts" :key="item.text" class="warehouse-quick-btn" @click="open(item.url)">
-            <text>{{ item.text }}</text>
-            <text>{{ item.desc }}</text>
+        <text class="manager-login-time">上次登录时间：{{ loginTime }}</text>
+      </view>
+
+      <view class="manager-home-actions">
+        <button v-for="action in profile.quicks" :key="action.label" class="manager-action-card" @click="handleQuick(action.target)">
+          <view class="manager-action-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 5h14v14H5z" />
+              <path d="M8 9h8" />
+              <path d="M8 13h8" />
+              <path d="M8 17h5" />
+            </svg>
+          </view>
+          <text>{{ action.label }}</text>
+        </button>
+      </view>
+
+      <view class="manager-status-overview">
+        <text class="section-title">任务状态总览</text>
+        <view class="manager-status-grid">
+          <view v-for="item in managerStatusRows" :key="item.label">
+            <text>{{ item.label }}</text>
+            <text>{{ item.value }}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="warehouse-section">
+        <view class="warehouse-section-head">
+          <text class="section-title">全员最近操作记录</text>
+        </view>
+        <view class="log-list">
+          <text v-for="item in operations" :key="item">{{ item }}</text>
+        </view>
+      </view>
+
+      <WarehouseBottomNav active="home" :role="role" />
+    </template>
+
+    <template v-else>
+      <view class="warehouse-work-head">
+        <view class="status-row">
+          <text>14:49</text>
+          <text>WiFi 80%</text>
+        </view>
+        <view class="warehouse-work-title">
+          <view>
+            <text class="title">{{ profile.name }}工作台</text>
+            <text class="subtle">{{ profile.entity }}</text>
+          </view>
+          <text class="role-badge">{{ profile.badge }}</text>
+        </view>
+      </view>
+
+      <view class="warehouse-main">
+        <view class="warehouse-kpis" :class="{ six: kpis.length > 3 }">
+          <button v-for="item in kpis" :key="item.label" class="warehouse-kpi" @click="goKpi(item.target)">
+            <text>{{ item.value }}</text>
+            <text>{{ item.label }}</text>
           </button>
         </view>
+
+        <view class="warehouse-section">
+          <view class="warehouse-section-head">
+            <text class="section-title">今日待办</text>
+          </view>
+          <view v-if="role === 'receiver'" class="receiver-todo-summary">
+            <button v-for="item in receiverTodoSummary" :key="item.label" class="receiver-todo-card" @click="openReceiverSummary(item)">
+              <view class="receiver-todo-main">
+                <text class="receiver-todo-label">{{ item.label }}</text>
+                <text class="receiver-todo-desc">{{ item.value }} 单{{ item.desc }}</text>
+              </view>
+              <text class="receiver-todo-action">{{ receiverTodoActionText(item.label) }}</text>
+            </button>
+          </view>
+          <view v-else class="warehouse-task-list">
+            <button v-for="task in todoTasks" :key="task.id" class="warehouse-task warehouse-home-task-card" @click="openTodo(task.id)">
+              <view class="home-task-head">
+                <view>
+                  <text class="warehouse-task-title">{{ task.title }}</text>
+                  <text class="warehouse-task-desc">{{ task.currentNo }} · 来源 {{ task.sourceNo }}</text>
+                </view>
+                <text class="status-pill" :class="task.statusTone">{{ task.status }}</text>
+              </view>
+              <view class="home-task-meta">
+                <text>{{ task.warehouse }}</text>
+                <text>{{ task.route || task.location }}</text>
+                <text>{{ task.skuCount }} SKU</text>
+              </view>
+              <text class="task-note">{{ task.diffNote }}</text>
+              <view class="home-task-foot">
+                <text>{{ task.plannedQty }} / {{ task.actualQty }} 件</text>
+                <text class="home-task-action">{{ task.primaryAction }}</text>
+              </view>
+            </button>
+            <button
+              v-if="todoTasks.length === 0"
+              v-for="order in homeDriverOrders"
+              :key="order.id"
+              class="warehouse-task warehouse-home-task-card"
+              @click="openDriverOrder(order.id)"
+            >
+              <view class="home-task-head">
+                <view>
+                  <text class="warehouse-task-title">{{ order.routeName }}</text>
+                  <text class="warehouse-task-desc">{{ order.id }} · {{ order.vehicle }}</text>
+                </view>
+                <text class="status-pill" :class="order.statusTone">{{ order.status }}</text>
+              </view>
+              <view class="home-task-meta">
+                <text>{{ order.warehouse }}</text>
+                <text>{{ order.stationCount }} 个自提点</text>
+                <text>{{ order.cargoCount }} 件</text>
+              </view>
+              <text class="task-note">{{ order.returnCount }} 件退货待回仓</text>
+              <view class="home-task-foot">
+                <text>{{ order.deliveryDate }}</text>
+                <text class="home-task-action">{{ order.status === '待发车' ? '确认出发' : '发起回仓' }}</text>
+              </view>
+            </button>
+            <button v-if="todoTasks.length === 0 && homeDriverOrders.length === 0" v-for="todo in todos" :key="todo.title" class="warehouse-task" @click="openTodo(todo.taskId)">
+              <text class="warehouse-task-title">{{ todo.title }}</text>
+              <text class="warehouse-task-desc">{{ todo.desc }}</text>
+            </button>
+          </view>
+        </view>
+
+        <view class="warehouse-section">
+          <view class="warehouse-section-head">
+            <text class="section-title">最近操作记录</text>
+          </view>
+          <view class="log-list">
+            <text v-for="item in operations" :key="item">{{ item }}</text>
+          </view>
+        </view>
       </view>
 
-      <view class="section warehouse-section">
-        <view class="warehouse-section-head">
-          <view>
-            <text class="title">重点任务</text>
-            <text class="subtle">收货、拣货、配送进度</text>
-          </view>
-        </view>
-        <view class="warehouse-task-list">
-          <view v-for="item in shortcuts" :key="item.tip" class="warehouse-task" @click="open(item.url)">
-            <view>
-              <text class="task-title">{{ item.text }}</text>
-              <text class="task-tip">{{ item.desc }}</text>
-            </view>
-            <text class="pill">{{ item.tip }}</text>
-          </view>
-        </view>
-      </view>
-    </view>
+      <WarehouseBottomNav active="home" :role="role" />
+    </template>
   </view>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { pageInventories, pageInboundOrders } from '@/api/wms';
+import { computed, ref } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
+import WarehouseBottomNav from '@/components/WarehouseBottomNav.vue';
+import {
+    canViewInventory,
+    getCurrentRole,
+    getRoleProfile,
+    loadWarehouseDashboard,
+    setPendingTarget,
+    type RoleProfile,
+    type WarehouseActionTarget,
+    type WarehouseDriverOrder,
+    type WarehouseKpi,
+    type ReceiverTodoSummary,
+    type WarehouseRole,
+    type WarehouseTask
+} from '@/stores/warehouse';
 
-const metrics = ref([
-    { label: '待收货', value: 0 },
-    { label: '待上架', value: 0 },
-    { label: '待拣货', value: 0 }
-]);
-
-const shortcuts = [
-    { text: '收货任务', desc: '采购到仓、质检、上架', tip: '差异 0', url: '/pages/tasks/index' },
-    { text: '库存查看', desc: 'SKU、库位、批次库存', tip: '实时', url: '/pages/inventory/index' },
-    { text: '我的角色', desc: '当前身份和授权仓库', tip: '主管', url: '/pages/mine/index' },
-    { text: '角色任务', desc: '收货、拣货、装车视角', tip: '切换', url: '/pages/roles/index' }
-];
+const role = ref<WarehouseRole>(getCurrentRole());
+const profile = ref<RoleProfile>(getRoleProfile());
+const kpis = ref<WarehouseKpi[]>([]);
+const todos = ref<RoleProfile['todos']>([]);
+const tasks = ref<WarehouseTask[]>([]);
+const driverOrders = ref<WarehouseDriverOrder[]>([]);
+const receiverTodoSummary = ref<ReceiverTodoSummary[]>([]);
+const operations = ref<string[]>([]);
+const loginTime = ref('2026-06-29 14:49');
+const managerStatusRows = ref<Array<{ label: string; value: number | string }>>([]);
+const todoTasks = computed(() => tasks.value.slice(0, 3));
+const homeDriverOrders = computed(() => role.value === 'driver' ? driverOrders.value.slice(0, 3) : []);
 
 async function loadData() {
-    const [inboundPage, inventoryPage] = await Promise.all([
-        pageInboundOrders({ pageNum: 1, pageSize: 20 }),
-        pageInventories({ pageNum: 1, pageSize: 20 })
-    ]);
-    metrics.value = [
-        { label: '待收货', value: inboundPage.total || 0 },
-        { label: '待上架', value: inventoryPage.total || 0 },
-        { label: '待拣货', value: inventoryPage.total || 0 }
-    ];
+    role.value = getCurrentRole();
+    const dashboard = await loadWarehouseDashboard(role.value);
+    profile.value = dashboard.profile;
+    kpis.value = dashboard.kpis;
+    todos.value = dashboard.todos;
+    tasks.value = dashboard.tasks;
+    driverOrders.value = dashboard.driverOrders;
+    receiverTodoSummary.value = dashboard.receiverTodoSummary;
+    operations.value = dashboard.operations;
+    managerStatusRows.value = dashboard.managerStatusRows;
 }
 
-function open(url: string) {
-    if (url === '/pages/tasks/index' || url === '/pages/inventory/index' || url === '/pages/mine/index') {
-        uni.switchTab({ url });
+function goTasks() {
+    if (role.value === 'driver') {
+        uni.setStorageSync('mall_warehouse_h5_driver_tab', 'delivery');
+    }
+    uni.switchTab({ url: '/pages/tasks/index' });
+}
+
+function openTodo(taskId?: string) {
+    if (taskId) {
+        uni.navigateTo({ url: `/pages/tasks/detail?id=${taskId}` });
         return;
     }
-    uni.navigateTo({ url });
+    goTasks();
 }
 
-onMounted(() => {
-    void loadData();
-});
+function openDriverOrder(orderId: string) {
+    uni.navigateTo({ url: `/pages/tasks/detail?id=${orderId}&mode=driverDelivery` });
+}
+
+function openReceiverSummary(item: ReceiverTodoSummary) {
+    const task = getDashboardTaskForTarget(item.target);
+    setPendingTarget(item.target, task?.id);
+    if (task?.id) {
+        uni.navigateTo({ url: `/pages/tasks/detail?id=${task.id}&mode=${item.target}` });
+        return;
+    }
+    uni.switchTab({ url: '/pages/tasks/index' });
+}
+
+function receiverTodoActionText(label: ReceiverTodoSummary['label']) {
+    if (label === '待接单') return '接单';
+    if (label === '待扫码') return '扫码';
+    return '收货';
+}
+
+function goKpi(target: string) {
+    if (target === 'inventory') {
+        goInventory();
+        return;
+    }
+    if (target === 'manager') {
+        handleQuick('managerPutaway');
+        return;
+    }
+    goTasks();
+}
+
+function goInventory() {
+    if (!canViewInventory(role.value)) {
+        uni.showToast({ title: '当前角色不展示库存入口', icon: 'none' });
+        return;
+    }
+    uni.switchTab({ url: '/pages/inventory/index' });
+}
+
+function handleQuick(target: WarehouseActionTarget) {
+    if (target === 'inventory' || target === 'managerStockGoods' || target === 'managerInventory') {
+        goInventory();
+        return;
+    }
+    const task = getDashboardTaskForTarget(target);
+    setPendingTarget(target, task?.id);
+    if (['receiveArea', 'receiveScan', 'receiveQuality', 'purchaseCreate', 'purchaseReceipt', 'pickWork', 'pickShortage', 'recheckWork', 'loadingReceipt', 'driverHandover', 'managerPutaway'].includes(target)) {
+        uni.navigateTo({ url: `/pages/tasks/detail?id=${task?.id || ''}&mode=${target}` });
+        return;
+    }
+    goTasks();
+}
+
+function getDashboardTaskForTarget(target: WarehouseActionTarget | string) {
+    const list = tasks.value;
+    if (target === 'receiveArea') return list.find((task) => task.status === '待接单') || list[0];
+    if (target === 'receiveScan' || target === 'receiveQuality') return list.find((task) => /待收货|收货中|待确认收货/.test(task.status)) || list[0];
+    if (target === 'purchaseReceipt') return list.find((task) => /已收货|待采购确认|已到仓|入库异常|采购/.test(`${task.status}${task.type}${task.title}`)) || list[0];
+    if (target === 'pickWork') return list.find((task) => /待拣货|拣货中/.test(task.status)) || list[0];
+    if (target === 'pickShortage') return list.find((task) => /履约缺货|缺货|差异/.test(`${task.status}${task.diffNote}`)) || list[0];
+    if (target === 'recheckWork' || target === 'loadingReceipt') return list.find((task) => /待装车|已装车待出库|已出库/.test(task.status)) || list[0];
+    if (target === 'managerPutaway') return list.find((task) => task.role === 'manager' || /上架/.test(task.type)) || list[0];
+    return list[0];
+}
+
+onShow(loadData);
 </script>
-
-<style lang="scss" scoped>
-.warehouse-page {
-  padding: 0 0 164rpx;
-}
-
-.warehouse-work-head {
-  min-height: 240rpx;
-  padding: 16rpx 28rpx 28rpx;
-}
-
-.warehouse-brand-row {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20rpx;
-  margin-top: 14rpx;
-}
-
-.warehouse-brand {
-  display: grid;
-  gap: 8rpx;
-  min-width: 0;
-  color: #ffffff;
-  font-size: 44rpx;
-  font-weight: 900;
-  line-height: 1.15;
-}
-
-.warehouse-brand text:last-child {
-  font-size: 22rpx;
-  opacity: 0.9;
-}
-
-.warehouse-badge,
-.warehouse-chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 56rpx;
-  padding: 0 22rpx;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.18);
-  border-radius: 999rpx;
-  font-size: 24rpx;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-.warehouse-work-title {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 20rpx;
-  margin-top: 30rpx;
-}
-
-.warehouse-work-title .title {
-  color: #ffffff;
-  font-size: 44rpx;
-}
-
-.warehouse-work-title .subtle {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.warehouse-main {
-  padding: 24rpx;
-}
-
-.warehouse-kpis {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18rpx;
-  margin-bottom: 24rpx;
-}
-
-.warehouse-kpi {
-  margin: 0;
-  min-width: 0;
-}
-
-.warehouse-section {
-  padding: 28rpx;
-}
-
-.warehouse-section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20rpx;
-  margin-bottom: 24rpx;
-}
-
-.warehouse-quick-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20rpx;
-}
-
-.warehouse-quick-btn {
-  display: grid;
-  gap: 8rpx;
-  align-content: start;
-  min-height: 128rpx;
-  padding: 24rpx;
-  color: #245a54 !important;
-  background: linear-gradient(135deg, #edf8f4 0%, #fbfdf8 100%) !important;
-  border-radius: 24rpx !important;
-  box-shadow: inset 0 0 0 1rpx #d3e7df;
-  text-align: left;
-}
-
-.warehouse-quick-btn text:first-child {
-  color: #173b3a;
-  font-size: 28rpx;
-  font-weight: 900;
-}
-
-.warehouse-quick-btn text:last-child {
-  color: #628078;
-  font-size: 24rpx;
-  line-height: 1.45;
-}
-
-.warehouse-task-list {
-  display: grid;
-  gap: 20rpx;
-}
-
-.warehouse-task {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20rpx;
-  padding: 24rpx;
-  background: #f7fbf8;
-  border: 1rpx solid #d9e9e3;
-  border-radius: 24rpx;
-}
-
-.task-title,
-.task-tip {
-  display: block;
-}
-
-.task-title {
-  color: #173b3a;
-  font-size: 28rpx;
-  font-weight: 900;
-}
-
-.task-tip {
-  margin-top: 8rpx;
-  color: #628078;
-  font-size: 24rpx;
-  line-height: 1.45;
-}
-</style>

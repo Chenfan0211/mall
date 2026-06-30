@@ -3,6 +3,7 @@ import uni from '@dcloudio/vite-plugin-uni';
 import { defineConfig } from 'vite';
 
 const uniPlugin = typeof uni === 'function' ? uni : uni.default;
+const apiProxyTarget = process.env.VITE_API_PROXY_TARGET || 'http://192.168.28.211';
 
 export default defineConfig({
     base: process.env.VITE_PUBLIC_BASE || '/',
@@ -16,7 +17,7 @@ export default defineConfig({
         port: 5177,
         proxy: {
             '/api': {
-                target: 'http://localhost:18000',
+                target: apiProxyTarget,
                 changeOrigin: true
             }
         }

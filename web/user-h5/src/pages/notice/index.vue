@@ -1,27 +1,50 @@
 <template>
-  <view class="page no-tab">
-    <view class="section">
-      <text class="title">商品通知</text>
-      <text class="subtle">售罄商品到货后，会按当前自提点发送站内消息。</text>
-    </view>
-
-    <view v-for="productId in notices" :key="productId" class="section notice-row">
-      <view>
-        <text>商品 {{ productId }}</text>
-        <text class="subtle">{{ state.station.name }} · 到货提醒已开启</text>
+  <view class="service-page shop-page" data-m-page="productNotices">
+    <view class="service-head">
+      <view class="order-nav">
+        <button class="order-back" @click="goMine">‹</button>
+        <b>商品通知</b>
+        <span>{{ noticeProducts.length }}个</span>
       </view>
-      <button class="plain small" @click="cancelNotice(productId)">取消提醒</button>
     </view>
 
-    <EmptyActionCard
-      v-if="notices.length === 0"
-      title="暂无商品通知"
-      sub="遇到售罄商品时，可在商品详情页开启到货提醒。"
-      icon="铃"
-      button-text="去首页"
-      @action="goHome"
-    />
+    <view class="service-list">
+      <view
+        v-for="item in noticeProducts"
+        :key="item.productId"
+        class="service-product-row"
+        @click="openDetail(item.productId)"
+      >
+        <view class="service-product-thumb" :style="serviceProductThumbStyle(item.mainImageUrl)" />
+        <view class="service-product-main">
+          <b>{{ item.productName }}</b>
+          <span>到货提醒已开启<br />{{ state.station.name }} 有货后通知你</span>
+          <em>{{ productSpecText(item) }}</em>
+        </view>
+        <button class="service-action danger" @click.stop="cancelNotice(item.productId)">删除</button>
+      </view>
+
+      <view class="service-product-row invalid">
+        <view class="service-product-thumb" :style="serviceProductThumbStyle(shopImageAssets.list)" />
+        <view class="service-product-main">
+          <b>云南蓝莓 125g*4盒</b>
+          <span>当前商品已售罄<br />可在商品详情页开启提醒</span>
+          <em>售罄样例</em>
+        </view>
+        <button class="service-action used" disabled>已售罄</button>
+      </view>
+
+      <EmptyActionCard
+        v-if="noticeProducts.length === 0"
+        title="暂无商品通知"
+        sub="订阅到货提醒后会显示在这里。"
+        icon="铃"
+        button-text="去首页逛逛"
+        @action="goHome"
+      />
+    </view>
     <UserToast />
+    <UserTabBar active="mine" />
   </view>
 </template>
 
@@ -29,38 +52,40 @@
 import { computed } from 'vue';
 
 import EmptyActionCard from '@/components/EmptyActionCard.vue';
+import UserTabBar from '@/components/UserTabBar.vue';
 import UserToast from '@/components/UserToast.vue';
-import { showUserToast, toggleNotice, useUserState } from '@/stores/userState';
+import { navigateUser, showUserToast, toggleNotice, useUserState } from '@/stores/userState';
+import { fallbackProducts, productSpecText, shopImageAssets } from '@/utils/userFallbackData';
 
 const state = useUserState();
-const notices = computed(() => Array.from(state.notices));
+const noticeProducts = computed(() => {
+    const ids = Array.from(state.notices);
+    if (ids.length === 0) {
+        return [];
+    }
+    return ids.map((id) => fallbackProducts.find((item) => item.productId === id) || fallbackProducts[0]);
+});
 
 function cancelNotice(productId: number) {
     toggleNotice(productId);
     showUserToast('已取消到货提醒');
 }
 
+function serviceProductThumbStyle(url?: string) {
+    return {
+        backgroundImage: `url("${url || shopImageAssets.detail}")`
+    };
+}
+
+function openDetail(productId: number) {
+    navigateUser(`/pages/product/detail?id=${productId}`);
+}
+
+function goMine() {
+    navigateUser('/pages/mine/index', true);
+}
+
 function goHome() {
-    uni.switchTab({ url: '/pages/home/index' });
+    navigateUser('/pages/home/index', true);
 }
 </script>
-
-<style lang="scss" scoped>
-.notice-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18rpx;
-}
-
-.notice-row view {
-  min-width: 0;
-}
-
-.notice-row view text:first-child {
-  display: block;
-  color: #172033;
-  font-size: 28rpx;
-  font-weight: 900;
-}
-</style>

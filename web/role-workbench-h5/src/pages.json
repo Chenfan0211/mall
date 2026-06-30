@@ -27,18 +27,21 @@
     {
       "path": "pages/orders/index",
       "style": {
+        "navigationStyle": "custom",
         "navigationBarTitleText": "订单"
       }
     },
     {
       "path": "pages/orders/detail",
       "style": {
+        "navigationStyle": "custom",
         "navigationBarTitleText": "订单详情"
       }
     },
     {
       "path": "pages/orders/product-summary",
       "style": {
+        "navigationStyle": "custom",
         "navigationBarTitleText": "商品汇总"
       }
     },
@@ -52,6 +55,12 @@
       "path": "pages/store/delivery-detail",
       "style": {
         "navigationBarTitleText": "到货详情"
+      }
+    },
+    {
+      "path": "pages/store/delivery-product",
+      "style": {
+        "navigationBarTitleText": "配送商品详情"
       }
     },
     {
@@ -151,35 +160,8 @@
       }
     }
   ],
-  "tabBar": {
-    "color": "#8f6c58",
-    "selectedColor": "#d94b34",
-    "backgroundColor": "#fffaf6",
-    "borderStyle": "black",
-    "list": [
-      {
-        "pagePath": "pages/workbench/index",
-        "text": "工作台"
-      },
-      {
-        "pagePath": "pages/orders/index",
-        "text": "订单"
-      },
-      {
-        "pagePath": "pages/store/index",
-        "text": "作业"
-      },
-      {
-        "pagePath": "pages/finance/index",
-        "text": "财务"
-      },
-      {
-        "pagePath": "pages/mine/index",
-        "text": "我的"
-      }
-    ]
-  },
   "globalStyle": {
+    "navigationStyle": "custom",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "角色工作台",
     "navigationBarBackgroundColor": "#fffaf6",

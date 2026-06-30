@@ -1,138 +1,212 @@
 <template>
-  <view class="page no-tab settings-page">
-    <view class="section">
-      <text class="title">设置</text>
-      <text class="subtle">账号安全、提货人和注销确认。</text>
-    </view>
-
-    <view class="section">
-      <view class="menu-row" @click="showUserToast('账号安全接口暂缺，当前只展示登录状态')">
-        <view>
-          <text>账号安全</text>
-          <text>{{ state.authenticated ? '已登录' : '未登录' }} · {{ state.mobileAuthorized ? '已授权手机号' : '未授权手机号' }}</text>
-        </view>
-        <text>›</text>
-      </view>
-      <view class="menu-row" @click="openReceivers">
-        <view>
-          <text>提货人</text>
-          <text>维护结算页默认提货人</text>
-        </view>
-        <text>›</text>
-      </view>
-      <view class="menu-row" @click="askDestroy">
-        <view>
-          <text>注销确认</text>
-          <text>注销会二次确认，当前不直接提交接口</text>
-        </view>
-        <text>›</text>
+  <view class="service-page shop-page settings-page" data-m-page="settings">
+    <view class="service-head">
+      <view class="order-nav">
+        <button class="order-back" @click="goMine">‹</button>
+        <b>设置</b>
+        <span>账号安全</span>
       </view>
     </view>
 
-    <button class="danger logout-btn" @click="askLogout">退出登录</button>
+    <view class="service-list">
+      <view class="settings-card">
+        <view>
+          <b>账号信息</b>
+          <span>微信昵称 {{ state.user.nickname }}<br />手机号 {{ state.mobileAuthorized ? state.user.mobile : '未授权' }}</span>
+        </view>
+        <button class="service-action used" @click="goMine">返回</button>
+      </view>
 
-    <ConfirmDialog
-      :visible="dialog.visible"
-      :title="dialog.title"
-      :content="dialog.content"
-      :confirm-text="dialog.confirmText"
-      danger
-      @cancel="dialog.visible = false"
-      @confirm="confirmDialog"
-    />
+      <view class="settings-card">
+        <view>
+          <b>协议与隐私</b>
+          <span>查看用户协议和隐私协议。</span>
+        </view>
+      </view>
+
+      <view class="account-cancel-card account-cancel-risk">
+        <view>
+          <b>注销账号</b>
+          <span>注销后当前账号将不能继续下单。</span>
+        </view>
+        <view class="account-cancel-limit">
+          <b>暂不可注销</b>
+          <span>存在未完成订单和售后中订单。</span>
+          <span>待提货订单 DD202606180126；售后单 AS202606180021。</span>
+        </view>
+        <button @click="openCancelPanel">申请注销账号</button>
+      </view>
+    </view>
+
+    <view v-if="cancelPanelVisible" class="account-cancel-mask" @click="cancelPanelVisible = false">
+      <view class="account-cancel-panel" @click.stop>
+        <h3>确认注销账号</h3>
+        <p>当前账号注销后不能继续下单。</p>
+        <view class="account-cancel-limit">
+          <b>暂不可注销</b>
+          <span>未完成订单：DD202606180126 待提货。</span>
+          <span>售后中订单：AS202606180021 待退货。</span>
+        </view>
+        <view class="clear-confirm-actions">
+          <button @click="cancelPanelVisible = false">再想想</button>
+          <button class="danger" @click="logoutAnyway">仍要注销</button>
+        </view>
+      </view>
+    </view>
     <UserToast />
+    <UserTabBar active="mine" />
   </view>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { ref } from 'vue';
 
-import ConfirmDialog from '@/components/ConfirmDialog.vue';
+import UserTabBar from '@/components/UserTabBar.vue';
 import UserToast from '@/components/UserToast.vue';
-import { logoutUser, showUserToast, useUserState } from '@/stores/userState';
+import { logoutUser, navigateUser, useUserState } from '@/stores/userState';
 
 const state = useUserState();
-const dialog = reactive({
-    visible: false,
-    action: '',
-    title: '',
-    content: '',
-    confirmText: '确认'
-});
+const cancelPanelVisible = ref(false);
 
-function openReceivers() {
-    uni.navigateTo({ url: '/pages/receivers/index' });
+function openCancelPanel() {
+    cancelPanelVisible.value = true;
 }
 
-function askLogout() {
-    dialog.visible = true;
-    dialog.action = 'logout';
-    dialog.title = '退出登录';
-    dialog.content = '退出后订单、售后、收藏等资产页需要重新授权登录。';
-    dialog.confirmText = '退出';
+function logoutAnyway() {
+    cancelPanelVisible.value = false;
+    logoutUser();
+    navigateUser('/pages/login/index', true);
 }
 
-function askDestroy() {
-    dialog.visible = true;
-    dialog.action = 'destroy';
-    dialog.title = '注销账号';
-    dialog.content = '注销属于高风险操作，当前第一版仅保留确认交互，不直接提交注销接口。';
-    dialog.confirmText = '我已知晓';
-}
-
-function confirmDialog() {
-    dialog.visible = false;
-    if (dialog.action === 'logout') {
-        logoutUser();
-        uni.redirectTo({ url: '/pages/login/index' });
-        return;
-    }
-    showUserToast('注销接口暂未开放，请联系运营处理', 'warn');
+function goMine() {
+    navigateUser('/pages/mine/index', true);
 }
 </script>
 
 <style lang="scss" scoped>
-.menu-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20rpx;
-  padding: 24rpx 0;
-  border-bottom: 1rpx solid #f4e2d8;
-}
-
-.menu-row:last-child {
-  border-bottom: 0;
-}
-
-.menu-row view {
-  min-width: 0;
+.account-cancel-card {
   display: grid;
-  gap: 8rpx;
+  gap: 16rpx;
+  padding: 24rpx;
+  background: #ffffff;
+  border: 1rpx solid #f1d8cb;
+  border-radius: 28rpx;
+  box-shadow: 0 16rpx 36rpx rgba(126, 76, 49, 0.08);
 }
 
-.menu-row view text:first-child {
+.account-cancel-card > view:first-child b,
+.account-cancel-card > view:first-child span {
+  display: block;
+}
+
+.account-cancel-card > view:first-child b {
   color: #172033;
   font-size: 28rpx;
   font-weight: 900;
 }
 
-.menu-row view text:last-child {
-  overflow: hidden;
+.account-cancel-card > view:first-child span {
+  margin-top: 8rpx;
   color: #8c6a58;
-  font-size: 23rpx;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 26rpx;
+  line-height: 1.45;
 }
 
-.menu-row > text {
-  color: #c2412d;
-  font-size: 44rpx;
-  line-height: 1;
+.account-cancel-card > button,
+.account-cancel-card > :deep(uni-button) {
+  min-height: 70rpx;
+  color: #ffffff !important;
+  background: #b42318 !important;
+  border-radius: 999rpx;
+  box-shadow: none;
+  font-size: 26rpx;
+  font-weight: 900;
 }
 
-.logout-btn {
-  width: calc(100% - 40rpx);
-  margin: 24rpx 20rpx 0;
+.account-cancel-limit {
+  display: grid;
+  gap: 8rpx;
+  padding: 18rpx;
+  color: #b42318;
+  background: #fff1e9;
+  border-radius: 18rpx;
+}
+
+.account-cancel-limit b {
+  color: #b42318;
+  font-size: 26rpx;
+}
+
+.account-cancel-limit span {
+  margin-top: 0;
+  color: #9a4636;
+  font-size: 26rpx;
+  line-height: 1.4;
+}
+
+.account-cancel-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.account-cancel-panel {
+  width: min(100vw, 390px);
+  padding: 32rpx 28rpx calc(34rpx + env(safe-area-inset-bottom));
+  background: #fffaf6;
+  border-radius: 36rpx 36rpx 0 0;
+  box-shadow: 0 -24rpx 56rpx rgba(15, 23, 42, 0.24);
+}
+
+.account-cancel-panel h3,
+.account-cancel-panel p {
+  margin: 0;
+}
+
+.account-cancel-panel h3 {
+  color: #172033;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.account-cancel-panel p {
+  margin-top: 12rpx;
+  color: #8c6a58;
+  font-size: 26rpx;
+  line-height: 1.45;
+}
+
+.account-cancel-panel .account-cancel-limit {
+  margin-top: 20rpx;
+}
+
+.clear-confirm-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.clear-confirm-actions button,
+.clear-confirm-actions :deep(uni-button) {
+  min-height: 72rpx;
+  color: #8c6a58 !important;
+  background: #ffffff !important;
+  border: 1rpx solid #ead8cd;
+  border-radius: 999rpx;
+  box-shadow: none;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.clear-confirm-actions button.danger,
+.clear-confirm-actions :deep(uni-button.danger) {
+  color: #ffffff !important;
+  background: #b42318 !important;
+  border-color: #b42318;
 }
 </style>

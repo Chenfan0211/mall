@@ -1,7 +1,6 @@
 <template>
   <section class="page-panel">
     <h1 class="page-title">装车出库</h1>
-    <el-alert type="warning" show-icon :closable="false" title="确认出库后才正式扣减库存，司机才能发车。" />
     <el-tabs v-model="activeTab" class="tabs">
       <el-tab-pane label="装车单" name="loading">
         <el-table :data="loadings" border>

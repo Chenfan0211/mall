@@ -6,172 +6,256 @@ export interface PageResult<T> {
 }
 
 export interface StationWorkbenchDTO {
-    stationId: number;
-    leaderId: number;
-    todayOrderCount: number;
-    waitPickupCount: number;
-    pickedCount: number;
-    arrivalCount: number;
-    exceptionCount: number;
-    unreadMessageCount: number;
-    availableAmount: string;
-    frozenAmount: string;
-    pendingCommissionAmount: string;
+    stationId?: number;
+    leaderId?: number;
+    todayOrderCount?: number;
+    waitPickupCount?: number;
+    pickedCount?: number;
+    arrivalCount?: number;
+    exceptionCount?: number;
+    unreadMessageCount?: number;
+    availableAmount?: string;
+    frozenAmount?: string;
+    pendingCommissionAmount?: string;
+}
+
+export interface StationDTO {
+    id?: number;
+    stationNo?: string;
+    stationName?: string;
+    contactName?: string;
+}
+
+export interface LeaderDTO {
+    id?: number;
+    leaderNo?: string;
+    leaderName?: string;
+    leaderMobile?: string;
 }
 
 export interface StationOrderDTO {
     id: number;
     orderNo: string;
-    stationId: number;
-    tradeStatus: number;
-    payStatus: number;
-    fulfillStatus: number;
+    stationId?: number;
+    leaderId?: number;
     pickupName?: string;
+    pickupMobile?: string;
+    totalAmount?: string;
+    payAmount?: string;
+    tradeStatus?: number;
+    payStatus?: number;
+    fulfillStatus?: number;
     createTime?: string;
+}
+
+export interface StationOrderItemDTO {
+    id: number;
+    orderId?: number;
+    orderNo?: string;
+    orderItemNo?: string;
+    productName?: string;
+    skuName?: string;
+    salePrice?: string;
+    qty?: number;
+    pickedQty?: number;
+    itemAmount?: string;
+    fulfillStatus?: number;
+    afterSaleStatus?: number;
+    expectedPickupDate?: string;
 }
 
 export interface DeliveryOrderDTO {
     id: number;
     deliveryNo: string;
-    outboundId?: number;
-    loadingId?: number;
-    warehouseId: number;
-    lineId: number;
+    warehouseId?: number;
+    lineId?: number;
     driverAccountId?: number;
     deliveryDate?: string;
-    status: number;
+    status?: number;
+    startTime?: string;
+    completeTime?: string;
+    createTime?: string;
 }
 
 export interface DeliveryStationDTO {
     id: number;
-    deliveryId: number;
-    stationId: number;
+    deliveryId?: number;
+    stationId?: number;
     deliverySort?: number;
-    status: number;
+    status?: number;
     arriveTime?: string;
     completeTime?: string;
     remark?: string;
+    createTime?: string;
 }
 
 export interface ReturnHandoverDTO {
     id: number;
     returnNo: string;
     deliveryId?: number;
-    stationId: number;
+    stationId?: number;
     skuId?: number;
-    warehouseId: number;
+    warehouseId?: number;
     returnQty?: number;
     reasonType?: number;
-    status: number;
+    status?: number;
+    confirmTime?: string;
     remark?: string;
+    createTime?: string;
 }
 
 export interface StationExceptionDTO {
     id: number;
-    exceptionNo: string;
-    title: string;
-    priority: number;
-    sourceModule: string;
-    status: number;
+    exceptionNo?: string;
+    title?: string;
+    priority?: number;
+    sourceModule?: string;
+    status?: number;
     description?: string;
     createTime?: string;
 }
 
 export interface StationFinanceAccountDTO {
     id: number;
-    accountNo: string;
-    subjectType: number;
-    subjectId: number;
-    availableAmount: string;
-    frozenAmount: string;
-    depositAmount: string;
-    status: number;
+    accountNo?: string;
+    subjectType?: number;
+    subjectId?: number;
+    availableAmount?: string;
+    frozenAmount?: string;
+    depositAmount?: string;
+    status?: number;
 }
 
 export interface StationFinanceFlowDTO {
     id: number;
-    flowNo: string;
-    accountId: number;
-    amount: string;
-    flowType: number;
-    bizType: string;
-    bizNo: string;
+    flowNo?: string;
+    accountId?: number;
+    amount?: string;
+    flowType?: number;
+    direction?: number;
+    bizType?: string;
+    bizNo?: string;
     createTime?: string;
 }
 
 export interface CommissionDetailDTO {
     id: number;
-    commissionNo: string;
-    subjectType: number;
-    subjectId: number;
-    amount: string;
-    status: number;
+    commissionNo?: string;
+    subjectType?: number;
+    subjectId?: number;
+    amount?: string;
+    status?: number;
+    createTime?: string;
 }
 
 export interface WithdrawApplyDTO {
     id: number;
-    withdrawNo: string;
-    accountId: number;
-    applyAmount: string;
-    status: number;
+    withdrawNo?: string;
+    accountId?: number;
+    applyAmount?: string;
+    withdrawAmount?: string;
+    status?: number;
+    auditStatus?: number;
+    payStatus?: number;
+    auditTime?: string;
+    auditRemark?: string;
+    createTime?: string;
 }
 
 export interface StationMessageDTO {
     id: number;
-    msgNo: string;
-    title: string;
-    bizType: string;
-    bizNo: string;
-    readStatus: number;
-    sendStatus: number;
+    msgNo?: string;
+    title?: string;
+    content?: string;
+    bizType?: string;
+    bizNo?: string;
+    readStatus?: number;
+    sendStatus?: number;
     createTime?: string;
-}
-
-export interface StationDTO {
-    id: number;
-    stationNo: string;
-    stationName: string;
-    cityId: number;
-    address: string;
-    contactName: string;
-    contactMobile: string;
-    businessHours: string;
-    status: number;
-}
-
-export interface LeaderDTO {
-    id: number;
-    leaderNo: string;
-    leaderName: string;
-    stationId?: number;
-    status: number;
-}
-
-export interface StationLeaderDTO {
-    id: number;
-    stationId: number;
-    leaderId: number;
-    bindStatus: number;
 }
 
 export interface StationLeaveDTO {
     id: number;
-    leaveNo: string;
-    stationId: number;
-    leaderId: number;
-    status: number;
+    leaveNo?: string;
+    stationId?: number;
+    leaderId?: number;
+    startTime?: string;
+    endTime?: string;
+    reason?: string;
+    auditStatus?: number;
+    auditTime?: string;
+    auditRemark?: string;
+    status?: number;
+    createTime?: string;
 }
 
 export interface SupplierWorkbenchDTO {
-    supplierId: number;
-    waitAuditPurchaseCount: number;
-    waitDeliveryPurchaseCount: number;
-    deliveringOrderCount: number;
-    arrivedOrderCount: number;
-    todayDeliveryOrderCount: number;
-    purchaseQty: number;
-    receivedQty: number;
-    diffQty: number;
+    supplierId?: number;
+    waitAuditPurchaseCount?: number;
+    waitDeliveryPurchaseCount?: number;
+    deliveringOrderCount?: number;
+    arrivedOrderCount?: number;
+    todayDeliveryOrderCount?: number;
+    purchaseQty?: number;
+    receivedQty?: number;
+    diffQty?: number;
+}
+
+export interface SupplierPurchaseDTO {
+    id: number;
+    purchaseNo?: string;
+    supplierId?: number;
+    warehouseId?: number;
+    cityId?: number;
+    deliveryDate?: string;
+    purchaseStatus?: number;
+    auditStatus?: number;
+    createReason?: string;
+    expectedArrivalTime?: string;
+    createTime?: string;
+}
+
+export interface SupplierPurchaseItemDTO {
+    id: number;
+    purchaseId?: number;
+    purchaseNo?: string;
+    productId?: number;
+    skuId?: number;
+    supplierId?: number;
+    warehouseId?: number;
+    skuName?: string;
+    productName?: string;
+    applyQty?: number;
+    purchaseQty?: number;
+    receivedQty?: number;
+    rejectedQty?: number;
+    purchasePrice?: string;
+    amount?: string;
+    status?: number;
+    createTime?: string;
+}
+
+export interface SupplierDeliveryDTO {
+    id: number;
+    deliveryNo?: string;
+    supplierId?: number;
+    warehouseId?: number;
+    deliveryDate?: string;
+    status?: number;
+    createTime?: string;
+}
+
+export interface SupplierSettlementDTO {
+    id: number;
+    settlementNo?: string;
+    supplierId?: number;
+    periodStartDate?: string;
+    periodEndDate?: string;
+    purchaseAmount?: string | number;
+    diffAmount?: string | number;
+    payableAmount?: string;
+    status?: number;
+    createTime?: string;
 }
 
 function buildSearch(query: Record<string, string | number | undefined>) {
@@ -181,190 +265,144 @@ function buildSearch(query: Record<string, string | number | undefined>) {
             search.set(key, String(value));
         }
     });
-    return search.toString();
+    const text = search.toString();
+    return text ? `?${text}` : '';
 }
 
 export function getWorkbenchSummary(query: Record<string, string | number | undefined>) {
-    return request<StationWorkbenchDTO>(`/station/workbench/summary?${buildSearch(query)}`);
+    return request<StationWorkbenchDTO>(`/station/workbench/summary${buildSearch(query)}`);
+}
+
+export function getStationDetail(id: number) {
+    return request<StationDTO>(`/station/base/stations/${id}`);
+}
+
+export function getLeaderDetail(id: number) {
+    return request<LeaderDTO>(`/station/base/leaders/${id}`);
 }
 
 export function pageStationOrders(query: Record<string, string | number | undefined>) {
-    return request<PageResult<StationOrderDTO>>(`/station/workbench/orders?${buildSearch(query)}`);
+    return request<PageResult<StationOrderDTO>>(`/station/workbench/orders${buildSearch(query)}`);
+}
+
+export function getStationOrderDetail(id: number) {
+    return request<StationOrderDTO>(`/station/workbench/orders/${id}`);
+}
+
+export function pageStationOrderItems(query: Record<string, string | number | undefined>) {
+    return request<PageResult<StationOrderItemDTO>>(`/station/workbench/order-items${buildSearch(query)}`);
+}
+
+export function getStationOrderItem(id: number) {
+    return request<StationOrderItemDTO>(`/station/workbench/order-items/${id}`);
+}
+
+export function verifyPickup(id: number, payload: Record<string, string | number | undefined>) {
+    return request<StationOrderItemDTO>(`/station/workbench/order-items/${id}/pickup-confirm`, {
+        method: 'POST',
+        data: payload
+    });
 }
 
 export function pageDeliveryOrders(query: Record<string, string | number | undefined>) {
-    return request<PageResult<DeliveryOrderDTO>>(`/station/workbench/deliveries?${buildSearch(query)}`);
+    return request<PageResult<DeliveryOrderDTO>>(`/station/workbench/deliveries${buildSearch(query)}`);
 }
 
 export function pageDeliveryStations(query: Record<string, string | number | undefined>) {
-    return request<PageResult<DeliveryStationDTO>>(`/station/workbench/delivery-stations?${buildSearch(query)}`);
+    return request<PageResult<DeliveryStationDTO>>(`/station/workbench/delivery-stations${buildSearch(query)}`);
+}
+
+export function confirmStationArrival(id: number, payload: Record<string, string | number | undefined>) {
+    return request<DeliveryStationDTO>(`/station/workbench/delivery-stations/${id}/arrival-confirm`, {
+        method: 'POST',
+        data: payload
+    });
 }
 
 export function pageReturnHandovers(query: Record<string, string | number | undefined>) {
-    return request<PageResult<ReturnHandoverDTO>>(`/station/workbench/returns?${buildSearch(query)}`);
+    return request<PageResult<ReturnHandoverDTO>>(`/station/workbench/returns${buildSearch(query)}`);
 }
 
 export function pageExceptions(query: Record<string, string | number | undefined>) {
-    return request<PageResult<StationExceptionDTO>>(`/station/workbench/exceptions?${buildSearch(query)}`);
+    return request<PageResult<StationExceptionDTO>>(`/station/workbench/exceptions${buildSearch(query)}`);
 }
 
 export function pageFinanceAccounts(query: Record<string, string | number | undefined>) {
-    return request<PageResult<StationFinanceAccountDTO>>(`/station/finance/accounts?${buildSearch(query)}`);
+    return request<PageResult<StationFinanceAccountDTO>>(`/station/finance/accounts${buildSearch(query)}`);
 }
 
 export function pageFinanceFlows(query: Record<string, string | number | undefined>) {
-    return request<PageResult<StationFinanceFlowDTO>>(`/station/finance/account-flows?${buildSearch(query)}`);
+    return request<PageResult<StationFinanceFlowDTO>>(`/station/finance/account-flows${buildSearch(query)}`);
 }
 
 export function pageCommissions(query: Record<string, string | number | undefined>) {
-    return request<PageResult<CommissionDetailDTO>>(`/station/finance/commissions?${buildSearch(query)}`);
+    return request<PageResult<CommissionDetailDTO>>(`/station/finance/commissions${buildSearch(query)}`);
 }
 
 export function pageWithdraws(query: Record<string, string | number | undefined>) {
-    return request<PageResult<WithdrawApplyDTO>>(`/station/finance/withdraws?${buildSearch(query)}`);
-}
-
-export function pageMessages(query: Record<string, string | number | undefined>) {
-    return request<PageResult<StationMessageDTO>>(`/station/finance/messages?${buildSearch(query)}`);
-}
-
-export function pageStations(query: Record<string, string | number | undefined>) {
-    return request<PageResult<StationDTO>>(`/station/base/stations?${buildSearch(query)}`);
-}
-
-export function pageLeaders(query: Record<string, string | number | undefined>) {
-    return request<PageResult<LeaderDTO>>(`/station/base/leaders?${buildSearch(query)}`);
-}
-
-export function pageStationLeaders(query: Record<string, string | number | undefined>) {
-    return request<PageResult<StationLeaderDTO>>(`/station/base/station-leaders?${buildSearch(query)}`);
-}
-
-export function pageLeaves(query: Record<string, string | number | undefined>) {
-    return request<PageResult<StationLeaveDTO>>(`/station/base/leaves?${buildSearch(query)}`);
-}
-
-export function getSupplierWorkbenchSummary(query: Record<string, string | number | undefined>) {
-    return request<SupplierWorkbenchDTO>(`/supplier/workbench/summary?${buildSearch(query)}`);
-}
-
-export function getStationOrderDetail(orderNo: string) {
-    return request<StationOrderDTO>(`/station/workbench/orders/${orderNo}`);
-}
-
-export function verifyPickup(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/workbench/orders/verify-pickup', {
-        method: 'POST',
-        data: payload
-    });
-}
-
-export function reportStationException(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/workbench/exceptions', {
-        method: 'POST',
-        data: payload
-    });
-}
-
-export function confirmStationArrival(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/workbench/delivery-stations/confirm-arrival', {
-        method: 'POST',
-        data: payload
-    });
-}
-
-export function sendArrivalNotice(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/workbench/messages/arrival-notice', {
-        method: 'POST',
-        data: payload
-    });
-}
-
-export function confirmReturnHandover(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/workbench/returns/confirm-handover', {
-        method: 'POST',
-        data: payload
-    });
+    return request<PageResult<WithdrawApplyDTO>>(`/station/finance/withdraws${buildSearch(query)}`);
 }
 
 export function applyWithdraw(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/finance/withdraws', {
+    return request<WithdrawApplyDTO>('/station/finance/withdraws', {
         method: 'POST',
         data: payload
     });
 }
 
-export function cancelWithdraw(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/finance/withdraws/cancel', {
-        method: 'POST',
-        data: payload
+export function cancelWithdraw(id: number) {
+    return request<WithdrawApplyDTO>(`/station/finance/withdraws/${id}/cancel`, {
+        method: 'POST'
     });
+}
+
+export function pageMessages(query: Record<string, string | number | undefined>) {
+    return request<PageResult<StationMessageDTO>>(`/station/finance/messages${buildSearch(query)}`);
+}
+
+export function markMessageRead(id: number) {
+    return request<StationMessageDTO>(`/station/finance/messages/${id}/read`, {
+        method: 'POST'
+    });
+}
+
+export function pageLeaves(query: Record<string, string | number | undefined>) {
+    return request<PageResult<StationLeaveDTO>>(`/station/base/leaves${buildSearch(query)}`);
 }
 
 export function applyLeave(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/base/leaves', {
+    return request<StationLeaveDTO>('/station/base/leaves', {
         method: 'POST',
         data: payload
     });
 }
 
-export function cancelLeave(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/base/leaves/cancel', {
-        method: 'POST',
-        data: payload
+export function cancelLeave(id: number) {
+    return request<StationLeaveDTO>(`/station/base/leaves/${id}/cancel`, {
+        method: 'POST'
     });
 }
 
-export function markMessageRead(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/messages/read', {
-        method: 'POST',
-        data: payload
-    });
-}
-
-export function markAllMessagesRead(payload: Record<string, string | number | undefined>) {
-    return request<void>('/station/messages/read-all', {
-        method: 'POST',
-        data: payload
-    });
+export function getSupplierWorkbenchSummary(query: Record<string, string | number | undefined>) {
+    return request<SupplierWorkbenchDTO>(`/supplier/workbench/summary${buildSearch(query)}`);
 }
 
 export function pageSupplierPurchases(query: Record<string, string | number | undefined>) {
-    return request<PageResult<Record<string, unknown>>>(`/supplier/purchases?${buildSearch(query)}`);
+    return request<PageResult<SupplierPurchaseDTO>>(`/supplier/purchases${buildSearch(query)}`);
 }
 
-export function getSupplierPurchaseDetail(purchaseNo: string) {
-    return request<Record<string, unknown>>(`/supplier/purchases/${purchaseNo}`);
+export function getSupplierPurchaseDetail(id: number) {
+    return request<SupplierPurchaseDTO>(`/supplier/purchases/${id}`);
 }
 
-export function confirmSupplierPurchase(payload: Record<string, string | number | undefined>) {
-    return request<void>('/supplier/purchases/confirm', {
-        method: 'POST',
-        data: payload
-    });
+export function pageSupplierPurchaseItems(query: Record<string, string | number | undefined>) {
+    return request<PageResult<SupplierPurchaseItemDTO>>(`/supplier/purchases/items${buildSearch(query)}`);
 }
 
-export function submitSupplierArrival(payload: Record<string, string | number | undefined>) {
-    return request<void>('/supplier/deliveries/arrival-proof', {
-        method: 'POST',
-        data: payload
-    });
-}
-
-export function submitSupplierShortage(payload: Record<string, string | number | undefined>) {
-    return request<void>('/supplier/deliveries/shortage', {
-        method: 'POST',
-        data: payload
-    });
-}
-
-export function applySupplierSupplement(payload: Record<string, string | number | undefined>) {
-    return request<void>('/supplier/purchases/supplement', {
-        method: 'POST',
-        data: payload
-    });
+export function pageSupplierDeliveries(query: Record<string, string | number | undefined>) {
+    return request<PageResult<SupplierDeliveryDTO>>(`/supplier/deliveries${buildSearch(query)}`);
 }
 
 export function pageSupplierSettlements(query: Record<string, string | number | undefined>) {
-    return request<PageResult<Record<string, unknown>>>(`/supplier/settlements?${buildSearch(query)}`);
+    return request<PageResult<SupplierSettlementDTO>>(`/finance/settlements/supplier${buildSearch(query)}`);
 }

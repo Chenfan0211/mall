@@ -1,11 +1,12 @@
 import { computed, reactive } from 'vue';
 
+import { buildFallbackCartItems } from '@/utils/userFallbackData';
+
 export const USER_MAIN_TABS = [
     { key: 'home', label: '首页', icon: '⌂', url: '/pages/home/index' },
-    { key: 'category', label: '分类', icon: '☷', url: '/pages/category/index' },
+    { key: 'category', label: '分类', icon: '▦', url: '/pages/category/index' },
     { key: 'cart', label: '购物车', icon: '车', url: '/pages/cart/index', auth: true },
-    { key: 'order', label: '订单', icon: '单', url: '/pages/order/index', auth: true },
-    { key: 'mine', label: '我的', icon: '我', url: '/pages/mine/index', auth: true }
+    { key: 'mine', label: '我的', icon: '♙', url: '/pages/mine/index' }
 ] as const;
 
 export interface UserSession {
@@ -18,6 +19,11 @@ export interface UserSession {
 export interface CityState {
     id: number;
     name: string;
+}
+
+export interface UserLocationPoint {
+    latitude: number;
+    longitude: number;
 }
 
 export interface StationState {
@@ -133,6 +139,18 @@ export interface UserCartItemDTO {
     updateTime?: string;
 }
 
+export interface UserStationDTO {
+    id: number;
+    stationNo?: string;
+    stationName: string;
+    cityId: number;
+    address: string;
+    contactName?: string;
+    contactMobile?: string;
+    businessHours?: string;
+    status: number;
+}
+
 export interface UserProductCardDTO {
     publishSkuId: number;
     periodId: number;
@@ -167,6 +185,7 @@ export interface UserState {
     afterLoginUrl: string;
     user: UserSession;
     city: CityState;
+    cities: CityState[];
     station: StationState;
     stations: StationState[];
     receivers: ReceiverState[];
@@ -183,6 +202,35 @@ export interface UserState {
         type: 'success' | 'warn' | 'loading';
     };
 }
+
+const DEFAULT_CITIES: CityState[] = [
+    { id: 440100, name: '广州' },
+    { id: 440300, name: '深圳' },
+    { id: 310100, name: '上海' },
+    { id: 330100, name: '杭州' },
+    { id: 510100, name: '成都' },
+    { id: 420100, name: '武汉' },
+    { id: 110100, name: '北京' }
+];
+
+const SERVICE_SCOPE_KEY = 'mall_user_h5_service_scope';
+
+const CITY_LOCATION_POINTS: Record<number, UserLocationPoint> = {
+    440100: { latitude: 23.1291, longitude: 113.2644 },
+    440300: { latitude: 22.5431, longitude: 114.0579 },
+    310100: { latitude: 31.2304, longitude: 121.4737 },
+    330100: { latitude: 30.2741, longitude: 120.1551 },
+    510100: { latitude: 30.5728, longitude: 104.0668 },
+    420100: { latitude: 30.5928, longitude: 114.3055 },
+    110100: { latitude: 39.9042, longitude: 116.4074 }
+};
+
+const CITY_MATCH_MAX_DISTANCE_KM = 80;
+
+const CITY_NAME_MAP = DEFAULT_CITIES.reduce<Record<number, string>>((map, city) => {
+    map[city.id] = city.name;
+    return map;
+}, {});
 
 const DEFAULT_STATIONS: StationState[] = [
     {
@@ -208,6 +256,17 @@ const DEFAULT_STATIONS: StationState[] = [
         deliveryTime: '明日 18:00-21:00'
     },
     {
+        id: 720004,
+        name: '番禺万博社区店',
+        cityId: 440100,
+        address: '广州市番禺区汉溪大道 86 号',
+        mobile: '13600007104',
+        businessHours: '08:30-21:30',
+        status: 1,
+        distance: '6.1km',
+        deliveryTime: '今日 20:00 前截单'
+    },
+    {
         id: 720003,
         name: '王府花园休假点',
         cityId: 440100,
@@ -218,10 +277,247 @@ const DEFAULT_STATIONS: StationState[] = [
         distance: '4.6km',
         deliveryTime: '暂停提货',
         abnormalReason: '当前自提点休假或停用，暂不可选'
+    },
+    {
+        id: 730001,
+        name: '南山科技园自提点',
+        cityId: 440300,
+        address: '深圳市南山区科苑南路 15 号',
+        mobile: '13800003001',
+        businessHours: '09:00-21:00',
+        status: 1,
+        distance: '2.4km',
+        deliveryTime: '明日 17:00-20:00'
+    },
+    {
+        id: 730002,
+        name: '福田香蜜湖店',
+        cityId: 440300,
+        address: '深圳市福田区香梅路 1068 号',
+        mobile: '13800003002',
+        businessHours: '08:30-20:30',
+        status: 1,
+        distance: '5.7km',
+        deliveryTime: '今日 19:30 前截单'
+    },
+    {
+        id: 730003,
+        name: '宝安中心休整点',
+        cityId: 440300,
+        address: '深圳市宝安区新湖路 99 号',
+        mobile: '13800003003',
+        businessHours: '暂停服务',
+        status: 2,
+        distance: '8.9km',
+        deliveryTime: '暂停提货',
+        abnormalReason: '门店盘点休整，暂不可选'
+    },
+    {
+        id: 740001,
+        name: '浦东世纪公园店',
+        cityId: 310100,
+        address: '上海市浦东新区锦绣路 888 号',
+        mobile: '13800004001',
+        businessHours: '09:00-21:00',
+        status: 1,
+        distance: '1.6km',
+        deliveryTime: '明日 16:30-20:30'
+    },
+    {
+        id: 740002,
+        name: '静安大宁社区点',
+        cityId: 310100,
+        address: '上海市静安区共和新路 1898 号',
+        mobile: '13800004002',
+        businessHours: '09:30-20:30',
+        status: 1,
+        distance: '4.1km',
+        deliveryTime: '今日 19:00 前截单'
+    },
+    {
+        id: 740003,
+        name: '徐汇滨江休假点',
+        cityId: 310100,
+        address: '上海市徐汇区龙腾大道 2555 号',
+        mobile: '13800004003',
+        businessHours: '暂停服务',
+        status: 2,
+        distance: '7.2km',
+        deliveryTime: '暂停提货',
+        abnormalReason: '团长休假中，暂不可选'
+    },
+    {
+        id: 750001,
+        name: '西湖文三路店',
+        cityId: 330100,
+        address: '杭州市西湖区文三路 478 号',
+        mobile: '13800005001',
+        businessHours: '09:00-20:30',
+        status: 1,
+        distance: '2.0km',
+        deliveryTime: '明日 16:00-19:30'
+    },
+    {
+        id: 750002,
+        name: '滨江星光社区点',
+        cityId: 330100,
+        address: '杭州市滨江区江南大道 228 号',
+        mobile: '13800005002',
+        businessHours: '08:30-21:00',
+        status: 1,
+        distance: '5.5km',
+        deliveryTime: '今日 20:30 前截单'
+    },
+    {
+        id: 760001,
+        name: '高新天府三街店',
+        cityId: 510100,
+        address: '成都市高新区天府三街 218 号',
+        mobile: '13800006001',
+        businessHours: '09:00-21:00',
+        status: 1,
+        distance: '3.3km',
+        deliveryTime: '明日 17:00-20:30'
+    },
+    {
+        id: 760002,
+        name: '锦江春熙社区点',
+        cityId: 510100,
+        address: '成都市锦江区红星路三段 99 号',
+        mobile: '13800006002',
+        businessHours: '09:30-20:30',
+        status: 1,
+        distance: '6.4km',
+        deliveryTime: '今日 18:30 前截单'
+    },
+    {
+        id: 760003,
+        name: '青羊优品休整点',
+        cityId: 510100,
+        address: '成都市青羊区光华村街 66 号',
+        mobile: '13800006003',
+        businessHours: '暂停服务',
+        status: 2,
+        distance: '9.8km',
+        deliveryTime: '暂停提货',
+        abnormalReason: '冷柜维护中，暂不可选'
+    },
+    {
+        id: 770001,
+        name: '光谷软件园店',
+        cityId: 420100,
+        address: '武汉市洪山区关山大道 1 号',
+        mobile: '13800007001',
+        businessHours: '09:00-21:00',
+        status: 1,
+        distance: '2.7km',
+        deliveryTime: '明日 16:00-20:00'
+    },
+    {
+        id: 770002,
+        name: '江汉路邻里点',
+        cityId: 420100,
+        address: '武汉市江汉区中山大道 818 号',
+        mobile: '13800007002',
+        businessHours: '09:00-20:00',
+        status: 1,
+        distance: '4.9km',
+        deliveryTime: '今日 19:00 前截单'
+    },
+    {
+        id: 780001,
+        name: '朝阳望京自提点',
+        cityId: 110100,
+        address: '北京市朝阳区阜通东大街 12 号',
+        mobile: '13800008001',
+        businessHours: '09:00-21:00',
+        status: 1,
+        distance: '3.0km',
+        deliveryTime: '明日 17:00-20:00'
+    },
+    {
+        id: 780002,
+        name: '海淀五道口店',
+        cityId: 110100,
+        address: '北京市海淀区成府路 28 号',
+        mobile: '13800008002',
+        businessHours: '09:30-20:30',
+        status: 1,
+        distance: '5.2km',
+        deliveryTime: '今日 19:30 前截单'
+    },
+    {
+        id: 780003,
+        name: '丰台云岗休假点',
+        cityId: 110100,
+        address: '北京市丰台区云岗路 8 号',
+        mobile: '13800008003',
+        businessHours: '暂停服务',
+        status: 2,
+        distance: '10.6km',
+        deliveryTime: '暂停提货',
+        abnormalReason: '团长临时休假，暂不可选'
     }
 ];
 
+function storageApi() {
+    return (globalThis as unknown as {
+        uni?: {
+            getStorageSync(key: string): unknown;
+            setStorageSync(key: string, value: unknown): void;
+        };
+    }).uni;
+}
+
+function readStoredServiceScope() {
+    try {
+        const stored = storageApi()?.getStorageSync(SERVICE_SCOPE_KEY) as
+            | { cityId?: number; stationId?: number }
+            | string
+            | undefined;
+        if (!stored) {
+            return undefined;
+        }
+        if (typeof stored === 'string') {
+            return JSON.parse(stored) as { cityId?: number; stationId?: number };
+        }
+        return stored;
+    } catch {
+        return undefined;
+    }
+}
+
+function saveServiceScope(state: UserState) {
+    try {
+        storageApi()?.setStorageSync(SERVICE_SCOPE_KEY, {
+            cityId: state.city.id,
+            stationId: state.station.id
+        });
+    } catch {
+        // Local test runners do not provide uni storage.
+    }
+}
+
+function initialCityAndStation() {
+    const stored = readStoredServiceScope();
+    const storedStation = DEFAULT_STATIONS.find((item) => item.id === stored?.stationId && item.status === 1);
+    if (storedStation) {
+        const city = DEFAULT_CITIES.find((item) => item.id === storedStation.cityId) || DEFAULT_CITIES[0];
+        return {
+            city,
+            station: storedStation
+        };
+    }
+    const city = DEFAULT_CITIES.find((item) => item.id === stored?.cityId) || DEFAULT_CITIES[0];
+    const station = DEFAULT_STATIONS.find((item) => item.cityId === city.id && item.status === 1) || DEFAULT_STATIONS[0];
+    return {
+        city,
+        station
+    };
+}
+
 export function createDefaultUserState(): UserState {
+    const initialScope = initialCityAndStation();
     return {
         authenticated: false,
         mobileAuthorized: false,
@@ -233,11 +529,9 @@ export function createDefaultUserState(): UserState {
             mobile: '13800004101',
             avatarText: '炎'
         },
-        city: {
-            id: 440100,
-            name: '广州'
-        },
-        station: { ...DEFAULT_STATIONS[0] },
+        city: { ...initialScope.city },
+        cities: DEFAULT_CITIES.map((item) => ({ ...item })),
+        station: { ...initialScope.station },
         stations: DEFAULT_STATIONS.map((item) => ({ ...item })),
         receivers: [
             { id: 740101, name: '默认提货人', mobile: '13800004101', defaultFlag: true },
@@ -453,7 +747,11 @@ function uniApi() {
         uni?: {
             navigateTo(options: { url: string; fail?: () => void }): void;
             redirectTo(options: { url: string; fail?: () => void }): void;
-            switchTab(options: { url: string; fail?: () => void }): void;
+            getLocation?(options: {
+                type?: string;
+                success?: (res: UserLocationPoint) => void;
+                fail?: () => void;
+            }): void;
             showToast(options: { title: string; icon: 'none'; duration?: number }): void;
         };
     }).uni;
@@ -506,9 +804,23 @@ export function guardUserPage(url: string) {
     if (needsUserAuth(url) && !userState.authenticated) {
         userState.afterLoginUrl = url;
         showUserToast('请先完成授权登录', 'warn');
-        uniApi()?.navigateTo({ url: '/pages/login/index' });
+        if (!navigateUserH5('/pages/login/index')) {
+            uniApi()?.navigateTo({ url: '/pages/login/index' });
+        }
         return false;
     }
+    return true;
+}
+
+function navigateUserH5(url: string) {
+    if (typeof window === 'undefined') {
+        return false;
+    }
+    const nextHash = `#${url}`;
+    if (window.location.hash === nextHash) {
+        return true;
+    }
+    window.location.hash = nextHash;
     return true;
 }
 
@@ -523,10 +835,13 @@ export function navigateUser(url: string, replace = false) {
     const path = url.split('?')[0];
     const tabTarget = USER_MAIN_TABS.some((item) => item.url === path);
     if (tabTarget) {
-        api.switchTab({
+        if (navigateUserH5(url)) {
+            return;
+        }
+        api.redirectTo({
             url: path,
             fail() {
-                api.redirectTo({ url: path });
+                api.navigateTo({ url: path });
             }
         });
         return;
@@ -551,6 +866,9 @@ export function goUserTab(key: string) {
 export function loginUser(authorizeMobile = true) {
     userState.authenticated = true;
     userState.mobileAuthorized = authorizeMobile;
+    if (userState.cartItems.length === 0) {
+        userState.cartItems = buildFallbackCartItems();
+    }
     showUserToast(authorizeMobile ? '已登录并授权手机号' : '已登录，手机号授权失败后可浏览但不能下单');
 }
 
@@ -558,6 +876,212 @@ export function logoutUser() {
     userState.authenticated = false;
     userState.mobileAuthorized = false;
     showUserToast('已退出登录');
+}
+
+function cityNameOf(state: UserState, cityId: number) {
+    return state.cities.find((item) => item.id === cityId)?.name || CITY_NAME_MAP[cityId] || state.city.name;
+}
+
+function cityNameFromId(cityId: number) {
+    return CITY_NAME_MAP[cityId] || `城市${cityId}`;
+}
+
+export function mapStationFromApi(item: UserStationDTO): StationState {
+    return {
+        id: Number(item.id),
+        name: item.stationName || item.stationNo || `自提点${item.id}`,
+        cityId: Number(item.cityId),
+        address: item.address || '地址待完善',
+        mobile: item.contactMobile || '',
+        businessHours: item.businessHours || '营业时间待定',
+        status: Number(item.status),
+        distance: '附近',
+        deliveryTime: Number(item.status) === 1 ? '明日 16:00-20:00' : '暂停提货',
+        abnormalReason: Number(item.status) === 1 ? undefined : '当前自提点休假或停用，暂不可选'
+    };
+}
+
+export function buildCitiesFromStations(stations: StationState[]) {
+    const cityMap = new Map<number, CityState>();
+    stations.forEach((station) => {
+        if (!cityMap.has(station.cityId)) {
+            cityMap.set(station.cityId, {
+                id: station.cityId,
+                name: cityNameFromId(station.cityId)
+            });
+        }
+    });
+    return Array.from(cityMap.values());
+}
+
+export function syncStationsFromApi(state: UserState, stationDtos: UserStationDTO[]) {
+    const stations = stationDtos.map(mapStationFromApi).filter((item) => item.id > 0 && item.cityId > 0);
+    if (stations.length === 0) {
+        return {
+            synced: false,
+            fallback: true,
+            message: '接口暂无自提点数据，已展示本地兜底数据'
+        };
+    }
+
+    const cities = buildCitiesFromStations(stations);
+    const currentStation = stations.find((item) => item.id === state.station.id && item.status === 1);
+    const currentCity = cities.find((item) => item.id === state.city.id);
+    const stored = readStoredServiceScope();
+    const storedStation = stations.find((item) => item.id === stored?.stationId && item.status === 1);
+    const storedCity = cities.find((item) => item.id === stored?.cityId);
+    const nextCity = currentCity || (storedStation && cities.find((item) => item.id === storedStation.cityId)) || storedCity || cities[0];
+    const nextStation =
+        currentStation ||
+        storedStation ||
+        stations.find((item) => item.cityId === nextCity?.id && item.status === 1) ||
+        stations.find((item) => item.status === 1) ||
+        stations[0];
+
+    state.cities = cities;
+    state.stations = stations;
+    if (nextStation) {
+        state.city = {
+            id: nextStation.cityId,
+            name: cityNameFromId(nextStation.cityId)
+        };
+        state.station = { ...nextStation };
+        if (nextStation.status === 1) {
+            saveServiceScope(state);
+        }
+    } else if (nextCity) {
+        state.city = { ...nextCity };
+    }
+
+    return {
+        synced: true,
+        fallback: false,
+        message: '已同步后端自提点'
+    };
+}
+
+export function resetStationsToFallback(state: UserState) {
+    const fallbackState = createDefaultUserState();
+    state.cities = fallbackState.cities;
+    state.stations = fallbackState.stations;
+    state.city = fallbackState.city;
+    state.station = fallbackState.station;
+    return {
+        synced: false,
+        fallback: true,
+        message: '接口不可用，已展示本地兜底数据'
+    };
+}
+
+function distanceKm(from: UserLocationPoint, to: UserLocationPoint) {
+    const radius = 6371;
+    const toRadians = (value: number) => (value * Math.PI) / 180;
+    const deltaLatitude = toRadians(to.latitude - from.latitude);
+    const deltaLongitude = toRadians(to.longitude - from.longitude);
+    const fromLatitude = toRadians(from.latitude);
+    const toLatitude = toRadians(to.latitude);
+    const factor =
+        Math.sin(deltaLatitude / 2) ** 2 +
+        Math.cos(fromLatitude) * Math.cos(toLatitude) * Math.sin(deltaLongitude / 2) ** 2;
+    return radius * 2 * Math.atan2(Math.sqrt(factor), Math.sqrt(1 - factor));
+}
+
+export function resolveNearestOpenCity(cities: CityState[], location?: UserLocationPoint, stations: StationState[] = []) {
+    const openCities = cities.filter((city) => stations.some((station) => station.cityId === city.id && station.status === 1));
+    const candidates = openCities.length ? openCities : cities;
+    if (!location) {
+        return candidates[0];
+    }
+    const nearest = candidates
+        .map((city) => {
+            const point = CITY_LOCATION_POINTS[city.id];
+            return point ? { city, distance: distanceKm(location, point) } : undefined;
+        })
+        .filter((item): item is { city: CityState; distance: number } => Boolean(item))
+        .sort((left, right) => left.distance - right.distance)[0];
+    return nearest && nearest.distance <= CITY_MATCH_MAX_DISTANCE_KM ? nearest.city : candidates[0];
+}
+
+export function applyLocatedCity(state: UserState, location?: UserLocationPoint) {
+    const city = resolveNearestOpenCity(state.cities, location, state.stations);
+    if (!city) {
+        return {
+            switched: false,
+            clearedCart: false,
+            message: '暂无可用城市'
+        };
+    }
+    return switchCity(state, city);
+}
+
+export function locateCurrentCity() {
+    const api = uniApi();
+    let settled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const applyOnce = (location?: UserLocationPoint) => {
+        if (settled) {
+            return;
+        }
+        settled = true;
+        if (timer) {
+            clearTimeout(timer);
+        }
+        applyLocatedCity(userState, location);
+    };
+    if (!api?.getLocation) {
+        return applyOnce();
+    }
+    timer = setTimeout(() => applyOnce(), 1500);
+    api.getLocation({
+        type: 'gcj02',
+        success(res) {
+            applyOnce(res);
+        },
+        fail() {
+            applyOnce();
+        }
+    });
+}
+
+export function switchCity(state: UserState, next: CityState) {
+    if (state.city.id === next.id && state.station.cityId === next.id) {
+        return {
+            switched: false,
+            clearedCart: false,
+            message: `当前已是 ${next.name}`
+        };
+    }
+    const nextStation = state.stations.find((item) => item.cityId === next.id && item.status === 1);
+    if (!nextStation) {
+        const changed = state.city.id !== next.id;
+        state.city = { ...next };
+        return {
+            switched: changed,
+            clearedCart: false,
+            message: `${next.name} 暂无可选自提点`
+        };
+    }
+    const currentCityId = state.city.id;
+    const currentStationId = state.station.id;
+    const changed = currentCityId !== next.id || currentStationId !== nextStation.id;
+    const clearedCart = changed && state.cartItems.some((item) => item.valid && item.qty > 0);
+    state.city = { ...next };
+    state.station = { ...nextStation };
+    if (clearedCart) {
+        state.cartItems = [];
+    }
+    saveServiceScope(state);
+    return {
+        switched: changed,
+        clearedCart,
+        message: clearedCart ? `已切换至 ${next.name}，购物车已清空` : `已切换至 ${next.name}`
+    };
+}
+
+export function switchCurrentCity(next: CityState) {
+    const result = switchCity(userState, next);
+    showUserToast(result.message, result.switched ? 'success' : 'warn');
+    return result;
 }
 
 export function switchStation(state: UserState, next: StationState) {
@@ -571,10 +1095,14 @@ export function switchStation(state: UserState, next: StationState) {
     const stationChanged = state.station.id !== next.id;
     const clearedCart = stationChanged && state.cartItems.some((item) => item.valid && item.qty > 0);
     state.station = { ...next };
-    state.city.id = next.cityId;
+    state.city = {
+        id: next.cityId,
+        name: cityNameOf(state, next.cityId)
+    };
     if (clearedCart) {
         state.cartItems = [];
     }
+    saveServiceScope(state);
     return {
         switched: stationChanged,
         clearedCart,
@@ -746,6 +1274,16 @@ export function addReceiver(state: UserState, name: string, mobile: string) {
         defaultFlag: state.receivers.length === 0
     };
     state.receivers.push(receiver);
+    return receiver;
+}
+
+export function updateReceiver(state: UserState, id: number, name: string, mobile: string) {
+    const receiver = state.receivers.find((item) => item.id === id);
+    if (!receiver) {
+        return undefined;
+    }
+    receiver.name = name;
+    receiver.mobile = mobile;
     return receiver;
 }
 

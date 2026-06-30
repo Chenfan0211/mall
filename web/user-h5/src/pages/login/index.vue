@@ -1,32 +1,31 @@
 <template>
-  <view class="page no-tab login-page">
-    <view class="login-hero">
-      <view class="avatar-img">未</view>
-      <view>
-        <text class="login-title">登录鲜选到家</text>
-        <text class="login-sub">登录后可查看订单、售后、收藏和消息。</text>
-      </view>
+  <view class="page shop-login-page shop-page" data-m-page="login">
+    <view class="status-bar">
+      <text>14:49</text>
+      <text>▮▮▮ WiFi 80</text>
     </view>
+    <view class="shop-login-card">
+      <h3>登录鲜选到家</h3>
+      <p>登录后可查看订单、售后、收藏和消息。</p>
 
-    <view class="login-card">
-      <text class="title">微信授权登录</text>
-      <text class="subtle">浏览商品不强制登录，加入购物车、结算和个人资产需要授权。</text>
-      <label class="agreement-row" @click="state.agreementAccepted = !state.agreementAccepted">
-        <view class="check-dot" :class="{ checked: state.agreementAccepted }">{{ state.agreementAccepted ? '✓' : '' }}</view>
-        <text>我已阅读并同意《用户协议》和《隐私协议》</text>
+      <label class="login-agreement-row" @click="state.agreementAccepted = !state.agreementAccepted">
+        <view class="login-check" :class="{ checked: state.agreementAccepted }">{{ state.agreementAccepted ? '✓' : '' }}</view>
+        <span>我已阅读并同意《用户协议》和《隐私协议》</span>
       </label>
-      <button class="primary" @click="login(true)">微信授权登录并授权手机号</button>
-      <button class="plain" @click="login(false)">手机号授权失败，先继续浏览</button>
+
+      <button class="login-main-btn" @click="login(true)">微信授权登录并授权手机号</button>
       <button class="plain" @click="goHome">先逛逛</button>
     </view>
 
     <UserToast />
+    <UserTabBar active="mine" />
   </view>
 </template>
 
 <script setup lang="ts">
+import UserTabBar from '@/components/UserTabBar.vue';
 import UserToast from '@/components/UserToast.vue';
-import { loginUser, showUserToast, useUserState } from '@/stores/userState';
+import { loginUser, navigateUser, showUserToast, useUserState } from '@/stores/userState';
 
 const state = useUserState();
 
@@ -36,101 +35,155 @@ function login(authorizeMobile: boolean) {
         return;
     }
     loginUser(authorizeMobile);
-    uni.redirectTo({
-        url: state.afterLoginUrl || '/pages/home/index',
-        fail() {
-            uni.switchTab({ url: '/pages/home/index' });
-        }
-    });
+    navigateUser(state.afterLoginUrl || '/pages/home/index', true);
 }
 
 function goHome() {
-    uni.switchTab({ url: '/pages/home/index' });
+    navigateUser('/pages/home/index', true);
 }
 </script>
 
 <style lang="scss" scoped>
-.login-page {
+.shop-login-page {
+  position: relative;
+  min-height: 100vh;
+  padding: 0 0 calc(180rpx + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 26rpx;
-  padding: 44rpx 24rpx;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(84, 42, 24, 0.38) 0%, rgba(84, 42, 24, 0.18) 30%, rgba(247, 241, 234, 0.62) 43%, #f7f1ea 100%),
+    url("/static/user-home/login-market.svg") center top / 100% 520rpx no-repeat,
+    #f7f1ea;
 }
 
-.login-hero {
-  display: grid;
-  grid-template-columns: 110rpx minmax(0, 1fr);
-  gap: 20rpx;
+.status-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 68rpx;
+  padding: 0 48rpx;
   color: #ffffff;
-  padding: 30rpx;
-  background: linear-gradient(135deg, #d94b34, #f28a42);
-  border-radius: 32rpx;
+  font-size: 30rpx;
+  font-weight: 800;
 }
 
-.avatar-img {
+.shop-login-card {
+  position: relative;
+  z-index: 2;
   display: grid;
-  width: 110rpx;
-  height: 110rpx;
-  place-items: center;
-  color: #d94b34;
-  background: #ffffff;
-  border-radius: 50%;
-  font-size: 42rpx;
-  font-weight: 900;
+  width: min(652rpx, calc(100% - 96rpx));
+  gap: 0;
+  margin: 436rpx auto 0;
+  padding: 44rpx 36rpx 36rpx;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1rpx solid rgba(255, 255, 255, 0.72);
+  border-radius: 40rpx;
+  box-shadow: 0 36rpx 76rpx rgba(126, 76, 49, 0.18);
+  backdrop-filter: blur(12rpx);
 }
 
-.login-title,
-.login-sub {
-  display: block;
-}
-
-.login-title {
-  font-size: 40rpx;
-  font-weight: 900;
-}
-
-.login-sub {
-  margin-top: 8rpx;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 24rpx;
-}
-
-.login-card {
-  display: grid;
-  gap: 18rpx;
-  padding: 30rpx;
-  background: #ffffff;
-  border: 1rpx solid #f0dfd6;
-  border-radius: 30rpx;
-  box-shadow: 0 12rpx 28rpx rgba(126, 76, 49, 0.08);
-}
-
-.agreement-row {
-  display: grid;
-  grid-template-columns: 42rpx minmax(0, 1fr);
-  gap: 14rpx;
+.shop-login-card::before {
+  display: inline-flex;
   align-items: center;
-  color: #6b5a50;
-  font-size: 24rpx;
+  justify-self: center;
+  min-height: 52rpx;
+  margin-bottom: 24rpx;
+  padding: 0 20rpx;
+  color: #d94b34;
+  content: "鲜选到家";
+  background: #fff3ea;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  font-weight: 900;
 }
 
-.check-dot {
+.shop-login-card h3,
+.shop-login-card p {
+  margin: 0;
+}
+
+.shop-login-card h3 {
+  margin-bottom: 14rpx;
+  color: #172033;
+  font-size: 48rpx;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.shop-login-card p {
+  margin-bottom: 36rpx;
+  color: #7b4a32;
+  font-size: 26rpx;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.login-agreement-row {
+  display: grid;
+  grid-template-columns: 36rpx minmax(0, 1fr);
+  column-gap: 16rpx;
+  align-items: center;
+  margin: 0 0 36rpx;
+  padding: 20rpx 22rpx;
+  color: #172033;
+  background: #fffaf6;
+  border-radius: 24rpx;
+  font-size: 26rpx;
+  font-weight: 900;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.login-check {
   display: grid;
   width: 38rpx;
   height: 38rpx;
   place-items: center;
   color: #ffffff;
   background: #ffffff;
-  border: 2rpx solid #e2cfc5;
+  border: 2rpx solid #e6d4c9;
   border-radius: 50%;
-  font-size: 22rpx;
+  font-size: 25rpx;
   font-weight: 900;
 }
 
-.check-dot.checked {
-  border-color: #e85d3f;
+.login-check.checked {
   background: #e85d3f;
+  border-color: #e85d3f;
+}
+
+.login-main-btn,
+.shop-login-card .plain {
+  width: 100%;
+  min-height: 92rpx;
+  border: 0;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.login-main-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #e85d3f, #f28a42) !important;
+  box-shadow: 0 20rpx 44rpx rgba(232, 93, 63, 0.22);
+}
+
+.shop-login-card .plain {
+  margin-top: 20rpx;
+  color: #c2412d !important;
+  background: #fff0e8 !important;
+  box-shadow: none;
 }
 </style>

@@ -1,10 +1,34 @@
 page {
   min-height: 100%;
   color: #173b3a;
-  background: #edf6f2;
-  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-  font-size: 30rpx;
+  background: #dfeee8;
+  font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+  font-size: 28rpx;
   line-height: 1.45;
+}
+
+html,
+body,
+#app,
+uni-app,
+uni-page,
+uni-page-wrapper,
+uni-page-body {
+  --window-width: 375px;
+  min-height: 100%;
+}
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  background: #cfe1da;
+}
+
+uni-tabbar,
+.uni-tabbar {
+  display: none !important;
 }
 
 .page,
@@ -16,223 +40,4834 @@ textarea {
   box-sizing: border-box;
 }
 
-.page {
-  min-height: 100vh;
-  padding: 20rpx 20rpx 164rpx;
-  background:
-    linear-gradient(180deg, rgba(18, 112, 101, 0.07) 0 1rpx, transparent 1rpx 52rpx),
-    linear-gradient(90deg, rgba(18, 112, 101, 0.05) 0 1rpx, transparent 1rpx 52rpx),
-    linear-gradient(180deg, #edf6f2 0%, #f8fbf7 48%, #eef3ee 100%);
+text {
+  overflow-wrap: anywhere;
 }
 
-.section {
-  margin-bottom: 20rpx;
-  padding: 28rpx;
-  background: rgba(255, 255, 255, 0.97);
-  border: 1rpx solid rgba(196, 218, 210, 0.7);
-  border-radius: 32rpx;
-  box-shadow: 0 12rpx 40rpx rgba(17, 85, 76, 0.07);
-}
-
-.warehouse-header {
-  margin: -20rpx -20rpx 20rpx;
-  padding: 46rpx 28rpx 30rpx;
-  color: #ffffff;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0 1rpx, transparent 1rpx 24rpx),
-    linear-gradient(135deg, #073e3d 0%, #0f766b 55%, #2a9d7a 100%);
-  box-shadow: 0 18rpx 42rpx rgba(17, 85, 76, 0.16);
-}
-
-.warehouse-header .title,
-.warehouse-header .subtle {
-  color: #ffffff;
-}
-
-.title {
-  display: block;
-  color: #173b3a;
-  font-size: 34rpx;
-  font-weight: 900;
-  line-height: 1.25;
-}
-
-.subtle {
-  display: block;
-  color: #628078;
-  font-size: 24rpx;
-  line-height: 1.45;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 46rpx;
-  padding: 0 18rpx;
-  color: #117b6d;
-  background: #e7f6ef;
-  border: 1rpx solid #cce8dc;
-  border-radius: 999rpx;
-  font-size: 22rpx;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-.pill.active {
-  color: #ffffff;
-  background: #117b6d;
-  border-color: #117b6d;
-}
-
-button,
-.button,
-.action,
-.submit {
-  min-height: 76rpx;
-  color: #ffffff !important;
-  background: #117b6d !important;
+button {
+  margin: 0;
+  padding: 0;
   border: 0;
-  border-radius: 24rpx !important;
-  font-size: 28rpx;
-  font-weight: 900;
+  background: transparent;
+  line-height: 1.3;
 }
 
 button::after {
   border: 0;
 }
 
-button:active,
-.button:active,
-.action:active,
-.submit:active {
+button:active {
   transform: scale(0.98);
 }
 
-input,
-textarea {
-  min-height: 76rpx;
-  padding: 0 24rpx;
-  color: #173b3a;
-  background: #f8fbf7;
-  border: 1rpx solid #d3e7df;
-  border-radius: 24rpx;
-  font-size: 28rpx;
+.page {
+  min-height: 100vh;
+  padding: 20rpx 20rpx 148rpx;
+  background:
+    linear-gradient(180deg, rgba(18, 112, 101, 0.08) 0 1rpx, transparent 1rpx 52rpx),
+    linear-gradient(90deg, rgba(18, 112, 101, 0.05) 0 1rpx, transparent 1rpx 52rpx),
+    linear-gradient(180deg, #edf6f2 0%, #f8fbf7 56%, #eef3ee 100%);
 }
 
-.price,
-.amount,
-.total {
-  color: #117b6d !important;
-  font-weight: 900;
+.phone-shell {
+  width: min(100vw, 375px);
+  max-width: 375px;
+  min-height: 100vh;
+  margin: 0 auto;
+  overflow-x: hidden;
 }
 
-.hero {
+@media (min-width: 600px) {
+  uni-page,
+  uni-page-wrapper,
+  uni-page-body,
+  .uni-page,
+  .uni-page-wrapper,
+  .uni-page-body {
+    width: 375px !important;
+    max-width: 375px !important;
+    min-height: 100vh;
+    margin-right: auto !important;
+    margin-left: auto !important;
+    overflow-x: hidden;
+    background: #edf6f2;
+    box-shadow: 0 18px 60px rgba(7, 62, 61, 0.18);
+  }
+
+  uni-page-head,
+  .uni-page-head,
+  uni-tabbar,
+  .uni-tabbar {
+    right: 0 !important;
+    left: 0 !important;
+    width: 375px !important;
+    max-width: 375px !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+  }
+
+  .phone-shell {
+    width: 375px;
+    border-right: 1px solid rgba(7, 62, 61, 0.08);
+    border-left: 1px solid rgba(7, 62, 61, 0.08);
+    box-shadow: 0 18px 60px rgba(7, 62, 61, 0.18);
+  }
+}
+
+.warehouse-top {
   position: relative;
-  overflow: hidden;
+  margin: -20rpx -20rpx 22rpx;
+  padding: 22rpx 28rpx 34rpx;
   color: #ffffff;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0 1rpx, transparent 1rpx 24rpx),
-    linear-gradient(135deg, #073e3d 0%, #0f766b 55%, #2a9d7a 100%);
-  border: 0;
-  box-shadow: 0 24rpx 44rpx rgba(17, 85, 76, 0.14);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0 1rpx, transparent 1rpx 24rpx),
+    linear-gradient(135deg, #073e3d 0%, #0f766b 58%, #279678 100%);
+  box-shadow: 0 18rpx 42rpx rgba(17, 85, 76, 0.16);
+  overflow: hidden;
 }
 
-.hero::after {
+.warehouse-work-head {
+  position: relative;
+  min-height: 200rpx;
+  margin: -20rpx -20rpx 0;
+  padding: 16rpx 28rpx 28rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0d4f49 0%, #117b6d 72%, #3f9d66 100%);
+  overflow: hidden;
+}
+
+.warehouse-work-head::after {
   content: "";
   position: absolute;
-  right: -68rpx;
-  top: 68rpx;
-  width: 316rpx;
-  height: 144rpx;
-  background: rgba(255, 255, 255, 0.1);
+  right: -80rpx;
+  top: 54rpx;
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.warehouse-work-title {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-top: 12rpx;
+}
+
+.warehouse-work-title .title {
+  color: #ffffff;
+  font-size: 44rpx;
+}
+
+.warehouse-work-title .subtle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.warehouse-main {
+  padding: 24rpx 0 0;
+}
+
+.warehouse-top::after {
+  content: "";
+  position: absolute;
+  right: -72rpx;
+  top: 84rpx;
+  width: 300rpx;
+  height: 132rpx;
+  background: rgba(255, 255, 255, 0.09);
   clip-path: polygon(16% 0, 100% 0, 84% 100%, 0 100%);
   transform: rotate(-12deg);
 }
 
-.hero .title,
-.hero .subtle {
+.status-row,
+.hero-row,
+.detail-title-row,
+.profile-row,
+.section-head,
+.task-head,
+.task-foot,
+.inventory-head,
+.goods-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.status-row,
+.hero-row,
+.detail-title-row,
+.profile-row {
   position: relative;
   z-index: 1;
+}
+
+.status-row {
+  align-items: center;
+  min-height: 48rpx;
+  margin-bottom: 22rpx;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.eyebrow,
+.title,
+.subtle,
+.section-title,
+.section-sub {
+  display: block;
+}
+
+.eyebrow {
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 22rpx;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.title {
+  color: #173b3a;
+  font-size: 38rpx;
+  font-weight: 900;
+  line-height: 1.22;
+}
+
+.warehouse-top .title,
+.warehouse-top .subtle {
   color: #ffffff;
 }
 
-.metric {
-  min-height: 136rpx;
-  padding: 26rpx 20rpx;
+.subtle {
+  margin-top: 8rpx;
+  color: #628078;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.role-badge,
+.pill,
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.role-badge {
   color: #ffffff;
-  border: 0;
-  border-radius: 24rpx;
-  box-shadow: 0 24rpx 44rpx rgba(17, 85, 76, 0.12);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
 }
 
-.metric:nth-child(1) {
-  background: linear-gradient(135deg, #117b6d, #1aa18c);
-}
-
-.metric:nth-child(2) {
-  background: linear-gradient(135deg, #2f7f50, #7fb447);
-}
-
-.metric:nth-child(3),
-.metric:nth-child(4) {
-  background: linear-gradient(135deg, #a36d14, #e0a432);
-}
-
-.metric .title,
-.metric .subtle {
-  color: #ffffff;
-}
-
-.row,
-.task,
-.task-row,
-.menu-row,
-.group {
-  border-color: #d9e9e3 !important;
-}
-
-.row,
-.task,
-.task-row,
-.menu-row,
-.group,
-.inventory-row {
-  min-width: 0;
-  padding: 22rpx 0;
-}
-
-.row:last-child,
-.task:last-child,
-.task-row:last-child,
-.menu-row:last-child {
-  border-bottom: 0 !important;
-}
-
-.summary {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16rpx;
-}
-
-.plain,
-button.plain {
-  color: #117b6d !important;
-  background: #edf8f4 !important;
+.pill,
+.status-pill.green {
+  color: #117b6d;
+  background: #e7f6ef;
   border: 1rpx solid #cce8dc;
-  box-shadow: none;
+}
+
+.status-pill.amber {
+  color: #a36d14;
+  background: #fff5da;
+  border: 1rpx solid #efd797;
+}
+
+.status-pill.red {
+  color: #b43c31;
+  background: #fff0ee;
+  border: 1rpx solid #edbbb6;
+}
+
+.status-pill.gray {
+  color: #66847c;
+  background: #f0f4f2;
+  border: 1rpx solid #d6e1dd;
+}
+
+.scope-strip {
+  position: relative;
+  z-index: 1;
+  margin-top: 26rpx;
+  padding: 18rpx 20rpx;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1rpx solid rgba(255, 255, 255, 0.18);
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.section {
+  margin-bottom: 18rpx;
+  padding: 24rpx;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1rpx solid rgba(196, 218, 210, 0.75);
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 26rpx rgba(17, 85, 76, 0.055);
+}
+
+.warehouse-section {
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1rpx solid #d9e9e3;
+  border-radius: 22rpx;
+  box-shadow: 0 8rpx 24rpx rgba(17, 85, 76, 0.05);
+}
+
+.warehouse-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-head {
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  color: #173b3a;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.section-sub {
+  margin-top: 6rpx;
+  color: #628078;
+  font-size: 23rpx;
+  line-height: 1.45;
 }
 
 .primary,
-button.primary {
+.plain,
+.danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 76rpx;
+  padding: 0 24rpx;
+  border-radius: 22rpx;
+  font-size: 26rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.primary {
   color: #ffffff !important;
   background: #117b6d !important;
   box-shadow: 0 10rpx 18rpx rgba(17, 123, 109, 0.2);
 }
 
-.empty-panel {
-  padding: 34rpx 24rpx;
-  background: rgba(255, 255, 255, 0.97);
+.plain {
+  color: #117b6d !important;
+  background: #edf8f4 !important;
+  border: 1rpx solid #cce8dc;
+}
+
+.danger {
+  color: #ffffff !important;
+  background: #b43c31 !important;
+  box-shadow: 0 10rpx 18rpx rgba(180, 60, 49, 0.17);
+}
+
+.mini-btn {
+  min-height: 56rpx;
+  padding: 0 18rpx;
+  border-radius: 18rpx;
+  font-size: 23rpx;
+}
+
+.input {
+  width: 100%;
+  min-height: 86rpx;
+  margin-bottom: 18rpx;
+  padding: 0 24rpx;
+  color: #173b3a;
+  background: #f8fbf7;
+  border: 1rpx solid #d3e7df;
+  border-radius: 22rpx;
+  font-size: 28rpx;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14rpx;
+  margin-bottom: 20rpx;
+}
+
+.metric-grid.six {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metric-card {
+  min-height: 122rpx;
+  padding: 22rpx 12rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #117b6d, #1aa18c);
+  border-radius: 22rpx;
+  box-shadow: 0 20rpx 34rpx rgba(17, 85, 76, 0.12);
+  text-align: center;
+}
+
+.metric-card:nth-child(2n) {
+  background: linear-gradient(135deg, #2f7f50, #7fb447);
+}
+
+.metric-card:nth-child(3n) {
+  background: linear-gradient(135deg, #a36d14, #e0a432);
+}
+
+.warehouse-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.warehouse-kpis.six {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.warehouse-kpi {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0;
+  min-height: 116rpx;
+  padding: 22rpx 20rpx;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #117b6d, #1aa18c) !important;
+  border-radius: 22rpx;
+  box-shadow: 0 12rpx 26rpx rgba(17, 85, 76, 0.1);
+  text-align: left;
+}
+
+.warehouse-kpi:nth-child(2n) {
+  background: linear-gradient(135deg, #2f7f50, #7fb447) !important;
+}
+
+.warehouse-kpi:nth-child(3n) {
+  background: linear-gradient(135deg, #a36d14, #e0a432) !important;
+}
+
+.warehouse-kpi text:first-child {
+  display: block;
+  font-size: 38rpx;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.warehouse-kpi text:last-child {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+  line-height: 1.35;
+  opacity: 0.92;
+}
+
+.metric-value,
+.metric-label {
+  display: block;
+}
+
+.metric-value {
+  font-size: 38rpx;
+  font-weight: 900;
+}
+
+.metric-label {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  opacity: 0.92;
+}
+
+.quick-grid,
+.role-grid,
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16rpx;
+}
+
+.quick-card,
+.role-option {
+  display: grid;
+  gap: 8rpx;
+  align-content: start;
+  min-height: 128rpx;
+  padding: 22rpx;
+  color: #245a54 !important;
+  background: linear-gradient(135deg, #edf8f4 0%, #fbfdf8 100%) !important;
+  border: 1rpx solid #d3e7df;
+  border-radius: 22rpx;
+  text-align: left;
+}
+
+.quick-card text:first-child,
+.role-name {
+  color: #173b3a;
+  font-size: 27rpx;
+  font-weight: 900;
+}
+
+.quick-card text:last-child,
+.role-desc {
+  color: #628078;
+  font-size: 22rpx;
+}
+
+.role-option.active,
+.role-card.active {
+  border-color: #117b6d;
+  box-shadow: inset 0 0 0 2rpx rgba(17, 123, 109, 0.18);
+}
+
+.quick-card.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #117b6d, #1a907f) !important;
+  border-color: #117b6d;
+  box-shadow: 0 10rpx 24rpx rgba(17, 123, 109, 0.16);
+}
+
+.quick-card.active text {
+  color: #ffffff !important;
+}
+
+.role-mark,
+.avatar,
+.goods-img {
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background: linear-gradient(135deg, #117b6d, #2a9d7a);
+  font-weight: 900;
+}
+
+.role-mark {
+  width: 66rpx;
+  height: 66rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+}
+
+.task-list,
+.page-list,
+.warehouse-order-list,
+.inventory-list,
+.goods-list,
+.role-list,
+.log-list,
+.permission-list {
+  display: grid;
+  gap: 18rpx;
+}
+
+.task-card,
+.warehouse-task-card,
+.inventory-card,
+.role-card,
+.goods-card {
+  padding: 22rpx;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1rpx solid #d9e9e3;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 26rpx rgba(17, 85, 76, 0.055);
+}
+
+.task-title,
+.task-sub,
+.task-note,
+.sku-title,
+.role-title,
+.role-tip,
+.role-actions,
+.goods-line {
+  display: block;
+}
+
+.task-title,
+.sku-title,
+.role-title {
+  color: #173b3a;
+  font-size: 29rpx;
+  font-weight: 900;
+}
+
+.task-sub,
+.task-note,
+.role-tip,
+.role-actions,
+.goods-line,
+.location-line {
+  margin-top: 8rpx;
+  color: #628078;
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.task-meta,
+.task-summary,
+.inventory-counts,
+.stat-grid,
+.detail-grid,
+.qty-line {
+  display: grid;
+  gap: 10rpx;
+}
+
+.task-meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 20rpx 0 12rpx;
+}
+
+.task-meta text,
+.task-summary view,
+.inventory-counts view,
+.stat-grid view,
+.detail-grid view {
+  min-width: 0;
+  padding: 14rpx 10rpx;
+  color: #245a54;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+  text-align: center;
+}
+
+.task-summary,
+.stat-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.inventory-counts {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 18rpx;
+}
+
+.task-summary text,
+.inventory-counts text,
+.stat-grid text,
+.detail-grid text {
+  display: block;
+}
+
+.task-summary text:first-child,
+.inventory-counts text:first-child,
+.stat-grid text:first-child,
+.detail-grid text:last-child {
+  color: #117b6d;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.task-summary text:last-child,
+.inventory-counts text:last-child,
+.stat-grid text:last-child,
+.detail-grid text:first-child {
+  margin-top: 6rpx;
+  color: #628078;
+  font-size: 21rpx;
+}
+
+.task-foot {
+  align-items: center;
+  margin-top: 18rpx;
+}
+
+.task-foot > text {
+  flex: 1;
+  color: #628078;
+  font-size: 23rpx;
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.seg-tabs {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 22rpx;
+  padding: 8rpx;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1rpx solid rgba(255, 255, 255, 0.18);
+  border-radius: 28rpx;
+  overflow: hidden;
+}
+
+.seg-tabs button {
+  min-width: 0;
+  min-height: 58rpx;
+  padding: 0 8rpx;
+  color: rgba(255, 255, 255, 0.82);
+  background: transparent;
+  border-radius: 22rpx;
+  font-size: 23rpx;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.seg-tabs button.active {
+  color: #117b6d;
+  background: #ffffff;
+}
+
+.back-btn {
+  width: 56rpx;
+  height: 56rpx;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  font-size: 42rpx;
+}
+
+.detail-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.goods-card {
+  display: grid;
+  grid-template-columns: 84rpx minmax(0, 1fr);
+  gap: 18rpx;
+  box-shadow: none;
+}
+
+.goods-img {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 22rpx;
+  font-size: 30rpx;
+}
+
+.goods-head text:first-child {
+  color: #173b3a;
+  font-size: 27rpx;
+  font-weight: 900;
+}
+
+.goods-head text:last-child {
+  color: #117b6d;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.task-goods-list {
+  display: grid;
+  margin-top: 2rpx;
+}
+
+.task-goods-row {
+  display: grid;
+  grid-template-columns: 78rpx minmax(0, 1fr) 124rpx;
+  gap: 12rpx;
+  align-items: start;
+  min-width: 0;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid rgba(196, 218, 210, 0.82);
+}
+
+.task-goods-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 2rpx;
+}
+
+.task-goods-img {
+  display: grid;
+  place-items: center;
+  width: 78rpx;
+  height: 78rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #117b6d, #2a9d7a);
+  border-radius: 14rpx;
+  box-shadow: 0 8rpx 18rpx rgba(17, 85, 76, 0.12);
+  font-size: 30rpx;
+  font-weight: 900;
+  overflow: hidden;
+}
+
+.task-goods-main {
+  display: grid;
+  min-width: 0;
+  gap: 5rpx;
+}
+
+.task-goods-title,
+.task-goods-line,
+.task-goods-barcode {
+  display: block;
+  min-width: 0;
+}
+
+.task-goods-title {
+  color: #101f1f;
+  font-size: 27rpx;
+  font-weight: 900;
+  line-height: 1.22;
+}
+
+.task-goods-line {
+  color: #31514e;
+  font-size: 22rpx;
+  font-weight: 800;
+  line-height: 1.26;
+}
+
+.task-goods-barcode {
+  margin-top: 3rpx;
+  color: #111b1b;
+  font-size: 24rpx;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.task-goods-qty {
+  align-self: start;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4rpx;
+  min-width: 0;
+  padding-top: 70rpx;
+}
+
+.task-goods-qty view {
+  display: grid;
+  gap: 2rpx;
+  min-width: 0;
+  text-align: center;
+}
+
+.task-goods-qty text:first-child {
+  color: #446460;
+  font-size: 18rpx;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.task-goods-qty text:last-child {
+  color: #030909;
+  font-size: 24rpx;
+  font-weight: 900;
+  line-height: 1.08;
+  white-space: nowrap;
+}
+
+.task-goods-editor,
+.task-goods-actions,
+.task-goods-shortage {
+  grid-column: 2 / -1;
+  margin-top: 8rpx;
+}
+
+.qty-line {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 12rpx;
+}
+
+.qty-line text {
+  padding: 10rpx;
+  color: #245a54;
+  background: #f7fbf8;
+  border-radius: 14rpx;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.action-section .danger {
+  width: 100%;
+  margin-top: 16rpx;
+}
+
+.inventory-summary,
+.inventory-summary view {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+}
+
+.inventory-summary view {
+  grid-template-columns: 1fr;
+  min-height: 108rpx;
+  padding: 18rpx 10rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 20rpx;
+  text-align: center;
+}
+
+.inventory-summary text:first-child {
+  color: #117b6d;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.inventory-summary text:last-child {
+  color: #628078;
+  font-size: 22rpx;
+}
+
+.inventory-filter {
+  margin-top: 0;
+}
+
+.stocktake-panel {
+  margin-top: 18rpx;
+}
+
+.stocktake-list {
+  display: grid;
+  gap: 14rpx;
+}
+
+.stocktake-row {
+  display: grid;
+  grid-template-columns: 58rpx minmax(0, 1fr) 128rpx;
+  gap: 14rpx;
+  align-items: center;
+  padding: 16rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+}
+
+.stocktake-row.selected {
+  background: #edf8f4;
+  border-color: #9bd7ca;
+}
+
+.stocktake-check {
+  display: grid;
+  place-items: center;
+  width: 50rpx;
+  height: 50rpx;
+  color: #117b6d !important;
+  background: #ffffff !important;
+  border: 1rpx solid #cce8dc;
+  border-radius: 16rpx;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.stocktake-row.selected .stocktake-check {
+  color: #ffffff !important;
+  background: #117b6d !important;
+  border-color: #117b6d;
+}
+
+.stocktake-info {
+  min-width: 0;
+}
+
+.stocktake-info text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stocktake-info text:first-child {
+  color: #173b3a;
+  font-size: 25rpx;
+  font-weight: 900;
+}
+
+.stocktake-info text:last-child {
+  margin-top: 5rpx;
+  color: #628078;
+  font-size: 20rpx;
+}
+
+.stocktake-qty text {
+  display: block;
+  color: #6b847e;
+  font-size: 19rpx;
+  text-align: right;
+}
+
+.stocktake-qty input {
+  width: 100%;
+  min-height: 56rpx;
+  margin-top: 6rpx;
+  color: #117b6d;
+  background: #ffffff;
+  border: 1rpx solid #cce8dc;
+  border-radius: 14rpx;
+  font-size: 24rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.stocktake-qty input[disabled] {
+  color: #9aaca7;
+  background: #eef4f1;
+}
+
+.warehouse-stock-card {
+  border-radius: 20rpx;
+  box-shadow: 0 6rpx 18rpx rgba(17, 85, 76, 0.045);
+}
+
+.warehouse-stock-card .location-line {
+  margin-top: 14rpx;
+  padding: 12rpx 14rpx;
+  color: #245a54;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+}
+
+.profile-row {
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 24rpx;
+}
+
+.avatar {
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 28rpx;
+  font-size: 34rpx;
+}
+
+.profile-name,
+.profile-line {
+  display: block;
+}
+
+.profile-name {
+  color: #ffffff;
+  font-size: 31rpx;
+  font-weight: 900;
+}
+
+.profile-line {
+  margin-top: 6rpx;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 23rpx;
+  line-height: 1.35;
+}
+
+.warehouse-profile-card {
+  border-radius: 20rpx;
+  box-shadow: 0 6rpx 18rpx rgba(17, 85, 76, 0.045);
+}
+
+.permission-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 18rpx;
+}
+
+.permission-list text {
+  padding: 14rpx 16rpx;
+  color: #245a54;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+}
+
+.driver-note {
+  margin-top: 16rpx;
+}
+
+.driver-stat-note {
+  display: grid;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.driver-stat-note view {
+  padding: 16rpx 18rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+}
+
+.driver-stat-note text:first-child {
+  display: block;
+  color: #173b3a;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.driver-stat-note text:last-child {
+  display: block;
+  margin-top: 6rpx;
+  color: #66847c;
+  font-size: 22rpx;
+  line-height: 1.45;
+}
+
+.driver-stats-filter {
+  align-items: center;
+  margin: 20rpx 24rpx 0;
+}
+
+.driver-stats-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10rpx;
+  margin: 18rpx 24rpx 0;
+}
+
+.driver-stats-summary view {
+  min-width: 0;
+  padding: 16rpx 8rpx;
+  background: #ffffff;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 24rpx rgba(17, 85, 76, 0.05);
+}
+
+.driver-stats-summary text {
+  display: block;
+}
+
+.driver-stats-summary text:first-child {
+  color: #6c8982;
+  font-size: 20rpx;
+  line-height: 1.25;
+}
+
+.driver-stats-summary text:last-child {
+  margin-top: 8rpx;
+  color: #0f5f56;
+  font-size: 30rpx;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.mine-page .driver-list {
+  display: grid;
+  gap: 18rpx;
+  padding: 18rpx 24rpx 132rpx;
+}
+
+.driver-stats-card {
+  border-radius: 20rpx;
+}
+
+.driver-route-title {
+  display: block;
+  color: #153f3b;
+  font-size: 29rpx;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.driver-route-sub {
+  display: block;
+  margin-top: 7rpx;
+  color: #6b847e;
+  font-size: 22rpx;
+}
+
+.record-headline {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.record-back {
+  flex: 0 0 56rpx;
+}
+
+.record-entry-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.warehouse-profile-link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 116rpx;
+  padding: 20rpx 22rpx;
+  text-align: left;
+}
+
+.warehouse-profile-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 74rpx;
+  width: 74rpx;
+  height: 74rpx;
+  color: #ffffff;
+  border-radius: 22rpx;
+  font-size: 28rpx;
+  font-weight: 900;
+  box-shadow: 0 10rpx 24rpx rgba(17, 123, 109, 0.18);
+}
+
+.warehouse-profile-link-icon.record {
+  background: linear-gradient(135deg, #117b6d, #37a879);
+}
+
+.warehouse-profile-link-icon.pick {
+  background: linear-gradient(135deg, #1769aa, #37a1c6);
+}
+
+.warehouse-profile-link-icon.switch {
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+}
+
+.warehouse-profile-link-copy {
+  flex: 1;
+  min-width: 0;
+  margin-left: 18rpx;
+}
+
+.warehouse-profile-link-copy text {
+  display: block;
+}
+
+.warehouse-profile-link-copy text:first-child {
+  color: #173b3a;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.warehouse-profile-link-copy text:last-child {
+  margin-top: 6rpx;
+  color: #66847c;
+  font-size: 22rpx;
+  line-height: 1.42;
+}
+
+.warehouse-profile-link-arrow {
+  flex: 0 0 34rpx;
+  color: #117b6d;
+  font-size: 40rpx;
+  text-align: right;
+}
+
+.warehouse-record-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 152rpx;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.warehouse-receive-record-tools {
+  grid-template-columns: minmax(0, 1fr) 126rpx 126rpx;
+}
+
+.warehouse-record-search,
+.warehouse-record-filter {
+  display: flex;
+  align-items: center;
+  min-height: 76rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 20rpx;
+}
+
+.warehouse-record-search {
+  gap: 10rpx;
+  padding: 0 16rpx;
+}
+
+.warehouse-record-search text {
+  color: #117b6d;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.warehouse-record-search input {
+  flex: 1;
+  min-width: 0;
+  color: #173b3a;
+  font-size: 23rpx;
+}
+
+.warehouse-record-filter {
+  justify-content: center;
+  padding: 0 10rpx;
+  color: #117b6d;
+  font-size: 21rpx;
+  font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.warehouse-record-list {
+  display: grid;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.warehouse-record-item {
+  display: grid;
+  grid-template-columns: 74rpx minmax(0, 1fr);
+  gap: 16rpx;
+  width: 100%;
+  padding: 18rpx;
+  background: #ffffff;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 20rpx;
+  text-align: left;
+  box-shadow: 0 6rpx 18rpx rgba(17, 85, 76, 0.04);
+}
+
+.warehouse-record-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 74rpx;
+  height: 74rpx;
+  color: #ffffff;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.warehouse-record-thumb.blue { background: linear-gradient(135deg, #1769aa, #3fa7d6); }
+.warehouse-record-thumb.orange { background: linear-gradient(135deg, #a36d14, #e0a432); }
+.warehouse-record-thumb.yellow { background: linear-gradient(135deg, #d19b1f, #f2c94c); }
+.warehouse-record-thumb.green { background: linear-gradient(135deg, #2f7f50, #7fb447); }
+.warehouse-record-thumb.teal { background: linear-gradient(135deg, #117b6d, #1aa18c); }
+.warehouse-record-thumb.purple { background: linear-gradient(135deg, #6856ad, #9b8be5); }
+.warehouse-record-thumb.rose { background: linear-gradient(135deg, #b43c31, #dc7a6d); }
+.warehouse-record-thumb.amber { background: linear-gradient(135deg, #a36d14, #d89c2d); }
+
+.warehouse-record-main {
+  min-width: 0;
+}
+
+.warehouse-record-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10rpx;
+}
+
+.warehouse-record-title-row > text:first-child {
+  min-width: 0;
+  color: #173b3a;
+  font-size: 26rpx;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.warehouse-record-title-row .status-pill {
+  flex: 0 0 auto;
+  min-height: 38rpx;
+  padding: 0 12rpx;
+  font-size: 18rpx;
+}
+
+.warehouse-record-meta,
+.warehouse-pick-line {
+  display: block;
+  margin-top: 8rpx;
+  color: #66847c;
+  font-size: 21rpx;
+  line-height: 1.42;
+}
+
+.warehouse-pick-line {
+  color: #245a54;
+}
+
+.warehouse-receive-counts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8rpx;
+  margin-top: 12rpx;
+}
+
+.warehouse-receive-counts view {
+  min-width: 0;
+  padding: 10rpx 8rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 14rpx;
+  text-align: center;
+}
+
+.warehouse-receive-counts .received {
+  background: #edf8f4;
+}
+
+.warehouse-receive-counts .diff {
+  background: #fff5da;
+  border-color: #efd797;
+}
+
+.warehouse-receive-counts .diff.done {
+  background: #e7f6ef;
+  border-color: #cce8dc;
+}
+
+.warehouse-receive-counts text {
+  display: block;
+}
+
+.warehouse-receive-counts text:first-child {
+  color: #66847c;
+  font-size: 18rpx;
+}
+
+.warehouse-receive-counts text:last-child {
+  margin-top: 4rpx;
+  color: #173b3a;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.record-empty {
+  margin: 0;
+  box-shadow: none;
+}
+
+.driver-stats-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10rpx;
+  margin-top: 18rpx;
+}
+
+.driver-stats-meta view {
+  min-width: 0;
+  padding: 14rpx 16rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 16rpx;
+}
+
+.driver-stats-meta text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.driver-stats-meta text:first-child {
+  color: #76918a;
+  font-size: 20rpx;
+}
+
+.driver-stats-meta text:last-child {
+  margin-top: 5rpx;
+  color: #173b3a;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.log-list text {
+  padding: 16rpx 0;
+  color: #628078;
+  border-bottom: 1rpx solid #d9e9e3;
+  font-size: 23rpx;
+}
+
+.log-list text:last-child {
+  border-bottom: 0;
+}
+
+.logout-btn,
+.login-btn,
+.forgot-btn {
+  width: 100%;
+}
+
+.forgot-btn {
+  margin-top: 16rpx;
+}
+
+.role-card {
+  display: grid;
+  grid-template-columns: 72rpx minmax(0, 1fr) auto;
+  gap: 18rpx;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+}
+
+.empty-panel,
+.denied-card {
+  padding: 34rpx 26rpx;
+}
+
+.login-page {
+  padding: 0 12rpx 20rpx;
+  background: #dfeee8;
+}
+
+.login-page .login-hero {
+  margin: 0 -12rpx 12rpx;
+  padding: 24rpx 28rpx 30rpx;
+  min-height: 124rpx;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.login-page .login-hero::after {
+  right: -36rpx;
+  top: 96rpx;
+  width: 188rpx;
+  height: 82rpx;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.login-page .status-row {
+  min-height: 34rpx;
+  margin-bottom: 26rpx;
+  font-size: 22rpx;
+}
+
+.login-page .login-hero-title {
+  position: relative;
+  z-index: 1;
+}
+
+.login-page .eyebrow {
+  font-size: 20rpx;
+}
+
+.login-page .title {
+  margin-top: 4rpx;
+  font-size: 34rpx;
+  line-height: 1.12;
+}
+
+.login-page .subtle {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  line-height: 1.35;
+}
+
+.login-main {
+  display: grid;
+  gap: 12rpx;
+}
+
+.login-page .login-panel {
+  margin-bottom: 0;
+  padding: 22rpx 24rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(17, 85, 76, 0.06);
+}
+
+.login-page .role-panel {
+  min-height: 170rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-page .role-panel.open {
+  min-height: 0;
+  display: block;
+  padding: 18rpx 28rpx 20rpx;
+}
+
+.login-page .login-card {
+  background:
+    linear-gradient(135deg, rgba(17, 123, 109, 0.05), rgba(255, 255, 255, 0.98) 44%),
+    rgba(255, 255, 255, 0.97);
+}
+
+.login-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.login-page .section-title {
+  font-size: 28rpx;
+  line-height: 1.2;
+}
+
+.login-page .section-sub {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  line-height: 1.35;
+}
+
+.login-role-collapsed {
+  display: grid;
+  justify-items: center;
+  gap: 16rpx;
+  width: 100%;
+}
+
+.login-page .role-panel.open .login-role-collapsed {
+  justify-items: start;
+  gap: 12rpx;
+}
+
+.login-page .role-panel.open .login-role-collapsed .section-title {
+  font-size: 30rpx;
+}
+
+.login-current-role {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  min-height: 72rpx;
+  padding: 0 34rpx;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #117b6d, #18917f) !important;
+  border-radius: 999rpx;
+  box-shadow: 0 12rpx 24rpx rgba(17, 123, 109, 0.18);
+  font-size: 28rpx;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.login-current-arrow {
+  font-size: 20rpx;
+  transform: translateY(-1rpx);
+}
+
+.login-role-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16rpx;
+  justify-items: stretch;
+  width: 100%;
+  padding: 4rpx 0 0;
+}
+
+.login-role-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  width: 100%;
+  min-height: 76rpx;
+  padding: 0 14rpx;
+  color: #245a54 !important;
+  background: #f5fbf8 !important;
+  border: 1rpx solid #c7ded6;
+  border-radius: 18rpx;
+  font-size: 24rpx;
+  font-weight: 900;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.login-role-option.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #117b6d, #168f7c) !important;
+  border-color: #117b6d;
+  box-shadow: 0 10rpx 20rpx rgba(17, 123, 109, 0.22);
+}
+
+.login-role-icon {
+  flex: none;
+  width: 26rpx;
+  height: 26rpx;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.login-role-icon circle {
+  fill: none;
+}
+
+.login-role-name {
+  min-width: 0;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.login-page .login-input {
+  min-height: 78rpx;
+  margin-bottom: 14rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+}
+
+.login-page .login-btn {
+  min-height: 78rpx;
+  margin-top: 4rpx;
+  border-radius: 20rpx;
+}
+
+.login-page .forgot-btn {
+  min-height: 72rpx;
+  margin-top: 14rpx;
+  border-radius: 18rpx;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 104rpx minmax(0, 1fr);
+  align-items: center;
+  min-height: 78rpx;
+  margin-bottom: 14rpx;
+  padding: 0 22rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d6e5df;
+  border-radius: 20rpx;
+}
+
+.form-row text {
+  color: #5c7770;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.form-row input {
+  min-width: 0;
+  color: #173b3a;
+  font-size: 28rpx;
+}
+
+.todo-card {
+  display: grid;
+  gap: 8rpx;
+  width: 100%;
+  min-height: 96rpx;
+  padding: 20rpx 22rpx;
+  color: #245a54 !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 20rpx;
+  text-align: left;
+}
+
+.todo-card text:first-child {
+  color: #173b3a;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.todo-card text:last-child {
+  color: #628078;
+  font-size: 23rpx;
+  line-height: 1.4;
+}
+
+.warehouse-task-list {
+  display: grid;
+  gap: 16rpx;
+}
+
+.warehouse-task {
+  display: grid;
+  gap: 8rpx;
+  width: 100%;
+  min-height: 88rpx;
+  padding: 20rpx;
+  color: #245a54 !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 22rpx;
+  text-align: left;
+}
+
+.warehouse-task text:first-child {
+  color: #173b3a;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.warehouse-task text:last-child {
+  color: #66847c;
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.role-home-card {
+  margin-bottom: 20rpx;
+}
+
+.scope-list.compact {
+  margin-top: 0;
+}
+
+.warehouse-bottom {
+  position: fixed;
+  right: max(20rpx, calc((100vw - 375px) / 2 + 12px));
+  bottom: max(12rpx, env(safe-area-inset-bottom));
+  left: max(20rpx, calc((100vw - 375px) / 2 + 12px));
+  z-index: 90;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8rpx;
+  height: 116rpx;
+  max-height: 116rpx;
+  max-width: 351px;
+  margin: 0 auto;
+  padding: 10rpx 12rpx;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1rpx solid #d8e8e1;
+  border-radius: 26rpx;
+  box-shadow: 0 -12rpx 34rpx rgba(17, 85, 76, 0.12);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.warehouse-bottom.items-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.warehouse-bottom.items-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.warehouse-nav-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4rpx;
+  width: 100%;
+  height: 96rpx;
+  min-height: 0;
+  max-height: 96rpx;
+  min-width: 0;
+  padding: 0;
+  color: #66847c !important;
+  background: transparent !important;
+  border-radius: 20rpx;
+  font-size: 21rpx;
+  font-weight: 900;
+  line-height: 1.1;
+  overflow: hidden;
+}
+
+.warehouse-nav-btn text {
+  display: block;
+  max-width: 100%;
+  color: currentColor;
+  font-size: 21rpx;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.warehouse-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46rpx;
+  height: 46rpx;
+  color: currentColor;
+  border-radius: 16rpx;
+}
+
+.warehouse-nav-icon svg {
+  width: 32rpx;
+  height: 32rpx;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.warehouse-nav-btn.active {
+  color: #117b6d !important;
+  background: linear-gradient(180deg, #e7f6ef 0%, #f4fbf7 100%) !important;
+  box-shadow: inset 0 0 0 1rpx #cce8dc;
+  transform: none;
+}
+
+.warehouse-nav-btn.active::before {
+  content: "";
+  position: absolute;
+  top: 8rpx;
+  left: 50%;
+  width: 36rpx;
+  height: 5rpx;
+  border-radius: 999rpx;
+  background: #18a67f;
+  transform: translateX(-50%);
+}
+
+.warehouse-nav-btn.active .warehouse-nav-icon {
+  color: #0f7569;
+  background: #d9f0e7;
+}
+
+.manager-home-page {
+  padding-top: 0;
+  background: #f2f5f2;
+}
+
+.manager-top {
+  position: relative;
+  margin: 0 -20rpx 22rpx;
+  padding: 0 0 32rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0d4f49 0%, #117b6d 70%, #39a184 100%);
+  overflow: hidden;
+}
+
+.manager-top::after {
+  content: "";
+  position: absolute;
+  right: -116rpx;
+  top: 52rpx;
+  width: 340rpx;
+  height: 340rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.manager-status {
+  min-height: 76rpx;
+  margin: 0;
+  padding: 0 34rpx;
+}
+
+.manager-top-title {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 88rpx minmax(0, 1fr) 88rpx;
+  align-items: center;
+  min-height: 100rpx;
+  padding: 0 28rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.18);
+  font-size: 34rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.manager-capsule {
+  justify-self: end;
+  display: inline-grid;
+  place-items: center;
+  width: 72rpx;
+  height: 56rpx;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1rpx solid rgba(255, 255, 255, 0.45);
+  border-radius: 999rpx;
+  font-size: 24rpx;
+}
+
+.manager-home-hero {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  padding: 10rpx 28rpx 0;
+}
+
+.manager-avatar {
+  display: grid;
+  place-items: center;
+  width: 112rpx;
+  height: 112rpx;
+  color: #117b6d;
+  background: #ffffff;
+  border-radius: 50%;
+  font-size: 34rpx;
+  font-weight: 900;
+  box-shadow: 0 10rpx 24rpx rgba(8, 60, 57, 0.18);
+}
+
+.manager-user-name {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.manager-role-chip {
+  padding: 6rpx 14rpx;
+  color: #117b6d;
+  background: #e7f6ef;
+  border-radius: 999rpx;
+  font-size: 20rpx;
+}
+
+.manager-user-line,
+.manager-login-time {
+  display: block;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 23rpx;
+}
+
+.manager-login-time {
+  position: relative;
+  z-index: 1;
+  margin: 18rpx 28rpx 0;
+}
+
+.manager-home-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24rpx;
+  padding: 0 8rpx;
+  margin-bottom: 22rpx;
+}
+
+.manager-action-card {
+  display: grid;
+  grid-template-columns: 58rpx minmax(0, 1fr);
+  align-items: center;
+  gap: 14rpx;
+  min-height: 104rpx;
+  padding: 20rpx 18rpx;
+  color: #173b3a !important;
+  background: #ffffff !important;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 24rpx;
+  box-shadow: 0 10rpx 28rpx rgba(17, 85, 76, 0.06);
+  font-size: 28rpx;
+  font-weight: 900;
+  text-align: left;
+}
+
+.manager-action-icon {
+  display: grid;
+  place-items: center;
+  width: 54rpx;
+  height: 54rpx;
+  color: #117b6d;
+  background: #e7f6ef;
+  border-radius: 18rpx;
+}
+
+.manager-action-icon svg {
+  width: 34rpx;
+  height: 34rpx;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.manager-status-overview {
+  margin-bottom: 22rpx;
+  padding: 20rpx;
+  background: #f6fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 20rpx rgba(17, 85, 76, 0.04);
+}
+
+.manager-status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.manager-status-grid view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10rpx;
+  min-height: 64rpx;
+  padding: 12rpx 16rpx;
+  background: #ffffff;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 16rpx;
+  text-align: left;
+}
+
+.manager-status-grid text:first-child {
+  color: #66847c;
+  font-size: 21rpx;
+}
+
+.manager-status-grid text:last-child {
+  color: #117b6d;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.scope-list {
+  display: grid;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.scope-list text {
+  padding: 14rpx 16rpx;
+  color: #245a54;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+}
+
+.filter-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140rpx 116rpx;
+  gap: 14rpx;
+  margin: 18rpx 4rpx 18rpx;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-height: 84rpx;
+  padding: 0 18rpx;
+  background: rgba(255, 255, 255, .98);
+  border: 1rpx solid #d9e9e3;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(17, 85, 76, .05);
+}
+
+.search-box.standalone {
+  margin-bottom: 18rpx;
+}
+
+.search-box text {
+  color: #117b6d;
+  font-weight: 900;
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  color: #173b3a;
+  font-size: 25rpx;
+}
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  width: 100%;
+  min-width: 0;
+  min-height: 84rpx;
+  padding: 0 14rpx;
+  color: #117b6d;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 24rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.filter-chip svg {
+  width: 28rpx;
+  height: 28rpx;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.date-chip {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0f6b60, #1b8a78);
+  border-color: rgba(17, 123, 109, 0.3);
+  box-shadow: 0 8rpx 20rpx rgba(17, 123, 109, 0.16);
+}
+
+.warehouse-list-scope-tip,
+.warehouse-state-strip {
+  margin: -4rpx 0 14rpx;
+  padding: 14rpx 18rpx;
+  color: #66847c;
+  background: #eef8f4;
+  border: 1rpx solid #d4e8df;
+  border-radius: 18rpx;
+  font-size: 22rpx;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.warehouse-state-strip {
+  color: #a36d14;
+  background: #fff7df;
+  border-color: #efd797;
+}
+
+.driver-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-bottom: 18rpx;
+}
+
+.driver-tabs button {
+  min-height: 70rpx;
+  color: #117b6d;
+  background: #edf8f4 !important;
+  border: 1rpx solid #cce8dc;
+  border-radius: 20rpx;
+  font-size: 25rpx;
+  font-weight: 900;
+}
+
+.driver-tabs button.active {
+  color: #ffffff;
+  background: #117b6d !important;
+}
+
+.driver-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12rpx;
+  margin: 18rpx 0;
+}
+
+.driver-mode-tabs button {
+  min-height: 68rpx;
+  color: #117b6d;
+  background: #edf8f4 !important;
+  border: 1rpx solid #cce8dc;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.driver-mode-tabs button.active {
+  color: #ffffff;
+  background: #117b6d !important;
+  border-color: #117b6d;
+  box-shadow: 0 8rpx 18rpx rgba(17, 123, 109, 0.16);
+}
+
+.driver-map-mode {
+  display: grid;
+  gap: 16rpx;
+}
+
+.driver-map-card {
+  padding: 22rpx;
+  background: linear-gradient(135deg, #f1faf6, #ffffff);
+  border: 1rpx solid #d9e9e3;
+  border-radius: 22rpx;
+}
+
+.driver-map-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.driver-map-card-head text {
+  display: block;
+}
+
+.driver-map-card-head view text:first-child {
+  color: #173b3a;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.driver-map-card-head view text:last-child {
+  margin-top: 6rpx;
+  color: #66847c;
+  font-size: 21rpx;
+  line-height: 1.35;
+}
+
+.driver-map-card-head > text {
+  flex: none;
+  color: #117b6d;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.driver-map-line {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 10rpx;
+  margin-top: 26rpx;
+}
+
+.driver-map-line::before {
+  content: "";
+  position: absolute;
+  right: 22rpx;
+  left: 22rpx;
+  top: 23rpx;
+  height: 4rpx;
+  background: #cfe5dc;
+  border-radius: 999rpx;
+}
+
+.driver-map-line view {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 50rpx;
+  height: 50rpx;
+  color: #66847c;
+  background: #ffffff;
+  border: 2rpx solid #cfe5dc;
+  border-radius: 50%;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.driver-map-line view.active {
+  color: #ffffff;
+  background: #e0a432;
+  border-color: #e0a432;
+}
+
+.driver-map-line view.done {
+  color: #ffffff;
+  background: #117b6d;
+  border-color: #117b6d;
+}
+
+.driver-map-stops {
+  display: grid;
+  gap: 12rpx;
+}
+
+.driver-map-stop {
+  padding: 16rpx 18rpx;
+  background: #ffffff;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+}
+
+.driver-map-stop text {
+  display: block;
+}
+
+.driver-map-stop text:first-child {
+  color: #173b3a;
+  font-size: 25rpx;
+  font-weight: 900;
+}
+
+.driver-map-stop text:last-child {
+  margin-top: 6rpx;
+  color: #628078;
+  font-size: 21rpx;
+  line-height: 1.4;
+}
+
+.driver-order-card,
+.station-card {
+  padding: 24rpx;
+  background: rgba(255, 255, 255, 0.98);
   border: 1rpx solid #d9e9e3;
   border-radius: 28rpx;
+  box-shadow: 0 12rpx 40rpx rgba(17, 85, 76, 0.07);
+}
+
+.driver-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10rpx;
+  margin: 20rpx 0 12rpx;
+}
+
+.driver-grid view {
+  min-width: 0;
+  padding: 14rpx 8rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 16rpx;
+  text-align: center;
+}
+
+.driver-grid text {
+  display: block;
+}
+
+.driver-grid text:first-child {
+  color: #117b6d;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.driver-grid text:last-child {
+  margin-top: 4rpx;
+  color: #628078;
+  font-size: 20rpx;
+}
+
+.pending-strip {
+  display: block;
+  margin-top: 14rpx;
+  padding: 14rpx 16rpx;
+  color: #a36d14;
+  background: #fff5da;
+  border: 1rpx solid #efd797;
+  border-radius: 16rpx;
+  font-size: 23rpx;
+  line-height: 1.4;
+}
+
+.full-btn {
+  width: 100%;
+  margin-top: 18rpx;
+}
+
+.station-list {
+  display: grid;
+  gap: 18rpx;
+}
+
+.action-grid.compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 18rpx;
+}
+
+.soft-danger {
+  color: #b43c31 !important;
+  background: #fff0ee !important;
+  border: 1rpx solid #edbbb6;
+  box-shadow: none;
+}
+
+.mt {
+  margin-top: 18rpx;
+}
+
+.area-options {
+  display: grid;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.area-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  min-height: 86rpx;
+  padding: 0 22rpx;
+  color: #245a54 !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 20rpx;
+  text-align: left;
+}
+
+.area-card text:first-child {
+  color: #173b3a;
+  font-size: 27rpx;
+  font-weight: 900;
+}
+
+.area-card text:last-child {
+  color: #628078;
+  font-size: 22rpx;
+}
+
+.qty-editor {
+  display: grid;
+  grid-template-columns: 62rpx minmax(0, 1fr) 62rpx;
+  gap: 10rpx;
+  margin-top: 14rpx;
+}
+
+.qty-editor button,
+.qty-editor input {
+  min-height: 58rpx;
+  color: #117b6d;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 16rpx;
+  font-size: 26rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.location-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.shortage-list {
+  display: grid;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.shortage-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96rpx;
+  gap: 12rpx;
+  align-items: center;
+  padding: 14rpx;
+  background: #fffaf0;
+  border: 1rpx solid #efd797;
+  border-radius: 16rpx;
+}
+
+.shortage-row view text:first-child {
+  display: block;
+  color: #173b3a;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.shortage-row view text:last-child {
+  display: block;
+  margin-top: 4rpx;
+  color: #a36d14;
+  font-size: 21rpx;
+}
+
+.shortage-row input {
+  min-height: 56rpx;
+  color: #a36d14;
+  background: #ffffff;
+  border: 1rpx solid #efd797;
+  border-radius: 14rpx;
+  text-align: center;
+  font-weight: 900;
+}
+
+.quality-card textarea,
+.section textarea {
+  width: 100%;
+  min-height: 128rpx;
+  margin-top: 16rpx;
+  padding: 18rpx;
+  color: #173b3a;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+  font-size: 24rpx;
+}
+
+.quality-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.quality-grid view {
+  padding: 16rpx 8rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 16rpx;
+  text-align: center;
+}
+
+.task-basic-section .section-head,
+.doc-chain-section .section-head,
+.history-inventory-section .section-head {
+  align-items: flex-start;
+}
+
+.quantity-confirm {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.quantity-confirm view {
+  min-width: 0;
+  padding: 18rpx 10rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+  text-align: center;
+}
+
+.quantity-confirm view.danger {
+  background: #fff3ee;
+  border-color: #efc4b8;
+}
+
+.quantity-confirm text {
+  display: block;
+}
+
+.quantity-confirm text:first-child {
+  color: #117b6d;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.quantity-confirm view.danger text:first-child {
+  color: #b43c31;
+}
+
+.quantity-confirm text:last-child {
+  margin-top: 4rpx;
+  color: #628078;
+  font-size: 21rpx;
+}
+
+.doc-chain-flow {
+  display: flex;
+  gap: 10rpx;
+  margin: 18rpx -2rpx 18rpx;
+  padding-bottom: 4rpx;
+  overflow-x: auto;
+}
+
+.doc-chain-flow text {
+  position: relative;
+  flex: 0 0 auto;
+  min-height: 50rpx;
+  padding: 0 18rpx;
+  color: #628078;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+  line-height: 50rpx;
+  white-space: nowrap;
+}
+
+.doc-chain-flow text.active {
+  color: #ffffff;
+  background: #117b6d;
+  border-color: #117b6d;
+  box-shadow: 0 8rpx 18rpx rgba(17, 123, 109, 0.16);
+}
+
+.chain-grid {
+  margin-top: 0;
+}
+
+.receipt-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.receipt-photo {
+  display: flex;
+  align-items: flex-end;
+  min-height: 138rpx;
+  padding: 14rpx;
+  color: #ffffff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: inset 0 -36rpx 52rpx rgba(0, 0, 0, 0.18);
+}
+
+.receipt-photo.blue { background: linear-gradient(135deg, #1769aa, #3fa7d6); }
+.receipt-photo.orange { background: linear-gradient(135deg, #a36d14, #e0a432); }
+.receipt-photo.yellow { background: linear-gradient(135deg, #d19b1f, #f2c94c); }
+.receipt-photo.green { background: linear-gradient(135deg, #2f7f50, #7fb447); }
+.receipt-photo.teal { background: linear-gradient(135deg, #117b6d, #1aa18c); }
+.receipt-photo.purple { background: linear-gradient(135deg, #6856ad, #9b8be5); }
+.receipt-photo.rose { background: linear-gradient(135deg, #b43c31, #dc7a6d); }
+.receipt-photo.amber { background: linear-gradient(135deg, #a36d14, #d89c2d); }
+
+.receipt-photo text {
+  font-size: 22rpx;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.receipt-mini {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.receipt-mini view {
+  min-width: 0;
+  padding: 16rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+}
+
+.receipt-mini text {
+  display: block;
+}
+
+.receipt-mini text:first-child {
+  color: #66847c;
+  font-size: 21rpx;
+}
+
+.receipt-mini text:last-child {
+  margin-top: 6rpx;
+  color: #173b3a;
+  font-size: 24rpx;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.receipt-stamp {
+  display: grid;
+  gap: 6rpx;
+  margin-top: 18rpx;
+  padding: 20rpx;
+  color: #117b6d;
+  background: linear-gradient(135deg, #edf8f4, #ffffff);
+  border: 2rpx dashed #8fcfc0;
+  border-radius: 22rpx;
+  text-align: center;
+}
+
+.receipt-stamp text:first-child {
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.receipt-stamp text:last-child {
+  color: #66847c;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.inventory-flow-list,
+.role-matrix-list {
+  display: grid;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.inventory-flow-row {
+  display: grid;
+  gap: 12rpx;
+  padding: 18rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+}
+
+.inventory-flow-row > view {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14rpx;
+  min-width: 0;
+}
+
+.inventory-flow-row text {
+  display: block;
+  min-width: 0;
+  color: #628078;
+  font-size: 22rpx;
+  line-height: 1.35;
+}
+
+.inventory-flow-row text:first-child {
+  color: #173b3a;
+  font-weight: 900;
+}
+
+.inventory-flow-row text:last-child {
+  text-align: right;
+}
+
+.roles-page {
+  padding-bottom: 158rpx;
+}
+
+.roles-hero .warehouse-work-title {
+  margin-top: 2rpx;
+}
+
+.roles-current {
+  display: grid;
+  grid-template-columns: 88rpx minmax(0, 1fr);
+  gap: 18rpx;
+  align-items: center;
+  margin-top: 22rpx;
+}
+
+.role-icon-lg,
+.role-icon-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: #117b6d;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 20rpx;
+}
+
+.role-icon-lg {
+  width: 88rpx;
+  height: 88rpx;
+}
+
+.role-icon-sm {
+  width: 58rpx;
+  height: 58rpx;
+}
+
+.role-icon-lg svg,
+.role-icon-sm svg {
+  width: 48rpx;
+  height: 48rpx;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.role-icon-sm svg {
+  width: 34rpx;
+  height: 34rpx;
+}
+
+.role-rule-card {
+  background: linear-gradient(135deg, rgba(17, 123, 109, 0.08), rgba(255, 255, 255, 0.98) 46%);
+}
+
+.role-matrix-card {
+  display: grid;
+  gap: 14rpx;
+  width: 100%;
+  padding: 20rpx;
+  color: #173b3a !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 20rpx;
+  text-align: left;
+  box-shadow: 0 6rpx 18rpx rgba(17, 85, 76, 0.045);
+}
+
+.role-matrix-card.active {
+  border-color: #117b6d;
+  box-shadow: inset 0 0 0 2rpx rgba(17, 123, 109, 0.16), 0 8rpx 24rpx rgba(17, 85, 76, 0.06);
+}
+
+.role-matrix-card.active .role-icon-sm {
+  color: #ffffff;
+  background: #117b6d;
+  border-color: #117b6d;
+}
+
+.role-matrix-head {
+  display: grid;
+  grid-template-columns: 58rpx minmax(0, 1fr) auto;
+  gap: 14rpx;
+  align-items: center;
+}
+
+.role-actions-strip {
+  display: flex;
+  gap: 8rpx;
+  flex-wrap: wrap;
+}
+
+.role-actions-strip text {
+  min-height: 42rpx;
+  padding: 0 14rpx;
+  color: #117b6d;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  font-weight: 900;
+  line-height: 42rpx;
+}
+
+.quality-grid text {
+  display: block;
+}
+
+.quality-grid text:first-child {
+  color: #628078;
+  font-size: 21rpx;
+}
+
+.quality-grid text:last-child {
+  margin-top: 6rpx;
+  color: #117b6d;
+  font-size: 25rpx;
+  font-weight: 900;
+}
+
+.purchase-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.purchase-form > view {
+  min-width: 0;
+  padding: 16rpx;
+  background: #f7fbf8;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 18rpx;
+}
+
+.purchase-form text,
+.purchase-form picker view {
+  display: block;
+}
+
+.purchase-form text {
+  color: #66847c;
+  font-size: 21rpx;
+}
+
+.purchase-form picker view {
+  margin-top: 7rpx;
+  color: #173b3a;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.purchase-summary-strip {
+  display: flex;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin: 0 0 16rpx;
+  padding: 14rpx 16rpx;
+  color: #117b6d;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 18rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.purchase-catalog-main {
+  min-width: 0;
+}
+
+.purchase-qty-stepper {
+  display: grid;
+  grid-template-columns: 58rpx minmax(0, 1fr) 58rpx;
+  gap: 10rpx;
+  margin-top: 12rpx;
+}
+
+.purchase-qty-stepper button,
+.purchase-qty-stepper input {
+  min-height: 56rpx;
+  color: #117b6d;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.compact-goods {
+  grid-template-columns: 74rpx minmax(0, 1fr);
+}
+
+.goods-img.blue { background: linear-gradient(135deg, #1769aa, #3fa7d6); }
+.goods-img.orange { background: linear-gradient(135deg, #a36d14, #e0a432); }
+.goods-img.yellow { background: linear-gradient(135deg, #d19b1f, #f2c94c); }
+.goods-img.green { background: linear-gradient(135deg, #2f7f50, #7fb447); }
+.goods-img.teal { background: linear-gradient(135deg, #117b6d, #1aa18c); }
+.goods-img.purple { background: linear-gradient(135deg, #6856ad, #9b8be5); }
+.goods-img.rose { background: linear-gradient(135deg, #b43c31, #dc7a6d); }
+.goods-img.amber { background: linear-gradient(135deg, #a36d14, #d89c2d); }
+
+/* Warehouse H5 design-density pass. Visual-only overrides; page logic stays in Vue. */
+.page.phone-shell {
+  width: min(100vw, 375px);
+  max-width: 375px;
+  min-height: 100vh;
+  padding: 14rpx 16rpx 148rpx;
+  background:
+    linear-gradient(180deg, rgba(18, 112, 101, 0.055) 0 1rpx, transparent 1rpx 48rpx),
+    linear-gradient(90deg, rgba(18, 112, 101, 0.035) 0 1rpx, transparent 1rpx 48rpx),
+    linear-gradient(180deg, #edf6f2 0%, #f8fbf7 54%, #eef3ee 100%);
+}
+
+.warehouse-top,
+.warehouse-work-head {
+  margin-right: -16rpx;
+  margin-left: -16rpx;
+  overflow: hidden;
+  box-shadow: 0 10rpx 24rpx rgba(17, 85, 76, 0.1);
+}
+
+.warehouse-top {
+  margin-top: -14rpx;
+  margin-bottom: 14rpx;
+  padding: 16rpx 24rpx 24rpx;
+}
+
+.warehouse-work-head {
+  min-height: 154rpx;
+  margin-top: -14rpx;
+  margin-bottom: 14rpx;
+  padding: 14rpx 24rpx 20rpx;
+}
+
+.warehouse-work-head::after {
+  right: -70rpx;
+  top: 36rpx;
+  width: 214rpx;
+  height: 214rpx;
+}
+
+.warehouse-top::after {
+  right: -68rpx;
+  top: 62rpx;
+  width: 260rpx;
+  height: 118rpx;
+}
+
+.status-row {
+  min-height: 38rpx;
+  margin-bottom: 12rpx;
+  font-size: 20rpx;
+}
+
+.warehouse-work-title {
+  gap: 14rpx;
+  margin-top: 6rpx;
+}
+
+.warehouse-work-title .title,
+.warehouse-top .title {
+  font-size: 36rpx;
+  line-height: 1.14;
+  letter-spacing: 0;
+}
+
+.warehouse-work-title .subtle,
+.warehouse-top .subtle {
+  margin-top: 5rpx;
+  font-size: 21rpx;
+  line-height: 1.34;
+}
+
+.warehouse-main {
+  padding: 0 2rpx;
+}
+
+.manager-inventory-tools {
+  margin-top: -4rpx;
+}
+
+.role-home-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.data-source-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  min-height: 34rpx;
+  padding: 0 12rpx;
+  color: #6b8079;
+  background: rgba(237, 248, 244, 0.92);
+  border: 1rpx solid #d4e8df;
+  border-radius: 999rpx;
+  font-size: 19rpx;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.workbench-page,
+.tasks-page,
+.inventory-page,
+.mine-page,
+.roles-page {
+  padding-bottom: 150rpx;
+}
+
+.section,
+.warehouse-section,
+.task-card,
+.warehouse-task-card,
+.inventory-card,
+.role-card,
+.goods-card,
+.driver-order-card,
+.station-card,
+.warehouse-profile-card,
+.role-home-card,
+.role-matrix-card {
+  border-color: rgba(196, 218, 210, 0.72);
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045);
+}
+
+.section,
+.warehouse-section,
+.warehouse-profile-card {
+  margin-bottom: 12rpx;
+  padding: 18rpx;
+}
+
+.warehouse-section-head,
+.section-head {
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  line-height: 1.2;
+}
+
+.section-sub,
+.subtle {
+  font-size: 21rpx;
+  line-height: 1.36;
+}
+
+.role-badge,
+.pill,
+.status-pill {
+  min-height: 38rpx;
+  padding: 0 13rpx;
+  font-size: 20rpx;
+  line-height: 38rpx;
+}
+
+.primary,
+.plain,
+.danger {
+  min-height: 62rpx;
+  padding: 0 18rpx;
+  border-radius: 17rpx;
+  font-size: 23rpx;
+}
+
+.mini-btn {
+  min-height: 46rpx;
+  padding: 0 15rpx;
+  border-radius: 15rpx;
+  font-size: 21rpx;
+}
+
+.workbench-page .warehouse-kpis {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9rpx;
+  margin-bottom: 12rpx;
+}
+
+.workbench-page .warehouse-kpi {
+  min-height: 88rpx;
+  padding: 13rpx 11rpx;
+  border-radius: 12rpx;
+  text-align: left;
+  box-shadow: 0 8rpx 18rpx rgba(17, 85, 76, 0.08);
+}
+
+.workbench-page .warehouse-kpi text:first-child {
+  font-size: 34rpx;
+  line-height: 1;
+}
+
+.workbench-page .warehouse-kpi text:last-child {
+  min-height: 26rpx;
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  line-height: 1.22;
+}
+
+.warehouse-task-list,
+.task-list,
+.page-list,
+.warehouse-order-list,
+.inventory-list,
+.goods-list,
+.role-list,
+.log-list,
+.permission-list,
+.role-matrix-list {
+  gap: 11rpx;
+}
+
+.workbench-page .warehouse-task,
+.warehouse-home-task-card,
+.tasks-page .task-card,
+.tasks-page .warehouse-task-card,
+.tasks-page .driver-order-card,
+.inventory-card,
+.warehouse-stock-card,
+.role-matrix-card {
+  padding: 15rpx;
+  border-radius: 16rpx;
+  line-height: 1.28;
+}
+
+.workbench-page .warehouse-task,
+.warehouse-home-task-card {
+  min-height: 0;
+  background: #f8fcfa !important;
+  border-color: rgba(207, 229, 220, 0.9);
+  box-shadow: none;
+  text-align: left;
+}
+
+.home-task-head,
+.task-head,
+.driver-card-head,
+.warehouse-record-title-row,
+.inventory-head {
+  gap: 12rpx;
+}
+
+.home-task-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  line-height: 1.25;
+}
+
+.home-task-head > view {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 4rpx;
+}
+
+.warehouse-task-title,
+.task-title,
+.sku-title,
+.role-title {
+  display: block;
+  font-size: 26rpx;
+  line-height: 1.25;
+}
+
+.warehouse-task-desc,
+.task-sub,
+.task-note,
+.location-line,
+.role-tip,
+.goods-line {
+  margin-top: 5rpx;
+  font-size: 20rpx;
+  line-height: 1.34;
+}
+
+.home-task-meta,
+.task-meta {
+  gap: 7rpx;
+  margin-top: 10rpx;
+}
+
+.home-task-meta {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.home-task-meta text,
+.task-meta text,
+.task-summary view,
+.driver-grid view,
+.inventory-counts view,
+.stat-grid view,
+.detail-grid view,
+.driver-stats-meta view {
+  padding: 9rpx 8rpx;
+  border-radius: 13rpx;
+}
+
+.home-task-meta text {
+  max-width: 100%;
+  color: #5e7771;
+  background: #f1f7f4;
+  font-size: 20rpx;
+  line-height: 1.25;
+}
+
+.home-task-foot,
+.action-row,
+.task-foot {
+  margin-top: 10rpx;
+}
+
+.home-task-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10rpx;
+  color: #6a817b;
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.home-task-action {
+  flex: none;
+  min-width: 108rpx;
+  padding: 7rpx 13rpx;
+  color: #ffffff;
+  text-align: center;
+  background: #117b6d;
+  border-radius: 999rpx;
+  font-size: 20rpx;
+}
+
+.receiver-todo-summary {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12rpx;
+  align-items: stretch;
+  padding: 0;
+}
+
+.receiver-todo-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 18rpx;
+  width: 100%;
+  min-width: 0;
+  min-height: 96rpx;
+  padding: 18rpx 20rpx;
+  text-align: left;
+  background: #fbf7f0;
+  border: 2rpx solid rgba(203, 225, 216, 0.92);
+  border-radius: 16rpx;
+  box-shadow: 0 6rpx 14rpx rgba(17, 85, 76, 0.04);
+  line-height: 1.2;
+}
+
+.receiver-todo-main {
+  display: grid;
+  min-width: 0;
+  gap: 8rpx;
+}
+
+.receiver-todo-label {
+  color: #173b3a;
+  font-size: 26rpx;
+  font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.receiver-todo-desc {
+  display: block;
+  overflow: hidden;
+  color: #5d766f;
+  font-size: 22rpx;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.receiver-todo-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70rpx;
+  min-height: 50rpx;
+  padding: 0 16rpx;
+  color: #0f766b;
+  background: #edf8f4;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+  line-height: 50rpx;
+  white-space: nowrap;
+}
+
+.filter-bar,
+.driver-tabs,
+.seg-tabs {
+  margin-bottom: 11rpx;
+}
+
+.seg-tabs {
+  padding: 5rpx;
+  border-radius: 22rpx;
+}
+
+.seg-tabs button,
+.driver-tabs button {
+  min-height: 50rpx;
+  border-radius: 17rpx;
+  font-size: 21rpx;
+}
+
+.search-box,
+.filter-chip,
+.date-chip,
+.warehouse-record-search,
+.warehouse-record-filter {
+  min-height: 58rpx;
+  border-radius: 17rpx;
+}
+
+.search-box input,
+.warehouse-record-search input {
+  min-height: 54rpx;
+  font-size: 22rpx;
+}
+
+.tasks-page .warehouse-order-list {
+  padding: 0 2rpx 12rpx;
+}
+
+.tasks-page .warehouse-task-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(196, 218, 210, 0.76);
+  box-shadow: 0 5rpx 16rpx rgba(17, 85, 76, 0.045);
+}
+
+.task-summary,
+.task-meta,
+.driver-grid,
+.inventory-counts,
+.stat-grid,
+.detail-grid,
+.qty-line,
+.driver-stats-meta {
+  gap: 7rpx;
+}
+
+.task-summary text:first-child,
+.inventory-counts text:first-child,
+.stat-grid text:first-child,
+.detail-grid text:last-child,
+.driver-grid text:first-child {
+  font-size: 25rpx;
+}
+
+.task-summary text:last-child,
+.inventory-counts text:last-child,
+.driver-grid text:last-child,
+.stat-grid text:last-child {
+  font-size: 19rpx;
+}
+
+.inventory-summary {
+  gap: 9rpx;
+  padding: 15rpx;
+  border-radius: 17rpx;
+}
+
+.inventory-counts {
+  gap: 7rpx;
+  margin-top: 10rpx;
+}
+
+.inventory-counts view {
+  min-height: 62rpx;
+}
+
+.warehouse-stock-card .location-line {
+  margin-top: 9rpx;
+}
+
+.record-entry-card {
+  padding: 0;
+}
+
+.warehouse-profile-link {
+  min-height: 88rpx;
+  padding: 13rpx 15rpx;
+}
+
+.warehouse-profile-link-icon {
+  flex-basis: 56rpx;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 15rpx;
+}
+
+.driver-stats-filter {
+  margin: 12rpx 16rpx 0;
+}
+
+.driver-stats-summary {
+  gap: 7rpx;
+  margin: 11rpx 16rpx 0;
+}
+
+.driver-stats-summary view {
+  min-height: 76rpx;
+  padding: 10rpx 8rpx;
+  border-radius: 15rpx;
+}
+
+.mine-page .driver-list {
+  gap: 11rpx;
+  padding: 11rpx 16rpx 132rpx;
+}
+
+.manager-top {
+  margin: -14rpx -16rpx 14rpx;
+  padding-bottom: 24rpx;
+  box-shadow: 0 10rpx 24rpx rgba(17, 85, 76, 0.1);
+}
+
+.manager-status {
+  min-height: 52rpx;
+  padding: 0 24rpx;
+}
+
+.manager-top-title {
+  min-height: 74rpx;
+  padding: 0 24rpx;
+  font-size: 31rpx;
+}
+
+.manager-capsule {
+  width: 62rpx;
+  height: 46rpx;
+}
+
+.manager-home-hero {
+  gap: 16rpx;
+  padding: 8rpx 24rpx 0;
+}
+
+.manager-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  font-size: 30rpx;
+}
+
+.manager-user-name {
+  gap: 9rpx;
+  margin-bottom: 5rpx;
+  font-size: 28rpx;
+}
+
+.manager-user-line,
+.manager-login-time {
+  font-size: 21rpx;
+}
+
+.manager-login-time {
+  margin: 12rpx 24rpx 0;
+}
+
+.manager-home-actions {
+  gap: 12rpx;
+  padding: 0 2rpx;
+  margin-bottom: 12rpx;
+}
+
+.manager-action-card {
+  grid-template-columns: 48rpx minmax(0, 1fr);
+  gap: 10rpx;
+  min-height: 84rpx;
+  padding: 15rpx 14rpx;
+  border-radius: 16rpx;
+  font-size: 25rpx;
+  box-shadow: 0 5rpx 16rpx rgba(17, 85, 76, 0.045);
+}
+
+.manager-action-icon {
+  width: 46rpx;
+  height: 46rpx;
+  border-radius: 14rpx;
+}
+
+.manager-action-icon svg {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.manager-status-overview {
+  margin-bottom: 14rpx;
+  padding: 18rpx;
+  border-radius: 18rpx;
+}
+
+.manager-status-grid {
+  gap: 10rpx;
+  margin-top: 12rpx;
+}
+
+.manager-status-grid view {
+  min-height: 56rpx;
+  padding: 10rpx 14rpx;
+  border-radius: 14rpx;
+}
+
+.manager-status-grid text:last-child {
+  font-size: 27rpx;
+}
+
+.roles-current {
+  grid-template-columns: 72rpx minmax(0, 1fr);
+  gap: 12rpx;
+  margin-top: 0;
+}
+
+.role-icon-lg {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 17rpx;
+}
+
+.role-icon-lg svg {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.role-icon-sm {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 14rpx;
+}
+
+.role-icon-sm svg {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.role-matrix-list {
+  margin-top: 10rpx;
+}
+
+.role-matrix-head {
+  grid-template-columns: 48rpx minmax(0, 1fr) auto;
+  gap: 10rpx;
+}
+
+.role-actions-strip {
+  display: none;
+}
+
+.compact-goods {
+  grid-template-columns: 74rpx minmax(0, 1fr);
+}
+
+.stocktake-row,
+.inventory-flow-row,
+.driver-map-card,
+.driver-map-stop,
+.quality-grid view,
+.quantity-confirm view,
+.receipt-mini view {
+  border-radius: 16rpx;
+}
+
+.login-page {
+  padding: 0 12rpx 22rpx;
+}
+
+.login-page .login-hero {
+  margin-bottom: 12rpx;
+  padding: 22rpx 28rpx 28rpx;
+}
+
+.login-page .login-panel {
+  padding: 20rpx 22rpx;
+  border-radius: 22rpx;
+}
+
+.login-page .role-panel.open {
+  padding: 18rpx 26rpx 20rpx;
+}
+
+.login-role-grid {
+  gap: 14rpx;
+}
+
+.login-role-option {
+  min-height: 76rpx;
+  border-radius: 16rpx;
+}
+
+.login-page .login-input,
+.login-page .login-btn,
+.form-row {
+  min-height: 74rpx;
+  border-radius: 18rpx;
+}
+
+.warehouse-bottom {
+  right: max(20rpx, calc((100vw - 375px) / 2 + 10px));
+  bottom: max(8rpx, env(safe-area-inset-bottom));
+  left: max(20rpx, calc((100vw - 375px) / 2 + 10px));
+  gap: 6rpx;
+  height: 112rpx;
+  max-height: 112rpx;
+  max-width: 355px;
+  padding: 9rpx 10rpx;
+  border-radius: 24rpx 24rpx 14rpx 14rpx;
+  box-shadow: 0 -12rpx 28rpx rgba(17, 85, 76, 0.13);
+}
+
+.warehouse-nav-btn {
+  gap: 3rpx;
+  height: 94rpx;
+  max-height: 94rpx;
+  border-radius: 18rpx;
+  font-size: 20rpx;
+}
+
+.warehouse-nav-btn text {
+  max-width: 100%;
+  font-size: 20rpx;
+  line-height: 1.12;
+  white-space: nowrap;
+}
+
+.warehouse-nav-icon {
+  width: 42rpx;
+  height: 42rpx;
+  border-radius: 14rpx;
+}
+
+.warehouse-nav-icon svg {
+  width: 29rpx;
+  height: 29rpx;
+}
+
+.receiver-tasks-page {
+  padding: 0 12rpx 150rpx;
+  background: linear-gradient(180deg, #f4faf7 0%, #edf6f2 48%, #f7fbf8 100%);
+}
+
+.receiver-task-top {
+  margin: 0 -12rpx 0;
+  padding: 32rpx 24rpx 28rpx;
+  color: #ffffff;
+  background: #117467;
+}
+
+.receiver-task-top .status-row {
+  margin-bottom: 28rpx;
+  color: #ffffff;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.receiver-task-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.receiver-task-title-row > view {
+  display: grid;
+  min-width: 0;
+  gap: 6rpx;
+}
+
+.receiver-task-title,
+.receiver-task-sub {
+  display: block;
+}
+
+.receiver-task-title {
+  color: #062f2e;
+  font-size: 34rpx;
+  font-weight: 900;
+  line-height: 1.12;
+}
+
+.receiver-task-sub {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 20rpx;
+  font-weight: 800;
+  opacity: 0.9;
+}
+
+.receiver-task-badge {
+  flex: none;
+  min-height: 46rpx;
+  padding: 0 20rpx;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.19);
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  font-weight: 900;
+  line-height: 46rpx;
+  white-space: nowrap;
+}
+
+.receiver-filter-panel {
+  display: grid;
+  gap: 12rpx;
+  margin: 0 0 12rpx;
+  padding: 12rpx;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1rpx solid rgba(196, 218, 210, 0.9);
+  border-radius: 0 0 22rpx 22rpx;
+  box-shadow: 0 6rpx 16rpx rgba(17, 85, 76, 0.045);
+}
+
+.receiver-status-row,
+.receiver-filter-row {
+  display: grid;
+  gap: 12rpx;
+}
+
+.receiver-status-picker-wrap {
+  display: block;
+  width: 100%;
+}
+
+.receiver-status-row {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  min-height: 64rpx;
+  padding: 0 14rpx;
+  background: #f8fcfa;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 26rpx;
+}
+
+.receiver-status-label,
+.receiver-status-picker,
+.receiver-date-chip,
+.receiver-search-box {
+  display: flex;
+  align-items: center;
+}
+
+.receiver-status-label {
+  gap: 8rpx;
+  min-width: 0;
+  color: #173b3a;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.receiver-status-dot {
+  width: 14rpx;
+  height: 14rpx;
+  background: #25b58f;
+  border-radius: 50%;
+}
+
+.receiver-status-picker {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  justify-content: center;
+  gap: 8rpx;
+  width: 156rpx;
+  min-width: 156rpx;
+  min-height: 42rpx;
+  padding: 0 12rpx;
+  color: #0f6b60;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  font-weight: 900;
+}
+
+.receiver-status-arrow {
+  font-size: 23rpx;
+  line-height: 1;
+}
+
+.receiver-filter-row {
+  grid-template-columns: minmax(0, 65fr) minmax(0, 35fr);
+}
+
+.receiver-filter-row > uni-picker,
+.receiver-filter-row > picker {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.receiver-search-box {
+  gap: 8rpx;
+  min-height: 72rpx;
+  padding: 0 12rpx;
+  color: #0f6b60;
+  background: #ffffff;
+  border: 1rpx solid #d9e9e3;
+  border-radius: 26rpx;
+  box-shadow: 0 6rpx 14rpx rgba(17, 85, 76, 0.04);
+}
+
+.receiver-search-box input {
+  flex: 1;
+  min-width: 0;
+  min-height: 68rpx;
+  color: #173b3a;
+  font-size: 22rpx;
+}
+
+.receiver-date-chip {
+  justify-content: center;
+  gap: 10rpx;
+  width: 100%;
+  min-width: 164rpx;
+  min-height: 72rpx;
+  color: #ffffff;
+  background: #118170;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 18rpx rgba(17, 123, 109, 0.16);
+  font-size: 23rpx;
+  font-weight: 900;
+}
+
+.receiver-date-chip svg {
+  width: 30rpx;
+  height: 30rpx;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.receiver-task-list {
+  display: grid;
+  gap: 16rpx;
+  padding-bottom: 10rpx;
+}
+
+.receiver-task-card {
+  display: grid;
+  gap: 18rpx;
+  padding: 24rpx 22rpx 22rpx;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1rpx solid rgba(196, 218, 210, 0.86);
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 22rpx rgba(17, 85, 76, 0.055);
+}
+
+.receiver-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14rpx;
+}
+
+.receiver-card-head > view {
+  display: grid;
+  min-width: 0;
+  gap: 9rpx;
+}
+
+.receiver-card-no,
+.receiver-card-route {
+  display: block;
+}
+
+.receiver-card-no {
+  color: #102f2e;
+  font-size: 30rpx;
+  font-weight: 900;
+  line-height: 1.14;
+}
+
+.receiver-card-route {
+  color: #4d6f68;
+  font-size: 21rpx;
+  font-weight: 800;
+  line-height: 1.3;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.receiver-status-pill {
+  flex: none;
+  min-height: 46rpx;
+  padding: 0 18rpx;
+  color: #0f6b60;
+  background: #edf8f4;
+  border: 1rpx solid #cce8dc;
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  font-weight: 900;
+  line-height: 46rpx;
+  white-space: nowrap;
+}
+
+.receiver-status-pill.amber {
+  color: #9a6a00;
+  background: #fff8e8;
+  border-color: #f4dfad;
+}
+
+.receiver-status-pill.blue {
+  color: #0b6f87;
+  background: #edf8fb;
+  border-color: #c9e6ed;
+}
+
+.receiver-status-pill.green {
+  color: #117b6d;
+  background: #edf8f4;
+  border-color: #cce8dc;
+}
+
+.receiver-status-pill.gray {
+  color: #60716d;
+  background: #edf1ef;
+  border-color: #d6dfdc;
+}
+
+.receiver-status-pill.red {
+  color: #9d372e;
+  background: #fff1ef;
+  border-color: #f1c6be;
+}
+
+.receiver-card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+}
+
+.receiver-card-stats view {
+  min-width: 0;
+  min-height: 96rpx;
+  padding: 17rpx 18rpx;
+  background: #eaf6f1;
+  border: 1rpx solid #cfe5dc;
+  border-radius: 15rpx;
+}
+
+.receiver-card-stats text {
+  display: block;
+}
+
+.receiver-card-stats text:first-child {
+  color: #102f2e;
+  font-size: 33rpx;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.receiver-card-stats text:last-child {
+  margin-top: 7rpx;
+  color: #3d625b;
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.receiver-card-meta {
+  display: grid;
+  gap: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #dbe8e2;
+}
+
+.receiver-card-meta view {
+  display: grid;
+  grid-template-columns: 130rpx minmax(0, 1fr);
+  gap: 14rpx;
+  align-items: center;
+  min-height: 34rpx;
+}
+
+.receiver-card-meta text {
+  display: block;
+  min-width: 0;
+  color: #102f2e;
+  font-size: 22rpx;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.receiver-card-meta text:first-child {
+  color: #173b3a;
+}
+
+.receiver-card-meta text:last-child {
+  text-align: right;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.receiver-card-actions {
+  display: flex;
+  gap: 14rpx;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 18rpx;
+  border-top: 1rpx solid #dbe8e2;
+}
+
+.receiver-detail-btn,
+.receiver-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  gap: 8rpx;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  min-height: 58rpx;
+  padding: 0 24rpx;
+  color: #ffffff;
+  background: #117b6d !important;
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 18rpx rgba(17, 123, 109, 0.2);
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.receiver-primary-btn {
+  background: #159177 !important;
+}
+
+/* Readability pass: keep the current layout style, but raise small text to a
+   phone-friendly size across the warehouse H5 surfaces. */
+page {
+  font-size: 30rpx;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+input,
+textarea,
+button {
+  font-size: 28rpx;
+}
+
+.subtle,
+.eyebrow,
+.task-sub,
+.task-note,
+.task-meta,
+.warehouse-task-desc,
+.home-task-meta,
+.home-task-foot,
+.log-list,
+.inventory-sub,
+.goods-sub,
+.profile-sub,
+.mine-sub,
+.permission-line,
+.record-row,
+.form-label,
+.field-label {
+  font-size: 26rpx !important;
+  line-height: 1.48;
+}
+
+.section-title,
+.task-title,
+.warehouse-task-title,
+.goods-title,
+.inventory-title,
+.profile-title,
+.mine-title,
+.form-title {
+  font-size: 31rpx !important;
+  line-height: 1.32;
+}
+
+.status-pill,
+.filter-chip,
+.date-chip,
+.role-badge,
+.warehouse-nav-btn text,
+.warehouse-nav-btn,
+.warehouse-bottom text {
+  font-size: 25rpx !important;
+}
+
+.warehouse-kpi text:first-child,
+.task-summary text:first-child,
+.driver-grid text:first-child,
+.inventory-stat text:first-child,
+.work-stat text:first-child {
+  font-size: 38rpx !important;
+}
+
+.warehouse-kpi text:last-child,
+.task-summary text:last-child,
+.driver-grid text:last-child,
+.inventory-stat text:last-child,
+.work-stat text:last-child {
+  font-size: 25rpx !important;
+}
+
+.receiver-task-title {
+  font-size: 37rpx;
+}
+
+.receiver-task-sub {
+  font-size: 24rpx;
+}
+
+.receiver-task-badge,
+.receiver-status-label,
+.receiver-status-picker,
+.receiver-date-chip,
+.receiver-search-box input {
+  font-size: 25rpx;
+}
+
+.receiver-card-no {
+  font-size: 33rpx;
+}
+
+.receiver-card-route,
+.receiver-status-pill,
+.receiver-card-meta text,
+.receiver-detail-btn,
+.receiver-primary-btn {
+  font-size: 25rpx;
+}
+
+.receiver-card-stats text:first-child {
+  font-size: 37rpx;
+}
+
+.receiver-card-stats text:last-child {
+  font-size: 24rpx;
+}
+
+.manager-status-grid text:first-child,
+.manager-action-card text,
+.driver-order-card text,
+.warehouse-task-card text,
+.inventory-card text,
+.mine-page text,
+.roles-page text {
+  font-size: 26rpx;
+}
+
+/* Final readability lift: keep the current visual language, only make dense
+   warehouse copy easier to read on 375px phones. */
+.phone-shell,
+.phone-shell text,
+.phone-shell button,
+.phone-shell input,
+.phone-shell textarea,
+.phone-shell picker {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.phone-shell text,
+.phone-shell button,
+.phone-shell input,
+.phone-shell textarea {
+  letter-spacing: 0;
+}
+
+.phone-shell .subtle,
+.phone-shell .section-sub,
+.phone-shell .task-sub,
+.phone-shell .task-note,
+.phone-shell .task-meta,
+.phone-shell .warehouse-task-desc,
+.phone-shell .warehouse-task text:last-child,
+.phone-shell .home-task-meta,
+.phone-shell .home-task-foot,
+.phone-shell .goods-line,
+.phone-shell .goods-sub,
+.phone-shell .inventory-sub,
+.phone-shell .location-line,
+.phone-shell .mine-sub,
+.phone-shell .profile-line,
+.phone-shell .profile-sub,
+.phone-shell .record-row,
+.phone-shell .warehouse-record-meta,
+.phone-shell .warehouse-pick-line,
+.phone-shell .driver-route-sub,
+.phone-shell .driver-map-stop text:last-child,
+.phone-shell .pending-strip,
+.phone-shell .receipt-stamp text:last-child,
+.phone-shell .api-source-hint {
+  font-size: 27rpx !important;
+  line-height: 1.5 !important;
+}
+
+.phone-shell .eyebrow,
+.phone-shell .status-row,
+.phone-shell .filter-chip,
+.phone-shell .date-chip,
+.phone-shell .status-pill,
+.phone-shell .role-badge,
+.phone-shell .data-source-chip,
+.phone-shell .manager-capsule,
+.phone-shell .warehouse-record-filter,
+.phone-shell .receiver-status-label,
+.phone-shell .receiver-status-picker,
+.phone-shell .receiver-date-chip,
+.phone-shell .receiver-status-pill,
+.phone-shell .receiver-task-badge,
+.phone-shell .role-actions-strip text,
+.phone-shell .doc-chain-flow text,
+.phone-shell .purchase-summary-strip {
+  font-size: 26rpx !important;
+  line-height: 1.35 !important;
+}
+
+.phone-shell .title,
+.phone-shell .section-title,
+.phone-shell .task-title,
+.phone-shell .warehouse-task-title,
+.phone-shell .goods-title,
+.phone-shell .sku-title,
+.phone-shell .inventory-title,
+.phone-shell .mine-title,
+.phone-shell .profile-title,
+.phone-shell .profile-name,
+.phone-shell .driver-route-title,
+.phone-shell .role-title,
+.phone-shell .role-name,
+.phone-shell .form-title,
+.phone-shell .warehouse-record-title-row text:first-child,
+.phone-shell .driver-map-card-head view text:first-child,
+.phone-shell .inventory-flow-row text:first-child {
+  font-size: 32rpx !important;
+  line-height: 1.34 !important;
+}
+
+.phone-shell .login-page .title,
+.phone-shell .warehouse-work-title .title,
+.phone-shell .detail-title-row .title,
+.phone-shell .manager-top-title text,
+.phone-shell .receiver-task-title {
+  font-size: 38rpx !important;
+  line-height: 1.18 !important;
+}
+
+.phone-shell .warehouse-kpi text:first-child,
+.phone-shell .inventory-summary text:first-child,
+.phone-shell .inventory-counts text:first-child,
+.phone-shell .task-summary text:first-child,
+.phone-shell .quantity-confirm text:first-child,
+.phone-shell .driver-grid text:first-child,
+.phone-shell .driver-stats-summary text:last-child,
+.phone-shell .driver-stats-meta text:last-child,
+.phone-shell .stat-grid text:first-child,
+.phone-shell .work-stat text:first-child,
+.phone-shell .receiver-card-stats text:first-child {
+  font-size: 40rpx !important;
+  line-height: 1.08 !important;
+}
+
+.phone-shell .warehouse-kpi text:last-child,
+.phone-shell .inventory-summary text:last-child,
+.phone-shell .inventory-counts text:last-child,
+.phone-shell .task-summary text:last-child,
+.phone-shell .quantity-confirm text:last-child,
+.phone-shell .driver-grid text:last-child,
+.phone-shell .driver-stats-summary text:first-child,
+.phone-shell .driver-stats-meta text:first-child,
+.phone-shell .stat-grid text:last-child,
+.phone-shell .work-stat text:last-child,
+.phone-shell .receiver-card-stats text:last-child,
+.phone-shell .detail-grid text:first-child,
+.phone-shell .receipt-mini text:first-child,
+.phone-shell .quality-grid text:first-child,
+.phone-shell .purchase-form text {
+  font-size: 25rpx !important;
+  line-height: 1.35 !important;
+}
+
+.phone-shell .detail-grid text:last-child,
+.phone-shell .receipt-mini text:last-child,
+.phone-shell .quality-grid text:last-child,
+.phone-shell .purchase-form picker view,
+.phone-shell .area-card text:first-child,
+.phone-shell .shortage-row view text:first-child,
+.phone-shell .stocktake-info text:first-child,
+.phone-shell .stocktake-qty text,
+.phone-shell .manager-action-card text,
+.phone-shell .role-matrix-card text,
+.phone-shell .roles-current text,
+.phone-shell .warehouse-profile-link-copy text,
+.phone-shell .warehouse-record-tools input,
+.phone-shell .search-box input,
+.phone-shell .receiver-search-box input,
+.phone-shell .form-row text,
+.phone-shell .form-row input {
+  font-size: 28rpx !important;
+  line-height: 1.38 !important;
+}
+
+.phone-shell .plain,
+.phone-shell .primary,
+.phone-shell .danger,
+.phone-shell .full-btn,
+.phone-shell .login-btn,
+.phone-shell .forgot-btn,
+.phone-shell .receiver-detail-btn,
+.phone-shell .receiver-primary-btn,
+.phone-shell .home-task-action,
+.phone-shell .receiver-todo-action,
+.phone-shell .driver-tabs button,
+.phone-shell .driver-mode-tabs button,
+.phone-shell .quick-card,
+.phone-shell .stocktake-check,
+.phone-shell .qty-editor button,
+.phone-shell .qty-editor input,
+.phone-shell .purchase-qty-stepper button,
+.phone-shell .purchase-qty-stepper input {
+  font-size: 28rpx !important;
+  line-height: 1.28 !important;
+}
+
+.phone-shell .warehouse-nav-btn,
+.phone-shell .warehouse-nav-btn text,
+.phone-shell .warehouse-bottom text {
+  font-size: 26rpx !important;
+  line-height: 1.15 !important;
+  white-space: normal;
+}
+
+.phone-shell .log-list text,
+.phone-shell .inventory-flow-row text,
+.phone-shell .role-actions-strip text,
+.phone-shell .driver-map-card-head view text:last-child,
+.phone-shell .driver-map-card-head > text,
+.phone-shell .driver-map-stop text:first-child,
+.phone-shell .area-card text:last-child,
+.phone-shell .shortage-row view text:last-child,
+.phone-shell .stocktake-info text:last-child,
+.phone-shell .stocktake-row input,
+.phone-shell .receipt-photo text,
+.phone-shell .receipt-stamp text:first-child {
+  font-size: 27rpx !important;
+  line-height: 1.4 !important;
+}
+
+.phone-shell .receiver-card-no {
+  font-size: 36rpx !important;
+}
+
+.phone-shell .receiver-card-route,
+.phone-shell .receiver-card-meta text,
+.phone-shell .receiver-todo-label,
+.phone-shell .receiver-todo-desc {
+  font-size: 28rpx !important;
+  line-height: 1.38 !important;
+}
+
+.phone-shell .goods-img,
+.phone-shell .warehouse-record-thumb,
+.phone-shell .avatar,
+.phone-shell .manager-avatar {
+  font-size: 31rpx !important;
+  font-weight: 900;
+}
+
+/* Root page correction: several uni pages put page type and phone-shell on the
+   same node, so these selectors must target the combined root class. */
+.phone-shell.login-page .title,
+.phone-shell.workbench-page .warehouse-work-title .title,
+.phone-shell.inventory-page .warehouse-top .title,
+.phone-shell.mine-page .warehouse-top .title,
+.phone-shell.roles-page .warehouse-work-title .title,
+.phone-shell.detail-page .detail-title-row .title,
+.phone-shell.tasks-page .receiver-task-title {
+  font-size: 40rpx !important;
+  line-height: 1.18 !important;
+}
+
+.phone-shell.login-page .eyebrow,
+.phone-shell.login-page .subtle,
+.phone-shell.login-page .section-sub,
+.phone-shell.workbench-page .subtle,
+.phone-shell.inventory-page .subtle,
+.phone-shell.mine-page .profile-line,
+.phone-shell.roles-page .subtle,
+.phone-shell.detail-page .subtle,
+.phone-shell.tasks-page .receiver-task-sub {
+  font-size: 28rpx !important;
+  line-height: 1.45 !important;
+}
+
+.phone-shell.login-page .section-title,
+.phone-shell.workbench-page .section-title,
+.phone-shell.inventory-page .section-title,
+.phone-shell.mine-page .section-title,
+.phone-shell.roles-page .section-title,
+.phone-shell.detail-page .section-title,
+.phone-shell.tasks-page .section-title {
+  font-size: 33rpx !important;
+  line-height: 1.3 !important;
+}
+
+.phone-shell.login-page .login-role-option,
+.phone-shell.login-page .login-role-name,
+.phone-shell.login-page .login-current-role {
+  font-size: 29rpx !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell.login-page .form-row text,
+.phone-shell.login-page .form-row input,
+.phone-shell.login-page .login-btn,
+.phone-shell.login-page .forgot-btn {
+  font-size: 29rpx !important;
+}
+
+.phone-shell.workbench-page .receiver-todo-label,
+.phone-shell.workbench-page .receiver-todo-desc,
+.phone-shell.workbench-page .log-list text,
+.phone-shell.tasks-page .receiver-card-route,
+.phone-shell.tasks-page .receiver-card-meta text,
+.phone-shell.tasks-page .receiver-detail-btn,
+.phone-shell.tasks-page .receiver-primary-btn,
+.phone-shell.inventory-page .location-line,
+.phone-shell.inventory-page .log-list text,
+.phone-shell.mine-page .log-list text,
+.phone-shell.roles-page .role-actions-strip text,
+.phone-shell.detail-page .detail-grid text,
+.phone-shell.detail-page .goods-line,
+.phone-shell.detail-page .task-note,
+.phone-shell.detail-page .log-list text {
+  font-size: 28rpx !important;
+  line-height: 1.45 !important;
+}
+
+.phone-shell.workbench-page .warehouse-kpi text:first-child,
+.phone-shell.inventory-page .inventory-summary text:first-child,
+.phone-shell.inventory-page .inventory-counts text:first-child,
+.phone-shell.mine-page .stat-grid text:first-child,
+.phone-shell.detail-page .quantity-confirm text:first-child,
+.phone-shell.tasks-page .receiver-card-stats text:first-child {
+  font-size: 42rpx !important;
+}
+
+.phone-shell .warehouse-kpi uni-text:first-child,
+.phone-shell .inventory-summary uni-text:first-child,
+.phone-shell .inventory-counts uni-text:first-child,
+.phone-shell .task-summary uni-text:first-child,
+.phone-shell .quantity-confirm uni-text:first-child,
+.phone-shell .driver-grid uni-text:first-child,
+.phone-shell .stat-grid uni-text:first-child,
+.phone-shell .receiver-card-stats uni-text:first-child {
+  font-size: 42rpx !important;
+  line-height: 1.08 !important;
+}
+
+.phone-shell .warehouse-kpi uni-text:last-child,
+.phone-shell .inventory-summary uni-text:last-child,
+.phone-shell .inventory-counts uni-text:last-child,
+.phone-shell .task-summary uni-text:last-child,
+.phone-shell .quantity-confirm uni-text:last-child,
+.phone-shell .driver-grid uni-text:last-child,
+.phone-shell .stat-grid uni-text:last-child,
+.phone-shell .receiver-card-stats uni-text:last-child {
+  font-size: 28rpx !important;
+  line-height: 1.25 !important;
+}
+
+.phone-shell .log-list uni-text,
+.phone-shell .warehouse-nav-btn uni-text,
+.phone-shell .status-pill,
+.phone-shell uni-text.status-pill,
+.phone-shell .filter-chip,
+.phone-shell .date-chip,
+.phone-shell .role-badge,
+.phone-shell uni-text.role-badge,
+.phone-shell .data-source-chip,
+.phone-shell .receiver-status-pill,
+.phone-shell uni-text.receiver-status-pill,
+.phone-shell .receiver-task-badge {
+  font-size: 28rpx !important;
+  line-height: 1.32 !important;
+}
+
+.phone-shell .warehouse-nav-btn uni-text span,
+.phone-shell .log-list uni-text span,
+.phone-shell .status-pill span,
+.phone-shell .role-badge span,
+.phone-shell .receiver-status-pill span {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Larger practical floor after browser inspection: 28rpx rendered as 14px on
+   375px H5, still too small for repeated warehouse operations. */
+.phone-shell .subtle,
+.phone-shell .section-sub,
+.phone-shell .task-sub,
+.phone-shell .task-note,
+.phone-shell .task-meta,
+.phone-shell .warehouse-task-desc,
+.phone-shell .home-task-meta,
+.phone-shell .home-task-foot,
+.phone-shell .goods-line,
+.phone-shell .goods-sub,
+.phone-shell .inventory-sub,
+.phone-shell .location-line,
+.phone-shell .mine-sub,
+.phone-shell .profile-line,
+.phone-shell .profile-sub,
+.phone-shell .record-row,
+.phone-shell .warehouse-record-meta,
+.phone-shell .warehouse-pick-line,
+.phone-shell .driver-route-sub,
+.phone-shell .pending-strip,
+.phone-shell .log-list uni-text,
+.phone-shell .receiver-todo-label,
+.phone-shell .receiver-todo-desc,
+.phone-shell .receiver-card-route,
+.phone-shell .receiver-card-meta uni-text,
+.phone-shell .detail-grid uni-text,
+.phone-shell .receipt-mini uni-text,
+.phone-shell .inventory-flow-row uni-text,
+.phone-shell .role-actions-strip uni-text,
+.phone-shell .driver-map-stop uni-text,
+.phone-shell .area-card uni-text,
+.phone-shell .shortage-row uni-text,
+.phone-shell .stocktake-info uni-text,
+.phone-shell .warehouse-record-tools input,
+.phone-shell .search-box input,
+.phone-shell .receiver-search-box input,
+.phone-shell .form-row uni-text,
+.phone-shell .form-row input {
+  font-size: 30rpx !important;
+  line-height: 1.45 !important;
+}
+
+.phone-shell .status-row,
+.phone-shell .eyebrow,
+.phone-shell .filter-chip,
+.phone-shell .date-chip,
+.phone-shell .status-pill,
+.phone-shell uni-text.status-pill,
+.phone-shell .role-badge,
+.phone-shell uni-text.role-badge,
+.phone-shell .data-source-chip,
+.phone-shell .warehouse-record-filter,
+.phone-shell .receiver-status-label,
+.phone-shell .receiver-status-picker,
+.phone-shell .receiver-date-chip,
+.phone-shell .receiver-status-pill,
+.phone-shell uni-text.receiver-status-pill,
+.phone-shell .receiver-task-badge,
+.phone-shell .warehouse-nav-btn,
+.phone-shell .warehouse-nav-btn uni-text,
+.phone-shell .warehouse-bottom uni-text {
+  font-size: 30rpx !important;
+  line-height: 1.25 !important;
+}
+
+.phone-shell .plain,
+.phone-shell .primary,
+.phone-shell .danger,
+.phone-shell .full-btn,
+.phone-shell .login-btn,
+.phone-shell .forgot-btn,
+.phone-shell .receiver-detail-btn,
+.phone-shell .receiver-primary-btn,
+.phone-shell .home-task-action,
+.phone-shell .receiver-todo-action,
+.phone-shell .driver-tabs button,
+.phone-shell .driver-mode-tabs button,
+.phone-shell .quick-card,
+.phone-shell .stocktake-check,
+.phone-shell .qty-editor button,
+.phone-shell .qty-editor input,
+.phone-shell .purchase-qty-stepper button,
+.phone-shell .purchase-qty-stepper input {
+  font-size: 30rpx !important;
+  line-height: 1.25 !important;
+}
+
+.phone-shell .title,
+.phone-shell .section-title,
+.phone-shell .task-title,
+.phone-shell .warehouse-task-title,
+.phone-shell .goods-title,
+.phone-shell .sku-title,
+.phone-shell .inventory-title,
+.phone-shell .mine-title,
+.phone-shell .profile-title,
+.phone-shell .profile-name,
+.phone-shell .driver-route-title,
+.phone-shell .role-title,
+.phone-shell .role-name,
+.phone-shell .warehouse-record-title-row uni-text:first-child {
+  font-size: 34rpx !important;
+  line-height: 1.3 !important;
+}
+
+.phone-shell.login-page .title,
+.phone-shell.workbench-page .warehouse-work-title .title,
+.phone-shell.inventory-page .warehouse-top .title,
+.phone-shell.mine-page .warehouse-top .title,
+.phone-shell.roles-page .warehouse-work-title .title,
+.phone-shell.detail-page .detail-title-row .title,
+.phone-shell.tasks-page .receiver-task-title {
+  font-size: 42rpx !important;
+  line-height: 1.18 !important;
+}
+
+.phone-shell .warehouse-kpi uni-text:first-child,
+.phone-shell .inventory-summary uni-text:first-child,
+.phone-shell .inventory-counts uni-text:first-child,
+.phone-shell .task-summary uni-text:first-child,
+.phone-shell .quantity-confirm uni-text:first-child,
+.phone-shell .driver-grid uni-text:first-child,
+.phone-shell .stat-grid uni-text:first-child,
+.phone-shell .receiver-card-stats uni-text:first-child {
+  font-size: 44rpx !important;
+}
+
+.phone-shell .warehouse-kpi uni-text:last-child,
+.phone-shell .inventory-summary uni-text:last-child,
+.phone-shell .inventory-counts uni-text:last-child,
+.phone-shell .task-summary uni-text:last-child,
+.phone-shell .quantity-confirm uni-text:last-child,
+.phone-shell .driver-grid uni-text:last-child,
+.phone-shell .stat-grid uni-text:last-child,
+.phone-shell .receiver-card-stats uni-text:last-child {
+  font-size: 30rpx !important;
+}
+
+/* Absolute readable floor for uni-app H5 rendered nodes. */
+.phone-shell uni-text,
+.phone-shell uni-button,
+.phone-shell button,
+.phone-shell input,
+.phone-shell textarea {
+  font-size: 32rpx !important;
+  line-height: 1.35 !important;
+}
+
+.phone-shell uni-text span,
+.phone-shell uni-button span,
+.phone-shell button span {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Page-specific floor wins against older page/component overrides. Keep this at
+   the end so dense operational text does not fall back to 14px. */
+.phone-shell.login-page uni-text,
+.phone-shell.login-page uni-button,
+.phone-shell.login-page button,
+.phone-shell.login-page input,
+.phone-shell.workbench-page uni-text,
+.phone-shell.workbench-page uni-button,
+.phone-shell.workbench-page button,
+.phone-shell.workbench-page input,
+.phone-shell.tasks-page uni-text,
+.phone-shell.tasks-page uni-button,
+.phone-shell.tasks-page button,
+.phone-shell.tasks-page input,
+.phone-shell.inventory-page uni-text,
+.phone-shell.inventory-page uni-button,
+.phone-shell.inventory-page button,
+.phone-shell.inventory-page input,
+.phone-shell.mine-page uni-text,
+.phone-shell.mine-page uni-button,
+.phone-shell.mine-page button,
+.phone-shell.mine-page input,
+.phone-shell.roles-page uni-text,
+.phone-shell.roles-page uni-button,
+.phone-shell.roles-page button,
+.phone-shell.roles-page input,
+.phone-shell.detail-page uni-text,
+.phone-shell.detail-page uni-button,
+.phone-shell.detail-page button,
+.phone-shell.detail-page input,
+.phone-shell.detail-page textarea {
+  font-size: 32rpx !important;
+  line-height: 1.35 !important;
+}
+
+.phone-shell.login-page .title,
+.phone-shell.workbench-page .title,
+.phone-shell.tasks-page .receiver-task-title,
+.phone-shell.inventory-page .title,
+.phone-shell.mine-page .title,
+.phone-shell.roles-page .title,
+.phone-shell.detail-page .title {
+  font-size: 42rpx !important;
+  line-height: 1.18 !important;
+}
+
+.phone-shell.login-page .section-title,
+.phone-shell.workbench-page .section-title,
+.phone-shell.tasks-page .section-title,
+.phone-shell.inventory-page .section-title,
+.phone-shell.mine-page .section-title,
+.phone-shell.roles-page .section-title,
+.phone-shell.detail-page .section-title,
+.phone-shell .task-title,
+.phone-shell .warehouse-task-title,
+.phone-shell .sku-title,
+.phone-shell .profile-name,
+.phone-shell .driver-route-title,
+.phone-shell .role-title,
+.phone-shell .role-name {
+  font-size: 34rpx !important;
+  line-height: 1.28 !important;
+}
+
+.phone-shell .warehouse-kpi uni-text:first-child,
+.phone-shell .inventory-summary uni-text:first-child,
+.phone-shell .inventory-counts uni-text:first-child,
+.phone-shell .task-summary uni-text:first-child,
+.phone-shell .quantity-confirm uni-text:first-child,
+.phone-shell .driver-grid uni-text:first-child,
+.phone-shell .stat-grid uni-text:first-child,
+.phone-shell .receiver-card-stats uni-text:first-child {
+  font-size: 44rpx !important;
+  line-height: 1.08 !important;
+}
+
+/* High-specificity readable floor for legacy page rules that otherwise win. */
+.phone-shell.login-page .login-role-option,
+.phone-shell.login-page .login-role-name,
+.phone-shell.login-page .login-current-role,
+.phone-shell.login-page .form-row text,
+.phone-shell.login-page .form-row uni-text,
+.phone-shell.login-page .form-row input,
+.phone-shell.login-page .login-btn,
+.phone-shell.login-page .forgot-btn,
+.phone-shell.workbench-page .log-list text,
+.phone-shell.workbench-page .log-list uni-text,
+.phone-shell.inventory-page .log-list text,
+.phone-shell.inventory-page .log-list uni-text,
+.phone-shell.mine-page .profile-line,
+.phone-shell.mine-page .log-list text,
+.phone-shell.mine-page .log-list uni-text,
+.phone-shell.detail-page .log-list text,
+.phone-shell.detail-page .log-list uni-text,
+.phone-shell.tasks-page .task-sub,
+.phone-shell.tasks-page .task-note,
+.phone-shell.tasks-page .task-meta,
+.phone-shell.tasks-page .status-pill,
+.phone-shell.tasks-page .filter-chip,
+.phone-shell.tasks-page .date-chip {
+  font-size: 32rpx !important;
+  line-height: 1.38 !important;
+}
+
+.phone-shell.workbench-page .manager-top-title text,
+.phone-shell.workbench-page .manager-user-line,
+.phone-shell.workbench-page .manager-login-time,
+.phone-shell.workbench-page .manager-status-grid text:first-child,
+.phone-shell.workbench-page .manager-status-grid text:last-child {
+  font-size: 32rpx !important;
+  line-height: 1.32 !important;
 }

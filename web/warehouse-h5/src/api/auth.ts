@@ -1,10 +1,9 @@
-import { request } from '@/utils/request';
+import { request, type WarehouseRequestOptions } from '@/utils/request';
 
 export interface LoginPayload {
     username: string;
     password: string;
     portalCode: string;
-    role: string;
 }
 
 export interface LoginResult {
@@ -24,10 +23,12 @@ export interface LoginResult {
         routePath?: string;
     }>;
     authorities?: string[];
+    dataScopes?: unknown[];
 }
 
-export function passwordLogin(payload: LoginPayload) {
+export function passwordLogin(payload: LoginPayload, options: WarehouseRequestOptions = {}) {
     return request<LoginResult>('/auth/password-login', {
+        ...options,
         method: 'POST',
         data: payload
     });

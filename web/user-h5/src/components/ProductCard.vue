@@ -4,8 +4,7 @@
       {{ favorite ? '已藏' : '收藏' }}
     </button>
     <view class="product-media">
-      <image v-if="product.mainImageUrl" class="product-img" :src="product.mainImageUrl" mode="aspectFill" />
-      <view v-else class="product-img fallback">鲜</view>
+      <view class="product-img" :style="backgroundImageStyle(product.mainImageUrl)" />
       <text class="pickup-pill">提货 {{ pickupText }}</text>
     </view>
     <view class="product-info">
@@ -31,6 +30,8 @@ import { computed } from 'vue';
 
 import type { UserProductCardDTO } from '@/api/user';
 
+const fallbackProductImage = '/static/user-home/shop-detail.jpg';
+
 const props = defineProps<{
     product: UserProductCardDTO;
     favorite?: boolean;
@@ -45,4 +46,10 @@ defineEmits<{
 
 const soldout = computed(() => Number(props.product.availableQty || 0) <= 0);
 const pickupText = computed(() => props.product.deliveryDate || '待定');
+
+function backgroundImageStyle(url?: string) {
+    return {
+        backgroundImage: `url("${url || fallbackProductImage}")`
+    };
+}
 </script>

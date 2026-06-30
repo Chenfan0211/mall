@@ -8,6 +8,7 @@ public class CategoryDTO {
     private Long parentId;
     private String categoryCode;
     private String categoryName;
+    private String imageUrl;
     private Long categoryType;
     private Long sortNo;
     private Long status;
@@ -43,6 +44,14 @@ public class CategoryDTO {
 
     public void setCategoryName(final String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(final String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Long getCategoryType() {

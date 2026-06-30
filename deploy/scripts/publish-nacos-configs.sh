@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /opt/mall-deploy/source
+cd "${MALL_DEPLOY_ROOT:-/opt/mall-deploy}/source"
 
 get_env() {
   local key="$1"
   local default="$2"
   local val
-  val="$(grep -E "^${key}=" deploy/.env | tail -1 | sed 's/^[^=]*=//' || true)"
+  val="$(grep -E "^${key}=" deploy/.env | tail -1 | sed 's/^[^=]*=//' | tr -d '\r' || true)"
   if [ -n "${val}" ]; then
     printf '%s' "${val}"
   else

@@ -1,7 +1,12 @@
 package com.mall.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.mall.api.user.dto.UserHomeAssetDTO;
+import com.mall.api.user.dto.UserHomeBannerDTO;
+import com.mall.api.user.dto.UserHomeCategoryAssetDTO;
 import com.mall.api.user.dto.UserHomeDTO;
+import com.mall.api.user.dto.UserHomePromoDTO;
+import com.mall.api.user.vo.UserHomeAssetQueryVO;
 import com.mall.api.user.vo.UserHomeQueryVO;
 import com.mall.common.exception.BusinessException;
 import com.mall.common.result.CommonErrorCode;
@@ -9,21 +14,29 @@ import com.mall.user.entity.MsgRecord;
 import com.mall.user.entity.OrdCart;
 import com.mall.user.entity.OrdOrder;
 import com.mall.user.entity.OrdOrderItem;
+import com.mall.user.entity.PrdCategory;
 import com.mall.user.entity.SalePublishPeriod;
 import com.mall.user.entity.SalePublishSku;
+import com.mall.user.entity.SysFileAsset;
 import com.mall.user.entity.UsrUser;
 import com.mall.user.mapper.MsgRecordMapper;
 import com.mall.user.mapper.OrdCartMapper;
 import com.mall.user.mapper.OrdOrderItemMapper;
 import com.mall.user.mapper.OrdOrderMapper;
+import com.mall.user.mapper.PrdCategoryMapper;
 import com.mall.user.mapper.SalePublishPeriodMapper;
 import com.mall.user.mapper.SalePublishSkuMapper;
+import com.mall.user.mapper.SysFileAssetMapper;
 import com.mall.user.mapper.UsrUserMapper;
 import com.mall.user.service.UserHomeService;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,8 +50,16 @@ public class UserHomeServiceImpl implements UserHomeService {
     private static final Long FULFILL_WAIT_PICKUP = 60L;
     private static final Long MSG_RECEIVER_USER = 1L;
     private static final Long MSG_UNREAD = 0L;
+    private static final Long CATEGORY_FRONT = 1L;
+    private static final Long ENABLED = 1L;
+    private static final String BIZ_CATEGORY_ICON = "USER_CATEGORY_ICON";
+    private static final String BIZ_HOME_BANNER = "USER_HOME_BANNER";
+    private static final String BIZ_HOME_PROMO = "USER_HOME_PROMO";
+    private static final String ACTIVITY_PAGE = "/pages/activity/index?activityCode=";
 
     private final UsrUserMapper userMapper;
+    private final PrdCategoryMapper categoryMapper;
+    private final SysFileAssetMapper fileAssetMapper;
     private final SalePublishPeriodMapper periodMapper;
     private final SalePublishSkuMapper publishSkuMapper;
     private final OrdCartMapper cartMapper;
@@ -48,6 +69,8 @@ public class UserHomeServiceImpl implements UserHomeService {
 
     public UserHomeServiceImpl(
             final UsrUserMapper userMapper,
+            final PrdCategoryMapper categoryMapper,
+            final SysFileAssetMapper fileAssetMapper,
             final SalePublishPeriodMapper periodMapper,
             final SalePublishSkuMapper publishSkuMapper,
             final OrdCartMapper cartMapper,
@@ -55,6 +78,8 @@ public class UserHomeServiceImpl implements UserHomeService {
             final OrdOrderItemMapper orderItemMapper,
             final MsgRecordMapper msgRecordMapper) {
         this.userMapper = userMapper;
+        this.categoryMapper = categoryMapper;
+        this.fileAssetMapper = fileAssetMapper;
         this.periodMapper = periodMapper;
         this.publishSkuMapper = publishSkuMapper;
         this.cartMapper = cartMapper;
@@ -70,7 +95,16 @@ public class UserHomeServiceImpl implements UserHomeService {
         }
         final UsrUser user = userMapper.selectById(query.getUserId());
         if (user == null) {
-            throw new BusinessException(CommonErrorCode.NOT_FOUND, "用户不存在");
+            final UserHomeDTO result = new UserHomeDTO();
+            result.setUserId(query.getUserId());
+            result.setCityId(query.getCityId());
+            result.setStationId(query.getStationId());
+            result.setOnlineProductCount(countOnlineProducts(query.getCityId()));
+            result.setCartItemCount(0L);
+            result.setWaitPayOrderCount(0L);
+            result.setWaitPickupOrderCount(0L);
+            result.setUnreadMessageCount(0L);
+            return result;
         }
         if (!USER_NORMAL.equals(user.getStatus())) {
             throw new BusinessException(CommonErrorCode.CONFLICT, "用户状态不可用");
@@ -87,6 +121,105 @@ public class UserHomeServiceImpl implements UserHomeService {
         result.setWaitPickupOrderCount(countWaitPickupItems(user.getId()));
         result.setUnreadMessageCount(countUnreadMessages(user.getId()));
         return result;
+    }
+
+    @Override
+    public UserHomeAssetDTO getHomeAssets(final UserHomeAssetQueryVO query) {
+        final UserHomeAssetDTO result = new UserHomeAssetDTO();
+        result.setCategories(buildCategoryAssets());
+        result.setBanners(buildBanners());
+        result.setPromos(buildPromos());
+        return result;
+    }
+
+    private List<UserHomeCategoryAssetDTO> buildCategoryAssets() {
+        final List<PrdCategory> categories = categoryMapper.selectList(new LambdaQueryWrapper<PrdCategory>()
+                .eq(PrdCategory::getCategoryType, CATEGORY_FRONT)
+                .eq(PrdCategory::getStatus, ENABLED)
+                .orderByAsc(PrdCategory::getSortNo)
+                .orderByDesc(PrdCategory::getId));
+        final Map<String, SysFileAsset> iconMap = listActiveAssets(BIZ_CATEGORY_ICON).stream()
+                .filter(item -> item.getBizNo() != null && item.getFileUrl() != null)
+                .collect(Collectors.toMap(SysFileAsset::getBizNo, Function.identity(), (left, right) -> left));
+        return categories.stream().map(item -> {
+            final UserHomeCategoryAssetDTO asset = new UserHomeCategoryAssetDTO();
+            asset.setCategoryId(item.getId());
+            asset.setCategoryCode(item.getCategoryCode());
+            asset.setCategoryName(item.getCategoryName());
+            asset.setSortNo(item.getSortNo());
+            asset.setImageUrl(assetUrl(iconMap.get(item.getCategoryCode())));
+            return asset;
+        }).toList();
+    }
+
+    private List<UserHomeBannerDTO> buildBanners() {
+        final Map<String, SysFileAsset> bannerMap = listActiveAssets(BIZ_HOME_BANNER).stream()
+                .filter(item -> item.getBizNo() != null && item.getFileUrl() != null)
+                .collect(Collectors.toMap(SysFileAsset::getBizNo, Function.identity(), (left, right) -> left));
+        return List.of(buildBanner("HOME_MAIN", "本周鲜果专场", "基地直采 次日到团点",
+                "爆汁橙、蓝莓、梨礼盒限时优惠", bannerMap.get("HOME_MAIN"), 1L))
+                .stream()
+                .filter(item -> StringUtils.hasText(item.getImageUrl()))
+                .toList();
+    }
+
+    private UserHomeBannerDTO buildBanner(
+            final String code,
+            final String title,
+            final String subTitle,
+            final String description,
+            final SysFileAsset asset,
+            final Long sortNo) {
+        final UserHomeBannerDTO banner = new UserHomeBannerDTO();
+        banner.setCode(code);
+        banner.setTitle(title);
+        banner.setSubTitle(subTitle);
+        banner.setDescription(description);
+        banner.setImageUrl(assetUrl(asset));
+        banner.setActivityCode(code);
+        banner.setLinkUrl(ACTIVITY_PAGE + code);
+        banner.setSortNo(sortNo);
+        return banner;
+    }
+
+    private List<UserHomePromoDTO> buildPromos() {
+        final Map<String, SysFileAsset> promoMap = listActiveAssets(BIZ_HOME_PROMO).stream()
+                .filter(item -> item.getBizNo() != null && item.getFileUrl() != null)
+                .collect(Collectors.toMap(SysFileAsset::getBizNo, Function.identity(), (left, right) -> left));
+        return List.of(
+                buildPromo("ORCHARD_DIRECT", "果园直供", promoMap.get("ORCHARD_DIRECT"), 1L),
+                buildPromo("TODAY_NEW", "今日上新", promoMap.get("TODAY_NEW"), 2L),
+                buildPromo("BREAKFAST_BAKERY", "早餐烘焙", promoMap.get("BREAKFAST_BAKERY"), 3L))
+                .stream()
+                .filter(item -> StringUtils.hasText(item.getImageUrl()))
+                .toList();
+    }
+
+    private UserHomePromoDTO buildPromo(
+            final String code,
+            final String title,
+            final SysFileAsset asset,
+            final Long sortNo) {
+        final UserHomePromoDTO promo = new UserHomePromoDTO();
+        promo.setCode(code);
+        promo.setTitle(title);
+        promo.setActionText("全部");
+        promo.setImageUrl(assetUrl(asset));
+        promo.setActivityCode(code);
+        promo.setLinkUrl(ACTIVITY_PAGE + code);
+        promo.setSortNo(sortNo);
+        return promo;
+    }
+
+    private List<SysFileAsset> listActiveAssets(final String bizType) {
+        return fileAssetMapper.selectList(new LambdaQueryWrapper<SysFileAsset>()
+                .eq(SysFileAsset::getBizType, bizType)
+                .eq(SysFileAsset::getStatus, ENABLED)
+                .orderByDesc(SysFileAsset::getId));
+    }
+
+    private String assetUrl(final SysFileAsset asset) {
+        return asset == null ? null : asset.getFileUrl();
     }
 
     private Long countOnlineProducts(final Long cityId) {

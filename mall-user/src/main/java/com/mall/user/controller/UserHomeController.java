@@ -1,6 +1,8 @@
 package com.mall.user.controller;
 
 import com.mall.api.user.dto.UserHomeDTO;
+import com.mall.api.user.dto.UserHomeAssetDTO;
+import com.mall.api.user.vo.UserHomeAssetQueryVO;
 import com.mall.api.user.vo.UserHomeQueryVO;
 import com.mall.common.result.Result;
 import com.mall.user.service.UserHomeService;
@@ -24,5 +26,10 @@ public class UserHomeController {
     @GetMapping("/summary")
     public Result<UserHomeDTO> getHome(@Valid final UserHomeQueryVO query) {
         return Result.success(userHomeService.getHome(query));
+    }
+
+    @GetMapping("/assets")
+    public Result<UserHomeAssetDTO> getHomeAssets(@Valid final UserHomeAssetQueryVO query) {
+        return Result.success(userHomeService.getHomeAssets(query));
     }
 }

@@ -41,6 +41,7 @@ class UserProductControllerTest {
         final CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setId(750001L);
         categoryDTO.setCategoryName("水果鲜食");
+        categoryDTO.setImageUrl("https://cdn.example.com/fruit.png");
         when(userProductService.pageCategories(any())).thenReturn(PageResult.of(1L, List.of(categoryDTO)));
 
         mockMvc.perform(get("/api/user/products/categories")
@@ -49,7 +50,8 @@ class UserProductControllerTest {
                         .with(user("tester").authorities(() -> "user:product:view")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("0"))
-                .andExpect(jsonPath("$.data.list[0].categoryName").value("水果鲜食"));
+                .andExpect(jsonPath("$.data.list[0].categoryName").value("水果鲜食"))
+                .andExpect(jsonPath("$.data.list[0].imageUrl").value("https://cdn.example.com/fruit.png"));
     }
 
     @Test

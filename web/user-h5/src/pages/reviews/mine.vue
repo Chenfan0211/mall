@@ -1,35 +1,44 @@
 <template>
-  <view class="page no-tab">
-    <view class="section">
-      <text class="title">我的评价</text>
-      <text class="subtle">展示已发表评价，低评分会关联运营跟进。</text>
+  <view class="service-page shop-page my-reviews-page" data-m-page="myReviews">
+    <view class="service-head">
+      <view class="order-nav">
+        <button class="order-back" @click="goMine">‹</button>
+        <b>我的评论</b>
+        <span>{{ state.localReviews.length }}条</span>
+      </view>
     </view>
 
-    <view class="section">
-      <view class="chip-row">
+    <view class="service-list">
+      <view class="service-filter-strip">
         <text v-for="item in filters" :key="item.label" class="pill" :class="{ active: activeFilter === item.value }" @click="activeFilter = item.value">
           {{ item.label }}
         </text>
       </view>
-    </view>
 
-    <view v-for="item in filteredReviews" :key="item.id" class="section review-row" @click="openProduct(item.productId)">
-      <view class="score-pill">{{ item.score }}分</view>
-      <view>
-        <text>{{ item.productName }}</text>
-        <text>{{ item.skuName }} · {{ item.createTime }}</text>
-        <text>{{ item.content }}</text>
+      <view v-for="item in filteredReviews" :key="item.id" class="service-product-row review-service-row" @click="openProduct(item.productId)">
+        <view class="service-product-thumb review-score-thumb" :style="reviewThumbStyle(item.productId)">
+          <span>{{ item.score }}分</span>
+        </view>
+        <view class="service-product-main">
+          <b>{{ item.productName }}</b>
+          <span>{{ item.skuName }}<br />{{ item.createTime }}</span>
+          <p>{{ item.content }}</p>
+          <em>{{ item.score >= 5 ? '好评' : '低评分跟进' }}</em>
+        </view>
+        <button class="service-action danger" @click.stop="deleteReview(item.id)">删除</button>
       </view>
-    </view>
 
-    <EmptyActionCard
-      v-if="filteredReviews.length === 0"
-      title="暂无评价"
-      sub="完成订单后可在订单详情里评价商品。"
-      icon="评"
-      button-text="看订单"
-      @action="goOrder"
-    />
+      <EmptyActionCard
+        v-if="filteredReviews.length === 0"
+        title="暂无评论信息"
+        sub="完成订单评价后会在这里展示。"
+        icon="评"
+        button-text="去首页逛逛"
+        @action="goHome"
+      />
+    </view>
+    <UserToast />
+    <UserTabBar active="mine" />
   </view>
 </template>
 
@@ -37,7 +46,10 @@
 import { computed, ref } from 'vue';
 
 import EmptyActionCard from '@/components/EmptyActionCard.vue';
-import { navigateUser, useUserState } from '@/stores/userState';
+import UserTabBar from '@/components/UserTabBar.vue';
+import UserToast from '@/components/UserToast.vue';
+import { navigateUser, showUserToast, useUserState } from '@/stores/userState';
+import { findFallbackProduct } from '@/utils/userFallbackData';
 
 const state = useUserState();
 const activeFilter = ref('all');
@@ -60,49 +72,49 @@ function openProduct(productId: number) {
     navigateUser(`/pages/product/detail?id=${productId}`);
 }
 
-function goOrder() {
-    uni.switchTab({ url: '/pages/order/index' });
+function deleteReview(id: number) {
+    const index = state.localReviews.findIndex((item) => item.id === id);
+    if (index >= 0) {
+        state.localReviews.splice(index, 1);
+        showUserToast('已删除本地评价记录');
+    }
+}
+
+function reviewThumbStyle(productId: number) {
+    return {
+        backgroundImage: `url("${findFallbackProduct(productId).mainImageUrl}")`
+    };
+}
+
+function goHome() {
+    navigateUser('/pages/home/index', true);
+}
+
+function goMine() {
+    navigateUser('/pages/mine/index', true);
 }
 </script>
 
 <style lang="scss" scoped>
-.review-row {
-  display: grid;
-  grid-template-columns: 82rpx minmax(0, 1fr);
-  gap: 16rpx;
+.review-service-row {
   align-items: start;
 }
 
-.score-pill {
-  display: grid;
-  width: 82rpx;
-  height: 82rpx;
-  place-items: center;
-  color: #d94b34;
-  background: #fff1e9;
-  border: 1rpx solid #f2d6c4;
-  border-radius: 22rpx;
-  font-size: 24rpx;
-  font-weight: 900;
-}
-
-.review-row view:last-child {
-  min-width: 0;
-}
-
-.review-row view:last-child text {
-  display: block;
-}
-
-.review-row view:last-child text:first-child {
-  color: #172033;
+.review-score-thumb {
+  position: relative;
+  color: #c2412d;
   font-size: 28rpx;
-  font-weight: 900;
 }
 
-.review-row view:last-child text:not(:first-child) {
-  margin-top: 6rpx;
-  color: #8c6a58;
-  font-size: 23rpx;
+.review-score-thumb span {
+  position: absolute;
+  right: 8rpx;
+  bottom: 8rpx;
+  padding: 4rpx 10rpx;
+  color: #ffffff;
+  background: rgba(23, 32, 51, 0.64);
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  font-weight: 900;
 }
 </style>

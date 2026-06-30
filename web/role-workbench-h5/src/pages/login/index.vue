@@ -5,100 +5,93 @@
         <text>14:49</text>
         <text>角色工作台</text>
       </view>
-      <text class="subtle">{{ profile.roleName }}</text>
-      <text class="title">登录进入工作台</text>
-      <text class="subtle">{{ profile.loginNote }}</text>
+      <view class="role-brand-row">
+        <view class="role-brand">
+          <text>角色工作台</text>
+          <text>{{ roleType === 'supplier' ? '供应商协同入口' : '自提点协同入口' }}</text>
+        </view>
+        <text class="role-badge">{{ profile.roleName }}</text>
+      </view>
     </view>
 
-    <view class="section">
-      <view class="section-head">
+    <view class="role-login-card">
+      <view class="role-login-title">
         <view>
-          <text class="title">选择入口</text>
-          <text class="subtle">同一账号按当前身份读取对应主体数据</text>
+          <text>登录</text>
+          <text>{{ roleType === 'supplier' ? '先选供应商入口' : '先选团点入口' }}</text>
         </view>
       </view>
-      <view class="login-role-switch">
-        <button :class="{ active: roleType === 'station' }" @click="chooseRole('station')">
-          <text>团点</text>
-          <text>团长 / 自提点</text>
-        </button>
-        <button :class="{ active: roleType === 'supplier' }" @click="chooseRole('supplier')">
-          <text>供应商</text>
-          <text>采购 / 到仓 / 结算</text>
-        </button>
-      </view>
-    </view>
 
-    <view class="section">
-      <view class="form-row">
-        <text>账号</text>
-        <input v-model="form.username" placeholder="请输入账号" />
+      <view class="role-switch">
+        <button class="role-option" :class="{ active: roleType === 'station' }" @click="chooseRole('station')">
+          <text>团点</text>
+          <text>团长/自提点</text>
+        </button>
+        <button class="role-option" :class="{ active: roleType === 'supplier' }" @click="chooseRole('supplier')">
+          <text>供应商</text>
+          <text>供应商角色</text>
+        </button>
       </view>
-      <view class="form-row">
-        <text>密码</text>
-        <input v-model="form.password" password placeholder="请输入密码" />
+
+      <view class="role-form">
+        <view class="form-row role-form-row">
+          <text>账号</text>
+          <input v-model="form.username" placeholder="请输入账号" />
+        </view>
+        <view class="form-row role-form-row">
+          <text>密码</text>
+          <input v-model="form.password" password placeholder="请输入密码" />
+        </view>
       </view>
-      <text class="form-tip">测试账号：{{ profile.account }}，默认密码：{{ profile.password }}</text>
-      <button class="primary login-submit" :disabled="loading" @click="submit">
+
+      <button class="role-login-btn" :disabled="loading" @click="submit">
         {{ loading ? '登录中' : '登录进入工作台' }}
       </button>
-      <view class="login-links">
-        <button class="link-btn" @click="goForgot">忘记密码</button>
-        <text>联系后台开通账号</text>
-      </view>
-    </view>
-
-    <view class="section">
-      <view class="section-head">
-        <view>
-          <text class="title">身份状态预览</text>
-          <text class="subtle">用于验收无身份、停用、无权限、加载失败等页面</text>
-        </view>
-      </view>
-      <view class="state-grid">
-        <button v-for="item in states" :key="item.type" class="soft" @click="openState(item.type)">
-          {{ item.label }}
-        </button>
+      <view class="role-login-meta">
+        <button @click="goForgot">忘记密码</button>
       </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { passwordLogin } from '@/api/auth';
 import {
+    applyLoginResult,
     currentProfile,
     currentRole,
-    setRoleAccount,
     setRoleToken,
     setRoleType,
     showRoleToast,
-    type RoleType,
-    type SubjectStatus
+    type RoleType
 } from '@/stores/role';
-import { setToken } from '@/utils/request';
+import { friendlyErrorMessage, setToken } from '@/utils/request';
 
 const roleType = computed(() => currentRole.value);
 const profile = computed(() => currentProfile.value);
 const loading = ref(false);
+const defaultCredentials: Record<RoleType, { username: string; password: string }> = {
+    station: { username: 'test_station', password: 'Test@123456' },
+    supplier: { username: 'test_supplier_h5', password: 'Test@123456' }
+};
 const form = reactive({
-    username: profile.value.account,
-    password: profile.value.password
+    username: defaultCredentials[currentRole.value].username,
+    password: defaultCredentials[currentRole.value].password
 });
 
-const states: Array<{ type: SubjectStatus; label: string }> = [
-    { type: 'loading', label: '加载中' },
-    { type: 'loadFailed', label: '加载失败' },
-    { type: 'noIdentity', label: '暂无身份' },
-    { type: 'subjectDisabled', label: '主体停用' },
-    { type: 'noPermission', label: '无权限' }
-];
+watch(roleType, () => {
+    applyDefaultCredential(roleType.value);
+});
 
 function chooseRole(nextRole: RoleType) {
     setRoleType(nextRole);
-    form.username = currentProfile.value.account;
-    form.password = currentProfile.value.password;
+    applyDefaultCredential(nextRole);
+}
+
+function applyDefaultCredential(nextRole: RoleType) {
+    form.username = defaultCredentials[nextRole].username;
+    form.password = defaultCredentials[nextRole].password;
 }
 
 async function submit() {
@@ -114,17 +107,16 @@ async function submit() {
             portalCode: 'role-workbench-h5',
             roleType: currentRole.value
         });
-        const token = result.accessToken || result.token || 'local-role-token';
+        const token = result.accessToken || result.token;
+        if (!token) {
+            throw new Error('登录结果异常，请稍后重试');
+        }
         setToken(token);
         setRoleToken(token);
-        setRoleAccount(form.username);
-        uni.switchTab({ url: '/pages/workbench/index' });
+        applyLoginResult(result, form.username);
+        uni.reLaunch({ url: '/pages/workbench/index' });
     } catch (error) {
-        setToken('local-role-token');
-        setRoleToken('local-role-token');
-        setRoleAccount(form.username);
-        showRoleToast('后端登录接口暂不可用，已进入前端验收数据');
-        uni.switchTab({ url: '/pages/workbench/index' });
+        showRoleToast(friendlyErrorMessage(error, '登录失败，请检查账号密码或稍后重试'));
     } finally {
         loading.value = false;
     }
@@ -133,90 +125,173 @@ async function submit() {
 function goForgot() {
     uni.navigateTo({ url: '/pages/login/forgot' });
 }
-
-function openState(status: SubjectStatus) {
-    uni.navigateTo({ url: `/pages/status/index?status=${status}` });
-}
 </script>
 
 <style lang="scss" scoped>
-.login-role-switch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16rpx;
+.role-login-card {
+  margin-top: -24rpx;
+  position: relative;
+  z-index: 2;
+  padding: 28rpx;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1rpx solid rgba(233, 217, 203, 0.86);
+  border-radius: 32rpx;
+  box-shadow: 0 20rpx 48rpx rgba(60, 33, 16, 0.08);
 }
 
-.login-role-switch button {
-  display: grid;
-  gap: 8rpx;
-  min-height: 122rpx;
-  padding: 22rpx;
-  color: #7a4f34;
-  background: #fffaf6;
-  border: 1rpx solid #f0dfd6;
-  border-radius: 26rpx;
-  text-align: left;
-}
-
-.login-role-switch button.active {
-  color: #ffffff;
-  background: #2b241f;
-  border-color: #2b241f;
-}
-
-.login-role-switch text:first-child {
-  font-size: 30rpx;
-  font-weight: 900;
-}
-
-.login-role-switch text:last-child {
-  font-size: 23rpx;
-}
-
-.form-row {
-  margin-bottom: 20rpx;
-}
-
-.form-row > text {
-  display: block;
-  margin-bottom: 10rpx;
-  color: #5f493d;
-  font-size: 24rpx;
-  font-weight: 800;
-}
-
-.form-tip {
-  display: block;
-  margin-bottom: 20rpx;
-  color: #8f6c58;
-  font-size: 23rpx;
-  line-height: 1.6;
-}
-
-.login-submit {
-  width: 100%;
-}
-
-.login-links {
+.role-brand-row {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 18rpx;
-  color: #8f6c58;
-  font-size: 23rpx;
+  gap: 20rpx;
+  margin-top: 14rpx;
 }
 
-.link-btn {
+.role-brand {
+  display: grid;
+  gap: 6rpx;
+  color: #ffffff;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.role-brand text:first-child {
+  font-size: 22rpx;
+  opacity: 0.9;
+}
+
+.role-brand text:last-child {
+  font-size: 44rpx;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52rpx;
+  padding: 0 24rpx;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.role-login-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-bottom: 14rpx;
+}
+
+.role-login-title text:first-child {
+  display: block;
+  color: #2b241f;
+  font-size: 34rpx;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.role-login-title text:last-child {
+  display: block;
+  margin-top: 6rpx;
+  color: #8f6c58;
+  font-size: 24rpx;
+}
+
+.role-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6rpx;
+  height: 74rpx;
+  margin-bottom: 18rpx;
+  padding: 6rpx;
+  background: #fff2e9;
+  border-radius: 999rpx;
+  box-shadow: inset 0 0 0 1rpx #f2d6c4;
+  box-sizing: border-box;
+}
+
+.role-option,
+.role-option uni-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 62rpx;
+  min-height: 62rpx;
+  margin: 0;
+  padding: 0;
+  color: #7a4f34;
+  background: transparent;
+  border: 0;
+  border-radius: 999rpx;
+  font-weight: 900;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.role-option::after {
+  border: 0;
+}
+
+.role-option.active,
+.role-option uni-button.active {
+  color: #ffffff;
+  background: #e85d3f;
+  box-shadow: 0 8rpx 18rpx rgba(232, 93, 63, 0.22);
+}
+
+.role-option text:first-child {
+  display: inline-block;
+  font-size: 26rpx;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.role-option text:last-child {
+  display: none;
+}
+
+.role-form {
+  display: grid;
+  gap: 16rpx;
+}
+
+.role-login-btn {
+  margin-top: 22rpx;
+  width: 100%;
+  min-height: 82rpx;
+  color: #ffffff;
+  background: #e85d3f;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 900;
+  box-shadow: 0 20rpx 40rpx rgba(232, 93, 63, 0.22);
+}
+
+.role-login-btn[disabled] {
+  opacity: 0.72;
+}
+
+.role-login-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 16rpx;
+  color: #9a6a4d;
+  font-size: 24rpx;
+}
+
+.role-login-meta button,
+.role-login-meta uni-button {
+  margin: 0;
   min-height: auto;
   color: #c2412d;
   background: transparent;
   font-size: 24rpx;
   font-weight: 900;
-}
-
-.state-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14rpx;
 }
 </style>

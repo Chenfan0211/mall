@@ -2,7 +2,7 @@
   <view v-if="visible" class="sheet-mask" @click="$emit('close')">
     <view class="sheet-panel" @click.stop>
       <view class="sheet-head">
-        <view class="sheet-thumb">鲜</view>
+        <view class="sheet-thumb"></view>
         <view>
           <text class="sheet-title">{{ title || '选择规格' }}</text>
           <text class="sheet-sub">选择规格后加入购物车</text>

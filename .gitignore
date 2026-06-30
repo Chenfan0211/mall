@@ -19,6 +19,7 @@ web/**/unpackage/
 /docs/部署访问地址与账号.md
 
 deploy/.env
+docs/deploy/敏感凭据-*.md
 deploy/data/
 deploy/logs/
 deploy/docker/mysql/init/10-nacos.sql

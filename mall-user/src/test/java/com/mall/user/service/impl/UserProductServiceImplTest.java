@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mall.api.product.dto.CategoryDTO;
 import com.mall.api.product.dto.ProductDTO;
 import com.mall.api.user.dto.UserCommentDTO;
+import com.mall.api.user.dto.UserProductCardDTO;
 import com.mall.api.user.dto.UserProductDetailDTO;
 import com.mall.api.user.vo.UserProductQueryVO;
 import com.mall.common.exception.BusinessException;
@@ -19,6 +20,7 @@ import com.mall.user.entity.PrdProduct;
 import com.mall.user.entity.PrdSku;
 import com.mall.user.entity.SalePublishPeriod;
 import com.mall.user.entity.SalePublishSku;
+import com.mall.user.entity.SysFileAsset;
 import com.mall.user.entity.UsrBrowseHistory;
 import com.mall.user.entity.UsrComment;
 import com.mall.user.entity.UsrUserFavorite;
@@ -27,6 +29,7 @@ import com.mall.user.mapper.PrdProductMapper;
 import com.mall.user.mapper.PrdSkuMapper;
 import com.mall.user.mapper.SalePublishPeriodMapper;
 import com.mall.user.mapper.SalePublishSkuMapper;
+import com.mall.user.mapper.SysFileAssetMapper;
 import com.mall.user.mapper.UsrBrowseHistoryMapper;
 import com.mall.user.mapper.UsrCommentMapper;
 import com.mall.user.mapper.UsrUserFavoriteMapper;
@@ -45,6 +48,9 @@ class UserProductServiceImplTest {
 
     @Mock
     private PrdCategoryMapper categoryMapper;
+
+    @Mock
+    private SysFileAssetMapper fileAssetMapper;
 
     @Mock
     private PrdProductMapper productMapper;
@@ -83,9 +89,15 @@ class UserProductServiceImplTest {
         final CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setId(750001L);
         categoryDTO.setCategoryName("水果鲜食");
+        final SysFileAsset icon = new SysFileAsset();
+        icon.setBizType("USER_CATEGORY_ICON");
+        icon.setBizNo("FRONT_FRUIT");
+        icon.setFileUrl("https://cdn.example.com/fruit.png");
         final Page<PrdCategory> page = Page.of(1L, 20L);
         page.setTotal(1L);
         page.setRecords(List.of(category));
+        category.setCategoryCode("FRONT_FRUIT");
+        when(fileAssetMapper.selectList(any())).thenReturn(List.of(icon));
         when(categoryMapper.selectPage(any(), any())).thenReturn(page);
         when(userConvert.toCategoryDTO(category)).thenReturn(categoryDTO);
 
@@ -93,6 +105,7 @@ class UserProductServiceImplTest {
 
         assertEquals(1L, result.getTotal());
         assertEquals("水果鲜食", result.getList().get(0).getCategoryName());
+        assertEquals("https://cdn.example.com/fruit.png", result.getList().get(0).getImageUrl());
     }
 
     @Test
@@ -144,6 +157,60 @@ class UserProductServiceImplTest {
         assertEquals(1L, result.getFavoriteFlag());
         assertEquals(2L, result.getCommentCount());
         assertEquals("测试红富士苹果", result.getProduct().getProductName());
+    }
+
+    @Test
+    void pageActivityProducts_success() {
+        final UserProductQueryVO query = new UserProductQueryVO();
+        query.setCityId(440100L);
+        final SalePublishPeriod period = new SalePublishPeriod();
+        period.setId(755002L);
+        period.setCityId(440100L);
+        period.setDeliveryDate(LocalDate.now());
+        period.setSaleStartTime(LocalDateTime.now().minusHours(1L));
+        period.setActualCutoffTime(LocalDateTime.now().plusHours(1L));
+        final SalePublishSku publishSku = new SalePublishSku();
+        publishSku.setId(756001L);
+        publishSku.setPeriodId(755002L);
+        publishSku.setProductId(751001L);
+        publishSku.setSkuId(752001L);
+        publishSku.setSalePrice(new BigDecimal("19.90"));
+        publishSku.setPlannedStockQty(10L);
+        publishSku.setSoldQty(2L);
+        publishSku.setLockedQty(1L);
+        publishSku.setLimitQty(3L);
+        publishSku.setMinBuyQty(1L);
+        publishSku.setStatus(1L);
+        final PrdProduct product = new PrdProduct();
+        product.setId(751001L);
+        product.setProductName("四川果冻橙");
+        product.setAuditStatus(20L);
+        product.setSaleStatus(1L);
+        final PrdSku sku = new PrdSku();
+        sku.setId(752001L);
+        sku.setSkuName("5斤装");
+        sku.setSaleSpecText("5斤");
+        final Page<SalePublishSku> page = Page.of(1L, 20L);
+        page.setTotal(1L);
+        page.setRecords(List.of(publishSku));
+        when(periodMapper.selectList(any())).thenReturn(List.of(period));
+        when(publishSkuMapper.selectPage(any(), any())).thenReturn(page);
+        when(productMapper.selectBatchIds(any())).thenReturn(List.of(product));
+        when(skuMapper.selectBatchIds(any())).thenReturn(List.of(sku));
+
+        final PageResult<UserProductCardDTO> result = userProductService.pageActivityProducts("HOME_MAIN", query);
+
+        assertEquals(1L, result.getTotal());
+        assertEquals("四川果冻橙", result.getList().get(0).getProductName());
+    }
+
+    @Test
+    void pageActivityProducts_unknownCode_returnEmptyPage() {
+        final PageResult<UserProductCardDTO> result =
+                userProductService.pageActivityProducts("UNKNOWN", new UserProductQueryVO());
+
+        assertEquals(0L, result.getTotal());
+        assertEquals(0, result.getList().size());
     }
 
     @Test

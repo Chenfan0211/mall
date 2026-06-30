@@ -27,14 +27,16 @@ public class SettlementController {
     }
 
     @GetMapping("/supplier")
-    @PreAuthorize("hasAuthority('finance:supplier-settlement:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') "
+            + "or hasAuthority('finance:supplier-settlement:view')")
     public Result<PageResult<SupplierSettlementDTO>> pageSupplierSettlements(
             @Valid final SupplierSettlementQueryVO query) {
         return Result.success(settlementService.pageSupplierSettlements(query));
     }
 
     @GetMapping("/supplier/{id}")
-    @PreAuthorize("hasAuthority('finance:supplier-settlement:view')")
+    @PreAuthorize("@portalAuthorization.isPortal('role-workbench-h5') "
+            + "or hasAuthority('finance:supplier-settlement:view')")
     public Result<SupplierSettlementDTO> getSupplierSettlement(@PathVariable final Long id) {
         return Result.success(settlementService.getSupplierSettlement(id));
     }

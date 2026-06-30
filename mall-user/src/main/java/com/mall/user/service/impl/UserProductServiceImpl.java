@@ -18,6 +18,7 @@ import com.mall.user.entity.PrdProduct;
 import com.mall.user.entity.PrdSku;
 import com.mall.user.entity.SalePublishPeriod;
 import com.mall.user.entity.SalePublishSku;
+import com.mall.user.entity.SysFileAsset;
 import com.mall.user.entity.UsrBrowseHistory;
 import com.mall.user.entity.UsrComment;
 import com.mall.user.entity.UsrUserFavorite;
@@ -26,6 +27,7 @@ import com.mall.user.mapper.PrdProductMapper;
 import com.mall.user.mapper.PrdSkuMapper;
 import com.mall.user.mapper.SalePublishPeriodMapper;
 import com.mall.user.mapper.SalePublishSkuMapper;
+import com.mall.user.mapper.SysFileAssetMapper;
 import com.mall.user.mapper.UsrBrowseHistoryMapper;
 import com.mall.user.mapper.UsrCommentMapper;
 import com.mall.user.mapper.UsrUserFavoriteMapper;
@@ -34,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -50,8 +53,15 @@ public class UserProductServiceImpl extends UserReadSupport implements UserProdu
     private static final Long PERIOD_ONLINE = 20L;
     private static final Long FAVORITE_ACTIVE = 1L;
     private static final Long COMMENT_SHOW = 1L;
+    private static final String BIZ_CATEGORY_ICON = "USER_CATEGORY_ICON";
+    private static final Set<String> ACTIVITY_CODES = Set.of(
+            "HOME_MAIN",
+            "ORCHARD_DIRECT",
+            "TODAY_NEW",
+            "BREAKFAST_BAKERY");
 
     private final PrdCategoryMapper categoryMapper;
+    private final SysFileAssetMapper fileAssetMapper;
     private final PrdProductMapper productMapper;
     private final PrdSkuMapper skuMapper;
     private final SalePublishPeriodMapper periodMapper;
@@ -63,6 +73,7 @@ public class UserProductServiceImpl extends UserReadSupport implements UserProdu
 
     public UserProductServiceImpl(
             final PrdCategoryMapper categoryMapper,
+            final SysFileAssetMapper fileAssetMapper,
             final PrdProductMapper productMapper,
             final PrdSkuMapper skuMapper,
             final SalePublishPeriodMapper periodMapper,
@@ -72,6 +83,7 @@ public class UserProductServiceImpl extends UserReadSupport implements UserProdu
             final UsrCommentMapper commentMapper,
             final UserConvert userConvert) {
         this.categoryMapper = categoryMapper;
+        this.fileAssetMapper = fileAssetMapper;
         this.productMapper = productMapper;
         this.skuMapper = skuMapper;
         this.periodMapper = periodMapper;
@@ -94,7 +106,18 @@ public class UserProductServiceImpl extends UserReadSupport implements UserProdu
                 .eq(PrdCategory::getStatus, ENABLED)
                 .orderByAsc(PrdCategory::getSortNo)
                 .orderByDesc(PrdCategory::getId);
-        return toPage(safeQuery, categoryMapper, wrapper, userConvert::toCategoryDTO);
+        final Map<String, String> iconMap = fileAssetMapper.selectList(new LambdaQueryWrapper<SysFileAsset>()
+                        .eq(SysFileAsset::getBizType, BIZ_CATEGORY_ICON)
+                .eq(SysFileAsset::getStatus, ENABLED)
+                .orderByDesc(SysFileAsset::getId))
+                .stream()
+                .filter(item -> item.getBizNo() != null && item.getFileUrl() != null)
+                .collect(Collectors.toMap(SysFileAsset::getBizNo, SysFileAsset::getFileUrl, (left, right) -> left));
+        return toPage(safeQuery, categoryMapper, wrapper, item -> {
+            final CategoryDTO dto = userConvert.toCategoryDTO(item);
+            dto.setImageUrl(iconMap.get(item.getCategoryCode()));
+            return dto;
+        });
     }
 
     @Override
@@ -131,6 +154,16 @@ public class UserProductServiceImpl extends UserReadSupport implements UserProdu
                         periodMap.get(item.getPeriodId())))
                 .toList();
         return PageResult.of(page.getTotal(), list);
+    }
+
+    @Override
+    public PageResult<UserProductCardDTO> pageActivityProducts(final String activityCode, final UserProductQueryVO query) {
+        if (!StringUtils.hasText(activityCode) || !ACTIVITY_CODES.contains(activityCode)) {
+            return PageResult.of(0L, Collections.emptyList());
+        }
+        final UserProductQueryVO safeQuery = copyQuery(query);
+        applyActivityFilter(activityCode, safeQuery);
+        return pageProducts(safeQuery);
     }
 
     @Override
@@ -207,6 +240,41 @@ public class UserProductServiceImpl extends UserReadSupport implements UserProdu
             return true;
         }
         return product.getProductName() != null && product.getProductName().contains(query.getKeyword());
+    }
+
+    private UserProductQueryVO copyQuery(final UserProductQueryVO query) {
+        final UserProductQueryVO source = query == null ? new UserProductQueryVO() : query;
+        final UserProductQueryVO target = new UserProductQueryVO();
+        target.setPageNum(source.getPageNum());
+        target.setPageSize(source.getPageSize());
+        target.setUserId(source.getUserId());
+        target.setCityId(source.getCityId());
+        target.setStationId(source.getStationId());
+        target.setCategoryId(source.getCategoryId());
+        target.setProductId(source.getProductId());
+        target.setPeriodId(source.getPeriodId());
+        target.setKeyword(source.getKeyword());
+        target.setDeliveryDate(source.getDeliveryDate());
+        return target;
+    }
+
+    private void applyActivityFilter(final String activityCode, final UserProductQueryVO query) {
+        if ("ORCHARD_DIRECT".equals(activityCode) || "HOME_MAIN".equals(activityCode)) {
+            applyKeywordIfEmpty(query, "果");
+            return;
+        }
+        if ("TODAY_NEW".equals(activityCode)) {
+            return;
+        }
+        if ("BREAKFAST_BAKERY".equals(activityCode)) {
+            applyKeywordIfEmpty(query, "早餐");
+        }
+    }
+
+    private void applyKeywordIfEmpty(final UserProductQueryVO query, final String keyword) {
+        if (!StringUtils.hasText(query.getKeyword())) {
+            query.setKeyword(keyword);
+        }
     }
 
     private UserProductCardDTO toProductCard(

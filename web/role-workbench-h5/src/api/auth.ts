@@ -14,6 +14,9 @@ export interface LoginResult {
     account?: {
         id?: number;
         username?: string;
+        mobile?: string;
+        subjectType?: number;
+        subjectId?: number;
     };
     roles?: Array<{
         roleCode?: string;
@@ -25,6 +28,10 @@ export interface LoginResult {
         routePath?: string;
     }>;
     authorities?: string[];
+    dataScopes?: Array<{
+        scopeType?: number;
+        scopeObjectId?: number;
+    }>;
 }
 
 export interface ResetPasswordPayload {

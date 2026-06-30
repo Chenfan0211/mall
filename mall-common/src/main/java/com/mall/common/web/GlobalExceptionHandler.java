@@ -7,11 +7,14 @@ import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -50,6 +53,13 @@ public class GlobalExceptionHandler {
         return Result.fail(CommonErrorCode.PARAM_ERROR, "请求参数格式错误");
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AuthenticationException.class)
+    public Result<Void> handleAuthenticationException(final AuthenticationException exception) {
+        return Result.fail(CommonErrorCode.UNAUTHORIZED);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
     public Result<Void> handleAccessDeniedException(final AccessDeniedException exception) {
         return Result.fail(CommonErrorCode.FORBIDDEN, "无权限访问");

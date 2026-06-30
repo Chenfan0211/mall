@@ -17,7 +17,10 @@ RUN VITE_PUBLIC_BASE=/warehouse/ npm run build:warehouse-h5
 
 FROM nginx:1.27-alpine
 
+RUN apk add --no-cache apache2-utils
+
 COPY deploy/nginx/conf.d/mall.conf /etc/nginx/conf.d/default.conf
+COPY deploy/nginx/docker-entrypoint.d/10-basic-auth.sh /docker-entrypoint.d/10-basic-auth.sh
 COPY --from=web-build /workspace/web/admin/dist /usr/share/nginx/html/admin
 COPY --from=web-build /workspace/web/wms-admin/dist /usr/share/nginx/html/wms
 COPY --from=web-build /workspace/web/user-h5/dist/build/h5 /usr/share/nginx/html/user
