@@ -5420,4 +5420,918 @@ VALUES
 (808292, 'WMS_LOG_H5_MORE_PICK_001', 50001, 700009, 'wms_picker', 'wms_picking', 'pick_shortage', 'pick', 'PICK_H5_MORE_DIFF_001', 20, 40, 'H5补充拣货差异', 1, NOW(), NOW(), 0),
 (808293, 'WMS_LOG_H5_MORE_DRIVER_001', 50001, 700011, 'wms_driver', 'wms_delivery', 'delivery_failed', 'delivery', 'DLV_H5_MORE_FAIL_001', 20, 40, 'H5补充无法送达', 2, NOW(), NOW(), 0);
 
+-- ============================
+-- 模块：用户端 H5 首页活动图与活动商品
+-- 操作类型：初始化
+-- 涉及表：sys_file_asset, prd_product, prd_sku, sale_publish_period, sale_publish_sku
+-- 日期：2026-07-01
+-- 操作人：codex
+-- 用途说明：补齐用户 H5 首页活动图接口资源和活动页商品列表联调数据
+-- ============================
+INSERT IGNORE INTO sys_file_asset
+(id, file_no, biz_type, biz_no, file_name, file_url, file_size, file_type, uploader_account_id, status, create_time, update_time, is_deleted)
+VALUES
+(809000, 'FILE_USER_HOME_BANNER_MAIN', 'USER_HOME_BANNER', 'HOME_MAIN', '用户端首页鲜果专场活动图', '/static/user-home/shop-home.jpg', 158236, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(809001, 'FILE_USER_HOME_PROMO_ORCHARD', 'USER_HOME_PROMO', 'ORCHARD_DIRECT', '用户端果园直供活动图', '/static/user-home/shop-seafood.jpg', 193980, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(809002, 'FILE_USER_HOME_PROMO_NEW', 'USER_HOME_PROMO', 'TODAY_NEW', '用户端今日上新活动图', '/static/user-home/shop-list.jpg', 83021, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(809003, 'FILE_USER_HOME_PROMO_BREAKFAST', 'USER_HOME_PROMO', 'BREAKFAST_BAKERY', '用户端早餐烘焙活动图', '/static/user-home/shop-bakery.jpg', 191641, 'jpg', 700003, 1, NOW(), NOW(), 0);
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_HOME_BANNER',
+    biz_no = 'HOME_MAIN',
+    file_name = '用户端首页鲜果专场活动图',
+    file_url = '/static/user-home/shop-home.jpg',
+    file_size = 158236,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_HOME_BANNER_MAIN';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_HOME_PROMO',
+    biz_no = 'ORCHARD_DIRECT',
+    file_name = '用户端果园直供活动图',
+    file_url = '/static/user-home/shop-seafood.jpg',
+    file_size = 193980,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_HOME_PROMO_ORCHARD';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_HOME_PROMO',
+    biz_no = 'TODAY_NEW',
+    file_name = '用户端今日上新活动图',
+    file_url = '/static/user-home/shop-list.jpg',
+    file_size = 83021,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_HOME_PROMO_NEW';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_HOME_PROMO',
+    biz_no = 'BREAKFAST_BAKERY',
+    file_name = '用户端早餐烘焙活动图',
+    file_url = '/static/user-home/shop-bakery.jpg',
+    file_size = 191641,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_HOME_PROMO_BREAKFAST';
+
+INSERT IGNORE INTO prd_product
+(id, product_no, product_name, front_category_id, stat_category_id, supplier_id, main_image_url, image_json, audit_status, sale_status, city_id, create_account_id, create_time, update_time, is_deleted)
+VALUES
+(809010, 'PRD_H5_ACTIVITY_FRUIT_BOX', '活动果园直供鲜果礼盒', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(809011, 'PRD_H5_ACTIVITY_BLUEBERRY', '活动云南蓝莓大果', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(809012, 'PRD_H5_ACTIVITY_BREAKFAST_SET', '活动早餐牛奶吐司组合', 750001, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(809013, 'PRD_H5_ACTIVITY_FRESH_EGG', '活动今日新鲜土鸡蛋', 750001, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO prd_sku
+(id, sku_no, product_id, sku_name, barcode, sale_spec_text, base_unit, supplier_id, weight_gram, status, create_time, update_time, is_deleted)
+VALUES
+(809020, 'SKU_H5_ACTIVITY_FRUIT_BOX', 809010, '鲜果礼盒5斤装', '690000809020', '5斤/箱', '箱', 710001, 2500, 1, NOW(), NOW(), 0),
+(809021, 'SKU_H5_ACTIVITY_BLUEBERRY', 809011, '蓝莓大果4盒装', '690000809021', '125g*4盒/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(809022, 'SKU_H5_ACTIVITY_BREAKFAST_SET', 809012, '早餐牛奶吐司组合', '690000809022', '牛奶950ml+吐司1袋/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(809023, 'SKU_H5_ACTIVITY_FRESH_EGG', 809013, '新鲜土鸡蛋30枚', '690000809023', '30枚/盒', '盒', 710001, 1800, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sale_publish_period
+(id, period_no, period_name, region_id, city_id, warehouse_id, sale_start_time, sale_end_time, actual_cutoff_time, delivery_date, stock_mode, status, publish_account_id, publish_time, create_time, update_time, is_deleted)
+VALUES
+(809030, 'PERIOD_H5_ACTIVITY_ONLINE', '用户端 H5 活动商品在线团期', 440000, 440100, 50001, DATE_SUB(NOW(), INTERVAL 1 HOUR), DATE_ADD(NOW(), INTERVAL 12 HOUR), DATE_ADD(NOW(), INTERVAL 12 HOUR), DATE_ADD(CURDATE(), INTERVAL 1 DAY), 1, 20, 700002, DATE_SUB(NOW(), INTERVAL 1 HOUR), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sale_publish_sku
+(id, period_id, product_id, sku_id, supplier_id, sale_price, purchase_price, limit_qty, min_buy_qty, planned_stock_qty, sold_qty, locked_qty, production_date, shelf_life_days, status, create_time, update_time, is_deleted)
+VALUES
+(809040, 809030, 809010, 809020, 710001, 39.9000, 26.0000, 2, 1, 500, 188, 12, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(809041, 809030, 809011, 809021, 710001, 29.9000, 19.0000, 3, 1, 360, 126, 8, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(809042, 809030, 809012, 809022, 710001, 24.9000, 15.0000, 2, 1, 280, 96, 6, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(809043, 809030, 809013, 809023, 710001, 32.9000, 22.0000, 2, 1, 320, 75, 5, CURDATE(), 10, 1, NOW(), NOW(), 0);
+
+-- ============================
+-- 模块：用户端 H5 分类与分类商品
+-- 操作类型：初始化
+-- 涉及表：prd_category, sys_file_asset, prd_product, prd_sku, sale_publish_period, sale_publish_sku
+-- 日期：2026-07-01
+-- 操作人：codex
+-- 用途说明：补齐首页和分类页接口联调数据，新增 6 个前台分类且每类至少 10 个广州在线团期可售商品
+-- ============================
+INSERT IGNORE INTO prd_category
+(id, parent_id, category_code, category_name, category_type, sort_no, status, create_time, update_time, is_deleted)
+VALUES
+(810001, 0, 'FRONT_SEAFOOD', '海鲜水产', 1, 30, 1, NOW(), NOW(), 0),
+(810002, 0, 'FRONT_COOKED', '熟食卤味', 1, 40, 1, NOW(), NOW(), 0),
+(810003, 0, 'FRONT_MEAT_EGG', '肉禽蛋品', 1, 50, 1, NOW(), NOW(), 0),
+(810004, 0, 'FRONT_SNACK', '休闲零食', 1, 60, 1, NOW(), NOW(), 0),
+(810005, 0, 'FRONT_BREAKFAST', '早餐烘焙', 1, 70, 1, NOW(), NOW(), 0),
+(810006, 0, 'FRONT_GRAIN_OIL', '粮油调味', 1, 80, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sys_file_asset
+(id, file_no, biz_type, biz_no, file_name, file_url, file_size, file_type, uploader_account_id, status, create_time, update_time, is_deleted)
+VALUES
+(810010, 'FILE_USER_CATEGORY_FRONT_SEAFOOD', 'USER_CATEGORY_ICON', 'FRONT_SEAFOOD', '用户端海鲜水产分类图标', '/static/user-home/shop-seafood.jpg', 193980, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(810011, 'FILE_USER_CATEGORY_FRONT_COOKED', 'USER_CATEGORY_ICON', 'FRONT_COOKED', '用户端熟食卤味分类图标', '/static/user-home/shop-cooked.jpg', 132981, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(810012, 'FILE_USER_CATEGORY_FRONT_MEAT_EGG', 'USER_CATEGORY_ICON', 'FRONT_MEAT_EGG', '用户端肉禽蛋品分类图标', '/static/user-home/shop-meat.jpg', 144913, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(810013, 'FILE_USER_CATEGORY_FRONT_SNACK', 'USER_CATEGORY_ICON', 'FRONT_SNACK', '用户端休闲零食分类图标', '/static/user-home/shop-list.jpg', 83021, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(810014, 'FILE_USER_CATEGORY_FRONT_BREAKFAST', 'USER_CATEGORY_ICON', 'FRONT_BREAKFAST', '用户端早餐烘焙分类图标', '/static/user-home/shop-bakery.jpg', 191641, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(810015, 'FILE_USER_CATEGORY_FRONT_GRAIN_OIL', 'USER_CATEGORY_ICON', 'FRONT_GRAIN_OIL', '用户端粮油调味分类图标', '/static/user-home/shop-grain.jpg', 92274, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(810016, 'FILE_USER_CATEGORY_FRONT_FRUIT', 'USER_CATEGORY_ICON', 'FRONT_FRUIT', '用户端水果鲜食分类图标', '/static/user-home/shop-home.jpg', 158236, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(810017, 'FILE_USER_CATEGORY_FRONT_VEGETABLE', 'USER_CATEGORY_ICON', 'FRONT_VEGETABLE', '用户端蔬菜豆制分类图标', '/static/user-home/shop-category.jpg', 100122, 'jpg', 700003, 1, NOW(), NOW(), 0);
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_CATEGORY_ICON',
+    biz_no = 'FRONT_SEAFOOD',
+    file_name = '用户端海鲜水产分类图标',
+    file_url = '/static/user-home/shop-seafood.jpg',
+    file_size = 193980,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_CATEGORY_FRONT_SEAFOOD';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_CATEGORY_ICON',
+    biz_no = 'FRONT_COOKED',
+    file_name = '用户端熟食卤味分类图标',
+    file_url = '/static/user-home/shop-cooked.jpg',
+    file_size = 132981,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_CATEGORY_FRONT_COOKED';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_CATEGORY_ICON',
+    biz_no = 'FRONT_MEAT_EGG',
+    file_name = '用户端肉禽蛋品分类图标',
+    file_url = '/static/user-home/shop-meat.jpg',
+    file_size = 144913,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_CATEGORY_FRONT_MEAT_EGG';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_CATEGORY_ICON',
+    biz_no = 'FRONT_SNACK',
+    file_name = '用户端休闲零食分类图标',
+    file_url = '/static/user-home/shop-list.jpg',
+    file_size = 83021,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_CATEGORY_FRONT_SNACK';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_CATEGORY_ICON',
+    biz_no = 'FRONT_BREAKFAST',
+    file_name = '用户端早餐烘焙分类图标',
+    file_url = '/static/user-home/shop-bakery.jpg',
+    file_size = 191641,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_CATEGORY_FRONT_BREAKFAST';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_CATEGORY_ICON',
+    biz_no = 'FRONT_GRAIN_OIL',
+    file_name = '用户端粮油调味分类图标',
+    file_url = '/static/user-home/shop-grain.jpg',
+    file_size = 92274,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_CATEGORY_FRONT_GRAIN_OIL';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_CATEGORY_ICON',
+    biz_no = 'FRONT_FRUIT',
+    file_name = '用户端水果鲜食分类图标',
+    file_url = '/static/user-home/shop-home.jpg',
+    file_size = 158236,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_CATEGORY_FRONT_FRUIT';
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_CATEGORY_ICON',
+    biz_no = 'FRONT_VEGETABLE',
+    file_name = '用户端蔬菜豆制分类图标',
+    file_url = '/static/user-home/shop-category.jpg',
+    file_size = 100122,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no = 'FILE_USER_CATEGORY_FRONT_VEGETABLE';
+
+INSERT IGNORE INTO prd_product
+(id, product_no, product_name, front_category_id, stat_category_id, supplier_id, main_image_url, image_json, audit_status, sale_status, city_id, create_account_id, create_time, update_time, is_deleted)
+VALUES
+(810100, 'PRD_H5_CAT_01_01', '舟山带鱼段', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810101, 'PRD_H5_CAT_01_02', '鲜冻白虾', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810102, 'PRD_H5_CAT_01_03', '蒜蓉粉丝扇贝', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810103, 'PRD_H5_CAT_01_04', '深海鳕鱼排', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810104, 'PRD_H5_CAT_01_05', '青岛蛤蜊', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810105, 'PRD_H5_CAT_01_06', '鲜活鲈鱼', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810106, 'PRD_H5_CAT_01_07', '三文鱼切片', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810107, 'PRD_H5_CAT_01_08', '东海小黄鱼', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810108, 'PRD_H5_CAT_01_09', '冷冻鱿鱼圈', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810109, 'PRD_H5_CAT_01_10', '即食海蜇丝', 810001, 750003, 710001, '/static/user-home/shop-seafood.jpg', JSON_ARRAY('/static/user-home/shop-seafood.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810200, 'PRD_H5_CAT_02_01', '卤香鸡腿', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810201, 'PRD_H5_CAT_02_02', '酱香牛肉', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810202, 'PRD_H5_CAT_02_03', '藤椒鸡爪', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810203, 'PRD_H5_CAT_02_04', '盐水鸭半只', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810204, 'PRD_H5_CAT_02_05', '蜜汁叉烧', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810205, 'PRD_H5_CAT_02_06', '卤味拼盘', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810206, 'PRD_H5_CAT_02_07', '五香豆干', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810207, 'PRD_H5_CAT_02_08', '红油耳片', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810208, 'PRD_H5_CAT_02_09', '黑椒烤肠', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810209, 'PRD_H5_CAT_02_10', '香卤鸭翅', 810002, 750003, 710001, '/static/user-home/shop-cooked.jpg', JSON_ARRAY('/static/user-home/shop-cooked.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810300, 'PRD_H5_CAT_03_01', '土猪前腿肉', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810301, 'PRD_H5_CAT_03_02', '精品五花肉', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810302, 'PRD_H5_CAT_03_03', '黄油土鸡', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810303, 'PRD_H5_CAT_03_04', '鲜牛腱子肉', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810304, 'PRD_H5_CAT_03_05', '黑椒牛排', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810305, 'PRD_H5_CAT_03_06', '琵琶鸡翅', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810306, 'PRD_H5_CAT_03_07', '散养土鸡蛋', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810307, 'PRD_H5_CAT_03_08', '鲜鸭蛋礼盒', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810308, 'PRD_H5_CAT_03_09', '猪肉馅', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810309, 'PRD_H5_CAT_03_10', '羔羊肉卷', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810400, 'PRD_H5_CAT_04_01', '每日坚果包', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810401, 'PRD_H5_CAT_04_02', '手撕面包', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810402, 'PRD_H5_CAT_04_03', '山楂小方', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810403, 'PRD_H5_CAT_04_04', '海苔脆片', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810404, 'PRD_H5_CAT_04_05', '芝麻薄脆', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810405, 'PRD_H5_CAT_04_06', '黄桃果干', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810406, 'PRD_H5_CAT_04_07', '紫薯脆条', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810407, 'PRD_H5_CAT_04_08', '牛轧饼干', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810408, 'PRD_H5_CAT_04_09', '酸奶溶豆', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810409, 'PRD_H5_CAT_04_10', '原味薯片', 810004, 750003, 710001, '/static/user-home/shop-list.jpg', JSON_ARRAY('/static/user-home/shop-list.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810500, 'PRD_H5_CAT_05_01', '全麦吐司', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810501, 'PRD_H5_CAT_05_02', '鲜奶小餐包', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810502, 'PRD_H5_CAT_05_03', '核桃贝果', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810503, 'PRD_H5_CAT_05_04', '原味手抓饼', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810504, 'PRD_H5_CAT_05_05', '香葱花卷', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810505, 'PRD_H5_CAT_05_06', '黑米馒头', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810506, 'PRD_H5_CAT_05_07', '鲜肉小笼包', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810507, 'PRD_H5_CAT_05_08', '玉米蒸饺', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810508, 'PRD_H5_CAT_05_09', '燕麦酸奶', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810509, 'PRD_H5_CAT_05_10', '鲜牛奶950ml', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810600, 'PRD_H5_CAT_06_01', '东北长粒香米', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810601, 'PRD_H5_CAT_06_02', '五常稻花香', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810602, 'PRD_H5_CAT_06_03', '压榨花生油', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810603, 'PRD_H5_CAT_06_04', '低芥酸菜籽油', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810604, 'PRD_H5_CAT_06_05', '有机小米', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810605, 'PRD_H5_CAT_06_06', '陈醋500ml', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810606, 'PRD_H5_CAT_06_07', '生抽酱油', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810607, 'PRD_H5_CAT_06_08', '火锅底料', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810608, 'PRD_H5_CAT_06_09', '海盐食用盐', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(810609, 'PRD_H5_CAT_06_10', '高筋面粉', 810006, 750003, 710001, '/static/user-home/shop-grain.jpg', JSON_ARRAY('/static/user-home/shop-grain.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO prd_sku
+(id, sku_no, product_id, sku_name, barcode, sale_spec_text, base_unit, supplier_id, weight_gram, status, create_time, update_time, is_deleted)
+VALUES
+(811100, 'SKU_H5_CAT_01_01', 810100, '舟山带鱼段500g装', '690000811100', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(811101, 'SKU_H5_CAT_01_02', 810101, '鲜冻白虾1kg装', '690000811101', '1kg装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811102, 'SKU_H5_CAT_01_03', 810102, '蒜蓉粉丝扇贝2斤装', '690000811102', '2斤装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811103, 'SKU_H5_CAT_01_04', 810103, '深海鳕鱼排家庭装', '690000811103', '家庭装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(811104, 'SKU_H5_CAT_01_05', 810104, '青岛蛤蜊尝鲜装', '690000811104', '尝鲜装/份', '份', 710001, 450, 1, NOW(), NOW(), 0),
+(811105, 'SKU_H5_CAT_01_06', 810105, '鲜活鲈鱼3包装', '690000811105', '3包装/份', '份', 710001, 900, 1, NOW(), NOW(), 0),
+(811106, 'SKU_H5_CAT_01_07', 810106, '三文鱼切片礼盒装', '690000811106', '礼盒装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(811107, 'SKU_H5_CAT_01_08', 810107, '东海小黄鱼整只装', '690000811107', '整只装/份', '份', 710001, 1100, 1, NOW(), NOW(), 0),
+(811108, 'SKU_H5_CAT_01_09', 810108, '冷冻鱿鱼圈切片装', '690000811108', '切片装/份', '份', 710001, 800, 1, NOW(), NOW(), 0),
+(811109, 'SKU_H5_CAT_01_10', 810109, '即食海蜇丝大份装', '690000811109', '大份装/份', '份', 710001, 1600, 1, NOW(), NOW(), 0),
+(811200, 'SKU_H5_CAT_02_01', 810200, '卤香鸡腿500g装', '690000811200', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(811201, 'SKU_H5_CAT_02_02', 810201, '酱香牛肉1kg装', '690000811201', '1kg装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811202, 'SKU_H5_CAT_02_03', 810202, '藤椒鸡爪2斤装', '690000811202', '2斤装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811203, 'SKU_H5_CAT_02_04', 810203, '盐水鸭半只家庭装', '690000811203', '家庭装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(811204, 'SKU_H5_CAT_02_05', 810204, '蜜汁叉烧尝鲜装', '690000811204', '尝鲜装/份', '份', 710001, 450, 1, NOW(), NOW(), 0),
+(811205, 'SKU_H5_CAT_02_06', 810205, '卤味拼盘3包装', '690000811205', '3包装/份', '份', 710001, 900, 1, NOW(), NOW(), 0),
+(811206, 'SKU_H5_CAT_02_07', 810206, '五香豆干礼盒装', '690000811206', '礼盒装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(811207, 'SKU_H5_CAT_02_08', 810207, '红油耳片整只装', '690000811207', '整只装/份', '份', 710001, 1100, 1, NOW(), NOW(), 0),
+(811208, 'SKU_H5_CAT_02_09', 810208, '黑椒烤肠切片装', '690000811208', '切片装/份', '份', 710001, 800, 1, NOW(), NOW(), 0),
+(811209, 'SKU_H5_CAT_02_10', 810209, '香卤鸭翅大份装', '690000811209', '大份装/份', '份', 710001, 1600, 1, NOW(), NOW(), 0),
+(811300, 'SKU_H5_CAT_03_01', 810300, '土猪前腿肉500g装', '690000811300', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(811301, 'SKU_H5_CAT_03_02', 810301, '精品五花肉1kg装', '690000811301', '1kg装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811302, 'SKU_H5_CAT_03_03', 810302, '黄油土鸡2斤装', '690000811302', '2斤装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811303, 'SKU_H5_CAT_03_04', 810303, '鲜牛腱子肉家庭装', '690000811303', '家庭装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(811304, 'SKU_H5_CAT_03_05', 810304, '黑椒牛排尝鲜装', '690000811304', '尝鲜装/份', '份', 710001, 450, 1, NOW(), NOW(), 0),
+(811305, 'SKU_H5_CAT_03_06', 810305, '琵琶鸡翅3包装', '690000811305', '3包装/份', '份', 710001, 900, 1, NOW(), NOW(), 0),
+(811306, 'SKU_H5_CAT_03_07', 810306, '散养土鸡蛋礼盒装', '690000811306', '礼盒装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(811307, 'SKU_H5_CAT_03_08', 810307, '鲜鸭蛋礼盒整只装', '690000811307', '整只装/份', '份', 710001, 1100, 1, NOW(), NOW(), 0),
+(811308, 'SKU_H5_CAT_03_09', 810308, '猪肉馅切片装', '690000811308', '切片装/份', '份', 710001, 800, 1, NOW(), NOW(), 0),
+(811309, 'SKU_H5_CAT_03_10', 810309, '羔羊肉卷大份装', '690000811309', '大份装/份', '份', 710001, 1600, 1, NOW(), NOW(), 0),
+(811400, 'SKU_H5_CAT_04_01', 810400, '每日坚果包500g装', '690000811400', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(811401, 'SKU_H5_CAT_04_02', 810401, '手撕面包1kg装', '690000811401', '1kg装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811402, 'SKU_H5_CAT_04_03', 810402, '山楂小方2斤装', '690000811402', '2斤装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811403, 'SKU_H5_CAT_04_04', 810403, '海苔脆片家庭装', '690000811403', '家庭装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(811404, 'SKU_H5_CAT_04_05', 810404, '芝麻薄脆尝鲜装', '690000811404', '尝鲜装/份', '份', 710001, 450, 1, NOW(), NOW(), 0),
+(811405, 'SKU_H5_CAT_04_06', 810405, '黄桃果干3包装', '690000811405', '3包装/份', '份', 710001, 900, 1, NOW(), NOW(), 0),
+(811406, 'SKU_H5_CAT_04_07', 810406, '紫薯脆条礼盒装', '690000811406', '礼盒装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(811407, 'SKU_H5_CAT_04_08', 810407, '牛轧饼干整只装', '690000811407', '整只装/份', '份', 710001, 1100, 1, NOW(), NOW(), 0),
+(811408, 'SKU_H5_CAT_04_09', 810408, '酸奶溶豆切片装', '690000811408', '切片装/份', '份', 710001, 800, 1, NOW(), NOW(), 0),
+(811409, 'SKU_H5_CAT_04_10', 810409, '原味薯片大份装', '690000811409', '大份装/份', '份', 710001, 1600, 1, NOW(), NOW(), 0),
+(811500, 'SKU_H5_CAT_05_01', 810500, '全麦吐司500g装', '690000811500', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(811501, 'SKU_H5_CAT_05_02', 810501, '鲜奶小餐包1kg装', '690000811501', '1kg装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811502, 'SKU_H5_CAT_05_03', 810502, '核桃贝果2斤装', '690000811502', '2斤装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811503, 'SKU_H5_CAT_05_04', 810503, '原味手抓饼家庭装', '690000811503', '家庭装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(811504, 'SKU_H5_CAT_05_05', 810504, '香葱花卷尝鲜装', '690000811504', '尝鲜装/份', '份', 710001, 450, 1, NOW(), NOW(), 0),
+(811505, 'SKU_H5_CAT_05_06', 810505, '黑米馒头3包装', '690000811505', '3包装/份', '份', 710001, 900, 1, NOW(), NOW(), 0),
+(811506, 'SKU_H5_CAT_05_07', 810506, '鲜肉小笼包礼盒装', '690000811506', '礼盒装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(811507, 'SKU_H5_CAT_05_08', 810507, '玉米蒸饺整只装', '690000811507', '整只装/份', '份', 710001, 1100, 1, NOW(), NOW(), 0),
+(811508, 'SKU_H5_CAT_05_09', 810508, '燕麦酸奶切片装', '690000811508', '切片装/份', '份', 710001, 800, 1, NOW(), NOW(), 0),
+(811509, 'SKU_H5_CAT_05_10', 810509, '鲜牛奶950ml大份装', '690000811509', '大份装/份', '份', 710001, 1600, 1, NOW(), NOW(), 0),
+(811600, 'SKU_H5_CAT_06_01', 810600, '东北长粒香米500g装', '690000811600', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(811601, 'SKU_H5_CAT_06_02', 810601, '五常稻花香1kg装', '690000811601', '1kg装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811602, 'SKU_H5_CAT_06_03', 810602, '压榨花生油2斤装', '690000811602', '2斤装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(811603, 'SKU_H5_CAT_06_04', 810603, '低芥酸菜籽油家庭装', '690000811603', '家庭装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(811604, 'SKU_H5_CAT_06_05', 810604, '有机小米尝鲜装', '690000811604', '尝鲜装/份', '份', 710001, 450, 1, NOW(), NOW(), 0),
+(811605, 'SKU_H5_CAT_06_06', 810605, '陈醋500ml3包装', '690000811605', '3包装/份', '份', 710001, 900, 1, NOW(), NOW(), 0),
+(811606, 'SKU_H5_CAT_06_07', 810606, '生抽酱油礼盒装', '690000811606', '礼盒装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(811607, 'SKU_H5_CAT_06_08', 810607, '火锅底料整只装', '690000811607', '整只装/份', '份', 710001, 1100, 1, NOW(), NOW(), 0),
+(811608, 'SKU_H5_CAT_06_09', 810608, '海盐食用盐切片装', '690000811608', '切片装/份', '份', 710001, 800, 1, NOW(), NOW(), 0),
+(811609, 'SKU_H5_CAT_06_10', 810609, '高筋面粉大份装', '690000811609', '大份装/份', '份', 710001, 1600, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sale_publish_period
+(id, period_no, period_name, region_id, city_id, warehouse_id, sale_start_time, sale_end_time, actual_cutoff_time, delivery_date, stock_mode, status, publish_account_id, publish_time, create_time, update_time, is_deleted)
+VALUES
+(810900, 'PERIOD_H5_CATEGORY_ONLINE', '用户端 H5 分类商品在线团期', 440000, 440100, 50001, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_ADD(NOW(), INTERVAL 18 HOUR), DATE_ADD(NOW(), INTERVAL 18 HOUR), DATE_ADD(CURDATE(), INTERVAL 1 DAY), 1, 20, 700002, DATE_SUB(NOW(), INTERVAL 2 HOUR), NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sale_publish_sku
+(id, period_id, product_id, sku_id, supplier_id, sale_price, purchase_price, limit_qty, min_buy_qty, planned_stock_qty, sold_qty, locked_qty, production_date, shelf_life_days, status, create_time, update_time, is_deleted)
+VALUES
+(812100, 810900, 810100, 811100, 710001, 12.9000, 8.0000, 3, 1, 360, 35, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812101, 810900, 810101, 811101, 710001, 14.6000, 9.1000, 5, 1, 375, 40, 3, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(812102, 810900, 810102, 811102, 710001, 16.3000, 10.1000, 2, 1, 390, 45, 4, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(812103, 810900, 810103, 811103, 710001, 18.0000, 11.2000, 4, 1, 405, 50, 5, CURDATE(), 10, 1, NOW(), NOW(), 0),
+(812104, 810900, 810104, 811104, 710001, 19.7000, 12.2000, 0, 1, 420, 55, 6, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(812105, 810900, 810105, 811105, 710001, 21.4000, 13.3000, 6, 1, 435, 60, 2, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(812106, 810900, 810106, 811106, 710001, 23.1000, 14.3000, 2, 1, 450, 65, 3, CURDATE(), 8, 1, NOW(), NOW(), 0),
+(812107, 810900, 810107, 811107, 710001, 24.8000, 15.4000, 3, 1, 465, 70, 4, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812108, 810900, 810108, 811108, 710001, 26.5000, 16.4000, 4, 1, 480, 75, 5, CURDATE(), 12, 1, NOW(), NOW(), 0),
+(812109, 810900, 810109, 811109, 710001, 28.2000, 17.5000, 0, 1, 495, 80, 6, CURDATE(), 9, 1, NOW(), NOW(), 0),
+(812200, 810900, 810200, 811200, 710001, 15.9000, 9.9000, 3, 1, 400, 43, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812201, 810900, 810201, 811201, 710001, 17.6000, 10.9000, 5, 1, 415, 48, 3, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(812202, 810900, 810202, 811202, 710001, 19.3000, 12.0000, 2, 1, 430, 53, 4, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(812203, 810900, 810203, 811203, 710001, 21.0000, 13.0000, 4, 1, 445, 58, 5, CURDATE(), 10, 1, NOW(), NOW(), 0),
+(812204, 810900, 810204, 811204, 710001, 22.7000, 14.1000, 0, 1, 460, 63, 6, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(812205, 810900, 810205, 811205, 710001, 24.4000, 15.1000, 6, 1, 475, 68, 2, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(812206, 810900, 810206, 811206, 710001, 26.1000, 16.2000, 2, 1, 490, 73, 3, CURDATE(), 8, 1, NOW(), NOW(), 0),
+(812207, 810900, 810207, 811207, 710001, 27.8000, 17.2000, 3, 1, 505, 78, 4, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812208, 810900, 810208, 811208, 710001, 29.5000, 18.3000, 4, 1, 520, 83, 5, CURDATE(), 12, 1, NOW(), NOW(), 0),
+(812209, 810900, 810209, 811209, 710001, 31.2000, 19.3000, 0, 1, 535, 88, 6, CURDATE(), 9, 1, NOW(), NOW(), 0),
+(812300, 810900, 810300, 811300, 710001, 18.9000, 11.7000, 3, 1, 440, 51, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812301, 810900, 810301, 811301, 710001, 20.6000, 12.8000, 5, 1, 455, 56, 3, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(812302, 810900, 810302, 811302, 710001, 22.3000, 13.8000, 2, 1, 470, 61, 4, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(812303, 810900, 810303, 811303, 710001, 24.0000, 14.9000, 4, 1, 485, 66, 5, CURDATE(), 10, 1, NOW(), NOW(), 0),
+(812304, 810900, 810304, 811304, 710001, 25.7000, 15.9000, 0, 1, 500, 71, 6, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(812305, 810900, 810305, 811305, 710001, 27.4000, 17.0000, 6, 1, 515, 76, 2, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(812306, 810900, 810306, 811306, 710001, 29.1000, 18.0000, 2, 1, 530, 81, 3, CURDATE(), 8, 1, NOW(), NOW(), 0),
+(812307, 810900, 810307, 811307, 710001, 30.8000, 19.1000, 3, 1, 545, 86, 4, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812308, 810900, 810308, 811308, 710001, 32.5000, 20.2000, 4, 1, 560, 91, 5, CURDATE(), 12, 1, NOW(), NOW(), 0),
+(812309, 810900, 810309, 811309, 710001, 34.2000, 21.2000, 0, 1, 575, 96, 6, CURDATE(), 9, 1, NOW(), NOW(), 0),
+(812400, 810900, 810400, 811400, 710001, 21.9000, 13.6000, 3, 1, 480, 59, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812401, 810900, 810401, 811401, 710001, 23.6000, 14.6000, 5, 1, 495, 64, 3, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(812402, 810900, 810402, 811402, 710001, 25.3000, 15.7000, 2, 1, 510, 69, 4, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(812403, 810900, 810403, 811403, 710001, 27.0000, 16.7000, 4, 1, 525, 74, 5, CURDATE(), 10, 1, NOW(), NOW(), 0),
+(812404, 810900, 810404, 811404, 710001, 28.7000, 17.8000, 0, 1, 540, 79, 6, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(812405, 810900, 810405, 811405, 710001, 30.4000, 18.8000, 6, 1, 555, 84, 2, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(812406, 810900, 810406, 811406, 710001, 32.1000, 19.9000, 2, 1, 570, 89, 3, CURDATE(), 8, 1, NOW(), NOW(), 0),
+(812407, 810900, 810407, 811407, 710001, 33.8000, 21.0000, 3, 1, 585, 94, 4, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812408, 810900, 810408, 811408, 710001, 35.5000, 22.0000, 4, 1, 600, 99, 5, CURDATE(), 12, 1, NOW(), NOW(), 0),
+(812409, 810900, 810409, 811409, 710001, 37.2000, 23.1000, 0, 1, 615, 104, 6, CURDATE(), 9, 1, NOW(), NOW(), 0),
+(812500, 810900, 810500, 811500, 710001, 24.9000, 15.4000, 3, 1, 520, 67, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812501, 810900, 810501, 811501, 710001, 26.6000, 16.5000, 5, 1, 535, 72, 3, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(812502, 810900, 810502, 811502, 710001, 28.3000, 17.5000, 2, 1, 550, 77, 4, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(812503, 810900, 810503, 811503, 710001, 30.0000, 18.6000, 4, 1, 565, 82, 5, CURDATE(), 10, 1, NOW(), NOW(), 0),
+(812504, 810900, 810504, 811504, 710001, 31.7000, 19.7000, 0, 1, 580, 87, 6, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(812505, 810900, 810505, 811505, 710001, 33.4000, 20.7000, 6, 1, 595, 92, 2, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(812506, 810900, 810506, 811506, 710001, 35.1000, 21.8000, 2, 1, 610, 97, 3, CURDATE(), 8, 1, NOW(), NOW(), 0),
+(812507, 810900, 810507, 811507, 710001, 36.8000, 22.8000, 3, 1, 625, 102, 4, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812508, 810900, 810508, 811508, 710001, 38.5000, 23.9000, 4, 1, 640, 107, 5, CURDATE(), 12, 1, NOW(), NOW(), 0),
+(812509, 810900, 810509, 811509, 710001, 40.2000, 24.9000, 0, 1, 655, 112, 6, CURDATE(), 9, 1, NOW(), NOW(), 0),
+(812600, 810900, 810600, 811600, 710001, 27.9000, 17.3000, 3, 1, 560, 75, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812601, 810900, 810601, 811601, 710001, 29.6000, 18.4000, 5, 1, 575, 80, 3, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(812602, 810900, 810602, 811602, 710001, 31.3000, 19.4000, 2, 1, 590, 85, 4, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(812603, 810900, 810603, 811603, 710001, 33.0000, 20.5000, 4, 1, 605, 90, 5, CURDATE(), 10, 1, NOW(), NOW(), 0),
+(812604, 810900, 810604, 811604, 710001, 34.7000, 21.5000, 0, 1, 620, 95, 6, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(812605, 810900, 810605, 811605, 710001, 36.4000, 22.6000, 6, 1, 635, 100, 2, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(812606, 810900, 810606, 811606, 710001, 38.1000, 23.6000, 2, 1, 650, 105, 3, CURDATE(), 8, 1, NOW(), NOW(), 0),
+(812607, 810900, 810607, 811607, 710001, 39.8000, 24.7000, 3, 1, 665, 110, 4, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(812608, 810900, 810608, 811608, 710001, 41.5000, 25.7000, 4, 1, 680, 115, 5, CURDATE(), 12, 1, NOW(), NOW(), 0),
+(812609, 810900, 810609, 811609, 710001, 43.2000, 26.8000, 0, 1, 695, 120, 6, CURDATE(), 9, 1, NOW(), NOW(), 0);
+
+-- ============================
+-- 模块：用户端 H5 运营活动页
+-- 操作类型：初始化/修正
+-- 涉及表：sys_file_asset, prd_product, prd_sku, sale_publish_period, sale_publish_sku
+-- 日期：2026-07-01
+-- 操作人：codex
+-- 用途说明：补齐首页运营活动图片和活动页商品列表联调数据
+-- ============================
+
+INSERT IGNORE INTO sys_file_asset
+(id, file_no, biz_type, biz_no, file_name, file_url, file_size, file_type, uploader_account_id, status, create_time, update_time, is_deleted)
+VALUES
+(819100, 'FILE_USER_HOME_BANNER_MAIN_242', 'USER_HOME_BANNER', 'HOME_MAIN', '用户端首页鲜果专场活动图', '/static/user-home/shop-home.jpg', 158236, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(819101, 'FILE_USER_HOME_PROMO_ORCHARD_242', 'USER_HOME_PROMO', 'ORCHARD_DIRECT', '用户端果园直供活动图', '/static/user-home/shop-home.jpg', 158236, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(819102, 'FILE_USER_HOME_PROMO_NEW_242', 'USER_HOME_PROMO', 'TODAY_NEW', '用户端今日上新活动图', '/static/user-home/shop-list.jpg', 83021, 'jpg', 700003, 1, NOW(), NOW(), 0),
+(819103, 'FILE_USER_HOME_PROMO_BREAKFAST_242', 'USER_HOME_PROMO', 'BREAKFAST_BAKERY', '用户端早餐烘焙活动图', '/static/user-home/shop-bakery.jpg', 191641, 'jpg', 700003, 1, NOW(), NOW(), 0);
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_HOME_BANNER',
+    biz_no = 'HOME_MAIN',
+    file_name = '用户端首页鲜果专场活动图',
+    file_url = '/static/user-home/shop-home.jpg',
+    file_size = 158236,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no IN ('FILE_USER_HOME_BANNER_MAIN', 'FILE_USER_HOME_BANNER_MAIN_242');
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_HOME_PROMO',
+    biz_no = 'ORCHARD_DIRECT',
+    file_name = '用户端果园直供活动图',
+    file_url = '/static/user-home/shop-home.jpg',
+    file_size = 158236,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no IN ('FILE_USER_HOME_PROMO_ORCHARD', 'FILE_USER_HOME_PROMO_ORCHARD_242');
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_HOME_PROMO',
+    biz_no = 'TODAY_NEW',
+    file_name = '用户端今日上新活动图',
+    file_url = '/static/user-home/shop-list.jpg',
+    file_size = 83021,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no IN ('FILE_USER_HOME_PROMO_NEW', 'FILE_USER_HOME_PROMO_NEW_242');
+
+UPDATE sys_file_asset
+SET biz_type = 'USER_HOME_PROMO',
+    biz_no = 'BREAKFAST_BAKERY',
+    file_name = '用户端早餐烘焙活动图',
+    file_url = '/static/user-home/shop-bakery.jpg',
+    file_size = 191641,
+    file_type = 'jpg',
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE file_no IN ('FILE_USER_HOME_PROMO_BREAKFAST', 'FILE_USER_HOME_PROMO_BREAKFAST_242');
+
+INSERT IGNORE INTO prd_product
+(id, product_no, product_name, front_category_id, stat_category_id, supplier_id, main_image_url, image_json, audit_status, sale_status, city_id, create_account_id, create_time, update_time, is_deleted)
+VALUES
+(819110, 'PRD_H5_ACTIVITY_PAGE_FRUIT_BOX', '本周鲜果礼盒 5斤装', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(819111, 'PRD_H5_ACTIVITY_PAGE_ORANGE', '果园直供赣南脐橙', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(819112, 'PRD_H5_ACTIVITY_PAGE_BLUEBERRY', '今日上新云南蓝莓', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(819113, 'PRD_H5_ACTIVITY_PAGE_BREAKFAST', '早餐烘焙牛奶吐司组合', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(819114, 'PRD_H5_ACTIVITY_PAGE_EGG', '今日上新谷物鲜鸡蛋', 810003, 750003, 710001, '/static/user-home/shop-meat.jpg', JSON_ARRAY('/static/user-home/shop-meat.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(819115, 'PRD_H5_ACTIVITY_PAGE_BAGEL', '早餐软欧面包组合', 810005, 750003, 710001, '/static/user-home/shop-bakery.jpg', JSON_ARRAY('/static/user-home/shop-bakery.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0);
+
+UPDATE prd_product
+SET audit_status = 20,
+    sale_status = 1,
+    city_id = 440100,
+    product_name = CASE
+        WHEN product_no = 'PRD_H5_ACTIVITY_PAGE_BAGEL' THEN '早餐软欧面包组合'
+        ELSE product_name
+    END,
+    update_time = NOW()
+WHERE product_no IN (
+    'PRD_H5_ACTIVITY_PAGE_FRUIT_BOX',
+    'PRD_H5_ACTIVITY_PAGE_ORANGE',
+    'PRD_H5_ACTIVITY_PAGE_BLUEBERRY',
+    'PRD_H5_ACTIVITY_PAGE_BREAKFAST',
+    'PRD_H5_ACTIVITY_PAGE_EGG',
+    'PRD_H5_ACTIVITY_PAGE_BAGEL',
+    'PRD_H5_ACTIVITY_FRUIT_BOX',
+    'PRD_H5_ACTIVITY_BLUEBERRY',
+    'PRD_H5_ACTIVITY_BREAKFAST_SET',
+    'PRD_H5_ACTIVITY_FRESH_EGG'
+);
+
+INSERT IGNORE INTO prd_sku
+(id, sku_no, product_id, sku_name, barcode, sale_spec_text, base_unit, supplier_id, weight_gram, status, create_time, update_time, is_deleted)
+VALUES
+(819120, 'SKU_H5_ACTIVITY_PAGE_FRUIT_BOX', 819110, '5斤装', '690000819120', '5斤/箱', '箱', 710001, 2500, 1, NOW(), NOW(), 0),
+(819121, 'SKU_H5_ACTIVITY_PAGE_ORANGE', 819111, '3斤装', '690000819121', '3斤/袋', '袋', 710001, 1500, 1, NOW(), NOW(), 0),
+(819122, 'SKU_H5_ACTIVITY_PAGE_BLUEBERRY', 819112, '125g*4盒', '690000819122', '125g*4盒/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(819123, 'SKU_H5_ACTIVITY_PAGE_BREAKFAST', 819113, '早餐组合', '690000819123', '牛奶950ml+吐司1袋/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(819124, 'SKU_H5_ACTIVITY_PAGE_EGG', 819114, '30枚装', '690000819124', '30枚/盒', '盒', 710001, 1800, 1, NOW(), NOW(), 0),
+(819125, 'SKU_H5_ACTIVITY_PAGE_BAGEL', 819115, '6只装', '690000819125', '6只/袋', '袋', 710001, 900, 1, NOW(), NOW(), 0);
+
+UPDATE prd_sku
+SET status = 1,
+    update_time = NOW()
+WHERE sku_no IN (
+    'SKU_H5_ACTIVITY_PAGE_FRUIT_BOX',
+    'SKU_H5_ACTIVITY_PAGE_ORANGE',
+    'SKU_H5_ACTIVITY_PAGE_BLUEBERRY',
+    'SKU_H5_ACTIVITY_PAGE_BREAKFAST',
+    'SKU_H5_ACTIVITY_PAGE_EGG',
+    'SKU_H5_ACTIVITY_PAGE_BAGEL',
+    'SKU_H5_ACTIVITY_FRUIT_BOX',
+    'SKU_H5_ACTIVITY_BLUEBERRY',
+    'SKU_H5_ACTIVITY_BREAKFAST_SET',
+    'SKU_H5_ACTIVITY_FRESH_EGG'
+);
+
+INSERT IGNORE INTO sale_publish_period
+(id, period_no, period_name, region_id, city_id, warehouse_id, sale_start_time, sale_end_time, actual_cutoff_time, delivery_date, stock_mode, status, publish_account_id, publish_time, create_time, update_time, is_deleted)
+VALUES
+(819130, 'PERIOD_H5_ACTIVITY_PAGE_ONLINE', '用户端 H5 运营活动在线团期', 440000, 440100, 50001, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_ADD(NOW(), INTERVAL 18 HOUR), DATE_ADD(NOW(), INTERVAL 18 HOUR), DATE_ADD(CURDATE(), INTERVAL 1 DAY), 1, 20, 700002, DATE_SUB(NOW(), INTERVAL 2 HOUR), NOW(), NOW(), 0);
+
+UPDATE sale_publish_period
+SET city_id = 440100,
+    sale_start_time = DATE_SUB(NOW(), INTERVAL 2 HOUR),
+    sale_end_time = DATE_ADD(NOW(), INTERVAL 18 HOUR),
+    actual_cutoff_time = DATE_ADD(NOW(), INTERVAL 18 HOUR),
+    delivery_date = DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    status = 20,
+    publish_time = DATE_SUB(NOW(), INTERVAL 2 HOUR),
+    update_time = NOW()
+WHERE period_no IN ('PERIOD_H5_ACTIVITY_PAGE_ONLINE', 'PERIOD_H5_ACTIVITY_ONLINE');
+
+INSERT IGNORE INTO sale_publish_sku
+(id, period_id, product_id, sku_id, supplier_id, sale_price, purchase_price, limit_qty, min_buy_qty, planned_stock_qty, sold_qty, locked_qty, production_date, shelf_life_days, status, create_time, update_time, is_deleted)
+VALUES
+(819140, 819130, 819110, 819120, 710001, 39.9000, 26.0000, 2, 1, 500, 188, 12, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(819141, 819130, 819111, 819121, 710001, 24.9000, 16.0000, 3, 1, 460, 165, 9, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(819142, 819130, 819112, 819122, 710001, 29.9000, 19.0000, 3, 1, 360, 126, 8, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(819143, 819130, 819113, 819123, 710001, 24.9000, 15.0000, 2, 1, 280, 96, 6, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(819144, 819130, 819114, 819124, 710001, 32.9000, 22.0000, 2, 1, 320, 75, 5, CURDATE(), 10, 1, NOW(), NOW(), 0),
+(819145, 819130, 819115, 819125, 710001, 19.9000, 12.0000, 2, 1, 260, 88, 4, CURDATE(), 3, 1, NOW(), NOW(), 0);
+
+UPDATE sale_publish_sku
+SET planned_stock_qty = GREATEST(planned_stock_qty, sold_qty + locked_qty + 50),
+    status = 1,
+    update_time = NOW()
+WHERE id IN (809040, 809041, 809042, 809043, 819140, 819141, 819142, 819143, 819144, 819145);
+
+-- ============================
+-- 模块：用户端 H5 前台二级类目
+-- 操作类型：初始化/修正
+-- 涉及表：prd_category, prd_product
+-- 日期：2026-07-01
+-- 操作人：codex
+-- 用途说明：补齐分类页接口二级类目，并将 H5 演示商品归类到二级类目
+-- ============================
+
+-- ============================
+-- 模块：用户端 H5 更多分类商品与多规格商品
+-- 操作类型：初始化
+-- 涉及表：prd_product, prd_sku, sale_publish_period, sale_publish_sku
+-- 日期：2026-07-01
+-- 操作人：codex
+-- 用途说明：补齐水果/蔬菜可售商品，并为各前台分类补充多规格商品，支持 H5 多规格加购联调
+-- ============================
+UPDATE sale_publish_period
+SET sale_start_time = DATE_SUB(NOW(), INTERVAL 2 HOUR),
+    sale_end_time = DATE_ADD(NOW(), INTERVAL 18 HOUR),
+    actual_cutoff_time = DATE_ADD(NOW(), INTERVAL 18 HOUR),
+    delivery_date = DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    status = 20,
+    publish_time = DATE_SUB(NOW(), INTERVAL 2 HOUR),
+    update_time = NOW(),
+    is_deleted = 0
+WHERE period_no = 'PERIOD_H5_CATEGORY_ONLINE';
+
+INSERT IGNORE INTO prd_product
+(id, product_no, product_name, front_category_id, stat_category_id, supplier_id, main_image_url, image_json, audit_status, sale_status, city_id, create_account_id, create_time, update_time, is_deleted)
+VALUES
+(813001, 'PRD_H5_FRUIT_01', '赣南脐橙', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813002, 'PRD_H5_FRUIT_02', '云南蓝莓', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813003, 'PRD_H5_FRUIT_03', '海南小台农芒果', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813004, 'PRD_H5_FRUIT_04', '山东红富士苹果', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813005, 'PRD_H5_FRUIT_05', '阳光玫瑰葡萄', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813006, 'PRD_H5_FRUIT_06', '四川爱媛果冻橙', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813007, 'PRD_H5_FRUIT_07', '陕西猕猴桃', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813008, 'PRD_H5_FRUIT_08', '越南火龙果', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813009, 'PRD_H5_FRUIT_09', '泰国椰青', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813010, 'PRD_H5_FRUIT_10', '香甜香蕉', 750001, 750003, 710001, '/static/user-home/shop-home.jpg', JSON_ARRAY('/static/user-home/shop-home.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813101, 'PRD_H5_VEG_01', '高山娃娃菜', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813102, 'PRD_H5_VEG_02', '有机西兰花', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813103, 'PRD_H5_VEG_03', '本地生菜', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813104, 'PRD_H5_VEG_04', '荷兰黄瓜', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813105, 'PRD_H5_VEG_05', '番茄组合装', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813106, 'PRD_H5_VEG_06', '铁棍山药', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813107, 'PRD_H5_VEG_07', '鲜香菇', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813108, 'PRD_H5_VEG_08', '嫩豆腐', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813109, 'PRD_H5_VEG_09', '黄豆芽', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0),
+(813110, 'PRD_H5_VEG_10', '净菜土豆丝', 750002, 750003, 710001, '/static/user-home/shop-category.jpg', JSON_ARRAY('/static/user-home/shop-category.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO prd_sku
+(id, sku_no, product_id, sku_name, barcode, sale_spec_text, base_unit, supplier_id, weight_gram, status, create_time, update_time, is_deleted)
+VALUES
+(814001, 'SKU_H5_FRUIT_01_STD', 813001, '3斤装', '690000814001', '3斤装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(814002, 'SKU_H5_FRUIT_02_STD', 813002, '2盒装', '690000814002', '2盒装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(814003, 'SKU_H5_FRUIT_03_STD', 813003, '5斤装', '690000814003', '5斤装/份', '份', 710001, 2500, 1, NOW(), NOW(), 0),
+(814004, 'SKU_H5_FRUIT_04_STD', 813004, '4斤装', '690000814004', '4斤装/份', '份', 710001, 2000, 1, NOW(), NOW(), 0),
+(814005, 'SKU_H5_FRUIT_05_STD', 813005, '1.5斤装', '690000814005', '1.5斤装/份', '份', 710001, 750, 1, NOW(), NOW(), 0),
+(814006, 'SKU_H5_FRUIT_06_STD', 813006, '6枚装', '690000814006', '6枚装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(814007, 'SKU_H5_FRUIT_07_STD', 813007, '12枚装', '690000814007', '12枚装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(814008, 'SKU_H5_FRUIT_08_STD', 813008, '2个装', '690000814008', '2个装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(814009, 'SKU_H5_FRUIT_09_STD', 813009, '3个装', '690000814009', '3个装/份', '份', 710001, 1800, 1, NOW(), NOW(), 0),
+(814010, 'SKU_H5_FRUIT_10_STD', 813010, '5斤装', '690000814010', '5斤装/份', '份', 710001, 2500, 1, NOW(), NOW(), 0),
+(814101, 'SKU_H5_VEG_01_STD', 813101, '2颗装', '690000814101', '2颗装/份', '份', 710001, 800, 1, NOW(), NOW(), 0),
+(814102, 'SKU_H5_VEG_02_STD', 813102, '2朵装', '690000814102', '2朵装/份', '份', 710001, 700, 1, NOW(), NOW(), 0),
+(814103, 'SKU_H5_VEG_03_STD', 813103, '500g装', '690000814103', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(814104, 'SKU_H5_VEG_04_STD', 813104, '3根装', '690000814104', '3根装/份', '份', 710001, 600, 1, NOW(), NOW(), 0),
+(814105, 'SKU_H5_VEG_05_STD', 813105, '3斤装', '690000814105', '3斤装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(814106, 'SKU_H5_VEG_06_STD', 813106, '2斤装', '690000814106', '2斤装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(814107, 'SKU_H5_VEG_07_STD', 813107, '400g装', '690000814107', '400g装/份', '份', 710001, 400, 1, NOW(), NOW(), 0),
+(814108, 'SKU_H5_VEG_08_STD', 813108, '4盒装', '690000814108', '4盒装/份', '份', 710001, 1200, 1, NOW(), NOW(), 0),
+(814109, 'SKU_H5_VEG_09_STD', 813109, '1kg装', '690000814109', '1kg装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(814110, 'SKU_H5_VEG_10_STD', 813110, '500g装', '690000814110', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(814201, 'SKU_H5_MULTI_FRUIT_SMALL', 813001, '小份装', '690000814201', '小份装/份', '份', 710001, 800, 1, NOW(), NOW(), 0),
+(814202, 'SKU_H5_MULTI_FRUIT_FAMILY', 813001, '家庭装', '690000814202', '家庭装/份', '份', 710001, 2500, 1, NOW(), NOW(), 0),
+(814203, 'SKU_H5_MULTI_FRUIT_GIFT', 813001, '礼盒装', '690000814203', '礼盒装/份', '份', 710001, 3500, 1, NOW(), NOW(), 0),
+(814204, 'SKU_H5_MULTI_VEG_SMALL', 813101, '小份装', '690000814204', '小份装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(814205, 'SKU_H5_MULTI_VEG_FAMILY', 813101, '家庭装', '690000814205', '家庭装/份', '份', 710001, 1600, 1, NOW(), NOW(), 0),
+(814206, 'SKU_H5_MULTI_SEAFOOD_SMALL', 810100, '500g装', '690000814206', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(814207, 'SKU_H5_MULTI_SEAFOOD_FAMILY', 810100, '1kg装', '690000814207', '1kg装/份', '份', 710001, 1000, 1, NOW(), NOW(), 0),
+(814208, 'SKU_H5_MULTI_MEAT_SMALL', 810300, '500g装', '690000814208', '500g装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(814209, 'SKU_H5_MULTI_MEAT_FAMILY', 810300, '1.5kg装', '690000814209', '1.5kg装/份', '份', 710001, 1500, 1, NOW(), NOW(), 0),
+(814210, 'SKU_H5_MULTI_BREAKFAST_SINGLE', 810500, '单人早餐装', '690000814210', '单人早餐装/份', '份', 710001, 600, 1, NOW(), NOW(), 0),
+(814211, 'SKU_H5_MULTI_BREAKFAST_FAMILY', 810500, '家庭早餐装', '690000814211', '家庭早餐装/份', '份', 710001, 1800, 1, NOW(), NOW(), 0),
+(814212, 'SKU_H5_MULTI_SNACK_SMALL', 810400, '分享装', '690000814212', '分享装/份', '份', 710001, 700, 1, NOW(), NOW(), 0),
+(814213, 'SKU_H5_MULTI_SNACK_BOX', 810400, '整箱装', '690000814213', '整箱装/份', '份', 710001, 2500, 1, NOW(), NOW(), 0),
+(814214, 'SKU_H5_MULTI_GRAIN_SMALL', 810600, '2.5kg装', '690000814214', '2.5kg装/份', '份', 710001, 2500, 1, NOW(), NOW(), 0),
+(814215, 'SKU_H5_MULTI_GRAIN_FAMILY', 810600, '5kg装', '690000814215', '5kg装/份', '份', 710001, 5000, 1, NOW(), NOW(), 0),
+(814216, 'SKU_H5_MULTI_COOKED_SMALL', 810200, '尝鲜装', '690000814216', '尝鲜装/份', '份', 710001, 500, 1, NOW(), NOW(), 0),
+(814217, 'SKU_H5_MULTI_COOKED_FAMILY', 810200, '家庭装', '690000814217', '家庭装/份', '份', 710001, 1600, 1, NOW(), NOW(), 0);
+
+INSERT IGNORE INTO sale_publish_sku
+(id, period_id, product_id, sku_id, supplier_id, sale_price, purchase_price, limit_qty, min_buy_qty, planned_stock_qty, sold_qty, locked_qty, production_date, shelf_life_days, status, create_time, update_time, is_deleted)
+VALUES
+(815001, 810900, 813001, 814001, 710001, 19.9000, 12.0000, 3, 1, 260, 42, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815002, 810900, 813002, 814002, 710001, 16.8000, 10.0000, 2, 1, 180, 38, 1, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815003, 810900, 813003, 814003, 710001, 29.9000, 18.0000, 2, 1, 220, 51, 2, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(815004, 810900, 813004, 814004, 710001, 24.9000, 15.0000, 3, 1, 240, 46, 3, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(815005, 810900, 813005, 814005, 710001, 35.9000, 22.0000, 2, 1, 160, 58, 2, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815006, 810900, 813006, 814006, 710001, 18.8000, 11.0000, 4, 1, 210, 44, 3, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815007, 810900, 813007, 814007, 710001, 22.6000, 13.5000, 4, 1, 230, 40, 2, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(815008, 810900, 813008, 814008, 710001, 13.9000, 8.0000, 5, 1, 260, 39, 1, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(815009, 810900, 813009, 814009, 710001, 27.9000, 17.0000, 2, 1, 150, 35, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815010, 810900, 813010, 814010, 710001, 15.9000, 9.0000, 4, 1, 300, 55, 3, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815101, 810900, 813101, 814101, 710001, 8.9000, 5.0000, 5, 1, 260, 33, 2, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815102, 810900, 813102, 814102, 710001, 12.8000, 7.5000, 4, 1, 220, 36, 1, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815103, 810900, 813103, 814103, 710001, 6.9000, 4.0000, 6, 1, 280, 40, 2, CURDATE(), 2, 1, NOW(), NOW(), 0),
+(815104, 810900, 813104, 814104, 710001, 9.9000, 5.5000, 5, 1, 230, 37, 2, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815105, 810900, 813105, 814105, 710001, 14.9000, 8.5000, 3, 1, 260, 45, 3, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(815106, 810900, 813106, 814106, 710001, 16.8000, 10.0000, 3, 1, 180, 31, 1, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(815107, 810900, 813107, 814107, 710001, 11.9000, 7.0000, 4, 1, 210, 34, 2, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815108, 810900, 813108, 814108, 710001, 10.9000, 6.5000, 4, 1, 240, 42, 2, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(815109, 810900, 813109, 814109, 710001, 5.9000, 3.5000, 6, 1, 280, 47, 1, CURDATE(), 2, 1, NOW(), NOW(), 0),
+(815110, 810900, 813110, 814110, 710001, 7.9000, 4.5000, 6, 1, 250, 43, 1, CURDATE(), 2, 1, NOW(), NOW(), 0),
+(815201, 810900, 813001, 814201, 710001, 12.9000, 8.0000, 4, 1, 180, 36, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815202, 810900, 813001, 814202, 710001, 28.9000, 18.0000, 2, 1, 4, 2, 0, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815203, 810900, 813001, 814203, 710001, 39.9000, 25.0000, 1, 1, 20, 20, 0, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815204, 810900, 813101, 814204, 710001, 6.9000, 4.0000, 5, 1, 200, 44, 1, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815205, 810900, 813101, 814205, 710001, 16.9000, 10.0000, 2, 1, 5, 3, 0, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815206, 810900, 810100, 814206, 710001, 12.9000, 8.0000, 3, 1, 140, 40, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815207, 810900, 810100, 814207, 710001, 23.9000, 15.0000, 2, 1, 20, 20, 0, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815208, 810900, 810300, 814208, 710001, 18.9000, 12.0000, 3, 1, 150, 46, 1, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(815209, 810900, 810300, 814209, 710001, 49.9000, 32.0000, 1, 1, 6, 4, 1, CURDATE(), 4, 1, NOW(), NOW(), 0),
+(815210, 810900, 810500, 814210, 710001, 15.9000, 10.0000, 4, 1, 180, 52, 2, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815211, 810900, 810500, 814211, 710001, 35.9000, 23.0000, 2, 1, 20, 20, 0, CURDATE(), 3, 1, NOW(), NOW(), 0),
+(815212, 810900, 810400, 814212, 710001, 21.9000, 14.0000, 3, 1, 160, 50, 2, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(815213, 810900, 810400, 814213, 710001, 59.9000, 40.0000, 1, 1, 3, 2, 0, CURDATE(), 6, 1, NOW(), NOW(), 0),
+(815214, 810900, 810600, 814214, 710001, 27.9000, 18.0000, 3, 1, 180, 54, 2, CURDATE(), 180, 1, NOW(), NOW(), 0),
+(815215, 810900, 810600, 814215, 710001, 49.9000, 32.0000, 1, 1, 20, 20, 0, CURDATE(), 180, 1, NOW(), NOW(), 0),
+(815216, 810900, 810200, 814216, 710001, 19.9000, 12.0000, 3, 1, 120, 39, 2, CURDATE(), 5, 1, NOW(), NOW(), 0),
+(815217, 810900, 810200, 814217, 710001, 45.9000, 30.0000, 1, 1, 5, 3, 1, CURDATE(), 5, 1, NOW(), NOW(), 0);
+
+-- 用户端 H5 前台二级类目数据与演示商品归类修正。
+-- 可重复执行：类目使用 INSERT IGNORE，商品归类使用幂等 UPDATE。
+
+INSERT IGNORE INTO prd_category
+(id, parent_id, category_code, category_name, category_type, sort_no, status, create_time, update_time, is_deleted)
+VALUES
+(816001, 750001, 'FRONT_FRUIT_CITRUS', '柑橘橙柚', 1, 101, 1, NOW(), NOW(), 0),
+(816002, 750001, 'FRONT_FRUIT_BERRY_GRAPE', '莓果葡萄', 1, 102, 1, NOW(), NOW(), 0),
+(816003, 750001, 'FRONT_FRUIT_APPLE_PEAR', '苹果梨桃', 1, 103, 1, NOW(), NOW(), 0),
+(816011, 750002, 'FRONT_VEG_LEAF_MUSHROOM', '叶菜菌菇', 1, 111, 1, NOW(), NOW(), 0),
+(816012, 750002, 'FRONT_VEG_ROOT_MELON', '茄果根茎', 1, 112, 1, NOW(), NOW(), 0),
+(816013, 750002, 'FRONT_VEG_TOFU_CLEAN', '豆制净菜', 1, 113, 1, NOW(), NOW(), 0),
+(816021, 810001, 'FRONT_SEAFOOD_FISH_SHRIMP', '鱼虾贝类', 1, 121, 1, NOW(), NOW(), 0),
+(816022, 810001, 'FRONT_SEAFOOD_PREPARED', '海鲜半成品', 1, 122, 1, NOW(), NOW(), 0),
+(816023, 810001, 'FRONT_SEAFOOD_READY', '即食海味', 1, 123, 1, NOW(), NOW(), 0),
+(816031, 810002, 'FRONT_COOKED_BRAISED', '卤味熟食', 1, 131, 1, NOW(), NOW(), 0),
+(816032, 810002, 'FRONT_COOKED_ROASTED', '烤肠肉食', 1, 132, 1, NOW(), NOW(), 0),
+(816033, 810002, 'FRONT_COOKED_TOFU_SIDE', '豆干小菜', 1, 133, 1, NOW(), NOW(), 0),
+(816041, 810003, 'FRONT_MEAT_PORK_BEEF', '猪牛羊肉', 1, 141, 1, NOW(), NOW(), 0),
+(816042, 810003, 'FRONT_MEAT_POULTRY_EGG', '禽肉蛋品', 1, 142, 1, NOW(), NOW(), 0),
+(816043, 810003, 'FRONT_MEAT_PREPARED', '调理肉品', 1, 143, 1, NOW(), NOW(), 0),
+(816051, 810004, 'FRONT_SNACK_NUT_FRUIT', '坚果果干', 1, 151, 1, NOW(), NOW(), 0),
+(816052, 810004, 'FRONT_SNACK_BAKED', '糕点饼干', 1, 152, 1, NOW(), NOW(), 0),
+(816053, 810004, 'FRONT_SNACK_CRISPY', '膨化零食', 1, 153, 1, NOW(), NOW(), 0),
+(816061, 810005, 'FRONT_BREAKFAST_BAKERY', '面包烘焙', 1, 161, 1, NOW(), NOW(), 0),
+(816062, 810005, 'FRONT_BREAKFAST_STAPLE', '早餐主食', 1, 162, 1, NOW(), NOW(), 0),
+(816063, 810005, 'FRONT_BREAKFAST_DAIRY', '乳品饮品', 1, 163, 1, NOW(), NOW(), 0),
+(816071, 810006, 'FRONT_GRAIN_RICE_FLOUR', '米面杂粮', 1, 171, 1, NOW(), NOW(), 0),
+(816072, 810006, 'FRONT_GRAIN_OIL', '食用油品', 1, 172, 1, NOW(), NOW(), 0),
+(816073, 810006, 'FRONT_GRAIN_SEASONING', '调味酱料', 1, 173, 1, NOW(), NOW(), 0);
+
+UPDATE prd_product
+SET front_category_id = CASE
+    WHEN product_no IN ('PRD_H5_FRUIT_01', 'PRD_H5_FRUIT_06', 'PRD_H5_ACTIVITY_FRUIT_BOX') THEN 816001
+    WHEN product_no IN ('PRD_H5_FRUIT_02', 'PRD_H5_FRUIT_05', 'PRD_H5_FRUIT_07', 'PRD_H5_ACTIVITY_BLUEBERRY') THEN 816002
+    WHEN product_no IN ('PRD_H5_FRUIT_03', 'PRD_H5_FRUIT_04', 'PRD_H5_FRUIT_08', 'PRD_H5_FRUIT_09', 'PRD_H5_FRUIT_10') THEN 816003
+    WHEN product_no IN ('PRD_H5_VEG_01', 'PRD_H5_VEG_03', 'PRD_H5_VEG_07') THEN 816011
+    WHEN product_no IN ('PRD_H5_VEG_02', 'PRD_H5_VEG_04', 'PRD_H5_VEG_05', 'PRD_H5_VEG_06') THEN 816012
+    WHEN product_no IN ('PRD_H5_VEG_08', 'PRD_H5_VEG_09', 'PRD_H5_VEG_10') THEN 816013
+    WHEN product_no IN ('PRD_H5_CAT_01_01', 'PRD_H5_CAT_01_02', 'PRD_H5_CAT_01_04', 'PRD_H5_CAT_01_06', 'PRD_H5_CAT_01_07', 'PRD_H5_CAT_01_08') THEN 816021
+    WHEN product_no IN ('PRD_H5_CAT_01_03', 'PRD_H5_CAT_01_09') THEN 816022
+    WHEN product_no IN ('PRD_H5_CAT_01_05', 'PRD_H5_CAT_01_10') THEN 816023
+    WHEN product_no IN ('PRD_H5_CAT_02_01', 'PRD_H5_CAT_02_02', 'PRD_H5_CAT_02_03', 'PRD_H5_CAT_02_04', 'PRD_H5_CAT_02_05', 'PRD_H5_CAT_02_06') THEN 816031
+    WHEN product_no IN ('PRD_H5_CAT_02_08', 'PRD_H5_CAT_02_09', 'PRD_H5_CAT_02_10') THEN 816032
+    WHEN product_no IN ('PRD_H5_CAT_02_07') THEN 816033
+    WHEN product_no IN ('PRD_H5_CAT_03_01', 'PRD_H5_CAT_03_02', 'PRD_H5_CAT_03_04', 'PRD_H5_CAT_03_10') THEN 816041
+    WHEN product_no IN ('PRD_H5_CAT_03_03', 'PRD_H5_CAT_03_06', 'PRD_H5_CAT_03_07', 'PRD_H5_CAT_03_08', 'PRD_H5_ACTIVITY_FRESH_EGG') THEN 816042
+    WHEN product_no IN ('PRD_H5_CAT_03_05', 'PRD_H5_CAT_03_09') THEN 816043
+    WHEN product_no IN ('PRD_H5_CAT_04_01', 'PRD_H5_CAT_04_06') THEN 816051
+    WHEN product_no IN ('PRD_H5_CAT_04_02', 'PRD_H5_CAT_04_05', 'PRD_H5_CAT_04_08', 'PRD_H5_CAT_04_09') THEN 816052
+    WHEN product_no IN ('PRD_H5_CAT_04_03', 'PRD_H5_CAT_04_04', 'PRD_H5_CAT_04_07', 'PRD_H5_CAT_04_10') THEN 816053
+    WHEN product_no IN ('PRD_H5_CAT_05_01', 'PRD_H5_CAT_05_02', 'PRD_H5_CAT_05_03', 'PRD_H5_ACTIVITY_BREAKFAST_SET') THEN 816061
+    WHEN product_no IN ('PRD_H5_CAT_05_04', 'PRD_H5_CAT_05_05', 'PRD_H5_CAT_05_06', 'PRD_H5_CAT_05_07', 'PRD_H5_CAT_05_08') THEN 816062
+    WHEN product_no IN ('PRD_H5_CAT_05_09', 'PRD_H5_CAT_05_10') THEN 816063
+    WHEN product_no IN ('PRD_H5_CAT_06_01', 'PRD_H5_CAT_06_02', 'PRD_H5_CAT_06_05', 'PRD_H5_CAT_06_10') THEN 816071
+    WHEN product_no IN ('PRD_H5_CAT_06_03', 'PRD_H5_CAT_06_04') THEN 816072
+    WHEN product_no IN ('PRD_H5_CAT_06_06', 'PRD_H5_CAT_06_07', 'PRD_H5_CAT_06_08', 'PRD_H5_CAT_06_09') THEN 816073
+    ELSE front_category_id
+END,
+update_time = NOW()
+WHERE product_no IN (
+    'PRD_H5_FRUIT_01', 'PRD_H5_FRUIT_02', 'PRD_H5_FRUIT_03', 'PRD_H5_FRUIT_04', 'PRD_H5_FRUIT_05',
+    'PRD_H5_FRUIT_06', 'PRD_H5_FRUIT_07', 'PRD_H5_FRUIT_08', 'PRD_H5_FRUIT_09', 'PRD_H5_FRUIT_10',
+    'PRD_H5_VEG_01', 'PRD_H5_VEG_02', 'PRD_H5_VEG_03', 'PRD_H5_VEG_04', 'PRD_H5_VEG_05',
+    'PRD_H5_VEG_06', 'PRD_H5_VEG_07', 'PRD_H5_VEG_08', 'PRD_H5_VEG_09', 'PRD_H5_VEG_10',
+    'PRD_H5_ACTIVITY_FRUIT_BOX', 'PRD_H5_ACTIVITY_BLUEBERRY', 'PRD_H5_ACTIVITY_BREAKFAST_SET', 'PRD_H5_ACTIVITY_FRESH_EGG',
+    'PRD_H5_CAT_01_01', 'PRD_H5_CAT_01_02', 'PRD_H5_CAT_01_03', 'PRD_H5_CAT_01_04', 'PRD_H5_CAT_01_05',
+    'PRD_H5_CAT_01_06', 'PRD_H5_CAT_01_07', 'PRD_H5_CAT_01_08', 'PRD_H5_CAT_01_09', 'PRD_H5_CAT_01_10',
+    'PRD_H5_CAT_02_01', 'PRD_H5_CAT_02_02', 'PRD_H5_CAT_02_03', 'PRD_H5_CAT_02_04', 'PRD_H5_CAT_02_05',
+    'PRD_H5_CAT_02_06', 'PRD_H5_CAT_02_07', 'PRD_H5_CAT_02_08', 'PRD_H5_CAT_02_09', 'PRD_H5_CAT_02_10',
+    'PRD_H5_CAT_03_01', 'PRD_H5_CAT_03_02', 'PRD_H5_CAT_03_03', 'PRD_H5_CAT_03_04', 'PRD_H5_CAT_03_05',
+    'PRD_H5_CAT_03_06', 'PRD_H5_CAT_03_07', 'PRD_H5_CAT_03_08', 'PRD_H5_CAT_03_09', 'PRD_H5_CAT_03_10',
+    'PRD_H5_CAT_04_01', 'PRD_H5_CAT_04_02', 'PRD_H5_CAT_04_03', 'PRD_H5_CAT_04_04', 'PRD_H5_CAT_04_05',
+    'PRD_H5_CAT_04_06', 'PRD_H5_CAT_04_07', 'PRD_H5_CAT_04_08', 'PRD_H5_CAT_04_09', 'PRD_H5_CAT_04_10',
+    'PRD_H5_CAT_05_01', 'PRD_H5_CAT_05_02', 'PRD_H5_CAT_05_03', 'PRD_H5_CAT_05_04', 'PRD_H5_CAT_05_05',
+    'PRD_H5_CAT_05_06', 'PRD_H5_CAT_05_07', 'PRD_H5_CAT_05_08', 'PRD_H5_CAT_05_09', 'PRD_H5_CAT_05_10',
+    'PRD_H5_CAT_06_01', 'PRD_H5_CAT_06_02', 'PRD_H5_CAT_06_03', 'PRD_H5_CAT_06_04', 'PRD_H5_CAT_06_05',
+    'PRD_H5_CAT_06_06', 'PRD_H5_CAT_06_07', 'PRD_H5_CAT_06_08', 'PRD_H5_CAT_06_09', 'PRD_H5_CAT_06_10'
+);
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- 用户端 H5 兼容旧商品详情 ID 610001 增量脚本
+-- 日期：2026-07-01
+-- 说明：执行到 192.168.28.242 的 mall 数据库后，/api/user/products/610001 返回可售多规格商品详情。
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 模块：用户端 H5 商品详情
+-- 操作类型：初始化/修正
+-- 涉及表：prd_product, prd_sku, sale_publish_period, sale_publish_sku
+-- 日期：2026-07-01
+-- 操作人：codex
+-- 用途说明：兼容前端旧兜底商品 ID 610001，并提供多规格加购联调数据
+-- ============================
+
+INSERT IGNORE INTO prd_product
+(id, product_no, product_name, front_category_id, stat_category_id, supplier_id, main_image_url, image_json, audit_status, sale_status, city_id, create_account_id, create_time, update_time, is_deleted)
+VALUES
+(610001, 'PRD_H5_LEGACY_610001', '四川爱媛果冻橙 5斤装', 816001, 750003, 710001, '/static/user-home/shop-detail.jpg', JSON_ARRAY('/static/user-home/shop-detail.jpg', '/static/user-home/shop-detail2.jpg'), 20, 1, 440100, 700003, NOW(), NOW(), 0);
+
+UPDATE prd_product
+SET product_no = 'PRD_H5_LEGACY_610001',
+    product_name = '四川爱媛果冻橙 5斤装',
+    front_category_id = 816001,
+    stat_category_id = 750003,
+    supplier_id = 710001,
+    main_image_url = '/static/user-home/shop-detail.jpg',
+    image_json = JSON_ARRAY('/static/user-home/shop-detail.jpg', '/static/user-home/shop-detail2.jpg'),
+    audit_status = 20,
+    sale_status = 1,
+    city_id = 440100,
+    create_account_id = 700003,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE id = 610001;
+
+INSERT IGNORE INTO prd_sku
+(id, sku_no, product_id, sku_name, barcode, sale_spec_text, base_unit, supplier_id, weight_gram, status, create_time, update_time, is_deleted)
+VALUES
+(819160, 'SKU_H5_LEGACY_610001_5JIN', 610001, '5斤装', '690000819160', '四川爱媛果冻橙 5斤/箱', '箱', 710001, 2500, 1, NOW(), NOW(), 0),
+(819161, 'SKU_H5_LEGACY_610001_PLUS', 610001, '5斤装 加量装', '690000819161', '四川爱媛果冻橙 5斤加量/箱', '箱', 710001, 3000, 1, NOW(), NOW(), 0);
+
+UPDATE prd_sku
+SET product_id = 610001,
+    supplier_id = 710001,
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE sku_no IN ('SKU_H5_LEGACY_610001_5JIN', 'SKU_H5_LEGACY_610001_PLUS');
+
+UPDATE prd_sku
+SET sku_name = '5斤装',
+    sale_spec_text = '四川爱媛果冻橙 5斤/箱',
+    base_unit = '箱',
+    weight_gram = 2500,
+    update_time = NOW()
+WHERE sku_no = 'SKU_H5_LEGACY_610001_5JIN';
+
+UPDATE prd_sku
+SET sku_name = '5斤装 加量装',
+    sale_spec_text = '四川爱媛果冻橙 5斤加量/箱',
+    base_unit = '箱',
+    weight_gram = 3000,
+    update_time = NOW()
+WHERE sku_no = 'SKU_H5_LEGACY_610001_PLUS';
+
+INSERT IGNORE INTO sale_publish_period
+(id, period_no, period_name, region_id, city_id, warehouse_id, sale_start_time, sale_end_time, actual_cutoff_time, delivery_date, stock_mode, status, publish_account_id, publish_time, create_time, update_time, is_deleted)
+VALUES
+(819170, 'PERIOD_H5_LEGACY_610001_ONLINE', '用户端 H5 兼容商品在线团期', 440000, 440100, 50001, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_ADD(NOW(), INTERVAL 18 HOUR), DATE_ADD(NOW(), INTERVAL 18 HOUR), DATE_ADD(CURDATE(), INTERVAL 1 DAY), 1, 20, 700002, DATE_SUB(NOW(), INTERVAL 2 HOUR), NOW(), NOW(), 0);
+
+UPDATE sale_publish_period
+SET region_id = 440000,
+    city_id = 440100,
+    warehouse_id = 50001,
+    sale_start_time = DATE_SUB(NOW(), INTERVAL 2 HOUR),
+    sale_end_time = DATE_ADD(NOW(), INTERVAL 18 HOUR),
+    actual_cutoff_time = DATE_ADD(NOW(), INTERVAL 18 HOUR),
+    delivery_date = DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    stock_mode = 1,
+    status = 20,
+    publish_account_id = 700002,
+    publish_time = DATE_SUB(NOW(), INTERVAL 2 HOUR),
+    is_deleted = 0,
+    update_time = NOW()
+WHERE period_no = 'PERIOD_H5_LEGACY_610001_ONLINE';
+
+INSERT IGNORE INTO sale_publish_sku
+(id, period_id, product_id, sku_id, supplier_id, sale_price, purchase_price, limit_qty, min_buy_qty, planned_stock_qty, sold_qty, locked_qty, production_date, shelf_life_days, status, create_time, update_time, is_deleted)
+VALUES
+(819180, 819170, 610001, 819160, 710001, 29.9000, 18.0000, 3, 1, 320, 86, 8, CURDATE(), 7, 1, NOW(), NOW(), 0),
+(819181, 819170, 610001, 819161, 710001, 39.9000, 25.0000, 2, 1, 180, 46, 6, CURDATE(), 7, 1, NOW(), NOW(), 0);
+
+UPDATE sale_publish_sku
+SET period_id = 819170,
+    product_id = 610001,
+    supplier_id = 710001,
+    planned_stock_qty = GREATEST(planned_stock_qty, sold_qty + locked_qty + 50),
+    status = 1,
+    is_deleted = 0,
+    update_time = NOW()
+WHERE id IN (819180, 819181);
+
+UPDATE sale_publish_sku
+SET sku_id = 819160,
+    sale_price = 29.9000,
+    purchase_price = 18.0000,
+    limit_qty = 3,
+    min_buy_qty = 1,
+    planned_stock_qty = GREATEST(320, sold_qty + locked_qty + 50),
+    production_date = CURDATE(),
+    shelf_life_days = 7,
+    update_time = NOW()
+WHERE id = 819180;
+
+UPDATE sale_publish_sku
+SET sku_id = 819161,
+    sale_price = 39.9000,
+    purchase_price = 25.0000,
+    limit_qty = 2,
+    min_buy_qty = 1,
+    planned_stock_qty = GREATEST(180, sold_qty + locked_qty + 50),
+    production_date = CURDATE(),
+    shelf_life_days = 7,
+    update_time = NOW()
+WHERE id = 819181;
+
 SET FOREIGN_KEY_CHECKS = 1;

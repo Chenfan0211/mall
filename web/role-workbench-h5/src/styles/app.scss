@@ -68,8 +68,8 @@ page {
   min-height: 100%;
   color: #2b241f;
   background: #f7f1ea;
-  font-size: 28rpx;
-  line-height: 1.45;
+  font-size: 30rpx;
+  line-height: 1.5;
 }
 
 .page,
@@ -182,19 +182,42 @@ uni-button {
 
 .role-work-entity {
   flex: none;
-  max-width: 190rpx;
-  min-height: 46rpx;
-  padding: 0 16rpx;
-  overflow: hidden;
+  max-width: 260rpx;
+  min-height: 52rpx;
+  padding: 8rpx 18rpx;
   color: rgba(255, 255, 255, 0.94);
   background: rgba(255, 255, 255, 0.16);
   border: 1rpx solid rgba(255, 255, 255, 0.22);
-  border-radius: 999rpx;
-  font-size: 22rpx;
+  border-radius: 28rpx;
+  font-size: 26rpx;
   font-weight: 900;
-  line-height: 44rpx;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: normal;
+}
+
+.role-detail-back,
+button.role-detail-back,
+uni-button.role-detail-back {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 56rpx !important;
+  min-width: 56rpx !important;
+  height: 56rpx !important;
+  min-height: 56rpx !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1rpx solid rgba(255, 255, 255, 0.36) !important;
+  border-radius: 999rpx !important;
+  box-shadow: 0 10rpx 24rpx rgba(128, 46, 20, 0.18) !important;
+  font-size: 42rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  backdrop-filter: blur(8rpx);
 }
 
 .title {
@@ -279,13 +302,14 @@ button.role-action-btn,
 uni-button.role-action-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 64rpx;
   padding: 0 24rpx;
   border: 0;
   border-radius: 999rpx;
   font-size: 24rpx;
   font-weight: 900;
+  text-align: left;
 }
 
 .role-action-btn.primary,
@@ -613,4 +637,193 @@ textarea {
     width: 100%;
     margin: 0;
   }
+}
+
+.role-work-entity {
+  max-width: 260rpx !important;
+  min-height: 58rpx !important;
+  font-size: 30rpx !important;
+  line-height: 1.2 !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+.role-work-head .role-detail-meta,
+.role-work-head .role-detail-meta text,
+.role-work-head .role-detail-meta uni-text {
+  min-width: 0 !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+.role-work-head .role-detail-meta {
+  align-items: flex-start !important;
+  flex-wrap: wrap !important;
+}
+
+/* Role workbench readability pass */
+.status-bar,
+.status-bar text:last-child::before,
+.status-bar uni-text:last-child::before {
+  font-size: 24rpx !important;
+}
+
+.role-work-title-main,
+.role-hero .title,
+.role-work-head .title,
+.role-detail-title {
+  font-size: 40rpx !important;
+  line-height: 1.18 !important;
+}
+
+.title {
+  font-size: 36rpx !important;
+}
+
+.section-title,
+.role-section .title {
+  font-size: 36rpx !important;
+  line-height: 1.2 !important;
+}
+
+.subtle,
+.form-tip,
+.role-status-note,
+.role-order-info text,
+.role-detail-meta,
+.role-product-desc,
+.role-detail-item-desc,
+.role-purchase-copy,
+.role-delivery-desc,
+.role-shortage-desc,
+.role-product-user-main text,
+.role-product-user-total view,
+.role-total-box view,
+.role-product-summary-foot view {
+  font-size: 28rpx !important;
+  line-height: 1.5 !important;
+}
+
+.pill,
+.role-status,
+uni-text.role-status,
+text.role-status {
+  min-height: 52rpx !important;
+  padding: 0 18rpx !important;
+  font-size: 26rpx !important;
+  line-height: 1.15 !important;
+}
+
+.role-action-btn,
+button.role-action-btn,
+uni-button.role-action-btn,
+.role-filter-clear,
+uni-button.role-filter-clear,
+.role-shortage-entry,
+uni-button.role-shortage-entry,
+.role-shortage-btn,
+uni-button.role-shortage-btn {
+  min-height: 68rpx !important;
+  padding: 0 24rpx !important;
+  font-size: 28rpx !important;
+  line-height: 68rpx !important;
+}
+
+.role-action-btn,
+button.role-action-btn,
+uni-button.role-action-btn {
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+input,
+textarea,
+.role-form-row input,
+.role-order-search input {
+  font-size: 30rpx !important;
+}
+
+.form-row > text,
+.form-row > label,
+.role-form-row > text,
+.role-form-row > label,
+.role-date-trigger,
+.role-order-search text,
+.role-query-tabs button,
+.role-query-tabs uni-button,
+.role-delivery-tabs button,
+.role-delivery-tabs uni-button,
+.role-delivery-toggle button,
+.role-delivery-toggle uni-button,
+.role-purchase-tabs button,
+.role-purchase-tabs uni-button {
+  font-size: 28rpx !important;
+}
+
+.task-title,
+.card-title,
+.role-product-title,
+.role-detail-item-title,
+.role-delivery-title,
+.role-shortage-title,
+.role-leave-head > text:first-child,
+.role-product-user-head > text:first-child {
+  font-size: 30rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.32 !important;
+}
+
+.task-desc,
+.card-desc,
+.role-task .task-desc,
+.role-user-buy-row text:nth-child(2),
+.role-user-buy-row > view:first-child > text:nth-child(2) {
+  font-size: 28rpx !important;
+  line-height: 1.5 !important;
+}
+
+.metric-card .label,
+.role-kpi span {
+  font-size: 26rpx !important;
+}
+
+.role-bottom {
+  height: 70px !important;
+}
+
+.role-bottom button,
+.role-bottom uni-button {
+  min-height: 54px !important;
+  font-size: 13px !important;
+}
+
+.role-bottom-icon {
+  width: 21px !important;
+  height: 21px !important;
+}
+
+.role-order-no,
+.role-order-code,
+.role-order-code-inline,
+.role-product-user-head > text:first-child,
+.role-purchase-card .role-leave-head > text:first-child {
+  color: #2d241f !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+}
+
+.role-order-no,
+.role-order-code,
+.role-product-user-head > text:first-child {
+  font-size: 30rpx !important;
+  line-height: 1.32 !important;
+}
+
+.role-order-code-inline {
+  display: inline !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
 }

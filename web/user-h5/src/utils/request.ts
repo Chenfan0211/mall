@@ -4,7 +4,7 @@ interface ApiResult<T> {
     data: T;
 }
 
-const DEFAULT_API_BASE_URL = 'http://192.168.28.211/api/user';
+const DEFAULT_API_BASE_URL = 'http://192.168.28.242/api/user';
 const RAW_API_BASE_URL = String(import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL).replace(/\/+$/, '');
 const API_BASE_URL = normalizeApiBaseUrl(RAW_API_BASE_URL);
 const TOKEN_KEY = 'mall_user_h5_token';

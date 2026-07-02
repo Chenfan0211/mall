@@ -73,10 +73,6 @@
                   <text>规格</text>
                   <text>{{ item.skuName || '-' }}</text>
                 </view>
-                <view>
-                  <text>预计提货日</text>
-                  <text>{{ formatDateText(item.expectedPickupDate || item.orderCreateTime || '-') }}</text>
-                </view>
               </view>
               <view class="role-product-user-total">
                 <view>
@@ -86,10 +82,6 @@
                 <view>
                   <text>{{ moneyText(formatMoneyValue(item.displayAmount)) }}</text>
                   <text>金额</text>
-                </view>
-                <view>
-                  <text>{{ item.status }}</text>
-                  <text>当前状态</text>
                 </view>
               </view>
             </view>
@@ -451,7 +443,7 @@ function back() {
 
 .role-product-user-total {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12rpx;
   margin-top: 18rpx;
 }

@@ -24,7 +24,7 @@
       <button class="role-action-btn primary retry-btn" @click="load">重新加载</button>
     </view>
 
-    <view v-else-if="roleType === 'station'" class="role-main">
+    <view v-else-if="roleType === 'station'" class="role-main station-shortage-main">
       <view v-if="!stationSummary" class="role-empty">
         <text class="title">暂无可标记商品</text>
         <text class="subtle">当前没有可上报异常的配送商品，可返回门店作业刷新后重试。</text>
@@ -47,18 +47,6 @@
               <text>{{ stationAvailableQty }}/{{ stationSummary.lack }}</text>
             </view>
           </view>
-          <view class="role-leave-form station-exception-form">
-            <view class="role-form-row">
-              <text>异常类型</text>
-              <picker mode="selector" :range="stationExceptionTypes" :value="stationExceptionTypeIndex" @change="changeStationExceptionType">
-                <view class="role-picker-trigger">{{ stationExceptionType }}</view>
-              </picker>
-            </view>
-            <view class="role-form-row">
-              <text>处理期望</text>
-              <textarea v-model="stationReason" placeholder="请填写期望运营如何处理，不直接退款或补货" />
-            </view>
-          </view>
         </view>
 
         <view class="role-detail-section">
@@ -76,20 +64,19 @@
           <view class="role-section-head">
             <view>
               <text class="section-title">用户购买明细</text>
-              <text class="subtle">按订单商品维度填写异常数量</text>
             </view>
           </view>
           <view class="role-user-breakdown">
             <view v-for="item in stationRows" :key="item.id" class="role-user-buy-row" :class="{ 'shortage-marked': stationShortageMap[item.id] > 0 }">
-              <view>
-                <text>{{ item.pickupName || '提货人未返回' }} {{ item.pickupMobile || '' }}</text>
-                <text>
-                  {{ item.orderNoText }} · 购买 {{ item.qty || 0 }} 件 · {{ formatDateText(item.expectedPickupDate || '-') }}
-                  <text v-if="stationShortageMap[item.id]" class="role-shortage-badge">已填写异常 {{ stationShortageMap[item.id] }} 件</text>
+              <view class="role-user-info">
+                <text class="role-user-main">{{ item.pickupName || '提货人未返回' }} {{ item.pickupMobile || '' }}</text>
+                <text class="role-user-sub">
+                  <text class="role-order-code-inline">{{ item.orderNoText }}</text>
+                  <text class="role-user-qty">· 购买 {{ item.qty || 0 }} 件</text>
                 </text>
               </view>
               <view class="role-shortage-edit">
-                <input v-model="stationShortageInputs[item.id]" type="number" :placeholder="`0-${item.qty || 0}`" />
+                <input v-model="stationShortageInputs[item.id]" type="number" placeholder="0" />
                 <button class="role-shortage-btn" @click="markStation(item)">标记</button>
               </view>
             </view>
@@ -100,9 +87,10 @@
           </view>
         </view>
 
-        <view class="role-order-actions">
-          <button class="role-action-btn danger" @click="submitStationException">提交异常</button>
-          <button class="role-action-btn soft" @click="back">返回</button>
+        <view class="role-floating-submit">
+          <button class="role-action-btn danger" :disabled="submitting" @click="submitStationException">
+            {{ submitting ? '提交中...' : '提交异常' }}
+          </button>
         </view>
       </template>
     </view>
@@ -189,8 +177,10 @@ import {
     pageStationOrders,
     pageSupplierPurchaseItems,
     pageSupplierPurchases,
+    submitStationException as submitStationExceptionApi,
     type StationOrderDTO,
     type StationOrderItemDTO,
+    type StationExceptionSubmitPayload,
     type SupplierPurchaseDTO,
     type SupplierPurchaseItemDTO
 } from '@/api/station';
@@ -228,15 +218,13 @@ const loading = ref(false);
 const error = ref('');
 const purchases = ref<SupplierPurchaseDTO[]>([]);
 const items = ref<SupplierPurchaseItemDTO[]>([]);
-const stationReason = ref('');
+const submitting = ref(false);
 const shortageInputs = reactive<Record<number, string>>({});
 const shortageMap = reactive<Record<number, number>>({});
 const stationShortageInputs = reactive<Record<number, string>>({});
 const stationShortageMap = reactive<Record<number, number>>({});
 const stationOrders = ref<StationOrderDTO[]>([]);
 const stationItems = ref<StationOrderItemDTO[]>([]);
-const stationExceptionTypes = ['少件', '错件', '破损', '变质'];
-const stationExceptionTypeIndex = ref(0);
 const roleType = computed(() => currentRole.value);
 
 const activePurchase = computed(() => {
@@ -265,7 +253,6 @@ const rows = computed<ShortageRow[]>(() => items.value.map((item) => {
 const totalQty = computed(() => rows.value.reduce((sum, item) => sum + item.qty, 0));
 const markedQty = computed(() => Object.values(shortageMap).reduce((sum, value) => sum + Number(value || 0), 0));
 const availableQty = computed(() => Math.max(0, totalQty.value - markedQty.value));
-const stationExceptionType = computed(() => stationExceptionTypes[stationExceptionTypeIndex.value] || stationExceptionTypes[0]);
 const stationRows = computed<StationShortageRow[]>(() => {
     const source = stationKey.value
         ? stationItems.value.filter((item) => productKey(item) === stationKey.value)
@@ -323,13 +310,20 @@ async function load() {
     }
 }
 
-function submitStationException() {
-    showRoleToast('异常提交通道暂未开放，未提交数据');
-}
-
-function changeStationExceptionType(event: { detail?: { value?: number | string } }) {
-    const index = Number(event.detail?.value || 0);
-    stationExceptionTypeIndex.value = Number.isFinite(index) ? index : 0;
+async function submitStationException() {
+    if (submitting.value) return;
+    const payload = buildStationExceptionPayload();
+    if (!payload) return;
+    submitting.value = true;
+    try {
+        await submitStationExceptionApi(payload);
+        showRoleToast('异常提交成功');
+        goPage('/pages/store/index');
+    } catch (err) {
+        showRoleToast(friendlyErrorMessage(err, '异常提交失败，请稍后重试'));
+    } finally {
+        submitting.value = false;
+    }
 }
 
 function markStation(item: StationShortageRow) {
@@ -345,6 +339,41 @@ function markStation(item: StationShortageRow) {
     }
     stationShortageMap[item.id] = value;
     showRoleToast(value > 0 ? `已标记异常 ${value} 件` : '已清空异常数量');
+}
+
+function buildStationExceptionPayload(): StationExceptionSubmitPayload | null {
+    const details = stationRows.value
+        .map((item) => ({
+            item,
+            qty: Math.floor(Number(stationShortageMap[item.id] || stationShortageInputs[item.id] || 0))
+        }))
+        .filter((row) => row.qty > 0);
+    if (details.length === 0) {
+        showRoleToast('请先标记异常数量');
+        return null;
+    }
+    const overLimit = details.find(({ item, qty }) => qty > Number(item.qty || 0));
+    if (overLimit) {
+        showRoleToast('异常数量不能大于购买数量');
+        return null;
+    }
+    const summary = stationSummary.value;
+    const totalQty = details.reduce((sum, row) => sum + row.qty, 0);
+    return {
+        ...getRequiredRoleQuery(),
+        productId: details[0].item.productId,
+        skuId: details[0].item.skuId,
+        productName: summary?.title || details[0].item.productName,
+        skuName: summary?.spec || details[0].item.skuName,
+        exceptionType: '少件',
+        totalQty,
+        items: details.map(({ item, qty }) => ({
+            orderItemId: item.id,
+            orderId: item.orderId,
+            orderNo: item.orderNoText,
+            qty
+        }))
+    };
 }
 
 function mark(item: ShortageRow) {
@@ -466,6 +495,10 @@ function formatDateText(value?: string) {
   padding-top: 0;
 }
 
+.role-main.station-shortage-main {
+  padding-bottom: 164rpx;
+}
+
 .role-detail-section {
   margin-bottom: 24rpx;
   padding: 28rpx;
@@ -517,48 +550,6 @@ function formatDateText(value?: string) {
 .role-supplier-shortage-list {
   display: grid;
   gap: 20rpx;
-}
-
-.role-leave-form {
-  display: grid;
-  gap: 20rpx;
-}
-
-.role-form-row > text {
-  display: block;
-  margin-bottom: 10rpx;
-  color: #5f493d;
-  font-size: 24rpx;
-  font-weight: 800;
-}
-
-.role-form-row input,
-.role-form-row textarea,
-.role-picker-trigger {
-  width: 100%;
-  min-height: 82rpx;
-  box-sizing: border-box;
-  padding: 0 22rpx;
-  color: #2b241f;
-  background: #fffdfb;
-  border: 1rpx solid #efc8b7;
-  border-radius: 24rpx;
-  font-size: 26rpx;
-}
-
-.role-picker-trigger {
-  display: flex;
-  align-items: center;
-  font-weight: 800;
-}
-
-.role-form-row textarea {
-  min-height: 180rpx;
-  padding-top: 20rpx;
-}
-
-.station-exception-form {
-  margin-top: 20rpx;
 }
 
 .role-supplier-shortage-card {
@@ -664,48 +655,153 @@ function formatDateText(value?: string) {
 
 .role-user-breakdown {
   display: grid;
-  gap: 16rpx;
+  gap: 0;
 }
 
 .role-user-buy-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 16rpx;
-  padding: 20rpx;
-  background: #fff8f3;
-  border: 1rpx solid #f4ddd0;
-  border-radius: 24rpx;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14rpx;
+  min-height: 92rpx;
+  padding: 14rpx 0;
+  background: transparent;
+  border-bottom: 1rpx solid rgba(244, 221, 208, 0.72);
 }
 
 .role-user-buy-row.shortage-marked {
-  background: #fff7f1;
-  border-color: #efc8b7;
+  background: linear-gradient(90deg, rgba(255, 247, 241, 0.88), rgba(255, 247, 241, 0));
 }
 
-.role-user-buy-row > view:first-child > text:first-child {
+.role-user-buy-row:last-child {
+  border-bottom: 0;
+}
+
+.role-user-info {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.role-user-main {
   display: block;
   color: #2d241f;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 900;
   line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.role-user-buy-row > view:first-child > text:nth-child(2) {
-  display: block;
-  margin-top: 6rpx;
-  color: #8b6a57;
-  font-size: 23rpx;
+.role-user-sub {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rpx;
+  margin-top: 4rpx;
+  color: #9a5a47;
+  font-size: 22rpx;
   line-height: 1.45;
+  overflow: visible;
+}
+
+.role-user-sub .role-order-code-inline {
+  display: -webkit-box;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 22rpx !important;
+}
+
+.role-user-qty {
+  display: block;
+  white-space: nowrap;
+  color: #c05643;
+  font-size: 24rpx;
+  font-weight: 800;
 }
 
 .role-user-buy-row .role-shortage-edit {
-  grid-template-columns: minmax(0, 1fr) 132rpx;
+  display: grid;
+  grid-template-columns: 88rpx 92rpx;
+  align-items: center;
+  gap: 10rpx;
+  width: 190rpx;
+}
+
+.role-user-buy-row .role-shortage-edit input {
+  min-height: 56rpx !important;
+  height: 56rpx !important;
+  padding: 0 10rpx;
+  text-align: center;
+  color: #2d241f;
+  background: #fffaf6;
+  border-color: #efc8b7;
+  border-radius: 22rpx;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.role-user-buy-row .role-shortage-btn,
+.role-user-buy-row :deep(uni-button.role-shortage-btn) {
+  width: 92rpx;
+  min-width: 92rpx;
+  min-height: 56rpx !important;
+  height: 56rpx !important;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff694d, #e84632);
+  box-shadow: none;
+  font-size: 24rpx !important;
+  line-height: 56rpx !important;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .role-order-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 16rpx;
+}
+
+.role-floating-submit {
+  position: fixed;
+  right: 24rpx;
+  bottom: 78px;
+  left: 24rpx;
+  z-index: 45;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.role-floating-submit .role-action-btn,
+.role-floating-submit :deep(uni-button.role-action-btn) {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center !important;
+  min-height: 76rpx;
+  color: #ffffff;
+  background: #c7342b;
+  font-size: 28rpx;
+  text-align: center !important;
+  box-shadow: 0 14rpx 30rpx rgba(199, 52, 43, 0.28);
+}
+
+.role-floating-submit .role-action-btn[disabled],
+.role-floating-submit :deep(uni-button.role-action-btn[disabled]) {
+  opacity: 0.72;
+  background: #b84940;
 }
 
 .role-action-btn,

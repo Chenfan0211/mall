@@ -13,6 +13,10 @@ public class UserProductQueryVO extends PageQuery {
     private Long periodId;
     private String keyword;
     private LocalDate deliveryDate;
+    private String sortField;
+    private String sortOrder;
+    private Boolean hasImage;
+    private Boolean mergeSku;
 
     public Long getUserId() {
         return userId;
@@ -76,5 +80,37 @@ public class UserProductQueryVO extends PageQuery {
 
     public void setDeliveryDate(final LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(final String sortField) {
+        this.sortField = sortField;
+    }
+
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(final String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public Boolean getHasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(final Boolean hasImage) {
+        this.hasImage = hasImage;
+    }
+
+    public Boolean getMergeSku() {
+        return mergeSku;
+    }
+
+    public void setMergeSku(final Boolean mergeSku) {
+        this.mergeSku = mergeSku;
     }
 }

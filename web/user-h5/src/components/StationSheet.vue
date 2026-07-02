@@ -396,6 +396,25 @@ watch(
   font-size: 38rpx;
 }
 
+.station-panel {
+  position: relative;
+}
+
+.station-panel-head {
+  padding-right: 84rpx;
+}
+
+.station-panel-head .sheet-close {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
 .station-search {
   display: flex;
   align-items: center;

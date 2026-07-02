@@ -1,5 +1,5 @@
 param(
-    [string]$HostUrl = "http://192.168.28.211",
+    [string]$HostUrl = "http://192.168.28.242",
     [string]$Username = "test_wms_receiver",
     [string]$Password = "Test@123456",
     [string]$PortalCode = "warehouse-h5",

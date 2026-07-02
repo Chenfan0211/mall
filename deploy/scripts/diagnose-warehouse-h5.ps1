@@ -1,5 +1,5 @@
 param(
-    [string]$HostUrl = "http://192.168.28.211",
+    [string]$HostUrl = "http://192.168.28.242",
     [string]$DeployUser = "root",
     [int]$SshPort = 22,
     [string]$Password = "Test@123456"

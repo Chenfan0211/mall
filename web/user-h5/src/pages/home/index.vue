@@ -90,7 +90,7 @@
     <view class="product-list">
       <view
         v-for="item in sortedProducts"
-        :key="item.publishSkuId"
+        :key="item.productId"
         class="shop-product"
         :class="{ soldout: isSoldout(item) }"
         @click="openProduct(item.productId)"
@@ -107,9 +107,9 @@
         </view>
         <view class="shop-product-info">
           <h4>{{ item.productName }}</h4>
-          <view class="shop-product-spec">{{ productSpecText(item) }}</view>
+          <view class="shop-product-spec">{{ productListSpecText(item) }}</view>
           <view class="price-row">
-            <span class="shop-price">¥{{ item.salePrice }}</span>
+            <span class="shop-price">¥{{ productDisplayPrice(item) }}</span>
             <span v-if="productOldPrice(item)" class="old-price">¥{{ productOldPrice(item) }}</span>
           </view>
           <view class="shop-sale-meta">
@@ -147,6 +147,19 @@
       />
     </view>
 
+    <SkuSheet
+      :visible="skuSheetVisible"
+      :title="skuSheetProduct?.productName"
+      :image-url="skuSheetProduct?.mainImageUrl"
+      :skus="skuSheetSkus"
+      :selected-id="selectedSkuId"
+      :quantity="skuSheetQty"
+      @close="closeSkuSheet"
+      @select="selectSheetSku"
+      @decrease="decreaseSheetQty"
+      @increase="increaseSheetQty"
+      @confirm="confirmSheetAdd"
+    />
     <StationSheet :visible="stationSheetVisible" @close="stationSheetVisible = false" />
     <UserToast />
     <UserTabBar active="home" />
@@ -157,23 +170,28 @@
 import { computed, onMounted, ref, watch } from 'vue';
 
 import EmptyActionCard from '@/components/EmptyActionCard.vue';
+import SkuSheet from '@/components/SkuSheet.vue';
 import StationSheet from '@/components/StationSheet.vue';
 import UserTabBar from '@/components/UserTabBar.vue';
 import UserToast from '@/components/UserToast.vue';
 import {
+    addCartItem,
     getHomeAssets,
     getHomeSummary,
+    getProductDetail,
     pageCategories,
     pageProducts,
     type UserCategoryDTO,
     type UserHomeAssetDTO,
     type UserHomeBannerDTO,
     type UserHomePromoDTO,
-    type UserProductCardDTO
+    type UserProductCardDTO,
+    type UserProductSkuDTO
 } from '@/api/user';
 import {
     addProductToCart,
     defaultReceiver,
+    mapCartItem,
     navigateUser,
     showUserToast,
     toggleFavorite,
@@ -181,9 +199,7 @@ import {
     useUserState
 } from '@/stores/userState';
 import {
-    fallbackCategories,
     fallbackProductImages,
-    fallbackProducts,
     isSoldout,
     productOldPrice,
     productPickupText,
@@ -194,10 +210,15 @@ import {
 
 const state = useUserState();
 const stationSheetVisible = ref(false);
+const skuSheetVisible = ref(false);
 const categories = ref<UserCategoryDTO[]>([]);
 const products = ref<UserProductCardDTO[]>([]);
 const homeAssets = ref<UserHomeAssetDTO | null>(null);
 const activeSort = ref<'recommend' | 'sales' | 'new' | 'price'>('recommend');
+const skuSheetProduct = ref<UserProductCardDTO>();
+const skuSheetSkus = ref<UserProductSkuDTO[]>([]);
+const selectedSkuId = ref<number | undefined>();
+const skuSheetQty = ref(1);
 let loadVersion = 0;
 const sortOptions = [
     { value: 'recommend', label: '推荐' },
@@ -218,8 +239,10 @@ const categoryAssetMap = computed(() => {
 });
 const categoryCards = computed(() => {
     const allCategory = {
-        ...fallbackCategories[0],
-        imageUrl: categoryAssetMap.value.get(0) || fallbackCategories[0].imageUrl
+        id: 0,
+        categoryName: '全部',
+        label: '全部',
+        imageUrl: categoryAssetMap.value.get(0) || fallbackProductImages[0]
     };
     const rows = categories.value.filter((item) => item.categoryName !== allCategory.label).slice(0, 9).map((item) => {
         return {
@@ -232,13 +255,7 @@ const categoryCards = computed(() => {
     if (rows.length > 0) {
         return [allCategory, ...rows].slice(0, 10);
     }
-    const existingNames = new Set([allCategory.label, ...rows.map((item) => item.label)]);
-    const filled = [
-        allCategory,
-        ...rows,
-        ...fallbackCategories.slice(1).filter((item) => !existingNames.has(item.label) && !rows.some((row) => row.id === item.id))
-    ];
-    return filled.slice(0, 10);
+    return [allCategory];
 });
 const activeBanner = computed(() => {
     const rows = [...(homeAssets.value?.banners || [])]
@@ -257,7 +274,7 @@ const promoCards = computed(() => {
 const primaryPromo = computed(() => promoCards.value[0] || null);
 const secondaryPromoCards = computed(() => promoCards.value.slice(1, 3));
 const sortedProducts = computed(() => {
-    const rows = [...products.value].sort((a, b) => Number(b.availableQty > 0) - Number(a.availableQty > 0));
+    const rows = mergeProductCards(products.value).sort((a, b) => Number(b.availableQty > 0) - Number(a.availableQty > 0));
     if (activeSort.value === 'sales') {
         return rows.sort((a, b) => Number(b.availableQty > 0) - Number(a.availableQty > 0) || Number(b.soldQty || 0) - Number(a.soldQty || 0));
     }
@@ -265,7 +282,7 @@ const sortedProducts = computed(() => {
         return rows.sort((a, b) => Number(b.availableQty > 0) - Number(a.availableQty > 0) || Number(b.publishSkuId || 0) - Number(a.publishSkuId || 0));
     }
     if (activeSort.value === 'price') {
-        return rows.sort((a, b) => Number(b.availableQty > 0) - Number(a.availableQty > 0) || Number(a.salePrice || 0) - Number(b.salePrice || 0));
+        return rows.sort((a, b) => Number(b.availableQty > 0) - Number(a.availableQty > 0) || Number(a.minSalePrice || a.salePrice || 0) - Number(b.minSalePrice || b.salePrice || 0));
     }
     return rows;
 });
@@ -318,7 +335,16 @@ async function loadData() {
     }
 
     try {
-        const categoryResult = await pageCategories({ pageNum: 1, pageSize: 10, status: 1 }, { silent: true });
+        const categoryResult = await pageCategories(
+            {
+                pageNum: 1,
+                pageSize: 10,
+                status: 1,
+                cityId: state.city.id,
+                stationId: state.station.id
+            },
+            { silent: true }
+        );
         if (!isCurrentLoad()) {
             return;
         }
@@ -333,6 +359,7 @@ async function loadData() {
             {
                 pageNum: 1,
                 pageSize: 10,
+                mergeSku: true,
                 ...queryContext
             },
             { silent: true }
@@ -340,10 +367,10 @@ async function loadData() {
         if (!isCurrentLoad()) {
             return;
         }
-        products.value = productResult?.list?.length ? withProductImages(productResult.list) : fallbackProducts;
+        products.value = productResult?.list?.length ? withProductImages(productResult.list) : [];
     } catch {
         hasRejected = true;
-        products.value = fallbackProducts;
+        products.value = [];
     }
 
     if (hasRejected) {
@@ -351,14 +378,171 @@ async function loadData() {
     }
 }
 
-function handleAddProduct(item: UserProductCardDTO) {
+function mergeProductCards(rows: UserProductCardDTO[]) {
+    const map = new Map<number, UserProductCardDTO>();
+    rows.forEach((item) => {
+        const productId = Number(item.productId || item.publishSkuId);
+        const existed = map.get(productId);
+        if (!existed) {
+            map.set(productId, {
+                ...item,
+                skuCount: Number(item.skuCount || 1),
+                availableSkuCount: Number(item.availableSkuCount || (Number(item.availableQty || 0) > 0 ? 1 : 0)),
+                minSalePrice: item.minSalePrice || item.salePrice,
+                maxSalePrice: item.maxSalePrice || item.salePrice
+            });
+            return;
+        }
+        const itemPrice = Number(item.minSalePrice || item.salePrice || 0);
+        const existedPrice = Number(existed.minSalePrice || existed.salePrice || 0);
+        const representative = itemPrice > 0 && (existedPrice <= 0 || itemPrice < existedPrice) ? item : existed;
+        const prices = [existed.minSalePrice || existed.salePrice, item.minSalePrice || item.salePrice]
+            .map(Number)
+            .filter((value) => value > 0);
+        map.set(productId, {
+            ...representative,
+            productId,
+            skuCount: Number(existed.skuCount || 1) + Number(item.skuCount || 1),
+            availableSkuCount: Number(existed.availableSkuCount || 0) + Number(item.availableSkuCount || (Number(item.availableQty || 0) > 0 ? 1 : 0)),
+            soldQty: Number(existed.soldQty || 0) + Number(item.soldQty || 0),
+            availableQty: Number(existed.availableQty || 0) + Number(item.availableQty || 0),
+            plannedStockQty: Number(existed.plannedStockQty || 0) + Number(item.plannedStockQty || 0),
+            lockedQty: Number(existed.lockedQty || 0) + Number(item.lockedQty || 0),
+            minSalePrice: (prices.length ? Math.min(...prices) : Number(representative.salePrice || 0)).toFixed(2),
+            maxSalePrice: (prices.length ? Math.max(...prices) : Number(representative.salePrice || 0)).toFixed(2)
+        });
+    });
+    return Array.from(map.values());
+}
+
+function productDisplayPrice(item: UserProductCardDTO) {
+    return (Number(item.minSalePrice || item.salePrice || 0) || 0).toFixed(2);
+}
+
+function productListSpecText(item: UserProductCardDTO) {
+    if (Number(item.skuCount || 1) > 1) {
+        return '多规格可选';
+    }
+    return productSpecText(item);
+}
+
+async function handleAddProduct(item: UserProductCardDTO) {
     if (!state.authenticated) {
         showUserToast('请先登录，登录后可加入购物车', 'warn');
         state.afterLoginUrl = '/pages/home/index';
         navigateUser('/pages/login/index');
         return;
     }
+    if (Number(item.skuCount || 1) > 1) {
+        await openSkuSheet(item);
+        return;
+    }
     addProductToCart(item);
+}
+
+async function openSkuSheet(item: UserProductCardDTO) {
+    skuSheetProduct.value = item;
+    skuSheetSkus.value = [];
+    selectedSkuId.value = undefined;
+    skuSheetQty.value = 1;
+    try {
+        const detail = await getProductDetail(item.productId, {
+            userId: state.user.id,
+            cityId: state.city.id,
+            stationId: state.station.id
+        }, { silent: true });
+        const skus = detail?.skus || [];
+        if (skus.length <= 1) {
+            addSelectedSkuToCart(skus[0] || item, item.productName, item.productId, item.mainImageUrl, 1);
+            return;
+        }
+        skuSheetSkus.value = skus;
+        selectedSkuId.value = skus.find((sku) => Number(sku.availableQty || 0) > 0)?.publishSkuId;
+        skuSheetVisible.value = true;
+    } catch {
+        showUserToast('规格加载失败，请稍后重试', 'warn');
+    }
+}
+
+function closeSkuSheet() {
+    skuSheetVisible.value = false;
+    skuSheetProduct.value = undefined;
+    skuSheetSkus.value = [];
+    selectedSkuId.value = undefined;
+    skuSheetQty.value = 1;
+}
+
+function selectSheetSku(id: number) {
+    const sku = skuSheetSkus.value.find((item) => item.publishSkuId === id);
+    if (!sku || Number(sku.availableQty || 0) <= 0) {
+        return;
+    }
+    selectedSkuId.value = id;
+    skuSheetQty.value = Math.min(skuSheetQty.value, Number(sku.limitQty || 99), Number(sku.availableQty || 1));
+}
+
+function decreaseSheetQty() {
+    skuSheetQty.value = Math.max(1, skuSheetQty.value - 1);
+}
+
+function increaseSheetQty() {
+    const sku = selectedSheetSku();
+    const maxQty = Math.max(1, Math.min(Number(sku?.limitQty || 99), Number(sku?.availableQty || 99)));
+    skuSheetQty.value = Math.min(maxQty, skuSheetQty.value + 1);
+}
+
+async function confirmSheetAdd() {
+    const sku = selectedSheetSku();
+    if (!sku || !skuSheetProduct.value) {
+        showUserToast('请选择规格', 'warn');
+        return;
+    }
+    await addSelectedSkuToCart(sku, skuSheetProduct.value.productName, skuSheetProduct.value.productId, skuSheetProduct.value.mainImageUrl, skuSheetQty.value);
+    closeSkuSheet();
+}
+
+function selectedSheetSku() {
+    return skuSheetSkus.value.find((item) => item.publishSkuId === selectedSkuId.value);
+}
+
+async function addSelectedSkuToCart(
+    sku: UserProductSkuDTO | UserProductCardDTO,
+    title: string,
+    productId: number,
+    imageUrl?: string,
+    quantity = 1
+) {
+    const cartSku = {
+        ...sku,
+        mainImageUrl: imageUrl || ('mainImageUrl' in sku ? sku.mainImageUrl : undefined)
+    };
+    if (state.authenticated) {
+        try {
+            const apiItem = await addCartItem({
+                userId: state.user.id,
+                cityId: state.city.id,
+                stationId: state.station.id,
+                periodId: cartSku.periodId,
+                productId,
+                skuId: cartSku.skuId,
+                qty: quantity
+            });
+            const nextItem = mapCartItem(apiItem);
+            const existingIndex = state.cartItems.findIndex((item) => item.id === nextItem.id);
+            if (existingIndex >= 0) {
+                state.cartItems.splice(existingIndex, 1, nextItem);
+            } else {
+                state.cartItems.unshift(nextItem);
+            }
+            showUserToast('成功加入购物车');
+            return;
+        } catch (error) {
+            console.info('购物车接口不可用，已使用本地购物车兜底', error);
+        }
+    }
+    for (let index = 0; index < quantity; index += 1) {
+        addProductToCart(cartSku, title, productId);
+    }
 }
 
 function openProduct(productId: number) {
@@ -4378,5 +4562,26 @@ watch(
 .home-page .shop-product.soldout > .round-add {
   background: #c8c0ba;
   box-shadow: none;
+}
+
+.home-page .shop-product-tag-row {
+  gap: 10rpx;
+  align-items: center;
+  grid-template-columns: max-content minmax(0, max-content);
+}
+
+.home-page .shop-product-date,
+.home-page .rank-line {
+  height: 50rpx;
+  min-height: 50rpx;
+  margin: 0;
+  padding: 0 14rpx;
+  align-items: center;
+  line-height: 50rpx;
+}
+
+.home-page .shop-product-date {
+  min-width: 0;
+  max-width: none;
 }
 </style>

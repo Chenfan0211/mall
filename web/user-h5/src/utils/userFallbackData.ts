@@ -2,11 +2,11 @@ import type { CartViewItem } from '@/stores/userState';
 import type { UserProductCardDTO, UserProductDetailDTO } from '@/api/user';
 
 export const shopImageAssets = {
-    bannerFruit: '/static/user-home/banner-fruit.svg',
-    promoGarden: '/static/user-home/promo-garden.svg',
-    promoNew: '/static/user-home/promo-new.svg',
-    promoBreakfast: '/static/user-home/promo-breakfast.svg',
-    productFresh: '/static/user-home/product-fresh.svg',
+    bannerFruit: '/static/user-home/shop-home.jpg',
+    promoGarden: '/static/user-home/shop-seafood.jpg',
+    promoNew: '/static/user-home/shop-list.jpg',
+    promoBreakfast: '/static/user-home/shop-bakery.jpg',
+    productFresh: '/static/user-home/shop-home.jpg',
     home: '/static/user-home/shop-home.jpg',
     list: '/static/user-home/shop-list.jpg',
     category: '/static/user-home/shop-category.jpg',
@@ -23,16 +23,16 @@ export const shopImageAssets = {
 };
 
 export const categoryIconAssets = {
-    all: '/static/user-home/cat-all.svg',
-    fruit: '/static/user-home/cat-fruit.svg',
-    vegetable: '/static/user-home/cat-veg.svg',
-    seafood: '/static/user-home/cat-seafood.svg',
-    cooked: '/static/user-home/cat-cooked.svg',
-    meat: '/static/user-home/cat-meat.svg',
-    snack: '/static/user-home/cat-snack.svg',
-    breakfast: '/static/user-home/cat-breakfast.svg',
-    dairy: '/static/user-home/cat-dairy.svg',
-    grain: '/static/user-home/cat-grain.svg'
+    all: '/static/user-home/shop-category.jpg',
+    fruit: '/static/user-home/shop-home.jpg',
+    vegetable: '/static/user-home/shop-category.jpg',
+    seafood: '/static/user-home/shop-seafood.jpg',
+    cooked: '/static/user-home/shop-cooked.jpg',
+    meat: '/static/user-home/shop-meat.jpg',
+    snack: '/static/user-home/shop-list.jpg',
+    breakfast: '/static/user-home/shop-bakery.jpg',
+    dairy: '/static/user-home/shop-home.jpg',
+    grain: '/static/user-home/shop-grain.jpg'
 };
 
 export const fallbackCategories = [
@@ -83,6 +83,8 @@ export function normalizeCategoryName(value?: string) {
     return text.length > 4 ? text.slice(0, 4) : text;
 }
 
+export const LEGACY_PRODUCT_ID = 610001;
+
 export const fallbackProductImages = [
     shopImageAssets.detail,
     shopImageAssets.list,
@@ -100,7 +102,7 @@ export const fallbackProducts: UserProductCardDTO[] = [
     {
         publishSkuId: 910001,
         periodId: 810001,
-        productId: 610001,
+        productId: LEGACY_PRODUCT_ID,
         skuId: 710001,
         productName: '四川爱媛果冻橙 5斤装',
         skuName: '5斤装',
@@ -113,6 +115,10 @@ export const fallbackProducts: UserProductCardDTO[] = [
         soldQty: 86,
         lockedQty: 8,
         availableQty: 26,
+        skuCount: 2,
+        availableSkuCount: 2,
+        minSalePrice: '29.90',
+        maxSalePrice: '53.82',
         deliveryDate: '明日 16:00-20:00',
         saleEndTime: '2026-06-29 20:00:00'
     },

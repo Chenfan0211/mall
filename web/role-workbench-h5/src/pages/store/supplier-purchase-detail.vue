@@ -37,7 +37,7 @@
           <view class="role-order-info">
             <view v-for="row in detailRows" :key="row.label">
               <text>{{ row.label }}</text>
-              <text>{{ row.value }}</text>
+              <text :class="{ 'role-order-code': row.label.includes('编号') }">{{ row.value }}</text>
             </view>
           </view>
         </view>
@@ -51,7 +51,7 @@
           </view>
           <view class="role-detail-item-list">
             <view v-for="item in items" :key="item.id" class="role-detail-item">
-              <view class="role-detail-img"><RoleProductThumb :label="item.productName || item.skuName" /></view>
+              <view class="role-detail-img"><RoleProductThumb :label="item.productName || item.skuName" :src="itemImage(item)" /></view>
               <view>
                 <text class="role-detail-item-title">{{ item.productName || `商品 #${item.productId || '-'}` }}</text>
                 <text class="role-detail-item-desc">规格：{{ item.skuName || `SKU #${item.skuId || '-'}` }}</text>
@@ -186,6 +186,10 @@ function purchaseActionState(status: string) {
     if (status === '待提交到仓') return { need: '需要我处理', next: '按采购要求准备到仓凭证，后续由仓库确认入库。' };
     if (status === '待我补充') return { need: '需要我处理', next: '采购申请被驳回或异常，按后台要求补充后重新提交。' };
     return { need: '无需我处理', next: '采购申请已提交，等待平台处理。' };
+}
+
+function itemImage(item: SupplierPurchaseItemDTO) {
+    return item.productImage || item.imageUrl || item.thumbUrl || item.picUrl || '';
 }
 
 function back() {

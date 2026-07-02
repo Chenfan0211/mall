@@ -4,7 +4,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${REPO_ROOT}"
 
-DEPLOY_HOST="${DEPLOY_HOST:-192.168.28.211}"
+DEPLOY_HOST="${DEPLOY_HOST:-192.168.28.242}"
 DEPLOY_USER="${DEPLOY_USER:-root}"
 SSH_PORT="${SSH_PORT:-22}"
 NGINX_CONTAINER="${NGINX_CONTAINER:-mall-nginx}"

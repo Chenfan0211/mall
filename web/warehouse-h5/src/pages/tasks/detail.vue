@@ -1,6 +1,24 @@
 <template>
-  <view class="page phone-shell detail-page">
-    <view class="warehouse-top detail-top">
+  <view
+    class="page phone-shell detail-page"
+    :class="{
+      'purchase-detail-page': task && task.role === 'buyer',
+      'receiver-pending-detail-page': isReceiverGoodsDetail
+    }"
+  >
+    <view v-if="isReceiverGoodsDetail" class="receiver-pending-top">
+      <view class="status-row receiver-pending-status">
+        <text>14:49</text>
+        <text>WiFi 80%</text>
+      </view>
+      <view class="receiver-pending-titlebar">
+        <button class="back-btn" @click="goBack">‹</button>
+        <text class="receiver-pending-title">任务详情</text>
+        <text v-if="task" class="status-pill" :class="task.statusTone">{{ task.status }}</text>
+      </view>
+    </view>
+
+    <view v-else class="warehouse-top detail-top">
       <view class="status-row">
         <button class="back-btn" @click="goBack">‹</button>
         <text>{{ modeTitle }}</text>
@@ -169,13 +187,121 @@
         </view>
       </view>
 
+      <template v-if="task.role === 'buyer'">
+        <view class="section purchase-detail-section purchase-overview-section">
+          <view class="purchase-form warehouse-purchase-form">
+            <view class="warehouse-purchase-field">
+              <text>仓库名称</text>
+              <picker v-if="mode === 'purchaseCreate'" :range="purchaseWarehouseOptions" @change="setPurchaseWarehouse">
+                <view>{{ purchaseWarehouse }}</view>
+              </picker>
+              <view v-else>{{ task.warehouse }}</view>
+            </view>
+            <view class="warehouse-purchase-field">
+              <text>配送时间</text>
+              <picker v-if="mode === 'purchaseCreate'" mode="date" @change="setPurchaseDate">
+                <view>{{ purchaseDate }}</view>
+              </picker>
+              <view v-else>{{ task.due }}</view>
+            </view>
+          </view>
+          <view class="warehouse-purchase-meta">
+            <text>{{ task.currentNo }}</text>
+            <text>{{ task.type }}</text>
+            <text>{{ profile.account }}</text>
+          </view>
+          <view class="purchase-kpi-strip">
+            <view><text>{{ task.items.length }}</text><text>SKU</text></view>
+            <view><text>{{ task.plannedQty }}</text><text>计划数量</text></view>
+            <view :class="{ danger: quantityDiff > 0 }"><text>{{ quantityDiff }}</text><text>差异数量</text></view>
+          </view>
+        </view>
+
+        <view v-if="mode === 'purchaseCreate'" class="section purchase-detail-section purchase-create-section">
+          <view class="warehouse-purchase-section-head">
+            <text class="section-title">已选择商品</text>
+            <text class="status-pill green">{{ selectedPurchaseItems.length }} SKU</text>
+          </view>
+          <view class="warehouse-purchase-search">
+            <input v-model="catalogKeyword" placeholder="搜索商品名称 / SKU / 条码" />
+            <button>查询</button>
+          </view>
+          <view class="purchase-summary-strip">
+            <text>已选择 {{ selectedPurchaseItems.length }} 个 SKU</text>
+            <text>计划 {{ selectedPurchaseQty }} 件</text>
+          </view>
+          <view class="warehouse-purchase-list">
+            <view v-for="item in filteredCatalog" :key="item.id" class="warehouse-purchase-item">
+              <view class="warehouse-detail-img goods-img" :class="item.imageTone">{{ item.title.slice(0, 1) }}</view>
+              <view class="warehouse-purchase-info">
+                <view class="warehouse-purchase-title-line">
+                  <text class="warehouse-purchase-title">{{ item.title }}</text>
+                </view>
+                <text class="warehouse-purchase-summary">{{ item.sku }} · {{ item.spec }}</text>
+                <view class="warehouse-purchase-tags">
+                  <text>{{ item.location }}</text>
+                  <text>{{ purchaseQty(item.id) > 0 ? '已选择' : '未选择' }}</text>
+                </view>
+                <view class="warehouse-purchase-selected-actions">
+                  <view class="purchase-qty-stepper">
+                    <button @click="stepPurchaseQty(item.id, -1)">-</button>
+                    <input :value="purchaseQty(item.id)" type="number" @input="setPurchaseQty(item.id, $event)" />
+                    <button @click="stepPurchaseQty(item.id, 1)">+</button>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view v-else class="section purchase-detail-section purchase-goods-section">
+          <view class="warehouse-purchase-section-head">
+            <text class="section-title">采购单商品</text>
+            <text class="status-pill" :class="task.statusTone">{{ task.status }}</text>
+          </view>
+          <view class="warehouse-purchase-list">
+            <view v-for="item in task.items" :key="item.id" class="warehouse-purchase-item">
+              <view class="warehouse-detail-img goods-img" :class="item.imageTone">{{ item.title.slice(0, 1) }}</view>
+              <view class="warehouse-purchase-info">
+                <view class="warehouse-purchase-title-line">
+                  <text class="warehouse-purchase-title">{{ item.title }}</text>
+                </view>
+                <text class="warehouse-purchase-summary">{{ item.sku }} · {{ item.spec }}</text>
+                <view class="warehouse-purchase-fields">
+                  <text><text>条码</text>{{ item.barcode }}</text>
+                  <text><text>库位</text>{{ item.location }}</text>
+                </view>
+                <view class="warehouse-purchase-tags">
+                  <text>计划 {{ item.planQty }}{{ item.unit }}</text>
+                  <text>实际 {{ item.actualQty }}{{ item.unit }}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view v-if="mode !== 'purchaseReceipt'" class="purchase-floating-action">
+          <button class="plain" @click="goTasks">返回任务</button>
+          <button class="primary warehouse-action-btn" :class="actionClass(mode === 'purchaseCreate' ? '提交审核' : task.primaryAction)" :disabled="mode === 'purchaseCreate' && selectedPurchaseItems.length === 0" @click="mode === 'purchaseCreate' ? createPurchase() : runAction(task.primaryAction)">
+            {{ mode === 'purchaseCreate' ? '提交审核' : task.primaryAction }}
+          </button>
+        </view>
+      </template>
+
+      <template v-else>
       <view class="section task-basic-section">
         <view class="section-head">
           <view>
             <text class="section-title">任务基础信息</text>
           </view>
         </view>
-        <view class="detail-grid">
+        <view v-if="isReceiverGoodsDetail" class="pending-basic-list">
+          <view v-for="row in receiverPendingBasicRows" :key="row.label">
+            <text>{{ row.label }}</text>
+            <text>{{ row.value }}</text>
+          </view>
+        </view>
+        <view v-else class="detail-grid">
           <view><text>任务单号</text><text>{{ task.currentNo }}</text></view>
           <view><text>来源单据</text><text>{{ task.sourceNo }}</text></view>
           <view><text>当前单据</text><text>{{ task.currentNo }}</text></view>
@@ -184,7 +310,7 @@
           <view><text>处理人</text><text>{{ profile.account }}</text></view>
           <view><text>更新时间</text><text>{{ task.updatedAt }}</text></view>
         </view>
-        <view class="quantity-confirm">
+        <view v-if="!isReceiverGoodsDetail" class="quantity-confirm">
           <view>
             <text>{{ task.plannedQty }}</text>
             <text>计划数量</text>
@@ -201,7 +327,7 @@
         <text v-if="task.submitPending" class="pending-strip">提交结果待确认：{{ task.submitPendingAction }}，请等待系统回写，避免重复提交。</text>
       </view>
 
-      <view v-if="mode === 'receiveArea'" class="section">
+      <view v-if="mode === 'receiveArea' && !isReceiverGoodsDetail" class="section">
         <text class="section-title">选择收货库区</text>
         <view class="area-options">
           <button v-for="area in areaOptions" :key="area" class="area-card" @click="selectArea(area)">
@@ -251,10 +377,10 @@
             </view>
           </view>
         </view>
-        <button class="primary full-btn" :disabled="selectedPurchaseItems.length === 0" @click="createPurchase">提交审核</button>
+        <button class="primary full-btn warehouse-action-btn action-default" :disabled="selectedPurchaseItems.length === 0" @click="createPurchase">提交审核</button>
       </view>
 
-      <view class="section">
+      <view class="section task-goods-section">
         <view class="section-head">
           <view>
             <text class="section-title">{{ goodsSectionTitle }}</text>
@@ -271,11 +397,11 @@
             </view>
             <view class="task-goods-qty">
               <view>
-                <text>应拣</text>
+                <text>{{ isReceiverGoodsDetail ? '应收' : '应拣' }}</text>
                 <text>{{ item.planQty }}{{ item.unit }}</text>
               </view>
               <view>
-                <text>已拣</text>
+                <text>{{ isReceiverGoodsDetail ? '已收' : '已拣' }}</text>
                 <text>{{ item.actualQty }}{{ item.unit }}</text>
               </view>
             </view>
@@ -297,6 +423,7 @@
           </view>
         </view>
       </view>
+      </template>
 
       <view v-if="mode === 'receiveQuality'" class="section quality-card">
         <text class="section-title">上传质检凭证</text>
@@ -313,6 +440,10 @@
       <text class="section-title">单据不存在</text>
       <text class="section-sub">请从任务列表重新进入。</text>
       <button class="primary" @click="goTasks">返回任务</button>
+    </view>
+
+    <view v-if="showReceiveAcceptButton" class="detail-floating-action">
+      <button class="primary warehouse-action-btn action-accept" @click="runAction('接单')">接单</button>
     </view>
 
     <WarehouseBottomNav v-if="task || driverOrder || returnOrder" :active="returnOrder ? 'stock' : 'tasks'" :role="profile.key" />
@@ -365,6 +496,8 @@ const areaOptions = ['R-收货暂存区', 'C-冷藏收货口', 'F-冷冻收货�
 const modeTitle = computed(() => {
     if (driverOrder.value) return '配送门店详情';
     if (returnOrder.value) return '退货详情';
+    if (isReceiverGoodsDetail.value) return '商品明细';
+    if (task.value?.role === 'buyer') return mode.value === 'purchaseCreate' ? '新建采购单' : '采购单详情';
     const map: Record<string, string> = {
         receiveArea: '选择库区',
         receiveScan: '扫码库位',
@@ -380,7 +513,13 @@ const modeTitle = computed(() => {
     return map[mode.value] || '任务详情';
 });
 
-const headerTitle = computed(() => driverOrder.value?.routeName || returnOrder.value?.station || task.value?.title || '任务详情');
+const headerTitle = computed(() => {
+    if (driverOrder.value) return driverOrder.value.routeName;
+    if (returnOrder.value) return returnOrder.value.station;
+    if (isReceiverGoodsDetail.value) return '商品明细';
+    if (task.value?.role === 'buyer') return mode.value === 'purchaseCreate' ? '采购单商品' : task.value.currentNo;
+    return task.value?.title || '任务详情';
+});
 const headerSub = computed(() => driverOrder.value?.id || returnOrder.value?.id || (task.value ? `${task.value.currentNo} · ${task.value.sourceNo}` : ''));
 const lastStationName = computed(() => {
     const stations = driverOrder.value?.stations || [];
@@ -407,6 +546,35 @@ const receiptImages = computed(() => {
     }));
 });
 const quantityDiff = computed(() => Math.abs(Number(task.value?.plannedQty || 0) - Number(task.value?.actualQty || 0)));
+const isReceiverPendingDetail = computed(() => task.value?.role === 'receiver' && task.value.status === '待接单');
+const isReceiverGoodsDetail = computed(() => task.value?.role === 'receiver' && (mode.value === 'receiverGoods' || task.value.status === '待接单'));
+const showReceiveAcceptButton = computed(() => task.value?.role === 'receiver' && task.value.status === '待接单' && mode.value !== 'receiverGoods');
+const receiverPendingBasicRows = computed(() => {
+    const row = task.value;
+    if (!row) return [];
+    const hasDoneTime = /已收货|已完成|已关闭/.test(row.status) && Boolean(row.updatedAt && row.updatedAt !== '-');
+    const diffNote = String(row.diffNote || '').trim();
+    const hasRealDiff = row.statusTone === 'red' || /异常|质检|差异/.test(row.status);
+    const rows = [
+        { label: '任务单号', value: row.currentNo },
+        { label: '库区/库位', value: row.location || row.area || '-' },
+        { label: '数量', value: `${Number(row.actualQty || 0)}/${Number(row.plannedQty || 0)}` },
+        { label: '状态', value: row.status },
+        { label: '处理人', value: profile.value.account || row.assignedTo || '-' },
+        { label: '创建时间', value: row.date || row.updatedAt || '-' },
+        hasDoneTime ? { label: '完成时间', value: row.updatedAt } : null,
+        hasRealDiff && diffNote && diffNote !== '-' && diffNote !== '无差异' ? { label: '差异原因', value: diffNote } : null
+    ];
+    return rows.filter((item): item is { label: string; value: string | number } => Boolean(item));
+});
+
+function actionClass(action: string) {
+    if (/接单/.test(action)) return 'action-accept';
+    if (/扫码|扫描/.test(action)) return 'action-scan';
+    if (/确认收货|确认入库/.test(action)) return 'action-confirm';
+    if (/质检|上传/.test(action)) return 'action-quality';
+    return 'action-default';
+}
 
 async function loadData() {
     const role = getCurrentRole();

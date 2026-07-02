@@ -3,12 +3,11 @@
     <view class="category-top">
       <view class="status-bar">
         <text>14:49</text>
-        <text>▮▮▮ WiFi 80</text>
+        <text>WiFi 80</text>
       </view>
       <view class="category-bar">
         <view class="category-station" @click="stationSheetVisible = true">
           <span>自提点 中轮 - {{ state.station.name }}</span>
-          <em>当前类目 · {{ activeCategoryName }}</em>
         </view>
         <view class="shop-search" @click="openSearch">搜索</view>
       </view>
@@ -31,12 +30,6 @@
       <button class="plain small" @click="stationSheetVisible = true">重新选择</button>
     </view>
 
-    <view class="activity-head">
-      <span>{{ activeCategoryName === '全部' ? '当前自提点' : activeCategoryName }}</span>
-      <b>{{ activeActivityTitle }}</b>
-      <span>活动商品列表</span>
-    </view>
-
     <view class="category-layout">
       <scroll-view class="side-cats" scroll-y>
         <view
@@ -48,22 +41,39 @@
           {{ shortCategoryName(item.label) }}
         </view>
       </scroll-view>
+
       <view class="cat-main">
-        <scroll-view class="sub-cat-strip" scroll-x>
+        <view v-if="subCategoryCards.length > 0" class="sub-cat-strip">
           <button
-            v-for="(item, index) in subCategoryCards"
-            :key="item"
+            v-for="item in subCategoryCards"
+            :key="item.id"
             class="sub-cat-chip"
-            :class="{ active: activeSubIndex === index }"
-            @click="activeSubIndex = index"
+            :class="{ active: activeSubCategoryId === item.id }"
+            @click="selectSubCategory(item.id)"
           >
-            {{ item }}
+            {{ item.label }}
           </button>
-        </scroll-view>
+        </view>
+
+        <view class="sort-strip">
+          <button
+            v-for="item in sortOptions"
+            :key="item.field"
+            class="sort-chip"
+            :class="{ active: activeSortField === item.field }"
+            @click="selectSort(item.field)"
+          >
+            <text>{{ item.label }}</text>
+            <text v-if="item.sortable" class="sort-arrows">
+              <text :class="{ active: activeSortField === item.field && activeSortOrder === 'asc' }">↑</text>
+              <text :class="{ active: activeSortField === item.field && activeSortOrder === 'desc' }">↓</text>
+            </text>
+          </button>
+        </view>
 
         <view class="cat-products">
           <view
-            v-for="item in sortedProducts"
+            v-for="item in products"
             :key="item.publishSkuId"
             class="cat-product"
             :class="{ soldout: isSoldout(item) }"
@@ -94,26 +104,28 @@
                 <span class="shop-product-date">提货日期 {{ productPickupText(item.deliveryDate) }}</span>
               </view>
             </view>
-            <button
-              class="round-add"
-              :disabled="isSoldout(item)"
-              :aria-label="isSoldout(item) ? '已售罄' : '加入购物车'"
-              @click.stop="isSoldout(item) ? toggleNotice(item.productId) : handleAddProduct(item)"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="8.8" cy="20" r="1.5"></circle>
-                <circle cx="17.8" cy="20" r="1.5"></circle>
-                <path d="M3.5 4.5h2.4L8 15.7h9.7l2.2-7.8H7.2"></path>
-                <path d="M15.8 4.2v6.4"></path>
-                <path d="M12.6 7.4H19"></path>
-              </svg>
-            </button>
+            <view class="product-action">
+              <button
+                class="round-add"
+                :disabled="isSoldout(item)"
+                :aria-label="isSoldout(item) ? '已售罄' : '加入购物车'"
+                @click.stop="isSoldout(item) ? toggleNotice(item.productId) : handleAddProduct(item)"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="8.8" cy="20" r="1.5"></circle>
+                  <circle cx="17.8" cy="20" r="1.5"></circle>
+                  <path d="M3.5 4.5h2.4L8 15.7h9.7l2.2-7.8H7.2"></path>
+                  <path d="M15.8 4.2v6.4"></path>
+                  <path d="M12.6 7.4H19"></path>
+                </svg>
+              </button>
+            </view>
           </view>
 
           <EmptyActionCard
-            v-if="sortedProducts.length === 0"
+            v-if="products.length === 0"
             title="当前类目暂无商品"
-            sub="空分类入口已在首页隐藏，可切换其他类目查看。"
+            sub="可切换其他类目查看。"
             icon="类"
             button-text="返回首页"
             @action="goHome"
@@ -145,9 +157,7 @@ import {
     useUserState
 } from '@/stores/userState';
 import {
-    fallbackCategories,
     fallbackProductImages,
-    fallbackProducts,
     isSoldout,
     productOldPrice,
     productPickupText,
@@ -156,61 +166,57 @@ import {
     withProductImages
 } from '@/utils/userFallbackData';
 
+type SortField = 'new' | 'sales' | 'price';
+type SortOrder = 'asc' | 'desc';
+
 const state = useUserState();
 const stationSheetVisible = ref(false);
 const categories = ref<UserCategoryDTO[]>([]);
 const products = ref<UserProductCardDTO[]>([]);
 const activeCategoryId = ref(0);
-const activeSubIndex = ref(0);
+const activeSubCategoryId = ref(0);
+const activeSortField = ref<SortField>('new');
+const activeSortOrder = ref<SortOrder>('desc');
 let loadVersion = 0;
 
-const subCategoryMap: Record<string, string[]> = {
-    全部: ['精选推荐', '今日上新', '销量优先', '次日达'],
-    水果: ['柑橘橙柚', '莓果葡萄', '苹果梨桃', '礼盒装'],
-    蔬菜百: ['叶菜', '茄果', '菌菇', '净菜'],
-    海鲜: ['鱼虾蟹贝', '冷冻海味', '即烹食材'],
-    熟食: ['卤味', '凉菜', '加热即食'],
-    肉禽蛋: ['鸡鸭禽肉', '猪牛羊', '蛋品'],
-    零食: ['坚果', '饼干糕点', '饮品'],
-    早餐: ['面包吐司', '牛奶豆浆', '速食早餐'],
-    乳品: ['低温奶', '酸奶', '奶酪'],
-    粮油: ['米面杂粮', '食用油', '调味']
-};
-const fallbackCategoryProductIds: Record<string, number[]> = {
-    水果: [610001, 610002, 610005, 610009],
-    蔬菜百: [610005, 610006],
-    肉禽蛋: [610003, 610008],
-    早餐: [610003, 610004],
-    乳品: [610004],
-    粮油: [610007, 610010]
-};
+const sortOptions = [
+    { field: 'new', label: '今日上新', sortable: false },
+    { field: 'sales', label: '销量', sortable: true },
+    { field: 'price', label: '价格', sortable: true }
+] as const;
 
 const categoryCards = computed(() => {
-    const allCategory = fallbackCategories[0];
-    const rows = categories.value.filter((item) => item.categoryName !== allCategory.label).slice(0, 9).map((item, index) => ({
+    const allCategory = {
+        id: 0,
+        categoryName: '全部',
+        label: '全部',
+        imageUrl: fallbackProductImages[0],
+        children: [] as UserCategoryDTO[]
+    };
+    const rows = categories.value.slice(0, 20).map((item) => ({
         id: item.id,
         categoryName: item.categoryName,
         label: normalizeCategoryName(item.categoryName),
-        imageUrl: fallbackCategories[(index + 1) % fallbackCategories.length].imageUrl
+        imageUrl: item.imageUrl || fallbackProductImages[0],
+        children: item.children || []
     }));
-    const existingNames = new Set([allCategory.label, ...rows.map((item) => item.label)]);
-    const filled = [
-        allCategory,
-        ...rows,
-        ...fallbackCategories.slice(1).filter((item) => !existingNames.has(item.label) && !rows.some((row) => row.id === item.id))
-    ];
-    return filled.slice(0, 10);
+    return [allCategory, ...rows];
 });
-const topCategoryCards = computed(() => categoryCards.value.filter((item) => item.id !== 0).slice(0, 5));
-const activeCategoryName = computed(() => categoryCards.value.find((item) => item.id === activeCategoryId.value)?.label || '全部');
-const activeActivityTitle = computed(() => {
-    if (activeCategoryName.value === '全部') {
-        return '今日鲜选好物';
+const topCategoryCards = computed(() => categoryCards.value.filter((item) => item.id !== 0).slice(0, 8));
+const activeCategory = computed(() => categoryCards.value.find((item) => item.id === activeCategoryId.value));
+const subCategoryCards = computed(() => {
+    if (!activeCategoryId.value || !activeCategory.value?.children?.length) {
+        return [];
     }
-    return `${activeCategoryName.value}精选`;
+    return [
+        { id: 0, label: '全部' },
+        ...activeCategory.value.children.map((item) => ({
+            id: item.id,
+            label: normalizeCategoryName(item.categoryName)
+        }))
+    ];
 });
-const subCategoryCards = computed(() => subCategoryMap[activeCategoryName.value] || subCategoryMap['全部']);
-const sortedProducts = computed(() => [...products.value].sort((a, b) => Number(b.availableQty > 0) - Number(a.availableQty > 0)));
+const queryCategoryId = computed(() => activeSubCategoryId.value || activeCategoryId.value || undefined);
 
 function readInitialCategoryId() {
     const pages = getCurrentPages();
@@ -222,29 +228,28 @@ function shortCategoryName(value: string) {
     return value.length > 4 ? value.slice(0, 4) : value;
 }
 
-function fallbackProductsForCategory(categoryName: string) {
-    if (!categoryName || categoryName === '全部') {
-        return withProductImages(fallbackProducts);
-    }
-    const productIds = fallbackCategoryProductIds[categoryName] || [];
-    if (productIds.length > 0) {
-        return withProductImages(fallbackProducts.filter((item) => productIds.includes(item.productId)));
-    }
-    return withProductImages(
-        fallbackProducts.filter((item) => `${item.productName}${item.skuName}${item.saleSpecText || ''}`.includes(categoryName))
-    );
-}
-
 async function loadCategories() {
     try {
-        const page = await pageCategories({ pageNum: 1, pageSize: 10, status: 1 }, { silent: true });
+        const page = await pageCategories(
+            {
+                pageNum: 1,
+                pageSize: 50,
+                status: 1,
+                cityId: state.city.id,
+                stationId: state.station.id
+            },
+            { silent: true }
+        );
         categories.value = page?.list?.length ? page.list : [];
-    } catch {
+    } catch (error) {
         categories.value = [];
-        console.info('用户端分类接口不可用，已展示本地兜底分类');
+        console.info('用户端分类接口不可用，分类页展示空状态', error);
     }
     if (!categoryCards.value.some((item) => item.id === activeCategoryId.value)) {
-        activeCategoryId.value = categoryCards.value[0]?.id || 0;
+        activeCategoryId.value = 0;
+        activeSubCategoryId.value = 0;
+    } else if (activeSubCategoryId.value && !subCategoryCards.value.some((item) => item.id === activeSubCategoryId.value)) {
+        activeSubCategoryId.value = 0;
     }
 }
 
@@ -255,29 +260,55 @@ async function loadProducts() {
             {
                 pageNum: 1,
                 pageSize: 20,
-                categoryId: activeCategoryId.value || undefined,
+                categoryId: queryCategoryId.value,
                 userId: state.user.id,
                 cityId: state.city.id,
-                stationId: state.station.id
+                stationId: state.station.id,
+                sortField: activeSortField.value,
+                sortOrder: activeSortOrder.value
             },
             { silent: true }
         );
         if (currentLoad !== loadVersion) {
             return;
         }
-        products.value = page?.list?.length ? withProductImages(page.list) : fallbackProductsForCategory(activeCategoryName.value);
-    } catch {
+        products.value = page?.list?.length ? withProductImages(page.list) : [];
+    } catch (error) {
         if (currentLoad !== loadVersion) {
             return;
         }
-        products.value = fallbackProductsForCategory(activeCategoryName.value);
-        console.info('用户端分类商品接口不可用，已展示本地兜底商品');
+        products.value = [];
+        console.info('用户端分类商品接口不可用，分类页展示空状态', error);
     }
 }
 
 async function selectCategory(id: number) {
+    if (activeCategoryId.value === id) {
+        return;
+    }
     activeCategoryId.value = id;
-    activeSubIndex.value = 0;
+    activeSubCategoryId.value = 0;
+    await loadProducts();
+}
+
+async function selectSubCategory(id: number) {
+    if (activeSubCategoryId.value === id) {
+        return;
+    }
+    activeSubCategoryId.value = id;
+    await loadProducts();
+}
+
+async function selectSort(field: SortField) {
+    if (field === 'new') {
+        activeSortField.value = 'new';
+        activeSortOrder.value = 'desc';
+    } else if (activeSortField.value === field) {
+        activeSortOrder.value = activeSortOrder.value === 'desc' ? 'asc' : 'desc';
+    } else {
+        activeSortField.value = field;
+        activeSortOrder.value = 'desc';
+    }
     await loadProducts();
 }
 
@@ -317,9 +348,10 @@ onMounted(async () => {
 
 watch(
     () => [state.city.id, state.station.id],
-    ([cityId, stationId], [previousCityId, previousStationId]) => {
+    async ([cityId, stationId], [previousCityId, previousStationId]) => {
         if (cityId !== previousCityId || stationId !== previousStationId) {
-            void loadProducts();
+            await loadCategories();
+            await loadProducts();
         }
     }
 );
@@ -328,12 +360,12 @@ watch(
 <style lang="scss" scoped>
 .category-page {
   min-height: 100vh;
-  padding: 0 0 152rpx;
+  padding: 0 0 calc(132rpx + env(safe-area-inset-bottom));
   background: #f6efe7;
 }
 
 .category-top {
-  min-height: 312rpx;
+  min-height: 300rpx;
   padding: 0 24rpx 20rpx;
   color: #7a2718;
   background: linear-gradient(180deg, #d94b34 0%, #fff0e4 100%);
@@ -341,104 +373,71 @@ watch(
 
 .status-bar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  height: 68rpx;
-  color: #ffffff;
-  font-size: 30rpx;
-  font-weight: 800;
+  padding: 16rpx 4rpx 12rpx;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 24rpx;
+  font-weight: 700;
 }
 
 .category-bar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 170px;
-  gap: 16rpx;
+  display: flex;
   align-items: center;
-  margin-bottom: 20rpx;
-  color: #8a2418;
-  font-weight: 900;
+  gap: 18rpx;
+  margin-bottom: 18rpx;
 }
 
 .category-station {
-  display: grid;
-  gap: 4rpx;
+  flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  min-height: 72rpx;
+  padding: 14rpx 20rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 18rpx;
+  box-shadow: 0 12rpx 28rpx rgba(132, 52, 28, 0.12);
 }
 
-.category-station::before {
-  display: none;
-}
-
-.category-station span,
-.category-station em {
+.category-station span {
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .category-station span {
-  color: #6f2414;
+  color: #6d2b1f;
   font-size: 28rpx;
-  line-height: 1.25;
-  text-shadow: none;
-}
-
-.category-station em {
-  display: block;
-  color: #9a5f47;
-  font-size: 25rpx;
-  font-style: normal;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .shop-search {
+  width: 118rpx;
+  min-height: 72rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  height: 76rpx;
-  color: #172033;
-  background: #ffffff;
+  color: #7a321d;
+  background: #fff8ef;
   border-radius: 999rpx;
   font-size: 26rpx;
   font-weight: 900;
-  box-shadow: none;
 }
 
 .horizontal-cats {
-  display: block;
-  overflow: hidden;
-  padding: 0 4rpx;
   white-space: nowrap;
 }
 
-.horizontal-cats :deep(.uni-scroll-view),
-.horizontal-cats :deep(.uni-scroll-view-content),
-.sub-cat-strip :deep(.uni-scroll-view),
-.sub-cat-strip :deep(.uni-scroll-view-content) {
-  scrollbar-width: none;
-}
-
-.horizontal-cats :deep(.uni-scroll-view::-webkit-scrollbar),
-.horizontal-cats :deep(.uni-scroll-view-content::-webkit-scrollbar),
-.sub-cat-strip :deep(.uni-scroll-view::-webkit-scrollbar),
-.sub-cat-strip :deep(.uni-scroll-view-content::-webkit-scrollbar) {
-  display: none;
-}
-
 .horizontal-cats .cat-item {
-  display: inline-grid;
-  width: 132rpx;
-  min-height: 144rpx;
-  margin-right: 28rpx;
-  justify-items: center;
-  align-content: start;
-  gap: 8rpx;
-  color: #091832;
-  font-size: 26rpx;
-  font-weight: 900;
-  text-align: center;
-  vertical-align: top;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 112rpx;
+  min-height: 126rpx;
+  margin-right: 26rpx;
+  color: #8b4a2a;
 }
 
 .horizontal-cats .cat-item.active {
@@ -446,329 +445,296 @@ watch(
 }
 
 .cat-img {
-  width: 96rpx;
-  height: 96rpx;
-  background-size: cover;
+  width: 92rpx;
+  height: 92rpx;
+  background-color: #fff8ef;
   background-position: center;
-  border-radius: 26rpx;
-  background-color: #ffffff;
-  box-shadow: 0 14rpx 26rpx rgba(126, 76, 49, 0.15);
-}
-
-.horizontal-cats .cat-item.active .cat-img {
-  outline: 4rpx solid #e85d3f;
-  outline-offset: 4rpx;
+  background-size: cover;
+  border: 4rpx solid rgba(255, 255, 255, 0.86);
+  border-radius: 28rpx;
+  box-shadow: 0 12rpx 24rpx rgba(122, 43, 24, 0.12);
 }
 
 .cat-name {
-  overflow: hidden;
-  width: 100%;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.18;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  font-weight: 900;
 }
 
 .station-alert {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12rpx;
-  margin: 18rpx 20rpx;
-  padding: 18rpx;
-  color: #b42318;
-  background: #fff1e9;
-  border: 1rpx solid #ffd2c2;
-  border-radius: 22rpx;
-  font-size: 26rpx;
+  gap: 16rpx;
+  margin: 18rpx 24rpx;
+  padding: 18rpx 20rpx;
+  color: #9b4d1f;
+  background: #fff7e8;
+  border: 1rpx solid #f2d7b7;
+  border-radius: 18rpx;
+  font-size: 25rpx;
+  font-weight: 700;
 }
 
-.activity-head {
-  position: relative;
-  display: grid;
-  gap: 6rpx;
-  min-height: 236rpx;
-  margin: 20rpx 24rpx 0;
-  padding: 32rpx;
-  overflow: hidden;
-  color: #ffffff;
-  background:
-    linear-gradient(90deg, rgba(15, 23, 42, 0.72), rgba(15, 23, 42, 0.16)),
-    url("/static/user-home/shop-category.jpg") center / cover;
-  border-radius: 26rpx;
-  box-shadow: 0 16rpx 36rpx rgba(126, 76, 49, 0.1);
+.station-alert text {
+  flex: 1;
 }
 
-.activity-head b,
-.activity-head span {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.activity-head b {
-  color: #ffffff;
-  font-size: 54rpx;
+.station-alert button {
+  min-width: 132rpx;
+  min-height: 54rpx;
+  padding: 0 18rpx;
+  color: #fff !important;
+  background: #e85d3f !important;
+  border-radius: 999rpx;
+  font-size: 24rpx;
   font-weight: 900;
-  line-height: 1.08;
-}
-
-.activity-head span {
-  color: #ffffff;
-  font-size: 26rpx;
-  font-weight: 800;
-  line-height: 1.2;
 }
 
 .category-layout {
   display: grid;
-  grid-template-columns: 184rpx minmax(0, 1fr);
-  gap: 20rpx;
-  min-height: 860rpx;
-  background: #ffffff;
+  grid-template-columns: 148rpx minmax(0, 1fr);
+  min-height: calc(100vh - 300rpx);
 }
 
 .side-cats {
-  height: auto;
-  min-height: 860rpx;
-  padding-bottom: 156rpx;
-  background: #f3f3f3;
+  min-height: 100%;
+  background: #fff8ef;
 }
 
 .side-cats view {
-  overflow: hidden;
   display: flex;
   align-items: center;
+  justify-content: center;
   min-height: 96rpx;
-  padding: 24rpx 16rpx;
-  color: #3a3a3a;
-  border-left: 8rpx solid transparent;
+  padding: 22rpx 14rpx;
+  color: #8c6d51;
+  border-left: 6rpx solid transparent;
   font-size: 26rpx;
-  line-height: 1.25;
-  text-overflow: clip;
-  white-space: normal;
+  font-weight: 900;
+  text-align: center;
 }
 
 .side-cats view.active {
   color: #d94b34;
-  background: #ffffff;
+  background: #fff;
   border-left-color: #e85d3f;
-  font-weight: 900;
 }
 
 .cat-main {
   min-width: 0;
-  padding: 0 0 156rpx;
-  background: #ffffff;
 }
 
 .sub-cat-strip {
-  display: block;
-  height: 104rpx;
-  padding: 16rpx 20rpx;
-  margin-bottom: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  border-bottom: 1rpx solid #f0e6df;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  min-height: 78rpx;
+  padding: 12rpx 16rpx 8rpx;
+  overflow-x: auto;
+  background: #fff;
+  border-bottom: 1rpx solid #f3e3d4;
 }
 
 .sub-cat-chip {
   display: inline-flex;
-  width: auto;
-  min-width: 0;
-  min-height: 58rpx;
-  margin-right: 16rpx;
-  padding: 0 24rpx;
-  color: #263043 !important;
-  background: #f7f7f8 !important;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 52rpx;
+  padding: 0 20rpx;
+  color: #8c6d51 !important;
+  background: #fbf4ec !important;
   border: 0;
   border-radius: 999rpx;
-  box-shadow: none;
-  font-size: 26rpx;
+  font-size: 25rpx;
   font-weight: 900;
 }
 
 .sub-cat-chip.active {
-  color: #d94b34 !important;
-  background: #fff0e8 !important;
-  border-color: #e85d3f;
+  color: #fff !important;
+  background: #e85d3f !important;
+}
+
+.sort-strip {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-height: 88rpx;
+  padding: 14rpx 16rpx;
+  overflow-x: auto;
+  background: #fff;
+}
+
+.sort-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  min-width: 118rpx;
+  min-height: 58rpx;
+  padding: 0 20rpx;
+  color: #8c6d51 !important;
+  background: #fbf4ec !important;
+  border: 0;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.sort-chip.active {
+  color: #fff !important;
+  background: #e85d3f !important;
+}
+
+.sort-arrows {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0;
+  font-size: 18rpx;
+  line-height: 1;
+  opacity: 0.72;
+}
+
+.sort-arrows .active {
+  opacity: 1;
+  font-weight: 900;
 }
 
 .cat-products {
-  display: grid;
-  padding: 0 16rpx 188rpx 20rpx;
-  background: #ffffff;
+  padding: 0 8rpx calc(148rpx + env(safe-area-inset-bottom)) 10rpx;
 }
 
 .cat-product {
-  position: relative;
   display: grid;
-  grid-template-columns: 200rpx minmax(0, 1fr);
-  gap: 20rpx;
-  align-items: start;
-  min-height: 232rpx;
-  padding: 24rpx 96rpx 24rpx 0;
-  background: #ffffff;
-  border-bottom: 1rpx solid #f0e6df;
-}
-
-.cat-product.soldout {
-  opacity: 0.68;
+  grid-template-columns: 92px minmax(0, 1fr) 44px;
+  gap: 10px;
+  align-items: center;
+  min-height: 120px;
+  margin-top: 16rpx;
+  padding: 10px 10px 10px 0;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 18rpx;
+  box-shadow: 0 12rpx 30rpx rgba(94, 49, 28, 0.08);
 }
 
 .cat-product-img {
-  width: 200rpx;
-  height: 184rpx;
-  background-size: cover;
+  width: 92px;
+  height: 100px;
+  margin-left: 8px;
+  background-color: #f6efe7;
   background-position: center;
-  border-radius: 20rpx;
-  background-color: #f7f1ea;
-}
-
-.cat-product.soldout .cat-product-img {
-  filter: grayscale(1) saturate(0.45) brightness(0.92);
+  background-size: cover;
+  border-radius: 8px;
 }
 
 .cat-product-info {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  min-height: 100px;
   min-width: 0;
-  padding-right: 0;
+  overflow: hidden;
 }
 
 .cat-product h4 {
   display: -webkit-box;
-  margin: 0 0 6rpx;
+  max-width: 100%;
+  margin: 0;
   overflow: hidden;
-  color: #172033;
-  font-size: 28rpx;
+  color: #2c221a;
+  font-size: 15px;
   font-weight: 900;
-  line-height: 1.25;
-  -webkit-box-orient: vertical;
+  line-height: 1.28;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .shop-product-spec {
-  margin-bottom: 6rpx;
+  max-width: 100%;
+  margin: 0;
   overflow: hidden;
-  color: #66716a;
-  font-size: 25rpx;
-  line-height: 1.25;
-  text-overflow: clip;
-  white-space: normal;
+  color: #8e7a67;
+  font-size: 14px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .price-row {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8rpx;
-  min-width: 0;
-  white-space: nowrap;
+  align-items: baseline;
+  flex-wrap: nowrap;
+  gap: 5px;
+  min-height: 25px;
+  margin: 0;
 }
 
 .shop-price {
-  color: #e60012;
-  font-size: 36rpx;
-  font-weight: 900;
-  line-height: 1;
+  color: #e85d3f;
+  font-size: 23px;
+  font-weight: 1000;
 }
 
 .old-price {
-  color: #999999;
-  font-size: 25rpx;
+  color: #c4aa95;
+  font-size: 13px;
   text-decoration: line-through;
 }
 
 .shop-sale-meta {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6rpx;
-  margin-top: 8rpx;
-  color: #5e6a60;
-  font-size: 26rpx;
-  font-weight: 700;
-  line-height: 1.25;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 3px;
+  min-height: 22px;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-size: 14px;
 }
 
 .shop-sale-meta span,
 .shop-sale-meta b {
   display: inline-flex;
   align-items: center;
-  min-height: 32rpx;
-  padding: 2rpx 8rpx;
+  min-height: 22px;
+  max-width: 96px;
+  padding: 2px 5px;
+  overflow: hidden;
+  color: #9b4d1f;
+  background: #fff2e8;
+  border-radius: 4px;
+  font-weight: 800;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  background: #f8faf7;
-  border: 1rpx solid #e8eee8;
-  border-radius: 999rpx;
 }
 
 .shop-sale-meta .sale-stock {
   padding: 0;
   background: transparent;
-  border: 0;
 }
 
-.shop-sale-meta .sale-stock b {
-  color: #526257;
-  font-weight: 800;
-}
-
-.shop-product-tag-row {
-  display: flex;
-  min-width: 0;
-  margin-top: 8rpx;
-}
-
-.shop-product-date {
-  display: inline-flex;
-  align-items: center;
-  min-height: 42rpx;
-  max-width: 172rpx;
-  padding: 0 12rpx;
-  overflow: hidden;
-  color: #6f5736;
-  background: #fbfaf6;
-  border: 1rpx solid #ece6da;
-  border-radius: 999rpx;
-  font-size: 26rpx;
-  font-weight: 800;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
+.shop-product-tag-row,
 .product-fav-btn {
-  position: absolute;
-  top: 18rpx;
-  right: 0;
-  z-index: 3;
-  min-width: 68rpx;
-  min-height: 46rpx;
-  padding: 0 12rpx;
-  color: #1f8a70 !important;
-  background: #ffffff !important;
-  border: 1rpx solid rgba(31, 138, 112, 0.24);
-  border-radius: 999rpx;
-  box-shadow: 0 8rpx 24rpx rgba(23, 36, 32, 0.08);
-  font-size: 25rpx;
-  font-weight: 900;
+  display: none;
 }
 
-.product-fav-btn.active {
-  color: #ffffff !important;
-  background: #1f8a70 !important;
-  border-color: #1f8a70;
+.product-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
 }
 
 .round-add {
-  position: absolute;
-  right: 4rpx;
-  bottom: 26rpx;
-  z-index: 2;
-  width: 68rpx;
-  min-width: 68rpx;
-  height: 68rpx;
-  min-height: 68rpx;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  min-height: 34px;
   padding: 0;
-  color: #ffffff !important;
+  color: #fff !important;
   background: #e85d3f !important;
   border: 0;
   border-radius: 50%;
@@ -782,171 +748,12 @@ watch(
 }
 
 .round-add svg {
-  width: 44rpx;
-  height: 44rpx;
+  width: 18px;
+  height: 18px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2.6;
-}
-
-.category-page {
-  padding-bottom: calc(132rpx + env(safe-area-inset-bottom));
-}
-
-.category-top {
-  min-height: 300rpx;
-}
-
-.category-bar {
-  margin-bottom: 18rpx;
-}
-
-.horizontal-cats .cat-item {
-  min-height: 126rpx;
-  margin-right: 34rpx;
-}
-
-.cat-img {
-  width: 92rpx;
-  height: 92rpx;
-}
-
-.activity-head {
-  min-height: 188rpx;
-  margin-bottom: 16rpx;
-  padding: 30rpx;
-}
-
-.activity-head b {
-  font-size: 46rpx;
-}
-
-.category-layout {
-  grid-template-columns: 148rpx minmax(0, 1fr);
-}
-
-.side-cats view {
-  min-height: 96rpx;
-  padding: 22rpx 14rpx;
-}
-
-.sub-cat-strip {
-  height: 88rpx;
-  padding: 14rpx 16rpx;
-}
-
-.sub-cat-chip {
-  min-height: 56rpx;
-  margin-right: 14rpx;
-  padding: 0 22rpx;
-}
-
-.cat-products {
-  padding: 0 8rpx calc(148rpx + env(safe-area-inset-bottom)) 10rpx;
-}
-
-.cat-product {
-  grid-template-columns: 82px minmax(0, 1fr);
-  gap: 9px;
-  align-items: center;
-  height: 106px;
-  min-height: 106px;
-  padding: 8px 38px 8px 0;
-  overflow: hidden;
-}
-
-.cat-product-img {
-  width: 82px;
-  height: 90px;
-  border-radius: 8px;
-}
-
-.cat-product-info {
-  display: grid;
-  align-content: center;
-  gap: 2px;
-  height: 90px;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.cat-product h4 {
-  margin: 0;
-  max-width: 100%;
-  font-size: 15px;
-  line-height: 1.18;
-  -webkit-line-clamp: 1;
-}
-
-.shop-product-spec {
-  margin: 0;
-  max-width: 100%;
-  font-size: 14px;
-  line-height: 1.22;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.price-row {
-  flex-wrap: nowrap;
-  gap: 5px;
-  min-height: 25px;
-  margin: 0;
-}
-
-.shop-price {
-  font-size: 23px;
-}
-
-.old-price {
-  font-size: 13px;
-}
-
-.shop-sale-meta {
-  flex-wrap: nowrap;
-  gap: 3px;
-  height: auto;
-  min-height: 24px;
-  max-width: 100%;
-  margin: 0;
-  overflow: hidden;
-  font-size: 14px;
-}
-
-.shop-sale-meta span,
-.shop-sale-meta b {
-  height: auto;
-  min-height: 22px;
-  padding: 2px 5px;
-  max-width: 86px;
-  overflow: hidden;
-  color: #9b4d1f;
-  background: #fff2e8;
-  border: 0;
-  border-radius: 4px;
-  text-overflow: ellipsis;
-}
-
-.cat-product .shop-product-tag-row,
-.cat-product .product-fav-btn {
-  display: none;
-}
-
-.round-add {
-  top: 50%;
-  right: 2px;
-  bottom: auto;
-  width: 34px;
-  min-width: 34px;
-  height: 34px;
-  min-height: 34px;
-  transform: translateY(-50%);
-}
-
-.round-add svg {
-  width: 18px;
-  height: 18px;
 }
 </style>

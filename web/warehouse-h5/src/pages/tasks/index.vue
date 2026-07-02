@@ -137,7 +137,7 @@
     </view>
 
     <view v-else-if="role === 'receiver'" class="receiver-task-list">
-      <view v-for="task in filteredTasks" :key="task.id" class="receiver-task-card" @click="openDetail(task.id)">
+      <view v-for="task in filteredTasks" :key="task.id" class="receiver-task-card">
         <view class="receiver-card-head">
           <view>
             <text class="receiver-card-no">{{ task.currentNo }}</text>
@@ -162,11 +162,11 @@
         </view>
         <text v-if="task.submitPending" class="pending-strip">提交结果待确认：{{ task.submitPendingAction }}</text>
         <view class="receiver-card-actions">
-          <button class="receiver-detail-btn" @click.stop="openDetail(task.id)">
+          <button class="receiver-detail-btn action-detail" @click.stop="openDetail(task.id)">
             <text>☰</text>
             <text>查看详情</text>
           </button>
-          <button v-if="showReceiverPrimary(task)" class="receiver-primary-btn" @click.stop="runAction(task, task.primaryAction)">
+          <button v-if="showReceiverPrimary(task)" class="receiver-primary-btn" :class="receiverPrimaryActionClass(task.primaryAction)" @click.stop="openReceiverWork(task)">
             <text>✓</text>
             <text>{{ task.primaryAction }}</text>
           </button>
@@ -220,6 +220,7 @@ import {
     actionIsCritical,
     applyDriverAction,
     applyTaskAction,
+    consumePendingReceiverStatusFilter,
     consumePendingTarget,
     getCurrentRole,
     getRoleProfile,
@@ -238,7 +239,7 @@ const tab = ref<'today' | 'risk' | 'role'>('today');
 const keyword = ref('');
 const statusFilter = ref('全部');
 const statusOptions = ['全部', '待处理', '处理中', '待确认', '已完成', '异常'];
-const receiverStatusOptions = ['全部', '待接单', '收货中', '待确认收货', '已收货', '质检异常'];
+const receiverStatusOptions = ['全部', '待接单', '待收货', '收货中', '待确认收货', '已收货', '质检异常'];
 const selectedDate = ref('all');
 const driverTab = ref<'delivery' | 'return'>('delivery');
 const role = ref<WarehouseRole>(getCurrentRole());
@@ -292,7 +293,16 @@ async function loadData() {
     tasks.value = dashboard.tasks;
     driverOrders.value = dashboard.driverOrders;
     returnOrders.value = dashboard.returnOrders;
+    const pendingReceiverStatus = consumePendingReceiverStatusFilter();
+    if (role.value === 'receiver' && pendingReceiverStatus) {
+        statusFilter.value = pendingReceiverStatus;
+        selectedDate.value = 'all';
+        return;
+    }
     const pending = consumePendingTarget();
+    if (role.value === 'receiver' && applyReceiverPendingFilter(pending.target)) {
+        return;
+    }
     if (pending.taskId) {
         uni.navigateTo({ url: `/pages/tasks/detail?id=${pending.taskId}&mode=${pending.target || ''}` });
     }
@@ -302,6 +312,12 @@ uni.$on('warehouse:driverTaskTab', (value: unknown) => {
     if (value === 'delivery' || value === 'return') {
         driverTab.value = value;
         uni.setStorageSync(DRIVER_TAB_KEY, value);
+    }
+});
+
+uni.$on('warehouse:receiverStatusFilter', (value: unknown) => {
+    if (typeof value === 'string') {
+        applyReceiverPendingFilter(value);
     }
 });
 
@@ -323,8 +339,9 @@ function dateMatches(value?: string) {
 function statusMatches(status: string, filter: string, tone: string) {
     if (filter === '全部') return true;
     if (filter === '待接单') return status === '待接单';
+    if (filter === '待收货') return status === '待收货';
     if (filter === '收货中') return status === '收货中';
-    if (filter === '待确认收货') return status === '待确认收货';
+    if (filter === '待确认收货') return /收货中|待确认收货/.test(status);
     if (filter === '已收货') return status === '已收货';
     if (filter === '质检异常') return /质检异常|异常/.test(status) || tone === 'red';
     if (filter === '异常') return tone === 'red' || /异常|缺货|提交结果待确认/.test(status);
@@ -335,6 +352,26 @@ function statusMatches(status: string, filter: string, tone: string) {
     return true;
 }
 
+function applyReceiverPendingFilter(target?: string) {
+    if (!target) return false;
+    if (receiverStatusOptions.includes(target)) {
+        statusFilter.value = target;
+        selectedDate.value = 'all';
+        return true;
+    }
+    if (target === 'receiveArea') {
+        statusFilter.value = '待接单';
+        selectedDate.value = 'all';
+        return true;
+    }
+    if (target === 'receiveScan') {
+        statusFilter.value = '待收货';
+        selectedDate.value = 'all';
+        return true;
+    }
+    return false;
+}
+
 function formatMonthDay(value: string) {
     const match = value.match(/^\d{4}-(\d{2})-(\d{2})/);
     if (!match) return value;
@@ -342,8 +379,13 @@ function formatMonthDay(value: string) {
 }
 
 function openDetail(id: string) {
-    const targetMode = role.value === 'manager' ? '&mode=managerPutaway' : '';
+    const targetMode = role.value === 'manager' ? '&mode=managerPutaway' : role.value === 'receiver' ? '&mode=receiverGoods' : '';
     uni.navigateTo({ url: `/pages/tasks/detail?id=${id}${targetMode}` });
+}
+
+function openReceiverWork(task: WarehouseTask) {
+    const mode = /接单/.test(task.primaryAction) ? 'receiveArea' : 'receiveScan';
+    uni.navigateTo({ url: `/pages/tasks/detail?id=${task.id}&mode=${mode}` });
 }
 
 function openDriver(id: string) {
@@ -356,6 +398,12 @@ function openReturn(id: string) {
 
 function showReceiverPrimary(task: WarehouseTask) {
     return !/查看|已关闭|已完成|已收货/.test(`${task.primaryAction}${task.status}`);
+}
+
+function receiverPrimaryActionClass(action: string) {
+    if (/接单/.test(action)) return 'action-accept';
+    if (/确认收货|确认入库/.test(action)) return 'action-confirm';
+    return 'action-default';
 }
 
 function runAction(task: WarehouseTask, action: string) {

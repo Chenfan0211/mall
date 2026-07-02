@@ -28,19 +28,26 @@
 
     <template v-else>
       <view class="role-main">
-        <view class="role-status-note">
-          <text>{{ actionNeed }}</text>
-          <text>{{ actionNext }}</text>
-        </view>
-
         <view class="role-detail-section">
           <text class="section-title">{{ roleType === 'supplier' ? '送货信息' : '订单信息' }}</text>
           <view class="role-order-info">
             <view v-for="row in detailRows" :key="row.label">
               <text>{{ row.label }}</text>
-              <text>{{ row.value }}</text>
+              <text :class="{ 'role-order-code': row.label.includes('编号') }">{{ row.value }}</text>
             </view>
           </view>
+        </view>
+
+        <view class="role-order-actions">
+          <button
+            v-for="action in detailActions"
+            :key="action"
+            class="role-action-btn"
+            :class="action === 'back' ? 'soft' : 'soft'"
+            @click="runDetailAction(action)"
+          >
+            {{ detailActionLabel(action) }}
+          </button>
         </view>
 
         <view v-if="roleType === 'station'" class="role-detail-section">
@@ -53,13 +60,13 @@
           <view class="role-detail-item-list">
             <view v-for="item in items" :key="item.id" class="role-detail-item">
               <view class="role-detail-img"><RoleProductThumb :label="item.productName || item.skuName" /></view>
-              <view>
+              <view class="role-detail-item-main">
+                <text class="role-status role-detail-item-status" :class="roleStatusClass(displayItemStatus(item))">{{ displayItemStatus(item) }}</text>
                 <text class="role-detail-item-title">{{ item.productName || `SKU #${item.skuId || item.id}` }}</text>
                 <text class="role-detail-item-desc">规格：{{ item.skuName || '-' }}</text>
                 <view class="role-detail-amount">
                   <text>{{ moneyText(item.itemAmount || item.salePrice) }}</text>
                   <text>x{{ item.qty || 0 }}</text>
-                  <text class="role-status" :class="roleStatusClass(displayItemStatus(item))">{{ displayItemStatus(item) }}</text>
                 </view>
               </view>
             </view>
@@ -88,32 +95,6 @@
           </view>
         </view>
 
-        <view v-if="roleType === 'station'" class="role-detail-section">
-          <text class="section-title">用户信息</text>
-          <view class="role-order-info">
-            <view>
-              <text>提货人</text>
-              <text>{{ pickupUser }}</text>
-            </view>
-            <view>
-              <text>订单编号</text>
-              <text>{{ order?.orderNo || '-' }}</text>
-            </view>
-            <view>
-              <text>自提点</text>
-              <text>{{ stationText }}</text>
-            </view>
-          </view>
-        </view>
-
-        <view class="role-order-actions">
-          <button v-if="roleType === 'station'" class="role-action-btn soft" @click="openTodayPickup">今日提货</button>
-          <button v-if="roleType === 'station' && firstPickupItemId" class="role-action-btn primary" @click="verify">确认提货</button>
-          <button v-if="roleType === 'station'" class="role-action-btn soft" @click="callPickupUser">拨打电话</button>
-          <button v-if="roleType === 'station'" class="role-action-btn soft" @click="copyPickupMobile">复制手机号</button>
-          <button v-if="roleType === 'station'" class="role-action-btn soft" @click="openNotifyPreview">发送到货通知</button>
-          <button class="role-action-btn soft" @click="back">{{ roleType === 'supplier' ? '返回到仓' : '返回提货订单' }}</button>
-        </view>
       </view>
     </template>
     <RoleBottomNav active="orders" />
@@ -123,8 +104,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
-import { getStationOrderDetail, pageStationOrderItems, verifyPickup, type StationOrderDTO, type StationOrderItemDTO } from '@/api/station';
-import { confirmAction, currentProfile, currentRole, getRequiredRoleQuery, goPage, moneyText, showRoleToast } from '@/stores/role';
+import { getStationOrderDetail, pageStationOrderItems, type StationOrderDTO, type StationOrderItemDTO } from '@/api/station';
+import { currentProfile, currentRole, getRequiredRoleQuery, goPage, moneyText, showRoleToast } from '@/stores/role';
 import { friendlyErrorMessage } from '@/utils/request';
 import RoleBottomNav from '@/components/RoleBottomNav.vue';
 import RoleProductThumb from '@/components/RoleProductThumb.vue';
@@ -136,12 +117,14 @@ const loading = ref(false);
 const error = ref('');
 const order = ref<StationOrderDTO | null>(null);
 const items = ref<StationOrderItemDTO[]>([]);
+const returnMode = ref('order');
+const returnKeyword = ref('');
+const returnPickupDate = ref('');
 
 const title = computed(() => order.value?.orderNo || (id.value ? `单据 #${id.value}` : '-'));
 const status = computed(() => order.value ? stationOrderStatusText(order.value, items.value) : '-');
 const pickupDate = computed(() => stationOrderPickupDate(order.value, items.value));
 const stationText = computed(() => profile.value.entity || `自提点 #${order.value?.stationId || '-'}`);
-const firstPickupItemId = computed(() => items.value.find((item) => Number(item.fulfillStatus || 0) === 60)?.id);
 const totalQty = computed(() => items.value.reduce((sum, item) => sum + Number(item.qty || 0), 0));
 const totalAmount = computed(() => {
     const itemAmount = items.value.reduce((sum, item) => sum + Number(item.itemAmount || 0), 0);
@@ -149,19 +132,23 @@ const totalAmount = computed(() => {
     return moneyText((itemAmount || fallback).toFixed(2));
 });
 const pickupUser = computed(() => [order.value?.pickupName, order.value?.pickupMobile].filter(Boolean).join(' ') || '-');
-const actionLine = computed(() => actionState(status.value));
-const actionNeed = computed(() => actionLine.value.need);
-const actionNext = computed(() => actionLine.value.next);
 const detailRows = computed(() => [
     { label: '订单状态', value: status.value },
-    { label: '合计数量', value: String(totalQty.value) },
-    { label: '合计金额', value: totalAmount.value },
-    { label: '生成时间', value: order.value?.createTime || '-' },
-    { label: '提货日', value: pickupDate.value },
-    { label: '自提点', value: stationText.value }
+    { label: '生成时间', value: formatDateTimeText(order.value?.createTime) },
+    { label: '提货人', value: pickupUser.value }
 ]);
+type DetailAction = 'notify' | 'call' | 'back';
+const detailActions = computed<DetailAction[]>(() => {
+    if (roleType.value === 'station' && status.value === '待提货') {
+        return ['notify', 'call', 'back'];
+    }
+    return ['back'];
+});
 
 onLoad((query) => {
+    returnMode.value = normalizeReturnMode(query?.returnMode);
+    returnKeyword.value = queryText(query?.keyword);
+    returnPickupDate.value = queryText(query?.pickupDate);
     const value = Number(query?.id);
     if (value) {
         id.value = value;
@@ -193,11 +180,43 @@ async function load() {
 }
 
 function back() {
-    goPage('/pages/orders/index');
+    const query = new URLSearchParams();
+    if (returnMode.value) {
+        query.set('mode', returnMode.value);
+    }
+    if (returnKeyword.value) {
+        query.set('keyword', returnKeyword.value);
+    }
+    if (returnPickupDate.value) {
+        query.set('pickupDate', returnPickupDate.value);
+    }
+    const text = query.toString();
+    uni.redirectTo({ url: `/pages/orders/index${text ? `?${text}` : ''}` });
 }
 
-function openTodayPickup() {
-    goPage('/pages/store/index');
+function normalizeReturnMode(value?: string | number) {
+    const mode = String(value || 'order');
+    return ['order', 'summary', 'warehouse'].includes(mode) ? mode : 'order';
+}
+
+function queryText(value: unknown) {
+    const raw = Array.isArray(value) ? String(value[0] || '') : String(value || '');
+    return safeDecode(raw);
+}
+
+function safeDecode(value: string) {
+    let text = value;
+    for (let i = 0; i < 2; i += 1) {
+        if (!/%[0-9A-Fa-f]{2}/.test(text)) break;
+        try {
+            const decoded = decodeURIComponent(text);
+            if (decoded === text) break;
+            text = decoded;
+        } catch {
+            break;
+        }
+    }
+    return text;
 }
 
 function openNotifyPreview() {
@@ -218,66 +237,25 @@ function callPickupUser() {
     });
 }
 
-function copyPickupMobile() {
-    const mobile = order.value?.pickupMobile || '';
-    if (!mobile) {
-        showRoleToast('当前订单没有手机号');
-        return;
-    }
-    if (copyTextByInput(mobile)) {
-        showRoleToast(`已复制手机号 ${mobile}`);
-        return;
-    }
-    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(mobile)
-            .then(() => showRoleToast(`已复制手机号 ${mobile}`))
-            .catch(() => copyTextByUni(mobile));
-        return;
-    }
-    copyTextByUni(mobile);
+function detailActionLabel(action: DetailAction) {
+    const map: Record<DetailAction, string> = {
+        notify: '发送到货通知',
+        call: '拨打电话',
+        back: roleType.value === 'supplier' ? '返回到仓' : '返回提货订单'
+    };
+    return map[action];
 }
 
-function copyTextByUni(value: string) {
-    uni.setClipboardData({
-        data: value,
-        success: () => showRoleToast(`已复制手机号 ${value}`),
-        fail: () => showRoleToast(`请手动复制 ${value}`)
-    });
-}
-
-function copyTextByInput(value: string) {
-    if (typeof document === 'undefined' || !document.body) return false;
-    const input = document.createElement('textarea');
-    input.value = value;
-    input.readOnly = true;
-    input.style.position = 'fixed';
-    input.style.left = '-9999px';
-    input.style.top = '0';
-    input.style.opacity = '0';
-    document.body.appendChild(input);
-    input.focus();
-    input.select();
-    input.setSelectionRange(0, value.length);
-    try {
-        return document.execCommand('copy');
-    } catch {
-        return false;
-    } finally {
-        document.body.removeChild(input);
+function runDetailAction(action: DetailAction) {
+    if (action === 'notify') {
+        openNotifyPreview();
+        return;
     }
-}
-
-async function verify() {
-    if (!firstPickupItemId.value) return;
-    const ok = await confirmAction('确认该订单商品已完成提货？', '确认提货');
-    if (!ok) return;
-    try {
-        await verifyPickup(firstPickupItemId.value, { pickedQty: 1 });
-        showRoleToast('提货核销成功');
-        load();
-    } catch (err) {
-        showRoleToast(friendlyErrorMessage(err, '提货核销失败'));
+    if (action === 'call') {
+        callPickupUser();
+        return;
     }
+    back();
 }
 
 function stationOrderStatusText(row: StationOrderDTO, rowItems: StationOrderItemDTO[]) {
@@ -338,21 +316,22 @@ function formatDateText(value?: string) {
     return match ? `${match[2]}月${match[3]}日` : String(value).split(' ')[0];
 }
 
+function formatDateTimeText(value?: string) {
+    if (!value || value === '-') return '-';
+    const text = String(value).trim();
+    const match = text.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2}):(\d{2})/);
+    if (match) {
+        return `${match[1]}-${match[2]}-${match[3]} ${match[4]}:${match[5]}:${match[6]}`;
+    }
+    return text.replace('T', ' ');
+}
+
 function roleStatusClass(text: string) {
     if (/已完成|已自提|已发送|已到货|已通过|仓库已确认|已结算/.test(text)) return 'green';
     if (/待提货|待售后确认/.test(text)) return 'blue';
     if (/未发货|待到货|等待|处理中|已提交|待处理|待审核|待确认|今日需处理/.test(text)) return 'orange';
     if (/驳回|拒绝|失败|停用|不可|已取消|已关闭|已退款/.test(text)) return 'gray';
     return 'orange';
-}
-
-function actionState(text: string) {
-    if (/未发货/.test(text)) return { need: '无需我处理', next: '等待仓库出库或司机配送，到货后再通知用户' };
-    if (/待到货/.test(text)) return { need: '无需我处理', next: '等待司机到货，到货后发送通知' };
-    if (/待提货/.test(text)) return { need: '需要我处理', next: '联系用户并完成线下提货交付' };
-    if (/待售后确认/.test(text)) return { need: '需要我处理', next: '按售后单或订单商品核对退货数量' };
-    if (/已完成|已自提|已取消|已关闭|已退款/.test(text)) return { need: '无需我处理', next: '可查看记录，不在角色端修改结果' };
-    return { need: '需要我处理', next: '按当前页面主按钮继续处理' };
 }
 </script>
 
@@ -417,24 +396,6 @@ function actionState(text: string) {
   padding-top: 0;
 }
 
-.role-status-note {
-  margin-bottom: 24rpx;
-  padding: 20rpx;
-  color: #8b6a57;
-  background: #fff8f2;
-  border: 1rpx solid #f4ddd0;
-  border-radius: 24rpx;
-  font-size: 24rpx;
-  line-height: 1.55;
-}
-
-.role-status-note text:first-child {
-  display: block;
-  margin-bottom: 8rpx;
-  color: #3a2c24;
-  font-weight: 900;
-}
-
 .role-detail-section {
   margin-bottom: 24rpx;
   padding: 28rpx;
@@ -488,6 +449,7 @@ function actionState(text: string) {
 }
 
 .role-detail-item {
+  position: relative;
   display: grid;
   grid-template-columns: 92rpx minmax(0, 1fr);
   gap: 18rpx;
@@ -497,6 +459,10 @@ function actionState(text: string) {
 
 .role-detail-item:last-child {
   border-bottom: 0;
+}
+
+.role-detail-item-main {
+  min-width: 0;
 }
 
 .role-detail-img {
@@ -515,6 +481,8 @@ function actionState(text: string) {
 
 .role-detail-item-title {
   display: block;
+  min-height: 44rpx;
+  padding-right: 150rpx;
   color: #2d241f;
   font-size: 28rpx;
   font-weight: 900;
@@ -532,8 +500,8 @@ function actionState(text: string) {
 .role-detail-amount {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 12rpx;
+  justify-content: space-between;
+  gap: 16rpx;
   margin-top: 12rpx;
 }
 
@@ -546,6 +514,14 @@ function actionState(text: string) {
 .role-detail-amount text:nth-child(2) {
   color: #8f6c58;
   font-size: 24rpx;
+}
+
+.role-detail-item-status {
+  position: absolute;
+  top: 18rpx;
+  right: 0;
+  z-index: 1;
+  max-width: 144rpx;
 }
 
 .role-total-box {
@@ -632,8 +608,17 @@ function actionState(text: string) {
 .role-order-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
   gap: 16rpx;
-  margin-bottom: 24rpx;
+  margin: -8rpx 0 24rpx;
+  padding: 0 10rpx;
+}
+
+.role-order-actions .role-action-btn,
+.role-order-actions :deep(uni-button.role-action-btn) {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .retry-btn {

@@ -10,16 +10,19 @@ import static org.mockito.Mockito.when;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mall.api.station.dto.StationWorkbenchDTO;
 import com.mall.api.station.vo.StationArrivalConfirmVO;
+import com.mall.api.station.vo.StationExceptionSubmitVO;
 import com.mall.api.station.vo.StationPickupConfirmVO;
 import com.mall.api.station.vo.StationWorkbenchQueryVO;
 import com.mall.api.trade.dto.OrderDTO;
 import com.mall.api.trade.dto.OrderItemDTO;
 import com.mall.api.wms.dto.DeliveryStationDTO;
+import com.mall.api.operation.dto.ExceptionRecordDTO;
 import com.mall.common.exception.BusinessException;
 import com.mall.common.page.PageResult;
 import com.mall.station.convert.StationConvert;
 import com.mall.station.entity.FinAccount;
 import com.mall.station.entity.FinCommissionDetail;
+import com.mall.station.entity.OpExceptionRecord;
 import com.mall.station.entity.OrdOrder;
 import com.mall.station.entity.OrdOrderItem;
 import com.mall.station.entity.OrdOrderStatusLog;
@@ -203,5 +206,38 @@ class StationOrderServiceImplTest {
 
         assertEquals(30L, result.getStatus());
         assertEquals(30L, order.getStatus());
+    }
+
+    @Test
+    void submitException_validItems_success() {
+        final StationExceptionSubmitVO request = new StationExceptionSubmitVO();
+        request.setStationId(720001L);
+        request.setProductName("页面覆盖赣南鲜橙");
+        request.setSkuName("鲜橙3kg装");
+        request.setExceptionType("少件");
+        request.setTotalQty(1L);
+        final StationExceptionSubmitVO.Item item = new StationExceptionSubmitVO.Item();
+        item.setOrderItemId(762005L);
+        item.setOrderId(761005L);
+        item.setOrderNo("ORD_TEST_WAIT_PICKUP");
+        item.setQty(1L);
+        request.setItems(List.of(item));
+        final ExceptionRecordDTO dto = new ExceptionRecordDTO();
+        dto.setTitle("页面覆盖赣南鲜橙 · 鲜橙3kg装 少件1件");
+        when(exceptionRecordMapper.insert(any(OpExceptionRecord.class))).thenReturn(1);
+        when(stationConvert.toExceptionRecordDTO(any(OpExceptionRecord.class))).thenReturn(dto);
+
+        final ExceptionRecordDTO result = stationOrderService.submitException(request);
+
+        assertEquals("页面覆盖赣南鲜橙 · 鲜橙3kg装 少件1件", result.getTitle());
+        verify(exceptionRecordMapper).insert(any(OpExceptionRecord.class));
+    }
+
+    @Test
+    void submitException_emptyItems_throwParamError() {
+        final StationExceptionSubmitVO request = new StationExceptionSubmitVO();
+        request.setStationId(720001L);
+
+        assertThrows(BusinessException.class, () -> stationOrderService.submitException(request));
     }
 }

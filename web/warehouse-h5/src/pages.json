@@ -22,7 +22,8 @@
     {
       "path": "pages/tasks/detail",
       "style": {
-        "navigationBarTitleText": "任务详情"
+        "navigationBarTitleText": "任务详情",
+        "navigationStyle": "custom"
       }
     },
     {

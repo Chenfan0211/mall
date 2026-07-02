@@ -53,7 +53,13 @@ export interface StationOrderItemDTO {
     orderId?: number;
     orderNo?: string;
     orderItemNo?: string;
+    productId?: number;
+    skuId?: number;
     productName?: string;
+    productImage?: string;
+    imageUrl?: string;
+    thumbUrl?: string;
+    picUrl?: string;
     skuName?: string;
     salePrice?: string;
     qty?: number;
@@ -115,6 +121,23 @@ export interface StationExceptionDTO {
     createTime?: string;
 }
 
+export interface StationExceptionSubmitPayload {
+    stationId?: number;
+    leaderId?: number;
+    productId?: number;
+    skuId?: number;
+    productName?: string;
+    skuName?: string;
+    exceptionType?: string;
+    totalQty: number;
+    items: Array<{
+        orderItemId?: number;
+        orderId?: number;
+        orderNo?: string;
+        qty: number;
+    }>;
+}
+
 export interface StationFinanceAccountDTO {
     id: number;
     accountNo?: string;
@@ -143,6 +166,7 @@ export interface CommissionDetailDTO {
     commissionNo?: string;
     subjectType?: number;
     subjectId?: number;
+    commissionAmount?: string;
     amount?: string;
     status?: number;
     createTime?: string;
@@ -225,6 +249,10 @@ export interface SupplierPurchaseItemDTO {
     warehouseId?: number;
     skuName?: string;
     productName?: string;
+    productImage?: string;
+    imageUrl?: string;
+    thumbUrl?: string;
+    picUrl?: string;
     applyQty?: number;
     purchaseQty?: number;
     receivedQty?: number;
@@ -325,6 +353,13 @@ export function pageReturnHandovers(query: Record<string, string | number | unde
 
 export function pageExceptions(query: Record<string, string | number | undefined>) {
     return request<PageResult<StationExceptionDTO>>(`/station/workbench/exceptions${buildSearch(query)}`);
+}
+
+export function submitStationException(payload: StationExceptionSubmitPayload) {
+    return request<StationExceptionDTO>('/station/workbench/exceptions', {
+        method: 'POST',
+        data: payload
+    });
 }
 
 export function pageFinanceAccounts(query: Record<string, string | number | undefined>) {

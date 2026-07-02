@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.mall.api.station.dto.StationWorkbenchDTO;
+import com.mall.api.operation.dto.ExceptionRecordDTO;
 import com.mall.api.trade.dto.OrderDTO;
 import com.mall.api.trade.dto.OrderItemDTO;
 import com.mall.api.wms.dto.DeliveryStationDTO;
@@ -118,5 +119,30 @@ class StationOrderControllerTest {
                         .with(user("tester").authorities(() -> "station:order:pickup-confirm")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("400"));
+    }
+
+    @Test
+    void submitException_success() throws Exception {
+        final ExceptionRecordDTO dto = new ExceptionRecordDTO();
+        dto.setExceptionNo("EX_TEST");
+        dto.setTitle("页面覆盖赣南鲜橙 少件1件");
+        when(stationOrderService.submitException(any())).thenReturn(dto);
+
+        mockMvc.perform(post("/api/station/workbench/exceptions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "stationId":720001,
+                                  "productName":"页面覆盖赣南鲜橙",
+                                  "skuName":"鲜橙3kg装",
+                                  "exceptionType":"少件",
+                                  "totalQty":1,
+                                  "items":[{"orderItemId":762005,"orderId":761005,"orderNo":"ORD_TEST","qty":1}]
+                                }
+                                """)
+                        .with(user("tester").authorities(() -> "station:exception:create")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("0"))
+                .andExpect(jsonPath("$.data.exceptionNo").value("EX_TEST"));
     }
 }

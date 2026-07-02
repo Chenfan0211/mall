@@ -1,5 +1,5 @@
 param(
-    [string]$HostUrl = "http://192.168.28.211",
+    [string]$HostUrl = "http://192.168.28.242",
     [string]$Password = "Test@123456",
     [int]$DebugPort = 9333,
     [switch]$SkipBrowser,

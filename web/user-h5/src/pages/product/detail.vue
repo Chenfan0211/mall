@@ -1,18 +1,31 @@
 <template>
   <view class="page detail-page shop-page" data-m-page="detail">
-    <view class="detail-hero">
-      <view class="detail-carousel-track">
-        <view class="detail-slide" :style="backgroundImageStyle(detailImage)" />
-      </view>
+    <view
+      class="detail-hero"
+      @touchstart="handleHeroPointerStart"
+      @touchend="handleHeroPointerEnd"
+      @mousedown="handleHeroPointerStart"
+      @mouseup="handleHeroPointerEnd"
+    >
+      <swiper
+        class="detail-carousel"
+        :current="heroImageIndex"
+        :autoplay="false"
+        :circular="detailImages.length > 1"
+        :interval="3000"
+        :duration="500"
+      >
+        <swiper-item v-for="image in detailImages" :key="image">
+          <view class="detail-slide" :style="backgroundImageStyle(image)" />
+        </swiper-item>
+      </swiper>
       <button class="detail-back" @click="goBack">‹</button>
       <button class="price-alert-btn" :class="{ subscribed: state.notices.has(productId) }" @click="noticeMe">
         {{ state.notices.has(productId) ? '已订阅到货' : '到货提醒' }}
       </button>
-      <view class="detail-hero-title">
-        <b>{{ productTitle }}</b>
-        <span>{{ productDesc }}</span>
+      <view v-if="detailImages.length > 1" class="detail-dots">
+        <span v-for="(image, index) in detailImages" :key="image" :class="{ active: heroImageIndex === index }"></span>
       </view>
-      <view class="detail-dots"><span></span><span></span><span></span></view>
     </view>
 
     <view class="detail-price">
@@ -27,7 +40,7 @@
 
     <view class="detail-card product-main-card">
       <h2>{{ productTitle }}</h2>
-      <p>{{ productDesc }}</p>
+      <p v-if="productDesc">{{ productDesc }}</p>
       <view class="supplier-line">商品供应商 <span>平台优选供应商</span></view>
       <view class="detail-meta-grid">
         <span><b>产地</b>产地直采</span>
@@ -51,54 +64,54 @@
           @click="selectSku(item.publishSkuId, item.availableQty)"
         >
           <b>{{ item.skuName }}</b>
-          <small>{{ item.availableQty <= 0 ? '已售罄' : `¥${item.salePrice} · 剩余${item.availableQty}` }}</small>
         </view>
       </view>
     </view>
 
-    <view class="detail-card detail-review-section">
+    <view v-if="reviewStats.commentCount > 0" class="detail-card detail-review-section">
       <view class="detail-review-title">
-        <h3>买家评价（{{ detail?.commentCount || 0 }}）</h3>
-        <button @click="openReviews">全部评价 ›</button>
+        <h3>买家评价（{{ reviewStats.commentCount || 0 }}）</h3>
+        <button @click="openReviews">全部评论 ›</button>
       </view>
       <view class="detail-review-summary">
-        <view><strong>98<small>.6%</small></strong><span>好评率</span></view>
-        <view><b>{{ selectedSkuSoldQty * 7 }}</b><em>近期已售</em></view>
-        <view><b>48</b><em>近期回购用户</em></view>
+        <view><strong>{{ formatGoodRate(reviewStats.goodRatePercent) }}</strong><span>好评率</span></view>
+        <view><b>{{ reviewStats.recentSoldQty || 0 }}</b><em>近期已售</em></view>
+        <view><b>{{ reviewStats.recentRepurchaseUserCount || 0 }}</b><em>近期回购用户</em></view>
       </view>
-      <view class="detail-review-tags">
-        <button>新鲜 <em>42</em></button>
-        <button>划算 <em>31</em></button>
-        <button>提货方便 <em>26</em></button>
+      <view v-if="reviewTags.length" class="detail-review-tags">
+        <button v-for="item in reviewTags" :key="item.label">{{ item.label }} <em>{{ item.count || 0 }}</em></button>
       </view>
-      <view class="detail-review-card preview">
+      <view v-if="reviewStats.commentCount > 0 && previewComment" class="detail-review-card preview">
         <view>
           <view class="detail-review-head">
             <span class="detail-review-user">
               <span class="detail-review-user-main">
                 <span class="detail-review-user-line">
-                  <span>评价记录</span>
-                  <span class="detail-review-rebuy">已回购 3 次</span>
+                  <span>用户 {{ previewComment.userId }}</span>
+                  <span class="detail-review-rebuy">{{ previewComment.createTime || '刚刚' }}</span>
                 </span>
-                <span><span class="detail-stars">★★★★★</span><span class="detail-review-satisfy"> 非常满意</span></span>
+                <span><span class="detail-stars">{{ stars(previewComment.score) }}</span><span class="detail-review-satisfy"> {{ reviewSatisfyText(previewComment.score) }}</span></span>
               </span>
             </span>
           </view>
-          <p>包装完整，提货点取货很快，商品到手状态不错。</p>
+          <p>{{ previewComment.content }}</p>
         </view>
-        <button class="detail-review-preview-img" @click="previewReviewImage" aria-label="查看评价图片">
+        <button v-if="previewReviewImages.length" class="detail-review-preview-img" @click="previewReviewImage" aria-label="查看评价图片">
           <view class="detail-review-img" :style="backgroundImageStyle(reviewPreviewImage)" />
-          <span>3</span>
+          <span>{{ previewReviewImages.length }}</span>
         </button>
       </view>
     </view>
 
-    <view class="detail-card detail-buyer-record-card">
+    <view v-if="purchaseRecords.length" class="detail-card detail-buyer-record-card">
       <h3>购买记录</h3>
       <view class="buyer-list">
-        <view v-for="(item, index) in buyerRecords" :key="item.time" class="buyer-row">
+        <view v-for="item in purchaseRecords" :key="`${item.userName}-${item.productName}-${item.skuName}-${item.createTime}`" class="buyer-row">
           <view class="buyer-avatar">单</view>
-          <view><b>购买记录 {{ index + 1 }}</b>{{ item.time }} · {{ state.station.name }} · {{ selectedSku?.skuName }}</view>
+          <view>
+            <b>{{ item.userName }}</b>
+            <span>{{ purchaseRecordText(item) }}</span>
+          </view>
           <em>x{{ item.qty }}</em>
         </view>
       </view>
@@ -148,10 +161,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import UserToast from '@/components/UserToast.vue';
-import { getProductDetail, type UserProductCardDTO, type UserProductDetailDTO } from '@/api/user';
+import {
+    getProductDetail,
+    getProductReviewStats,
+    pageProductPurchaseRecords,
+    pageComments,
+    type UserCommentDTO,
+    type UserProductCardDTO,
+    type UserProductDetailDTO,
+    type UserProductPurchaseRecordDTO,
+    type UserProductReviewStatsDTO
+} from '@/api/user';
 import {
     addProductToCart,
     navigateUser,
@@ -163,6 +186,7 @@ import {
     buildFallbackDetail,
     fallbackProductImages,
     fallbackProducts,
+    LEGACY_PRODUCT_ID,
     productPickupText,
     productSpecText
 } from '@/utils/userFallbackData';
@@ -171,27 +195,117 @@ import { currentRouteQuery } from '@/utils/routeQuery';
 const state = useUserState();
 const productId = ref(0);
 const detail = ref<UserProductDetailDTO>();
+const reviewStats = ref<UserProductReviewStatsDTO>(zeroReviewStats());
+const previewComments = ref<UserCommentDTO[]>([]);
+const purchaseRecords = ref<UserProductPurchaseRecordDTO[]>([]);
 const selectedPublishSkuId = ref<number | undefined>();
+const heroImageIndex = ref(0);
+const heroPointerStartX = ref<number | undefined>();
+let heroAutoTimer: ReturnType<typeof setInterval> | undefined;
 const selectedSku = computed(() => (detail.value?.skus || []).find((item) => item.publishSkuId === selectedPublishSkuId.value));
 const productTitle = computed(() => detail.value?.product?.productName || '商品详情');
-const productDesc = computed(() => selectedSku.value?.saleSpecText || selectedSku.value?.skuName || '基地直采 / 当前自提点可买 / 次日到团点');
-const detailImage = computed(() => detail.value?.product?.mainImageUrl || fallbackProductImages[0]);
-const reviewPreviewImage = computed(() => fallbackProductImages[1] || detailImage.value);
+const productDesc = computed(() => selectedSku.value?.skuName || '');
+const detailImages = computed(() => normalizeDetailImages(detail.value?.product?.imageJson, detail.value?.product?.mainImageUrl));
+const detailImage = computed(() => detailImages.value[heroImageIndex.value] || detailImages.value[0] || fallbackProductImages[0]);
+const previewComment = computed(() => previewComments.value[0]);
+const previewReviewImages = computed(() => (previewComment.value ? reviewImages(previewComment.value) : []));
+const reviewPreviewImage = computed(() => previewReviewImages.value[0] || fallbackProductImages[1] || detailImage.value);
+const reviewTags = computed(() => (reviewStats.value.tags || []).filter((item) => Number(item.count || 0) > 0));
 const selectedSkuSoldQty = computed(() => {
     const product = fallbackProducts.find((item) => item.publishSkuId === selectedPublishSkuId.value || item.productId === productId.value);
     return Number(product?.soldQty || 86);
 });
 const recommendProducts = computed(() => fallbackProducts.filter((item) => item.productId !== productId.value).slice(0, 4));
-const buyerRecords = [
-    { time: '刚刚下单', qty: 1 },
-    { time: '12 分钟前', qty: 2 },
-    { time: '28 分钟前', qty: 1 }
-];
+
+function zeroReviewStats(): UserProductReviewStatsDTO {
+    return {
+        commentCount: 0,
+        goodRatePercent: 0,
+        imageReviewCount: 0,
+        recentSoldQty: 0,
+        recentRepurchaseUserCount: 0,
+        tags: [
+            { label: '新鲜', count: 0 },
+            { label: '划算', count: 0 },
+            { label: '提货方便', count: 0 }
+        ]
+    };
+}
+
+function normalizeDetailImages(imageJson?: string, mainImageUrl?: string) {
+    const images: string[] = [];
+    const pushImage = (url?: unknown) => {
+        if (typeof url === 'string' && url.trim() && !images.includes(url.trim())) {
+            images.push(url.trim());
+        }
+    };
+
+    if (imageJson) {
+        try {
+            const parsed = JSON.parse(imageJson) as unknown;
+            if (Array.isArray(parsed)) {
+                parsed.forEach(pushImage);
+            }
+        } catch {
+            pushImage(imageJson);
+        }
+    }
+    pushImage(mainImageUrl);
+    if (!images.length) {
+        pushImage(fallbackProductImages[0]);
+    }
+    return images;
+}
+
+function resetHeroImageIndex() {
+    heroImageIndex.value = 0;
+}
+
+async function resetHeroCarousel() {
+    resetHeroImageIndex();
+    await nextTick();
+    startHeroAutoPlay();
+}
+
+function stopHeroAutoPlay() {
+    if (heroAutoTimer) {
+        clearInterval(heroAutoTimer);
+        heroAutoTimer = undefined;
+    }
+}
+
+function startHeroAutoPlay() {
+    stopHeroAutoPlay();
+    if (detailImages.value.length <= 1) {
+        return;
+    }
+    heroAutoTimer = setInterval(() => {
+        if (detailImages.value.length <= 1) {
+            stopHeroAutoPlay();
+            return;
+        }
+        heroImageIndex.value = (heroImageIndex.value + 1) % detailImages.value.length;
+    }, 3000);
+}
+
+function normalizePointerClientX(event: TouchEvent | MouseEvent) {
+    if ('changedTouches' in event && event.changedTouches.length) {
+        return event.changedTouches[0].clientX;
+    }
+    if ('touches' in event && event.touches.length) {
+        return event.touches[0].clientX;
+    }
+    return 'clientX' in event ? event.clientX : 0;
+}
 
 async function loadDetail() {
     if (!productId.value) {
-        detail.value = buildFallbackDetail(610001);
+        detail.value = buildFallbackDetail(fallbackProducts[0]?.productId || LEGACY_PRODUCT_ID);
+        await resetHeroCarousel();
         selectedPublishSkuId.value = detail.value.skus?.[0]?.publishSkuId;
+        await loadReviewStats(detail.value.product?.id || LEGACY_PRODUCT_ID);
+        await loadPreviewComments(detail.value.product?.id || LEGACY_PRODUCT_ID);
+        await loadPurchaseRecords(detail.value.product?.id || LEGACY_PRODUCT_ID);
         return;
     }
     try {
@@ -199,15 +313,100 @@ async function loadDetail() {
         if (!detail.value?.product || !detail.value.skus?.length) {
             detail.value = buildFallbackDetail(productId.value);
         }
+        await resetHeroCarousel();
         selectedPublishSkuId.value = detail.value.skus?.find((item) => item.availableQty > 0)?.publishSkuId || detail.value.skus?.[0]?.publishSkuId;
         if (detail.value.favoriteFlag === 1) {
             state.favorites.add(productId.value);
         }
     } catch {
         detail.value = buildFallbackDetail(productId.value);
+        await resetHeroCarousel();
         selectedPublishSkuId.value = detail.value.skus?.find((item) => item.availableQty > 0)?.publishSkuId || detail.value.skus?.[0]?.publishSkuId;
         console.info('用户端商品详情接口不可用，已展示本地兜底详情');
     }
+    const realProductId = detail.value?.product?.id || productId.value;
+    await loadReviewStats(realProductId);
+    await loadPreviewComments(realProductId);
+    await loadPurchaseRecords(realProductId);
+}
+
+async function loadReviewStats(id: number) {
+    if (!id) {
+        reviewStats.value = zeroReviewStats();
+        return;
+    }
+    try {
+        const stats = await getProductReviewStats(id, { cityId: state.city.id, stationId: state.station.id }, { silent: true });
+        reviewStats.value = {
+            commentCount: Number(stats.commentCount || 0),
+            goodRatePercent: stats.goodRatePercent || 0,
+            imageReviewCount: Number(stats.imageReviewCount || 0),
+            recentSoldQty: Number(stats.recentSoldQty || 0),
+            recentRepurchaseUserCount: Number(stats.recentRepurchaseUserCount || 0),
+            tags: normalizeReviewTags(stats.tags)
+        };
+    } catch {
+        reviewStats.value = zeroReviewStats();
+        console.info('用户端商品评价统计接口不可用，已展示零值统计');
+    }
+}
+
+async function loadPreviewComments(id: number) {
+    if (!id) {
+        previewComments.value = [];
+        return;
+    }
+    try {
+        const page = await pageComments(
+            {
+                pageNum: 1,
+                pageSize: 1,
+                productId: id,
+                cityId: state.city.id,
+                stationId: state.station.id,
+                sortField: 'latest',
+                sortOrder: 'desc'
+            },
+            { silent: true }
+        );
+        previewComments.value = page.list || [];
+    } catch {
+        previewComments.value = [];
+        console.info('用户端商品评价预览接口不可用，已隐藏评价预览');
+    }
+}
+
+async function loadPurchaseRecords(id: number) {
+    if (!id) {
+        purchaseRecords.value = [];
+        return;
+    }
+    try {
+        const page = await pageProductPurchaseRecords(
+            id,
+            {
+                pageNum: 1,
+                pageSize: 3,
+                cityId: state.city.id,
+                stationId: state.station.id
+            },
+            { silent: true }
+        );
+        purchaseRecords.value = page.list || [];
+    } catch {
+        purchaseRecords.value = [];
+        console.info('用户端商品购买记录接口不可用，已隐藏购买记录');
+    }
+}
+
+function normalizeReviewTags(tags?: UserProductReviewStatsDTO['tags']) {
+    const source = Array.isArray(tags) ? tags : [];
+    return source
+        .map((item) => ({
+            label: item.label,
+            count: Number(item.count || 0)
+        }))
+        .filter((item) => item.count > 0);
 }
 
 function selectSku(id: number, availableQty: number) {
@@ -216,6 +415,25 @@ function selectSku(id: number, availableQty: number) {
         return;
     }
     selectedPublishSkuId.value = id;
+}
+
+function handleHeroPointerStart(event: TouchEvent | MouseEvent) {
+    heroPointerStartX.value = normalizePointerClientX(event);
+}
+
+function handleHeroPointerEnd(event: TouchEvent | MouseEvent) {
+    if (heroPointerStartX.value === undefined || detailImages.value.length <= 1) {
+        heroPointerStartX.value = undefined;
+        return;
+    }
+    const distance = normalizePointerClientX(event) - heroPointerStartX.value;
+    heroPointerStartX.value = undefined;
+    if (Math.abs(distance) < 40) {
+        return;
+    }
+    const direction = distance < 0 ? 1 : -1;
+    const length = detailImages.value.length;
+    heroImageIndex.value = (heroImageIndex.value + direction + length) % length;
 }
 
 function requireAuth() {
@@ -285,6 +503,14 @@ function productOldPrice(item: UserProductCardDTO) {
     return (value * 1.25).toFixed(2);
 }
 
+function formatGoodRate(value: string | number) {
+    const numberValue = Number(value || 0);
+    if (!Number.isFinite(numberValue) || numberValue <= 0) {
+        return '0%';
+    }
+    return `${numberValue.toFixed(1)}%`;
+}
+
 function backgroundImageStyle(url?: string) {
     return {
         backgroundImage: `url("${url || fallbackProductImages[0]}")`
@@ -298,9 +524,42 @@ function noticeMe() {
     toggleNotice(productId.value);
 }
 
+function reviewImages(item: UserCommentDTO) {
+    if (!item.imageJson) {
+        return [];
+    }
+    try {
+        const parsed = JSON.parse(item.imageJson) as string[];
+        return Array.isArray(parsed) ? parsed.filter(Boolean).slice(0, 9) : [];
+    } catch {
+        return [];
+    }
+}
+
+function stars(value: number) {
+    return '★★★★★'.slice(0, Math.max(1, Math.min(5, Number(value || 5))));
+}
+
+function reviewSatisfyText(value: number) {
+    if (Number(value || 0) >= 5) {
+        return '非常满意';
+    }
+    if (Number(value || 0) >= 4) {
+        return '满意';
+    }
+    return '需要跟进';
+}
+
+function purchaseRecordText(item: UserProductPurchaseRecordDTO) {
+    return [item.productName, item.skuName].filter(Boolean).join(' · ');
+}
+
 function previewReviewImage() {
+    if (!previewReviewImages.value.length) {
+        return;
+    }
     uni.previewImage({
-        urls: [reviewPreviewImage.value],
+        urls: previewReviewImages.value,
         current: reviewPreviewImage.value
     });
 }
@@ -328,8 +587,12 @@ function goBack() {
 
 onMounted(() => {
     const query = currentRouteQuery();
-    productId.value = Number(query.id || query.productId || 610001);
+    productId.value = Number(query.id || query.productId || fallbackProducts[0]?.productId || LEGACY_PRODUCT_ID);
     void loadDetail();
+});
+
+onBeforeUnmount(() => {
+    stopHeroAutoPlay();
 });
 </script>
 
@@ -348,7 +611,7 @@ onMounted(() => {
   background: #fff3ea;
 }
 
-.detail-carousel-track,
+.detail-carousel,
 .detail-slide {
   width: 100%;
   height: 100%;
@@ -358,14 +621,6 @@ onMounted(() => {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-}
-
-.detail-hero::after {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(180deg, transparent 45%, rgba(7, 34, 25, 0.74));
-  content: "";
 }
 
 .detail-back,
@@ -401,33 +656,6 @@ onMounted(() => {
   color: #e85d3f !important;
 }
 
-.detail-hero-title {
-  position: absolute;
-  left: 28rpx;
-  right: 28rpx;
-  bottom: 32rpx;
-  z-index: 2;
-  color: #ffffff;
-}
-
-.detail-hero-title b,
-.detail-hero-title span {
-  display: block;
-}
-
-.detail-hero-title b {
-  font-size: 38rpx;
-  font-weight: 900;
-  line-height: 1.15;
-}
-
-.detail-hero-title span {
-  margin-top: 8rpx;
-  font-size: 26rpx;
-  line-height: 1.45;
-  opacity: 0.92;
-}
-
 .detail-dots {
   position: absolute;
   left: 0;
@@ -447,7 +675,7 @@ onMounted(() => {
   box-shadow: 0 2rpx 8rpx rgba(15, 23, 42, 0.2);
 }
 
-.detail-dots span:first-child {
+.detail-dots span.active {
   width: 36rpx;
   background: #ffffff;
 }
@@ -498,7 +726,7 @@ onMounted(() => {
 }
 
 .detail-card {
-  margin: 20rpx 24rpx 0;
+  margin: 20rpx 12rpx 0;
   padding: 24rpx;
   background: #ffffff;
   border: 1rpx solid #f0dfd6;
@@ -623,9 +851,8 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6rpx;
-  min-height: 88rpx;
-  padding: 14rpx 12rpx;
+  min-height: 76rpx;
+  padding: 12rpx 14rpx;
   color: #7b5f51;
   background: #fffaf6;
   border: 1rpx solid #f0dfd6;
@@ -646,37 +873,38 @@ onMounted(() => {
   opacity: 0.56;
 }
 
-.sku-option b,
-.sku-option small {
+.sku-option b {
   display: block;
   overflow: hidden;
   width: 100%;
   text-overflow: ellipsis;
-}
-
-.sku-option b {
-  font-size: 25rpx;
-  line-height: 1.2;
+  font-size: 26rpx;
+  line-height: 1.28;
   white-space: normal;
   word-break: break-word;
 }
 
-.sku-option small {
-  font-size: 26rpx;
-  line-height: 1.15;
-  white-space: nowrap;
-}
-
 .detail-review-title {
+  align-items: center;
+  gap: 16rpx;
   justify-content: space-between;
 }
 
-.detail-review-title button {
+.detail-review-title h3 {
+  min-width: 0;
+}
+
+.detail-review-title button,
+.detail-review-title uni-button {
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-right: 0;
   min-height: 48rpx;
   padding: 0;
   color: #e85d3f !important;
   background: transparent !important;
   font-size: 26rpx;
+  white-space: nowrap;
   box-shadow: none;
 }
 
@@ -710,14 +938,20 @@ onMounted(() => {
 }
 
 .detail-review-tags {
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 10rpx;
+  justify-content: flex-start;
+  column-gap: 8rpx;
+  row-gap: 8rpx;
   margin-top: 16rpx;
 }
 
-.detail-review-tags button {
+.detail-review-tags button,
+.detail-review-tags uni-button {
+  flex-shrink: 0;
+  margin: 0;
   min-height: 48rpx;
-  padding: 0 14rpx;
+  padding: 0 12rpx;
   color: #744b39 !important;
   background: #fff5ef !important;
   border: 1rpx solid #f2dfd4;
@@ -858,7 +1092,16 @@ onMounted(() => {
   color: #172033;
 }
 
+.buyer-row span {
+  display: block;
+  overflow: hidden;
+  color: #8c6a58;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .buyer-row em {
+  flex-shrink: 0;
   color: #e85d3f;
   font-style: normal;
   font-weight: 900;

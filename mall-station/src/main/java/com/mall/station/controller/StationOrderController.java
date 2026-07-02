@@ -4,6 +4,7 @@ import com.mall.api.operation.dto.ExceptionRecordDTO;
 import com.mall.api.station.dto.StationWorkbenchDTO;
 import com.mall.api.station.vo.StationArrivalConfirmVO;
 import com.mall.api.station.vo.StationDeliveryQueryVO;
+import com.mall.api.station.vo.StationExceptionSubmitVO;
 import com.mall.api.station.vo.StationOrderQueryVO;
 import com.mall.api.station.vo.StationPickupConfirmVO;
 import com.mall.api.station.vo.StationWorkbenchQueryVO;
@@ -107,5 +108,11 @@ public class StationOrderController {
     @GetMapping("/exceptions")
     public Result<PageResult<ExceptionRecordDTO>> pageExceptions(@Valid final StationDeliveryQueryVO query) {
         return Result.success(stationOrderService.pageExceptions(query));
+    }
+
+    @PostMapping("/exceptions")
+    public Result<ExceptionRecordDTO> submitException(
+            @Valid @RequestBody final StationExceptionSubmitVO request) {
+        return Result.success(stationOrderService.submitException(request));
     }
 }

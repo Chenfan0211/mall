@@ -43,13 +43,7 @@
         <view v-if="record" class="role-detail-section">
           <text class="section-title">退货商品</text>
           <view class="role-product-summary-main">
-            <view class="role-product-summary-img">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M7 7h10l2 3v9H5v-9l2-3Z" />
-                <path d="M9 7V5h6v2" />
-                <path d="m9 14 2.2 2.2L15.8 12" />
-              </svg>
-            </view>
+            <view class="role-product-summary-img"><RoleProductThumb variant="return" /></view>
             <view>
               <text class="role-product-title">{{ record.returnNo || `退货 #${record.id}` }}</text>
               <text class="role-product-desc">SKU #{{ record.skuId || '-' }} · 仓库 #{{ record.warehouseId || '-' }}</text>
@@ -119,12 +113,14 @@ import { pageReturnHandovers, type ReturnHandoverDTO } from '@/api/station';
 import { currentProfile, getRequiredRoleQuery, goPage } from '@/stores/role';
 import { friendlyErrorMessage } from '@/utils/request';
 import RoleBottomNav from '@/components/RoleBottomNav.vue';
+import RoleProductThumb from '@/components/RoleProductThumb.vue';
 
 const profile = computed(() => currentProfile.value);
 const id = ref<number>();
 const loading = ref(false);
 const error = ref('');
 const record = ref<ReturnHandoverDTO | null>(null);
+const returnQuery = ref('');
 
 const statusText = computed(() => record.value ? returnStatusText(record.value.status) : '等待处理');
 const stationText = computed(() => profile.value.entity || `自提点 #${record.value?.stationId || '-'}`);
@@ -148,7 +144,12 @@ const actionLine = computed(() => {
 });
 
 onLoad((query) => {
-    const value = Number(query?.id);
+    const routeQuery = {
+        ...h5HashQuery(),
+        ...normalizeQuery(query)
+    };
+    returnQuery.value = buildReturnQuery(routeQuery);
+    const value = Number(routeQuery.id);
     if (value) {
         id.value = value;
         load();
@@ -219,7 +220,50 @@ function formatDateTime(value?: string) {
 }
 
 function back() {
-    goPage('/pages/store/index');
+    goPage(`/pages/store/index${returnQuery.value ? `?${returnQuery.value}` : ''}`);
+}
+
+function buildReturnQuery(query?: Record<string, unknown>) {
+    return ['tab', 'keyword', 'date', 'onlyShortage']
+        .map((key) => {
+            const value = Array.isArray(query?.[key]) ? query?.[key][0] : query?.[key];
+            const text = safeDecode(String(value ?? ''));
+            return text ? `${key}=${encodeURIComponent(text)}` : '';
+        })
+        .filter(Boolean)
+        .join('&');
+}
+
+function normalizeQuery(query?: Record<string, unknown>) {
+    const result: Record<string, string> = {};
+    Object.entries(query || {}).forEach(([key, value]) => {
+        result[key] = safeDecode(Array.isArray(value) ? String(value[0] || '') : String(value ?? ''));
+    });
+    return result;
+}
+
+function h5HashQuery() {
+    const result: Record<string, string> = {};
+    const hash = typeof location === 'undefined' ? '' : location.hash || '';
+    const queryText = hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : '';
+    if (!queryText) return result;
+    new URLSearchParams(queryText).forEach((value, key) => {
+        result[key] = safeDecode(value);
+    });
+    return result;
+}
+
+function safeDecode(value: string) {
+    let text = value;
+    for (let i = 0; i < 2; i += 1) {
+        if (!/%[0-9A-Fa-f]{2}/.test(text)) break;
+        try {
+            text = decodeURIComponent(text);
+        } catch (err) {
+            break;
+        }
+    }
+    return text;
 }
 </script>
 
@@ -328,19 +372,6 @@ function back() {
   border-radius: 26rpx;
   font-size: 36rpx;
   font-weight: 900;
-}
-
-.role-product-summary-img svg {
-  width: 48rpx;
-  height: 48rpx;
-  fill: none;
-}
-
-.role-product-summary-img path {
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .role-product-title {

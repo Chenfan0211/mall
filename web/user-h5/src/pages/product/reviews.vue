@@ -3,7 +3,7 @@
     <view class="review-hero">
       <view class="review-nav">
         <button @click="goBack">‹</button>
-        <b>买家评价（{{ reviews.length }}）</b>
+        <b>买家评价（{{ reviewStats.commentCount || 0 }}）</b>
         <span>••• ◎</span>
       </view>
       <view class="review-stats">
@@ -12,11 +12,11 @@
           <span>好评率</span>
         </view>
         <view class="review-metric">
-          <b>{{ reviews.length }}</b>
+          <b>{{ reviewStats.commentCount || 0 }}</b>
           <span>评价数</span>
         </view>
         <view class="review-metric">
-          <b>{{ imageReviewCount }}</b>
+          <b>{{ reviewStats.imageReviewCount || 0 }}</b>
           <span>有图评价</span>
         </view>
       </view>
@@ -28,18 +28,18 @@
           {{ item.label }}
         </button>
       </view>
-      <view class="review-tag-grid">
-        <button v-for="item in tags" :key="item" :class="{ active: activeTag === item }" @click="selectTag(item)">
-          <span>{{ item }}</span>
-          <em>{{ tagCount(item) }}</em>
+      <view v-if="reviewTags.length" class="review-tag-grid">
+        <button v-for="item in reviewTags" :key="item.label">
+          <span>{{ item.label }}</span>
+          <em>{{ item.count }}</em>
         </button>
       </view>
     </view>
 
     <view class="review-list-page">
-      <view class="review-list-count">当前筛选：{{ activeFilterLabel }} · {{ visibleReviews.length }} 条评价示例</view>
+      <view class="review-list-count">当前筛选：{{ activeFilterLabel }} · {{ reviews.length }} 条评价</view>
 
-      <view v-for="item in visibleReviews" :key="item.id" class="detail-review-card">
+      <view v-for="item in reviews" :key="item.id" class="detail-review-card">
         <view class="detail-review-head">
           <span class="detail-review-user">评价记录 <span class="detail-stars">{{ stars(item.score) }}</span></span>
           <span>{{ item.createTime || '刚刚' }}</span>
@@ -62,7 +62,7 @@
       </view>
 
       <EmptyActionCard
-        v-if="visibleReviews.length === 0"
+        v-if="reviews.length === 0"
         title="暂无符合条件的评价"
         sub="切换筛选条件查看其他评价。"
         icon="评"
@@ -80,58 +80,48 @@ import { computed, onMounted, ref } from 'vue';
 
 import EmptyActionCard from '@/components/EmptyActionCard.vue';
 import UserToast from '@/components/UserToast.vue';
-import { pageComments, type UserCommentDTO } from '@/api/user';
+import { getProductReviewStats, pageComments, type UserCommentDTO, type UserProductReviewStatsDTO } from '@/api/user';
 import { navigateUser, showUserToast, useUserState } from '@/stores/userState';
 import { fallbackProductImages } from '@/utils/userFallbackData';
 
-type ReviewFilter = 'all' | 'latest' | 'image' | 'good' | 'low';
+type ReviewFilter = 'all' | 'latest' | 'image';
 
 const filters: Array<{ key: ReviewFilter; label: string }> = [
     { key: 'all', label: '全部' },
     { key: 'latest', label: '最新' },
-    { key: 'image', label: '图片' },
-    { key: 'good', label: '5 分' },
-    { key: 'low', label: '低评分' }
+    { key: 'image', label: '图片' }
 ];
-const tags = ['新鲜/色泽好', '包装完整', '提货方便', '分量足'];
 const productId = ref<number | undefined>();
-const score = ref<number | undefined>();
 const activeFilter = ref<ReviewFilter>('all');
-const activeTag = ref('');
 const reviews = ref<UserCommentDTO[]>([]);
+const reviewStats = ref<UserProductReviewStatsDTO>(zeroReviewStats());
 const state = useUserState();
 
-const visibleReviews = computed(() => {
-    let rows = reviews.value.filter((item) => {
-        if (score.value === 2) {
-            return item.score <= 2;
-        }
-        return !score.value || item.score === score.value;
-    });
-    if (activeFilter.value === 'image') {
-        rows = rows.filter((item) => reviewImages(item).length > 0);
-    }
-    if (activeFilter.value === 'latest') {
-        rows = [...rows].sort((left, right) => String(right.createTime || '').localeCompare(String(left.createTime || '')));
-    }
-    if (!activeTag.value) {
-        return rows;
-    }
-    return rows.filter((item) => item.content.includes(activeTag.value.replace(/\/.*$/, '')) || item.score >= 5);
-});
-const goodRate = computed(() => {
-    if (!reviews.value.length) {
-        return 0;
-    }
-    const good = reviews.value.filter((item) => item.score >= 4).length;
-    return Math.round((good / reviews.value.length) * 100);
-});
-const imageReviewCount = computed(() => reviews.value.filter((item) => reviewImages(item).length > 0).length);
+const reviewTags = computed(() => (reviewStats.value.tags || []).filter((item) => Number(item.count || 0) > 0));
+const goodRate = computed(() => formatGoodRate(reviewStats.value.goodRatePercent));
 const activeFilterLabel = computed(() => {
     const matched = filters.find((item) => item.key === activeFilter.value);
-    const base = matched?.label || '全部';
-    return activeTag.value ? `${base} / ${activeTag.value}` : base;
+    return matched?.label || '全部';
 });
+
+function zeroReviewStats(): UserProductReviewStatsDTO {
+    return {
+        commentCount: 0,
+        goodRatePercent: 0,
+        imageReviewCount: 0,
+        recentSoldQty: 0,
+        recentRepurchaseUserCount: 0,
+        tags: []
+    };
+}
+
+function formatGoodRate(value: string | number) {
+    const numberValue = Number(value || 0);
+    if (!Number.isFinite(numberValue) || numberValue <= 0) {
+        return 0;
+    }
+    return Number.isInteger(numberValue) ? numberValue : numberValue.toFixed(1);
+}
 
 async function loadReviews() {
     try {
@@ -140,93 +130,52 @@ async function loadReviews() {
                 pageNum: 1,
                 pageSize: 20,
                 productId: productId.value,
-                score: score.value,
+                cityId: state.city.id,
+                stationId: state.station.id,
+                sortField: activeFilter.value === 'latest' ? 'latest' : undefined,
+                sortOrder: activeFilter.value === 'latest' ? 'desc' : undefined,
+                hasImage: activeFilter.value === 'image' ? true : undefined
+            },
+            { silent: true }
+        );
+        reviews.value = page.list || [];
+    } catch {
+        reviews.value = [];
+        console.info('用户端评价接口不可用，已展示空评价状态');
+    }
+}
+
+async function loadReviewStats() {
+    if (!productId.value) {
+        reviewStats.value = zeroReviewStats();
+        return;
+    }
+    try {
+        const stats = await getProductReviewStats(
+            productId.value,
+            {
+                cityId: state.city.id,
                 stationId: state.station.id
             },
             { silent: true }
         );
-        reviews.value = page.list?.length ? page.list : fallbackReviews();
+        reviewStats.value = {
+            commentCount: Number(stats.commentCount || 0),
+            goodRatePercent: stats.goodRatePercent || 0,
+            imageReviewCount: Number(stats.imageReviewCount || 0),
+            recentSoldQty: Number(stats.recentSoldQty || 0),
+            recentRepurchaseUserCount: Number(stats.recentRepurchaseUserCount || 0),
+            tags: (stats.tags || []).filter((item) => Number(item.count || 0) > 0)
+        };
     } catch {
-        reviews.value = fallbackReviews();
-        console.info('用户端评价接口不可用，已展示本地评价状态');
+        reviewStats.value = zeroReviewStats();
+        console.info('用户端评价统计接口不可用，已展示零值统计');
     }
-}
-
-function fallbackReviews(): UserCommentDTO[] {
-    const matched = state.localReviews.filter((item) => !productId.value || item.productId === productId.value);
-    const source = matched.length
-        ? matched
-        : [
-            {
-                id: 779001,
-                orderNo: 'LOCAL-DEMO-1',
-                productId: productId.value || 610001,
-                productName: '鲜选商品',
-                skuName: '默认规格',
-                score: 5,
-                content: '新鲜度不错，包装完整，提货方便。',
-                images: [fallbackProductImages[0]],
-                status: 1,
-                createTime: '2026-06-27 18:20:00'
-            },
-            {
-                id: 779002,
-                orderNo: 'LOCAL-DEMO-2',
-                productId: productId.value || 610001,
-                productName: '鲜选商品',
-                skuName: '家庭装',
-                score: 5,
-                content: '分量足，适合家庭分享，性价比高。',
-                images: [],
-                status: 1,
-                createTime: '2026-06-27 16:45:00'
-            },
-            {
-                id: 779003,
-                orderNo: 'LOCAL-DEMO-3',
-                productId: productId.value || 610001,
-                productName: '鲜选商品',
-                skuName: '默认规格',
-                score: 4,
-                content: '提货点离家近，整体体验稳定。',
-                images: [],
-                status: 1,
-                createTime: '2026-06-26 20:10:00'
-            }
-        ];
-    return source.map((item) => ({
-        id: item.id,
-        commentNo: `LOCAL${item.id}`,
-        userId: state.user.id,
-        productId: item.productId,
-        skuId: 0,
-        stationId: state.station.id,
-        score: item.score,
-        content: item.content,
-        imageJson: JSON.stringify(item.images || []),
-        status: item.status,
-        createTime: item.createTime
-    }));
 }
 
 function selectFilter(value: ReviewFilter) {
     activeFilter.value = value;
-    if (value === 'good') {
-        score.value = 5;
-    } else if (value === 'low') {
-        score.value = 2;
-    } else {
-        score.value = undefined;
-    }
     void loadReviews();
-}
-
-function selectTag(value: string) {
-    activeTag.value = activeTag.value === value ? '' : value;
-}
-
-function tagCount(tag: string) {
-    return Math.max(1, reviews.value.filter((item) => item.content.includes(tag.replace(/\/.*$/, '')) || item.score >= 5).length);
 }
 
 function stars(value: number) {
@@ -268,6 +217,7 @@ onMounted(() => {
     const pages = getCurrentPages();
     const current = pages[pages.length - 1] as { options?: Record<string, string> };
     productId.value = Number(current.options?.productId || current.options?.id || 0) || undefined;
+    void loadReviewStats();
     void loadReviews();
 });
 </script>
@@ -297,17 +247,25 @@ onMounted(() => {
 }
 
 .review-nav button {
-  width: 60rpx;
-  min-width: 60rpx;
-  height: 60rpx;
-  min-height: 60rpx;
+  display: grid;
+  width: 64rpx;
+  min-width: 64rpx;
+  height: 64rpx;
+  min-height: 64rpx;
   padding: 0;
+  place-items: center;
   color: #d82236 !important;
   background: rgba(255, 255, 255, 0.86) !important;
   border: 1rpx solid rgba(216, 34, 54, 0.12);
   border-radius: 50%;
   box-shadow: 0 12rpx 28rpx rgba(216, 34, 54, 0.12);
-  font-size: 46rpx;
+  font-size: 50rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.review-nav button::after {
+  border: 0;
 }
 
 .review-nav b {
@@ -315,7 +273,7 @@ onMounted(() => {
   color: #172033;
   font-size: 34rpx;
   font-weight: 900;
-  text-align: center;
+  text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -337,6 +295,7 @@ onMounted(() => {
   grid-template-columns: 1.15fr repeat(2, minmax(0, 1fr));
   gap: 0;
   align-items: center;
+  justify-items: center;
   margin-top: 28rpx;
   padding: 26rpx 20rpx;
   background: rgba(255, 255, 255, 0.82);
@@ -353,6 +312,7 @@ onMounted(() => {
   color: #80665c;
   background: transparent;
   border-radius: 0;
+  justify-items: center;
   text-align: center;
 }
 
@@ -405,6 +365,12 @@ onMounted(() => {
 }
 
 .review-tabs {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  justify-self: flex-start;
+  justify-content: flex-start;
+  align-items: center;
   gap: 8rpx;
   padding: 6rpx;
   background: #f2f4f7;
@@ -412,15 +378,22 @@ onMounted(() => {
 }
 
 .review-tag-grid {
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 10rpx;
+  overflow-x: visible;
+  white-space: normal;
 }
 
 .review-tabs button,
+.review-tabs uni-button,
 .review-tag-grid button {
   flex: 0 0 auto;
+  width: auto;
+  margin: 0 !important;
   min-height: 60rpx;
   padding: 0 20rpx;
+  text-align: left;
   color: #8c6a58 !important;
   background: #fffaf6 !important;
   border: 1rpx solid #f0dfd6;
@@ -430,16 +403,19 @@ onMounted(() => {
   font-weight: 900;
 }
 
-.review-tabs button {
-  flex: 1;
-  min-width: 0;
+.review-tabs button,
+.review-tabs uni-button {
+  flex: 0 0 auto;
+  min-width: 88rpx;
+  padding: 0 22rpx;
   background: transparent !important;
   border: 0;
   border-radius: 16rpx;
+  text-align: center;
 }
 
 .review-tabs button.active,
-.review-tag-grid button.active {
+.review-tabs uni-button.active {
   color: #d82236 !important;
   background: #ffffff !important;
   border-color: transparent;

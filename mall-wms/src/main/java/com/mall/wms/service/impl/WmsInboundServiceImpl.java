@@ -20,6 +20,7 @@ import com.mall.wms.mapper.WmsPutawayTaskMapper;
 import com.mall.wms.mapper.WmsQualityFileMapper;
 import com.mall.wms.mapper.WmsReceiveRecordMapper;
 import com.mall.wms.service.WmsInboundService;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -53,6 +54,10 @@ public class WmsInboundServiceImpl extends WmsReadSupport implements WmsInboundS
     @Override
     public PageResult<InboundOrderDTO> pageInboundOrders(final WmsInboundQueryVO query) {
         final WmsInboundQueryVO safeQuery = safeQuery(query);
+        final LocalDateTime createStart = safeQuery.getCreateDate() == null
+                ? null
+                : safeQuery.getCreateDate().atStartOfDay();
+        final LocalDateTime createEnd = createStart == null ? null : createStart.plusDays(1L);
         final LambdaQueryWrapper<WmsInboundOrder> wrapper = new LambdaQueryWrapper<WmsInboundOrder>()
                 .and(StringUtils.hasText(safeQuery.getKeyword()), nested -> nested
                         .like(WmsInboundOrder::getInboundNo, safeQuery.getKeyword())
@@ -63,6 +68,8 @@ public class WmsInboundServiceImpl extends WmsReadSupport implements WmsInboundS
                 .eq(safeQuery.getWarehouseId() != null, WmsInboundOrder::getWarehouseId,
                         safeQuery.getWarehouseId())
                 .eq(safeQuery.getStatus() != null, WmsInboundOrder::getStatus, safeQuery.getStatus())
+                .ge(createStart != null, WmsInboundOrder::getCreateTime, createStart)
+                .lt(createEnd != null, WmsInboundOrder::getCreateTime, createEnd)
                 .orderByDesc(WmsInboundOrder::getId);
         return toPage(safeQuery, inboundOrderMapper, wrapper, wmsConvert::toInboundOrderDTO);
     }

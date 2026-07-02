@@ -132,9 +132,6 @@
             </view>
             <text class="status-pill" :class="currentRole === role.key ? 'green' : 'gray'">{{ currentRole === role.key ? '当前' : '切换' }}</text>
           </view>
-          <view class="role-actions-strip">
-            <text v-for="action in role.permissions.slice(0, 4)" :key="action">{{ action }}</text>
-          </view>
         </button>
       </view>
     </view>

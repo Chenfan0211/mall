@@ -16,6 +16,7 @@ export interface RoleMetric {
     value: string;
     label: string;
     page: string;
+    valueClass?: string;
 }
 
 export interface RoleProfile {
@@ -43,6 +44,12 @@ export interface RoleSession {
     leaderId?: number;
     supplierId?: number;
     authorities: string[];
+}
+
+interface EntityNameCache {
+    station?: string;
+    leader?: string;
+    supplier?: string;
 }
 
 interface DataScopeDTO {
@@ -94,6 +101,7 @@ const state = reactive({
     roleType: (uni.getStorageSync('mall_role_h5_role') as RoleType) || 'station',
     token: (uni.getStorageSync('mall_role_h5_token') as string) || '',
     session: readSession(),
+    entityNames: readEntityNames(),
     lastToast: ''
 });
 
@@ -154,6 +162,19 @@ export function applyLoginResult(result: LoginResult, fallbackUsername: string) 
 export function setRoleToken(token: string) {
     state.token = token;
     uni.setStorageSync('mall_role_h5_token', token);
+}
+
+export function setCurrentEntityName(name?: string) {
+    const text = String(name || '').trim();
+    if (!text) return;
+    if (state.roleType === 'supplier') {
+        state.entityNames.supplier = text;
+    } else if (state.session.stationId) {
+        state.entityNames.station = text;
+    } else if (state.session.leaderId) {
+        state.entityNames.leader = text;
+    }
+    uni.setStorageSync('mall_role_h5_entity_names', JSON.stringify(state.entityNames));
 }
 
 export function getRoleQuery() {
@@ -262,11 +283,35 @@ export function confirmAction(content: string, title = '确认操作') {
     });
 }
 
+export async function refreshCurrentEntityName(fetcher: {
+    getStationDetail: (id: number) => Promise<{ stationName?: string; contactName?: string }>;
+    getLeaderDetail: (id: number) => Promise<{ leaderName?: string }>;
+}) {
+    if (state.roleType !== 'station') {
+        return;
+    }
+    try {
+        if (state.session.stationId) {
+            const station = await fetcher.getStationDetail(Number(state.session.stationId));
+            setCurrentEntityName(station.stationName || station.contactName);
+            return;
+        }
+        if (state.session.leaderId) {
+            const leader = await fetcher.getLeaderDetail(Number(state.session.leaderId));
+            setCurrentEntityName(leader.leaderName);
+        }
+    } catch {
+        // Keep the existing fallback name when the identity detail request is unavailable.
+    }
+}
+
 export function logoutRole() {
     state.token = '';
     state.session = emptySession();
+    state.entityNames = {};
     clearToken();
     uni.removeStorageSync('mall_role_h5_session');
+    uni.removeStorageSync('mall_role_h5_entity_names');
 }
 
 function findScope(scopes: DataScopeDTO[], scopeType: number) {
@@ -285,6 +330,18 @@ function readSession(): RoleSession {
     }
 }
 
+function readEntityNames(): EntityNameCache {
+    const raw = uni.getStorageSync('mall_role_h5_entity_names') as string;
+    if (!raw) {
+        return {};
+    }
+    try {
+        return JSON.parse(raw) || {};
+    } catch {
+        return {};
+    }
+}
+
 function emptySession(): RoleSession {
     return {
         username: '',
@@ -295,13 +352,13 @@ function emptySession(): RoleSession {
 
 function resolveEntityName(base: RoleProfile, session: RoleSession) {
     if (state.roleType === 'supplier' && session.supplierId) {
-        return `供应商 #${session.supplierId}`;
+        return state.entityNames.supplier || `供应商 #${session.supplierId}`;
     }
     if (state.roleType === 'station' && session.stationId) {
-        return `自提点 #${session.stationId}`;
+        return state.entityNames.station || `自提点 #${session.stationId}`;
     }
     if (state.roleType === 'station' && session.leaderId) {
-        return `团长 #${session.leaderId}`;
+        return state.entityNames.leader || `团长 #${session.leaderId}`;
     }
     return base.entity;
 }

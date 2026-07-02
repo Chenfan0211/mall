@@ -10,17 +10,27 @@
           <text class="role-work-title-main">{{ roleType === 'supplier' ? '供应商到仓' : '提货订单' }}</text>
           <text class="role-work-sub">{{ roleType === 'supplier' ? '只看仓库、SKU、数量、到仓时间和单据状态' : '默认当前提货日，可按订单或商品汇总查询' }}</text>
         </view>
-        <text class="role-work-entity">{{ profile.entity }}</text>
+        <text class="role-work-entity">{{ headerEntityName }}</text>
       </view>
     </view>
 
     <view class="role-query-tabs">
-      <button :class="{ active: mode === 'order' }" @click="mode = 'order'">
-        {{ roleType === 'supplier' ? '送货单维度' : '提货订单' }}
-      </button>
-      <button :class="{ active: mode === secondaryMode }" @click="setSecondaryMode">
-        {{ secondaryLabel }}
-      </button>
+      <template v-if="roleType === 'station'">
+        <button :class="{ active: mode === secondaryMode }" @click="setSecondaryMode">
+          {{ secondaryLabel }}
+        </button>
+        <button :class="{ active: mode === 'order' }" @click="mode = 'order'">
+          提货订单
+        </button>
+      </template>
+      <template v-else>
+        <button :class="{ active: mode === 'order' }" @click="mode = 'order'">
+          送货单维度
+        </button>
+        <button :class="{ active: mode === secondaryMode }" @click="setSecondaryMode">
+          {{ secondaryLabel }}
+        </button>
+      </template>
     </view>
 
     <view class="role-order-query-row" :class="{ 'single': roleType !== 'station' }">
@@ -49,11 +59,14 @@
 
     <template v-else>
       <view v-if="mode === 'order'" class="role-order-list">
-        <view v-for="order in filteredOrders" :key="order.id" class="role-order-card">
+        <view
+          v-for="order in filteredOrders"
+          :key="order.id"
+          class="role-order-card"
+        >
           <view class="role-order-head">
             <view>
               <text class="role-order-no">{{ order.no }}</text>
-              <text>{{ order.location }}</text>
             </view>
             <text class="role-status" :class="order.statusClass">{{ order.status }}</text>
           </view>
@@ -76,20 +89,17 @@
               <text>手机号</text>
               <text>{{ order.mobile || '-' }}</text>
             </view>
-            <view>
-              <text>自提点</text>
-              <text>{{ order.location }}</text>
-            </view>
-            <view>
-              <text>提货日</text>
-              <text>{{ order.pickupDate }}</text>
-            </view>
           </view>
           <view class="role-order-actions">
-            <button class="role-action-btn primary" @click.stop="openDetail(order.id)">查看详情</button>
-            <button v-if="roleType === 'station'" class="role-action-btn soft" @click.stop="callUser(order)">拨打电话</button>
-            <button v-if="roleType === 'station'" class="role-action-btn soft" @click.stop="copyMobile(order)">复制手机号</button>
-            <button v-if="roleType === 'station'" class="role-action-btn soft" @click.stop="openNotifyPreview(order)">发送到货通知</button>
+            <button
+              v-for="action in order.actions"
+              :key="action"
+              class="role-action-btn"
+              :class="action === 'detail' ? 'primary' : 'soft'"
+              @click.stop="runOrderAction(action, order)"
+            >
+              {{ orderActionLabel(action) }}
+            </button>
           </view>
         </view>
         <view v-if="filteredOrders.length === 0" class="empty-panel">
@@ -138,7 +148,7 @@
       <view v-else class="role-order-list">
         <view v-for="item in filteredSummaries" :key="item.key" class="role-product-summary-card">
           <view class="role-product-summary-main">
-            <view class="role-product-summary-img"><RoleProductThumb :label="item.title" /></view>
+            <view class="role-product-summary-img"><RoleProductThumb :label="item.title" :src="item.image" /></view>
             <view>
               <text class="role-product-title">{{ item.title }}</text>
               <text class="role-product-desc">{{ item.spec }}</text>
@@ -174,9 +184,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { onShow } from '@dcloudio/uni-app';
-import { pageStationOrderItems, pageStationOrders, pageSupplierDeliveries, pageSupplierPurchaseItems, type StationOrderDTO, type StationOrderItemDTO, type SupplierDeliveryDTO, type SupplierPurchaseItemDTO } from '@/api/station';
-import { currentProfile, currentRole, getRequiredRoleQuery, goPage, showRoleToast } from '@/stores/role';
+import { onLoad, onShow } from '@dcloudio/uni-app';
+import { getLeaderDetail, getStationDetail, pageStationOrderItems, pageStationOrders, pageSupplierDeliveries, pageSupplierPurchaseItems, type StationOrderDTO, type StationOrderItemDTO, type SupplierDeliveryDTO, type SupplierPurchaseItemDTO } from '@/api/station';
+import { currentProfile, currentRole, currentSession, getRequiredRoleQuery, goPage, setCurrentEntityName, showRoleToast } from '@/stores/role';
 import { friendlyErrorMessage } from '@/utils/request';
 import RoleBottomNav from '@/components/RoleBottomNav.vue';
 import RoleProductThumb from '@/components/RoleProductThumb.vue';
@@ -195,12 +205,16 @@ interface DisplayOrder {
     amount: string;
     searchText: string;
     raw: StationOrderDTO | SupplierDeliveryDTO;
+    actions: OrderAction[];
 }
+
+type OrderAction = 'detail' | 'notify' | 'call' | 'copy';
 
 interface ProductSummary {
     key: string;
     title: string;
     spec: string;
+    image: string;
     qty: number;
     amount: string;
     orders: number;
@@ -224,7 +238,7 @@ interface WarehouseSummary {
 
 const profile = computed(() => currentProfile.value);
 const roleType = computed(() => currentRole.value);
-const mode = ref<'order' | 'summary' | 'warehouse'>('order');
+const mode = ref<'order' | 'summary' | 'warehouse'>(defaultOrderMode());
 const keyword = ref('');
 const activeDate = ref('');
 const loading = ref(false);
@@ -233,7 +247,9 @@ const stationOrders = ref<StationOrderDTO[]>([]);
 const stationItems = ref<StationOrderItemDTO[]>([]);
 const supplierDeliveries = ref<SupplierDeliveryDTO[]>([]);
 const supplierItems = ref<SupplierPurchaseItemDTO[]>([]);
+const entityName = ref('');
 
+const headerEntityName = computed(() => entityName.value || profile.value.entity);
 const secondaryMode = computed(() => roleType.value === 'supplier' ? 'warehouse' : 'summary');
 const secondaryLabel = computed(() => roleType.value === 'supplier' ? '仓库维度' : '商品汇总');
 
@@ -258,7 +274,8 @@ const orders = computed<DisplayOrder[]>(() => {
                 item.createTime,
                 supplierDeliveryStatusText(item.status)
             ].join(' ').toLowerCase(),
-            raw: item
+            raw: item,
+            actions: ['detail']
         }));
     }
     return stationOrders.value.map((item) => {
@@ -287,7 +304,8 @@ const orders = computed<DisplayOrder[]>(() => {
                 pickupDate,
                 productText
             ].join(' ').toLowerCase(),
-            raw: item
+            raw: item,
+            actions: stationOrderActions(status)
         };
     });
 });
@@ -319,6 +337,11 @@ const placeholderText = computed(() => {
     return mode.value === 'summary' ? '搜索商品名称、规格、提货订单号、用户' : '搜索提货订单号、用户、手机号、商品';
 });
 
+onLoad((query) => {
+    applyInitialMode(query?.mode);
+    applyInitialFilters(query);
+});
+
 const filteredOrders = computed(() => {
     const query = keyword.value.trim().toLowerCase();
     return dateFilteredOrders.value.filter((order) => {
@@ -336,7 +359,7 @@ const summaries = computed<ProductSummary[]>(() => {
         return [];
     }
     const allowedOrders = new Set(dateFilteredOrders.value.map((item) => item.no));
-    const map = new Map<string, { key: string; title: string; spec: string; qty: number; amount: number; orders: Set<string>; users: Set<string> }>();
+    const map = new Map<string, { key: string; title: string; spec: string; image: string; qty: number; amount: number; orders: Set<string>; users: Set<string> }>();
     stationItems.value.forEach((item) => {
         const order = stationOrders.value.find((rowOrder) => rowOrder.id === item.orderId || rowOrder.orderNo === item.orderNo);
         if (selectedPickupDate.value !== 'all' && stationItemPickupDate(item, order) !== selectedPickupDate.value) return;
@@ -346,7 +369,8 @@ const summaries = computed<ProductSummary[]>(() => {
         const title = item.productName || `SKU #${item.skuId || item.id}`;
         const spec = item.skuName || '-';
         const key = productSummaryKey(title, spec);
-        const row = map.get(key) || { key, title, spec, qty: 0, amount: 0, orders: new Set<string>(), users: new Set<string>() };
+        const row = map.get(key) || { key, title, spec, image: itemImage(item), qty: 0, amount: 0, orders: new Set<string>(), users: new Set<string>() };
+        if (!row.image) row.image = itemImage(item);
         row.qty += Number(item.qty || 0);
         row.amount += orderItemAmount(item);
         if (displayOrderNo) row.orders.add(displayOrderNo);
@@ -457,6 +481,7 @@ async function load() {
             const [orderPage, itemPage] = await Promise.all([pageStationOrders(query), pageStationOrderItems(query)]);
             stationOrders.value = orderPage.list || [];
             stationItems.value = itemPage.list || [];
+            await loadStationEntityName(query);
         }
     } catch (err) {
         error.value = friendlyErrorMessage(err, '订单加载失败，请稍后重试');
@@ -465,12 +490,43 @@ async function load() {
     }
 }
 
+async function loadStationEntityName(query: { stationId?: number; leaderId?: number }) {
+    entityName.value = profile.value.entity;
+    try {
+        const shouldShowLeader = currentSession.value.subjectType === 5 || (query.leaderId && !query.stationId);
+        if (shouldShowLeader && query.leaderId) {
+            const leader = await getLeaderDetail(Number(query.leaderId));
+            entityName.value = leader.leaderName || profile.value.entity;
+            setCurrentEntityName(entityName.value);
+            return;
+        }
+        if (query.stationId) {
+            const station = await getStationDetail(Number(query.stationId));
+            entityName.value = station.stationName || station.contactName || profile.value.entity;
+            setCurrentEntityName(entityName.value);
+        }
+    } catch {
+        entityName.value = profile.value.entity;
+    }
+}
+
 function openDetail(id: number) {
-    goPage(`/pages/orders/detail?id=${id}`);
+    const query = new URLSearchParams({
+        id: String(id),
+        returnMode: 'order'
+    });
+    const currentKeyword = keyword.value.trim();
+    if (currentKeyword) {
+        query.set('keyword', currentKeyword);
+    }
+    if (selectedPickupDate.value) {
+        query.set('pickupDate', selectedPickupDate.value);
+    }
+    goPage(`/pages/orders/detail?${query.toString()}`);
 }
 
 function openSummary(key: string) {
-    goPage(`/pages/orders/product-summary?key=${encodeURIComponent(key)}`);
+    goPage(`/pages/orders/product-summary?key=${encodeURIComponent(key)}&returnMode=summary`);
 }
 
 function openWarehouse(item: WarehouseSummary) {
@@ -482,6 +538,52 @@ function setSecondaryMode() {
     mode.value = secondaryMode.value;
 }
 
+function applyInitialMode(value?: string | number) {
+    const nextMode = String(value || '');
+    if (nextMode === 'order') {
+        mode.value = 'order';
+        return;
+    }
+    if (nextMode === secondaryMode.value) {
+        mode.value = secondaryMode.value;
+    }
+}
+
+function applyInitialFilters(query?: Record<string, unknown>) {
+    const nextKeyword = queryText(query?.keyword);
+    const nextPickupDate = queryText(query?.pickupDate);
+    if (nextKeyword) {
+        keyword.value = nextKeyword;
+    }
+    if (nextPickupDate) {
+        activeDate.value = nextPickupDate;
+    }
+}
+
+function defaultOrderMode(): 'order' | 'summary' {
+    return currentRole.value === 'supplier' ? 'order' : 'summary';
+}
+
+function queryText(value: unknown) {
+    const raw = Array.isArray(value) ? String(value[0] || '') : String(value || '');
+    return safeDecode(raw);
+}
+
+function safeDecode(value: string) {
+    let text = value;
+    for (let i = 0; i < 2; i += 1) {
+        if (!/%[0-9A-Fa-f]{2}/.test(text)) break;
+        try {
+            const decoded = decodeURIComponent(text);
+            if (decoded === text) break;
+            text = decoded;
+        } catch {
+            break;
+        }
+    }
+    return text;
+}
+
 function changeDate(event: { detail?: { value?: number | string } }) {
     const index = Number(event.detail?.value || 0);
     activeDate.value = index <= 0 ? 'all' : dateOptions.value[index] || 'all';
@@ -490,6 +592,41 @@ function changeDate(event: { detail?: { value?: number | string } }) {
 function openNotifyPreview(order?: DisplayOrder) {
     const query = order?.no ? `?orderNo=${encodeURIComponent(order.no)}` : '';
     goPage(`/pages/store/notify-preview${query}`);
+}
+
+function runOrderAction(action: OrderAction, order: DisplayOrder) {
+    if (action === 'detail') {
+        openDetail(order.id);
+        return;
+    }
+    if (action === 'notify') {
+        openNotifyPreview(order);
+        return;
+    }
+    if (action === 'call') {
+        callUser(order);
+        return;
+    }
+    if (action === 'copy') {
+        copyMobile(order);
+    }
+}
+
+function orderActionLabel(action: OrderAction) {
+    const map: Record<OrderAction, string> = {
+        detail: '查看详情',
+        notify: '发送到货通知',
+        call: '拨打电话',
+        copy: '复制手机号'
+    };
+    return map[action];
+}
+
+function stationOrderActions(status: string): OrderAction[] {
+    if (status === '待提货') {
+        return ['detail', 'notify', 'call'];
+    }
+    return ['detail'];
 }
 
 function copyMobile(order: DisplayOrder) {
@@ -627,6 +764,10 @@ function supplierItemStatusText(status?: number) {
 
 function productSummaryKey(title: string, spec: string) {
     return `${title}__${spec}`;
+}
+
+function itemImage(item: StationOrderItemDTO | SupplierPurchaseItemDTO) {
+    return item.productImage || item.imageUrl || item.thumbUrl || item.picUrl || '';
 }
 
 function stationOrderPickupDate(order: StationOrderDTO, items: StationOrderItemDTO[]) {
@@ -1022,6 +1163,8 @@ uni-button.role-filter-clear {
 .role-order-actions {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
+  align-content: flex-start;
   flex-wrap: wrap;
   gap: 16rpx;
   margin-top: 18rpx;
@@ -1031,6 +1174,7 @@ uni-button.role-filter-clear {
 uni-button.role-action-btn {
   flex: 0 1 auto;
   min-height: 60rpx;
+  margin: 0;
   padding: 0 24rpx;
   border-radius: 999rpx;
   font-size: 24rpx;

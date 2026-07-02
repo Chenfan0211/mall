@@ -361,4 +361,37 @@ async function loadStations() {
   background: #eee7e2;
   border-color: #e2d7d0;
 }
+
+.entry-select-page .city-scroll {
+  overflow: visible;
+  white-space: normal;
+}
+
+.entry-select-page .city-chip-row.entry-city-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10rpx 8rpx;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 4rpx;
+  overflow: visible;
+  white-space: normal;
+}
+
+.entry-select-page .city-chip-row.entry-city-row .city-chip {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  min-height: 56rpx;
+  margin: 0;
+  padding: 0 18rpx;
+}
+
+.entry-select-page .city-chip-row.entry-city-row .city-chip.locating {
+  min-width: auto;
+  padding: 0 20rpx;
+}
 </style>

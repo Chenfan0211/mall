@@ -163,6 +163,10 @@ export interface UserProductCardDTO {
     salePrice: string;
     limitQty: number;
     availableQty: number;
+    skuCount?: number;
+    availableSkuCount?: number;
+    minSalePrice?: string | number;
+    maxSalePrice?: string | number;
     deliveryDate?: string;
 }
 

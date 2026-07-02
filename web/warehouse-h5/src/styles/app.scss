@@ -4871,3 +4871,4444 @@ button {
   font-size: 32rpx !important;
   line-height: 1.32 !important;
 }
+
+/* Receiver task detail goods card: final override for screenshot-level density. */
+.phone-shell.detail-page .task-goods-section {
+  padding: 22rpx 18rpx 16rpx !important;
+  border: 1rpx solid rgba(188, 218, 207, 0.88) !important;
+  border-radius: 18rpx !important;
+  background: #ffffff !important;
+  box-shadow: 0 8rpx 24rpx rgba(17, 85, 76, 0.06) !important;
+}
+
+.phone-shell.detail-page {
+  padding-bottom: 248rpx !important;
+}
+
+.phone-shell.detail-page .task-goods-section .section-head {
+  margin-bottom: 6rpx !important;
+}
+
+.phone-shell.detail-page .task-goods-list {
+  display: grid !important;
+  gap: 0 !important;
+  margin-top: 0 !important;
+}
+
+.phone-shell.detail-page .task-goods-row {
+  display: grid !important;
+  grid-template-columns: 92rpx minmax(0, 1fr) 112rpx !important;
+  gap: 14rpx !important;
+  align-items: start !important;
+  min-width: 0 !important;
+  padding: 20rpx 0 18rpx !important;
+  border-bottom: 1rpx solid #dce9e3 !important;
+}
+
+.phone-shell.detail-page .task-goods-row:last-child {
+  border-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.phone-shell.detail-page .task-goods-img {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 92rpx !important;
+  height: 92rpx !important;
+  border-radius: 16rpx !important;
+  overflow: hidden !important;
+  color: transparent !important;
+  font-size: 30rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  box-shadow: 0 8rpx 18rpx rgba(17, 85, 76, 0.16) !important;
+}
+
+.phone-shell.detail-page .task-goods-img::before,
+.phone-shell.detail-page .task-goods-img::after {
+  content: "";
+  position: absolute;
+  border-radius: 999rpx;
+  opacity: 0.72;
+}
+
+.phone-shell.detail-page .task-goods-img::before {
+  right: -16rpx;
+  bottom: -14rpx;
+  width: 62rpx;
+  height: 62rpx;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.phone-shell.detail-page .task-goods-img::after {
+  left: 12rpx;
+  top: 14rpx;
+  width: 34rpx;
+  height: 22rpx;
+  background: rgba(255, 255, 255, 0.44);
+  transform: rotate(-18deg);
+}
+
+.phone-shell.detail-page .task-goods-img.blue {
+  background:
+    radial-gradient(circle at 28% 24%, #ffffff 0 7rpx, transparent 8rpx),
+    radial-gradient(circle at 72% 28%, #f7633d 0 11rpx, transparent 12rpx),
+    radial-gradient(circle at 38% 72%, #355f86 0 18rpx, transparent 19rpx),
+    linear-gradient(135deg, #1769aa, #7fc8e2) !important;
+}
+
+.phone-shell.detail-page .task-goods-img.orange,
+.phone-shell.detail-page .task-goods-img.amber {
+  background:
+    radial-gradient(circle at 30% 34%, #ffd56d 0 15rpx, transparent 16rpx),
+    radial-gradient(circle at 70% 68%, #f28b28 0 18rpx, transparent 19rpx),
+    radial-gradient(circle at 72% 30%, #388559 0 6rpx, transparent 7rpx),
+    linear-gradient(135deg, #b45d16, #f2b44f) !important;
+}
+
+.phone-shell.detail-page .task-goods-img.yellow {
+  background:
+    radial-gradient(circle at 34% 32%, #f7d25d 0 18rpx, transparent 19rpx),
+    radial-gradient(circle at 72% 64%, #e7a71c 0 19rpx, transparent 20rpx),
+    radial-gradient(circle at 68% 26%, #6d9b45 0 7rpx, transparent 8rpx),
+    linear-gradient(135deg, #c98912, #f5ca55) !important;
+}
+
+.phone-shell.detail-page .task-goods-img.green,
+.phone-shell.detail-page .task-goods-img.teal {
+  background:
+    radial-gradient(circle at 31% 31%, #8ccf68 0 16rpx, transparent 17rpx),
+    radial-gradient(circle at 70% 65%, #2f7f50 0 19rpx, transparent 20rpx),
+    radial-gradient(circle at 75% 28%, #f5fff2 0 6rpx, transparent 7rpx),
+    linear-gradient(135deg, #117b6d, #91c76a) !important;
+}
+
+.phone-shell.detail-page .task-goods-img.purple {
+  background:
+    radial-gradient(circle at 32% 34%, #7c5bc7 0 18rpx, transparent 19rpx),
+    radial-gradient(circle at 70% 66%, #4e3a90 0 18rpx, transparent 19rpx),
+    radial-gradient(circle at 70% 28%, #d7cdfa 0 6rpx, transparent 7rpx),
+    linear-gradient(135deg, #6856ad, #b0a1ee) !important;
+}
+
+.phone-shell.detail-page .task-goods-img.rose {
+  background:
+    radial-gradient(circle at 31% 31%, #e65d52 0 17rpx, transparent 18rpx),
+    radial-gradient(circle at 70% 66%, #aa2f28 0 18rpx, transparent 19rpx),
+    radial-gradient(circle at 72% 28%, #ffe0db 0 6rpx, transparent 7rpx),
+    linear-gradient(135deg, #b43c31, #dc7a6d) !important;
+}
+
+.phone-shell.detail-page .task-goods-main {
+  display: grid !important;
+  min-width: 0 !important;
+  gap: 6rpx !important;
+  padding-top: 1rpx !important;
+}
+
+.phone-shell.detail-page .task-goods-title {
+  display: block !important;
+  min-width: 0 !important;
+  color: #122523 !important;
+  font-size: 27rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.18 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-line {
+  display: block !important;
+  min-width: 0 !important;
+  color: #31534f !important;
+  font-size: 22rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-barcode {
+  display: block !important;
+  min-width: 0 !important;
+  margin-top: 5rpx !important;
+  color: #071312 !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-qty {
+  align-self: stretch !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8rpx !important;
+  align-items: end !important;
+  min-width: 0 !important;
+  padding-top: 52rpx !important;
+}
+
+.phone-shell.detail-page .task-goods-qty view {
+  display: grid !important;
+  gap: 2rpx !important;
+  min-width: 0 !important;
+  text-align: center !important;
+}
+
+.phone-shell.detail-page .task-goods-qty text:first-child,
+.phone-shell.detail-page .task-goods-qty uni-text:first-child {
+  color: #31534f !important;
+  font-size: 21rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-qty text:last-child,
+.phone-shell.detail-page .task-goods-qty uni-text:last-child {
+  color: #061110 !important;
+  font-size: 27rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.05 !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-editor,
+.phone-shell.detail-page .task-goods-actions,
+.phone-shell.detail-page .task-goods-shortage {
+  grid-column: 2 / -1 !important;
+  margin-top: 10rpx !important;
+}
+
+.phone-shell.detail-page .detail-floating-action {
+  position: fixed;
+  left: max(20rpx, calc((100vw - 375px) / 2 + 16px));
+  right: max(20rpx, calc((100vw - 375px) / 2 + 16px));
+  bottom: calc(max(8rpx, env(safe-area-inset-bottom)) + 126rpx);
+  z-index: 120;
+  max-width: 343px;
+  margin: 0 auto;
+}
+
+.phone-shell.detail-page .detail-floating-action .primary {
+  width: 100% !important;
+  min-height: 80rpx !important;
+  border-radius: 22rpx !important;
+  font-size: 31rpx !important;
+  font-weight: 900 !important;
+  box-shadow: 0 16rpx 30rpx rgba(17, 123, 109, 0.28) !important;
+}
+
+/* Warehouse H5 prototype convergence. Visual-only: do not change Vue logic. */
+.page.phone-shell {
+  width: min(100vw, 375px) !important;
+  max-width: 375px !important;
+  min-height: 100vh !important;
+  margin: 0 auto !important;
+  padding: 0 0 192rpx !important;
+  overflow-x: hidden !important;
+  color: #173b3a !important;
+  background:
+    linear-gradient(180deg, rgba(18, 112, 101, 0.07) 0 1rpx, transparent 1rpx 52rpx),
+    linear-gradient(90deg, rgba(18, 112, 101, 0.05) 0 1rpx, transparent 1rpx 52rpx),
+    linear-gradient(180deg, #edf6f2 0%, #f8fbf7 48%, #eef3ee 100%) !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell .warehouse-main {
+  padding: 24rpx !important;
+}
+
+.phone-shell.login-page {
+  padding: 0 0 28rpx !important;
+}
+
+.phone-shell.tasks-page,
+.phone-shell.receiver-tasks-page,
+.phone-shell.inventory-page,
+.phone-shell.mine-page,
+.phone-shell.roles-page,
+.phone-shell.workbench-page {
+  padding-bottom: 192rpx !important;
+}
+
+.phone-shell.detail-page {
+  padding-bottom: 252rpx !important;
+}
+
+.phone-shell .warehouse-top,
+.phone-shell .warehouse-work-head,
+.phone-shell .manager-top,
+.phone-shell .receiver-task-top {
+  margin: 0 !important;
+  color: #ffffff !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0 1rpx, transparent 1rpx 24rpx),
+    linear-gradient(135deg, #073e3d 0%, #0f766b 55%, #2a9d7a 100%) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+.phone-shell .warehouse-work-head {
+  min-height: 200rpx !important;
+  padding: 16rpx 28rpx 28rpx !important;
+}
+
+.phone-shell .warehouse-top {
+  min-height: 0 !important;
+  padding: 16rpx 28rpx 68rpx !important;
+}
+
+.phone-shell.login-page .login-hero {
+  margin: 0 !important;
+  padding: 16rpx 28rpx 68rpx !important;
+  border-radius: 0 !important;
+}
+
+.phone-shell .receiver-task-top {
+  padding: 16rpx 28rpx 28rpx !important;
+  border-radius: 0 !important;
+}
+
+.phone-shell .status-row {
+  min-height: 40rpx !important;
+  margin-bottom: 14rpx !important;
+  color: inherit !important;
+  font-size: 22rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.25 !important;
+}
+
+.phone-shell .warehouse-work-title,
+.phone-shell .detail-title-row,
+.phone-shell .receiver-task-title-row {
+  gap: 20rpx !important;
+  margin-top: 14rpx !important;
+}
+
+.phone-shell .warehouse-work-title .title,
+.phone-shell .warehouse-top .title,
+.phone-shell .receiver-task-title,
+.phone-shell .detail-title-row .title,
+.phone-shell .manager-top-title text {
+  color: inherit !important;
+  font-size: 44rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell .warehouse-work-title .subtle,
+.phone-shell .warehouse-top .subtle,
+.phone-shell .receiver-task-sub,
+.phone-shell .detail-title-row .subtle {
+  color: rgba(255, 255, 255, 0.92) !important;
+  margin-top: 12rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.45 !important;
+}
+
+.phone-shell .role-badge,
+.phone-shell .manager-capsule,
+.phone-shell .receiver-task-badge {
+  min-height: 56rpx !important;
+  padding: 0 20rpx !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 0 !important;
+  border-radius: 999rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+  line-height: 56rpx !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell .section,
+.phone-shell .warehouse-section,
+.phone-shell .warehouse-task-card,
+.phone-shell .task-card,
+.phone-shell .receiver-task-card,
+.phone-shell .warehouse-profile-card,
+.phone-shell .inventory-card,
+.phone-shell .warehouse-stock-card,
+.phone-shell .driver-order-card,
+.phone-shell .station-card,
+.phone-shell .role-card,
+.phone-shell .role-matrix-card,
+.phone-shell .manager-status-overview,
+.phone-shell .task-goods-section {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1rpx solid rgba(196, 218, 210, 0.7) !important;
+  border-radius: 32rpx !important;
+  box-shadow: 0 6rpx 20rpx rgba(17, 85, 76, 0.07) !important;
+}
+
+.phone-shell .section,
+.phone-shell .warehouse-section,
+.phone-shell .warehouse-profile-card,
+.phone-shell .manager-status-overview {
+  margin: 0 0 24rpx !important;
+  padding: 28rpx !important;
+}
+
+.phone-shell .warehouse-section-head,
+.phone-shell .section-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 20rpx !important;
+  margin-bottom: 24rpx !important;
+}
+
+.phone-shell .section-title,
+.phone-shell .warehouse-section-head .section-title,
+.phone-shell .section-head .section-title,
+.phone-shell .login-panel .section-title {
+  color: #173b3a !important;
+  font-size: 34rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell .section-sub,
+.phone-shell .task-sub,
+.phone-shell .task-note,
+.phone-shell .warehouse-task-desc,
+.phone-shell .goods-line,
+.phone-shell .goods-sub,
+.phone-shell .inventory-sub,
+.phone-shell .profile-line,
+.phone-shell .mine-sub,
+.phone-shell .record-row,
+.phone-shell .warehouse-record-meta,
+.phone-shell .warehouse-pick-line,
+.phone-shell .location-line {
+  color: #66847c !important;
+  font-size: 24rpx !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+}
+
+.phone-shell .warehouse-kpis {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 18rpx !important;
+  margin: 0 0 24rpx !important;
+}
+
+.phone-shell .warehouse-kpi {
+  min-height: 122rpx !important;
+  padding: 26rpx 20rpx !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  border-radius: 24rpx !important;
+  text-align: left !important;
+  box-shadow: 0 12rpx 22rpx rgba(17, 85, 76, 0.12) !important;
+}
+
+.phone-shell .warehouse-kpi:nth-child(1) { background: linear-gradient(135deg, #117b6d, #1aa18c) !important; }
+.phone-shell .warehouse-kpi:nth-child(2) { background: linear-gradient(135deg, #2f7f50, #7fb447) !important; }
+.phone-shell .warehouse-kpi:nth-child(3) { background: linear-gradient(135deg, #a36d14, #e0a432) !important; }
+
+.phone-shell .warehouse-kpi text:first-child,
+.phone-shell .warehouse-kpi uni-text:first-child {
+  color: #ffffff !important;
+  font-size: 40rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.phone-shell .warehouse-kpi text:last-child,
+.phone-shell .warehouse-kpi uni-text:last-child {
+  display: block !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  margin-top: 8rpx !important;
+  font-size: 22rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+}
+
+.phone-shell .warehouse-task-list,
+.phone-shell .warehouse-order-list,
+.phone-shell .task-list,
+.phone-shell .page-list,
+.phone-shell .receiver-task-list,
+.phone-shell .inventory-list,
+.phone-shell .log-list,
+.phone-shell .goods-list,
+.phone-shell .role-list,
+.phone-shell .permission-list {
+  display: grid !important;
+  gap: 20rpx !important;
+}
+
+.phone-shell .warehouse-task,
+.phone-shell .warehouse-home-task-card {
+  width: 100% !important;
+  padding: 24rpx !important;
+  color: #173b3a !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d9e9e3 !important;
+  border-radius: 24rpx !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+.phone-shell .warehouse-task-title,
+.phone-shell .task-title,
+.phone-shell .receiver-card-no,
+.phone-shell .sku-title,
+.phone-shell .profile-name,
+.phone-shell .inventory-title,
+.phone-shell .mine-title {
+  color: #173b3a !important;
+  font-size: 28rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.35 !important;
+}
+
+.phone-shell .status-pill,
+.phone-shell .receiver-status-pill,
+.phone-shell .filter-chip,
+.phone-shell .date-chip,
+.phone-shell .data-source-chip {
+  min-height: 48rpx !important;
+  padding: 0 20rpx !important;
+  border-radius: 999rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+  line-height: 48rpx !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell .home-task-meta,
+.phone-shell .task-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 14rpx !important;
+  margin-top: 20rpx !important;
+}
+
+.phone-shell .home-task-meta text,
+.phone-shell .task-meta text {
+  color: #66847c !important;
+  background: #f1f7f4 !important;
+  border-radius: 18rpx !important;
+  padding: 10rpx 14rpx !important;
+  font-size: 22rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+.phone-shell .home-task-foot,
+.phone-shell .task-foot,
+.phone-shell .action-row {
+  margin-top: 20rpx !important;
+}
+
+.phone-shell .home-task-action,
+.phone-shell .primary,
+.phone-shell .plain,
+.phone-shell .danger,
+.phone-shell .full-btn,
+.phone-shell .receiver-detail-btn,
+.phone-shell .receiver-primary-btn,
+.phone-shell .login-btn,
+.phone-shell .forgot-btn {
+  min-height: 64rpx !important;
+  padding: 0 28rpx !important;
+  border-radius: 999rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell.workbench-page .receiver-todo-summary {
+  display: grid !important;
+  gap: 18rpx !important;
+}
+
+.phone-shell.workbench-page .receiver-todo-card {
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 18rpx !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-height: 88rpx !important;
+  padding: 20rpx 22rpx !important;
+  color: #173b3a !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d9e9e3 !important;
+  border-radius: 24rpx !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.workbench-page .receiver-todo-label {
+  flex: 0 0 auto !important;
+  color: #173b3a !important;
+  font-size: 28rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.25 !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.workbench-page .receiver-todo-desc {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: flex-end !important;
+  gap: 2rpx !important;
+  min-width: 0 !important;
+  color: #66847c !important;
+  margin-top: 0 !important;
+  font-size: 23rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  text-align: right !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.workbench-page .receiver-todo-count {
+  flex: 0 0 auto !important;
+  color: #0d7669 !important;
+  font-size: 32rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.phone-shell.workbench-page .receiver-todo-action {
+  display: none !important;
+}
+
+.phone-shell .receiver-filter-panel {
+  gap: 20rpx !important;
+  margin: 0 24rpx 24rpx !important;
+  padding: 8rpx !important;
+  background: linear-gradient(135deg, #eaf4ef, #e0ede7) !important;
+  border: 1rpx solid #cfe4dc !important;
+  border-radius: 32rpx !important;
+  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.8), 0 2rpx 8rpx rgba(17, 85, 76, 0.04) !important;
+}
+
+.phone-shell .receiver-task-card,
+.phone-shell .warehouse-task-card,
+.phone-shell .driver-order-card {
+  padding: 28rpx !important;
+  border-radius: 32rpx !important;
+  box-shadow: 0 4rpx 16rpx rgba(17, 85, 76, 0.06) !important;
+}
+
+.phone-shell .receiver-task-list,
+.phone-shell.tasks-page .warehouse-order-list,
+.phone-shell.tasks-page .task-list,
+.phone-shell.tasks-page .page-list {
+  padding-right: 24rpx !important;
+  padding-left: 24rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page > .section,
+.phone-shell.detail-page > .task-goods-section,
+.phone-shell.detail-page > .receipt-section,
+.phone-shell.detail-page > .quality-card {
+  width: calc(100% - 48rpx) !important;
+  margin-right: 24rpx !important;
+  margin-left: 24rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell .receiver-task-card,
+.phone-shell.tasks-page .warehouse-task-card,
+.phone-shell.tasks-page .task-card,
+.phone-shell.tasks-page .driver-order-card {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell .receiver-card-stats {
+  gap: 16rpx !important;
+}
+
+.phone-shell .receiver-card-stats view,
+.phone-shell .task-summary view,
+.phone-shell .detail-grid view,
+.phone-shell .quantity-confirm view,
+.phone-shell .inventory-summary view,
+.phone-shell .inventory-counts view,
+.phone-shell .stat-grid view {
+  min-width: 0 !important;
+  padding: 20rpx !important;
+  background: linear-gradient(135deg, #f3faf6, #e8f5ef) !important;
+  border: 1rpx solid rgba(196, 218, 210, 0.5) !important;
+  border-radius: 24rpx !important;
+}
+
+.phone-shell .receiver-card-stats text:first-child,
+.phone-shell .task-summary text:first-child,
+.phone-shell .detail-grid text:last-child,
+.phone-shell .quantity-confirm text:first-child,
+.phone-shell .inventory-summary text:first-child,
+.phone-shell .inventory-counts text:first-child,
+.phone-shell .stat-grid text:first-child {
+  color: #173b3a !important;
+  font-size: 34rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+}
+
+.phone-shell .receiver-card-stats text:last-child,
+.phone-shell .task-summary text:last-child,
+.phone-shell .detail-grid text:first-child,
+.phone-shell .quantity-confirm text:last-child,
+.phone-shell .inventory-summary text:last-child,
+.phone-shell .inventory-counts text:last-child,
+.phone-shell .stat-grid text:last-child {
+  color: #66847c !important;
+  font-size: 22rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+.phone-shell .log-list text,
+.phone-shell .log-list uni-text {
+  display: block !important;
+  padding: 18rpx 20rpx !important;
+  color: #4a6b64 !important;
+  background: #f6fbf8 !important;
+  border: 1rpx solid #dceee7 !important;
+  border-radius: 24rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.45 !important;
+}
+
+.phone-shell.login-page .login-main {
+  position: relative !important;
+  z-index: 2 !important;
+  display: grid !important;
+  gap: 24rpx !important;
+  padding: 0 28rpx 28rpx !important;
+  margin-top: -16rpx !important;
+}
+
+.phone-shell.login-page .login-panel {
+  margin: 0 !important;
+  padding: 24rpx 28rpx !important;
+  border-radius: 32rpx !important;
+}
+
+.phone-shell.login-page .login-panel.role-panel {
+  padding: 24rpx 28rpx !important;
+}
+
+.phone-shell.login-page .login-role-collapsed {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 20rpx !important;
+}
+
+.phone-shell.login-page .login-current-role {
+  min-height: 52rpx !important;
+  padding: 0 18rpx !important;
+  color: #0f766b !important;
+  background: #e9f6f1 !important;
+  border-radius: 999rpx !important;
+  font-size: 24rpx !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.login-page .login-role-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16rpx !important;
+  padding-top: 24rpx !important;
+}
+
+.phone-shell.login-page .login-role-option {
+  min-height: 76rpx !important;
+  padding: 16rpx 12rpx !important;
+  border-radius: 24rpx !important;
+  background: #f5fbf8 !important;
+  border: 1rpx solid #c7ded6 !important;
+  color: #245a54 !important;
+  font-size: 24rpx !important;
+}
+
+.phone-shell.login-page .login-role-option.active {
+  color: #ffffff !important;
+  background: #117b6d !important;
+  border-color: #117b6d !important;
+  box-shadow: 0 8rpx 16rpx rgba(17, 123, 109, 0.22) !important;
+}
+
+.phone-shell.login-page .login-role-icon {
+  width: 28rpx !important;
+  height: 28rpx !important;
+}
+
+.phone-shell.login-page .form-row {
+  display: grid !important;
+  grid-template-columns: 116rpx minmax(0, 1fr) !important;
+  gap: 16rpx !important;
+  align-items: center !important;
+  min-height: 84rpx !important;
+  padding: 0 24rpx !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d6e5df !important;
+  border-radius: 24rpx !important;
+}
+
+.phone-shell.login-page .form-row text,
+.phone-shell.login-page .form-row input {
+  color: #5c7770 !important;
+  font-size: 24rpx !important;
+  font-weight: 800 !important;
+}
+
+.phone-shell.login-page .login-btn {
+  width: 100% !important;
+  min-height: 92rpx !important;
+  margin-top: 20rpx !important;
+  border-radius: 999rpx !important;
+  font-size: 30rpx !important;
+  box-shadow: 0 10rpx 20rpx rgba(17, 123, 109, 0.22) !important;
+}
+
+.phone-shell.login-page .forgot-btn {
+  width: 100% !important;
+  min-height: 64rpx !important;
+  color: #117b6d !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.phone-shell .warehouse-bottom {
+  position: fixed !important;
+  left: max(20rpx, calc((100vw - 375px) / 2 + 20px)) !important;
+  right: max(20rpx, calc((100vw - 375px) / 2 + 20px)) !important;
+  bottom: max(14rpx, env(safe-area-inset-bottom)) !important;
+  z-index: 90 !important;
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: minmax(0, 1fr) !important;
+  gap: 8rpx !important;
+  height: 108rpx !important;
+  max-width: 335px !important;
+  padding: 8rpx !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1rpx solid rgba(190, 219, 207, 0.92) !important;
+  border-radius: 36rpx !important;
+  box-shadow: 0 -12rpx 28rpx rgba(17, 85, 76, 0.16) !important;
+  backdrop-filter: blur(14rpx) !important;
+}
+
+.phone-shell .warehouse-nav-btn {
+  display: grid !important;
+  place-items: center !important;
+  align-content: center !important;
+  gap: 4rpx !important;
+  height: 90rpx !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 28rpx !important;
+  color: #73908a !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.phone-shell .warehouse-nav-btn.active {
+  color: #117b6d !important;
+  background: #edf8f4 !important;
+}
+
+.phone-shell .warehouse-nav-icon {
+  width: 40rpx !important;
+  height: 40rpx !important;
+  border-radius: 14rpx !important;
+  background: transparent !important;
+}
+
+.phone-shell .warehouse-nav-icon svg {
+  width: 28rpx !important;
+  height: 28rpx !important;
+}
+
+.phone-shell .warehouse-nav-btn text,
+.phone-shell .warehouse-nav-btn uni-text,
+.phone-shell .warehouse-bottom text,
+.phone-shell .warehouse-bottom uni-text {
+  color: currentColor !important;
+  font-size: 22rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.12 !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell .manager-top {
+  padding: 16rpx 28rpx 28rpx !important;
+}
+
+.phone-shell .manager-home-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 18rpx !important;
+  padding: 24rpx !important;
+}
+
+.phone-shell .manager-action-card {
+  min-height: 120rpx !important;
+  padding: 20rpx 14rpx !important;
+  border-radius: 24rpx !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1rpx solid rgba(196, 218, 210, 0.7) !important;
+  box-shadow: 0 6rpx 18rpx rgba(17, 85, 76, 0.06) !important;
+}
+
+.phone-shell .task-goods-section {
+  padding: 28rpx !important;
+  border-radius: 28rpx !important;
+}
+
+.phone-shell.detail-page .detail-floating-action {
+  left: max(28rpx, calc((100vw - 375px) / 2 + 18px)) !important;
+  right: max(28rpx, calc((100vw - 375px) / 2 + 18px)) !important;
+  bottom: calc(max(14rpx, env(safe-area-inset-bottom)) + 124rpx) !important;
+  max-width: 339px !important;
+}
+
+.phone-shell.detail-page .detail-floating-action .primary {
+  min-height: 96rpx !important;
+  border-radius: 32rpx !important;
+  font-size: 30rpx !important;
+}
+
+/* Warehouse H5 remaining prototype gap pass. Visual-only overrides. */
+.phone-shell.inventory-page > .section,
+.phone-shell.mine-page > .section,
+.phone-shell.roles-page > .section,
+.phone-shell.detail-page > .section {
+  width: calc(100% - 48rpx) !important;
+  margin: 24rpx 24rpx 0 !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.inventory-page > .section:first-of-type,
+.phone-shell.mine-page > .section:first-of-type,
+.phone-shell.roles-page > .section:first-of-type,
+.phone-shell.detail-page > .section:first-of-type {
+  margin-top: 24rpx !important;
+}
+
+.phone-shell .filter-bar,
+.phone-shell .warehouse-record-tools,
+.phone-shell .driver-stats-filter {
+  width: calc(100% - 48rpx) !important;
+  margin: 24rpx 24rpx 20rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell .filter-bar {
+  grid-template-columns: minmax(0, 1fr) 156rpx 124rpx !important;
+  gap: 12rpx !important;
+}
+
+.phone-shell.inventory-page .inventory-filter {
+  grid-template-columns: minmax(0, 1fr) 144rpx !important;
+  margin-top: 24rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-filter {
+  grid-template-columns: minmax(0, 1fr) 176rpx !important;
+}
+
+.phone-shell .search-box,
+.phone-shell .warehouse-record-search,
+.phone-shell .warehouse-record-filter,
+.phone-shell .filter-chip,
+.phone-shell .date-chip,
+.phone-shell .receiver-search-box,
+.phone-shell .receiver-date-chip {
+  min-height: 72rpx !important;
+  border-radius: 20rpx !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+}
+
+.phone-shell .search-box,
+.phone-shell .warehouse-record-search {
+  padding: 0 16rpx !important;
+}
+
+.phone-shell .search-box input,
+.phone-shell .warehouse-record-search input,
+.phone-shell .receiver-search-box input {
+  min-width: 0 !important;
+  font-size: 23rpx !important;
+  font-weight: 700 !important;
+}
+
+.phone-shell .filter-chip,
+.phone-shell .date-chip,
+.phone-shell .warehouse-record-filter {
+  padding: 0 14rpx !important;
+  overflow: hidden !important;
+  text-align: center !important;
+  text-overflow: ellipsis !important;
+}
+
+.phone-shell .seg-tabs,
+.phone-shell .driver-tabs,
+.phone-shell .driver-mode-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10rpx !important;
+  margin: 20rpx 0 0 !important;
+}
+
+.phone-shell .driver-tabs,
+.phone-shell .driver-mode-tabs {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  width: calc(100% - 48rpx) !important;
+  margin: 22rpx 24rpx 20rpx !important;
+}
+
+.phone-shell .driver-mode-tabs {
+  width: 100% !important;
+  margin: 0 0 20rpx !important;
+}
+
+.phone-shell .seg-tabs button,
+.phone-shell .driver-tabs button,
+.phone-shell .driver-mode-tabs button {
+  min-height: 64rpx !important;
+  padding: 0 12rpx !important;
+  border-radius: 18rpx !important;
+  font-size: 22rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.15 !important;
+}
+
+.phone-shell.inventory-page .inventory-summary,
+.phone-shell.mine-page .driver-stats-summary,
+.phone-shell .stat-grid,
+.phone-shell .inventory-counts,
+.phone-shell .driver-grid,
+.phone-shell .quantity-confirm,
+.phone-shell .detail-grid {
+  gap: 12rpx !important;
+}
+
+.phone-shell.inventory-page .inventory-summary {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  padding: 20rpx !important;
+}
+
+.phone-shell.inventory-page .inventory-list,
+.phone-shell.mine-page .driver-list,
+.phone-shell.roles-page .role-matrix-list {
+  width: calc(100% - 48rpx) !important;
+  margin: 0 24rpx !important;
+  display: grid !important;
+  gap: 18rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.inventory-page .inventory-card,
+.phone-shell.inventory-page .stocktake-row,
+.phone-shell.mine-page .driver-stats-card,
+.phone-shell .warehouse-record-item,
+.phone-shell.roles-page .role-matrix-card,
+.phone-shell .station-card,
+.phone-shell .driver-map-card,
+.phone-shell .driver-map-stop,
+.phone-shell .goods-card,
+.phone-shell .task-goods-row {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1rpx solid rgba(196, 218, 210, 0.72) !important;
+  border-radius: 24rpx !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.055) !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.inventory-page .inventory-card,
+.phone-shell.mine-page .driver-stats-card,
+.phone-shell .warehouse-record-item,
+.phone-shell .station-card,
+.phone-shell .driver-map-card {
+  padding: 22rpx !important;
+}
+
+.phone-shell.inventory-page .inventory-head,
+.phone-shell .task-head,
+.phone-shell .driver-card-head,
+.phone-shell .warehouse-record-title-row,
+.phone-shell.roles-page .role-matrix-head {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 14rpx !important;
+}
+
+.phone-shell.inventory-page .location-line {
+  margin-top: 14rpx !important;
+  padding: 12rpx 14rpx !important;
+  border-radius: 16rpx !important;
+}
+
+.phone-shell .inventory-counts {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  margin-top: 16rpx !important;
+}
+
+.phone-shell .inventory-counts view,
+.phone-shell .driver-grid view,
+.phone-shell .driver-stats-meta view,
+.phone-shell .warehouse-receive-counts view,
+.phone-shell .quantity-confirm view,
+.phone-shell .detail-grid view,
+.phone-shell .quality-grid view,
+.phone-shell .receipt-mini view {
+  min-width: 0 !important;
+  padding: 16rpx 12rpx !important;
+  border-radius: 18rpx !important;
+  background: linear-gradient(135deg, #f6fbf8, #edf8f4) !important;
+  border: 1rpx solid rgba(196, 218, 210, 0.62) !important;
+}
+
+.phone-shell.inventory-page .stocktake-panel {
+  padding: 24rpx !important;
+}
+
+.phone-shell.inventory-page .stocktake-list {
+  gap: 14rpx !important;
+}
+
+.phone-shell.inventory-page .stocktake-row {
+  grid-template-columns: 52rpx minmax(0, 1fr) 126rpx !important;
+  gap: 12rpx !important;
+  padding: 16rpx !important;
+}
+
+.phone-shell.inventory-page .stocktake-check {
+  width: 48rpx !important;
+  height: 48rpx !important;
+  border-radius: 14rpx !important;
+}
+
+.phone-shell.inventory-page .stocktake-qty input {
+  min-height: 54rpx !important;
+  border-radius: 14rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-summary {
+  width: calc(100% - 48rpx) !important;
+  margin: 0 24rpx 20rpx !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.mine-page .driver-stats-summary view,
+.phone-shell .stat-grid view {
+  min-height: 100rpx !important;
+  padding: 18rpx 12rpx !important;
+  border-radius: 22rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-meta {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+  margin-top: 18rpx !important;
+}
+
+.phone-shell .warehouse-profile-link {
+  min-height: 104rpx !important;
+  padding: 18rpx 20rpx !important;
+}
+
+.phone-shell .warehouse-profile-link-icon,
+.phone-shell .warehouse-record-thumb,
+.phone-shell .role-icon-lg,
+.phone-shell .role-icon-sm {
+  box-shadow: 0 8rpx 18rpx rgba(17, 123, 109, 0.14) !important;
+}
+
+.phone-shell .warehouse-profile-link-icon,
+.phone-shell .warehouse-record-thumb {
+  width: 68rpx !important;
+  height: 68rpx !important;
+  flex-basis: 68rpx !important;
+  border-radius: 18rpx !important;
+}
+
+.phone-shell .warehouse-record-tools {
+  grid-template-columns: minmax(0, 1fr) 154rpx !important;
+  gap: 10rpx !important;
+  margin: 0 0 18rpx !important;
+  width: 100% !important;
+}
+
+.phone-shell .warehouse-receive-record-tools {
+  grid-template-columns: minmax(0, 1fr) 122rpx 122rpx !important;
+}
+
+.phone-shell .warehouse-record-list {
+  gap: 14rpx !important;
+  margin-top: 0 !important;
+}
+
+.phone-shell .warehouse-record-item {
+  grid-template-columns: 68rpx minmax(0, 1fr) !important;
+  gap: 14rpx !important;
+}
+
+.phone-shell .warehouse-receive-counts {
+  gap: 8rpx !important;
+  margin-top: 12rpx !important;
+}
+
+.phone-shell.roles-page .roles-current {
+  display: grid !important;
+  grid-template-columns: 78rpx minmax(0, 1fr) !important;
+  gap: 18rpx !important;
+  align-items: center !important;
+  padding: 24rpx !important;
+}
+
+.phone-shell.roles-page .role-icon-lg {
+  width: 78rpx !important;
+  height: 78rpx !important;
+  border-radius: 24rpx !important;
+}
+
+.phone-shell.roles-page .role-icon-sm {
+  width: 56rpx !important;
+  height: 56rpx !important;
+  border-radius: 18rpx !important;
+}
+
+.phone-shell.roles-page .role-icon-lg svg {
+  width: 42rpx !important;
+  height: 42rpx !important;
+}
+
+.phone-shell.roles-page .role-icon-sm svg {
+  width: 30rpx !important;
+  height: 30rpx !important;
+}
+
+.phone-shell.roles-page .role-matrix-card {
+  width: 100% !important;
+  padding: 20rpx !important;
+  text-align: left !important;
+}
+
+.phone-shell.roles-page .role-matrix-card.active {
+  border-color: rgba(17, 123, 109, 0.42) !important;
+  box-shadow: 0 8rpx 20rpx rgba(17, 123, 109, 0.1) !important;
+}
+
+.phone-shell.roles-page .role-actions-strip {
+  display: none !important;
+}
+
+.phone-shell.tasks-page .warehouse-order-list,
+.phone-shell.tasks-page .task-list,
+.phone-shell.tasks-page .page-list {
+  gap: 18rpx !important;
+  padding: 0 24rpx !important;
+}
+
+.phone-shell.tasks-page .warehouse-task-card,
+.phone-shell.tasks-page .driver-order-card,
+.phone-shell.tasks-page .task-card {
+  padding: 24rpx !important;
+  border-radius: 26rpx !important;
+}
+
+.phone-shell.tasks-page .task-summary {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+  margin-top: 18rpx !important;
+}
+
+.phone-shell.tasks-page .task-meta {
+  gap: 10rpx !important;
+  margin-top: 16rpx !important;
+}
+
+.phone-shell.tasks-page .task-meta text,
+.phone-shell.detail-page .task-meta text {
+  padding: 8rpx 12rpx !important;
+  border-radius: 14rpx !important;
+  font-size: 21rpx !important;
+}
+
+.phone-shell .driver-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  margin-top: 18rpx !important;
+}
+
+.phone-shell .driver-grid view {
+  min-height: 92rpx !important;
+}
+
+.phone-shell .action-row,
+.phone-shell .action-grid {
+  gap: 12rpx !important;
+  margin-top: 18rpx !important;
+}
+
+.phone-shell .action-grid.compact {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.phone-shell .plain,
+.phone-shell .primary,
+.phone-shell .danger,
+.phone-shell .mini-btn {
+  min-width: 0 !important;
+  min-height: 62rpx !important;
+  padding: 0 20rpx !important;
+  border-radius: 999rpx !important;
+  font-size: 23rpx !important;
+}
+
+.phone-shell.detail-page .task-basic-section,
+.phone-shell.detail-page .task-goods-section,
+.phone-shell.detail-page .quality-card,
+.phone-shell.detail-page .receipt-section {
+  padding: 24rpx !important;
+  border-radius: 28rpx !important;
+}
+
+.phone-shell.detail-page .area-options {
+  display: grid !important;
+  gap: 14rpx !important;
+  margin-top: 18rpx !important;
+}
+
+.phone-shell.detail-page .area-card {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16rpx !important;
+  width: 100% !important;
+  min-height: 84rpx !important;
+  padding: 18rpx 20rpx !important;
+  border-radius: 22rpx !important;
+  text-align: left !important;
+}
+
+.phone-shell.detail-page .task-goods-list,
+.phone-shell.detail-page .goods-list,
+.phone-shell.detail-page .station-list,
+.phone-shell.detail-page .driver-map-stops {
+  display: grid !important;
+  gap: 16rpx !important;
+}
+
+.phone-shell.detail-page .task-goods-row {
+  display: grid !important;
+  grid-template-columns: 76rpx minmax(0, 1fr) auto !important;
+  gap: 14rpx !important;
+  align-items: start !important;
+  padding: 18rpx !important;
+}
+
+.phone-shell.detail-page .task-goods-img,
+.phone-shell.detail-page .goods-img,
+.phone-shell.detail-page .receipt-photo {
+  width: 76rpx !important;
+  height: 76rpx !important;
+  border-radius: 20rpx !important;
+  box-shadow: 0 8rpx 18rpx rgba(17, 85, 76, 0.12) !important;
+}
+
+.phone-shell.detail-page .task-goods-title {
+  font-size: 27rpx !important;
+  line-height: 1.25 !important;
+}
+
+.phone-shell.detail-page .task-goods-line,
+.phone-shell.detail-page .task-goods-barcode,
+.phone-shell.detail-page .goods-line {
+  margin-top: 5rpx !important;
+  font-size: 21rpx !important;
+  line-height: 1.35 !important;
+}
+
+.phone-shell.detail-page .task-goods-qty {
+  display: grid !important;
+  gap: 8rpx !important;
+  min-width: 92rpx !important;
+}
+
+.phone-shell.detail-page .task-goods-qty view {
+  padding: 8rpx 10rpx !important;
+  background: #f2faf6 !important;
+  border: 1rpx solid #dceee7 !important;
+  border-radius: 14rpx !important;
+  text-align: center !important;
+}
+
+.phone-shell.detail-page .qty-editor,
+.phone-shell.detail-page .location-actions,
+.phone-shell.detail-page .task-goods-shortage {
+  grid-column: 1 / -1 !important;
+  margin-top: 12rpx !important;
+}
+
+.phone-shell.detail-page .qty-editor {
+  display: grid !important;
+  grid-template-columns: 64rpx minmax(0, 1fr) 64rpx !important;
+  gap: 10rpx !important;
+  align-items: center !important;
+}
+
+.phone-shell.detail-page .qty-editor button,
+.phone-shell.detail-page .qty-editor input {
+  min-height: 60rpx !important;
+  border-radius: 18rpx !important;
+}
+
+.phone-shell.detail-page .location-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+}
+
+.phone-shell.detail-page .shortage-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 112rpx !important;
+  gap: 12rpx !important;
+  align-items: center !important;
+  padding: 14rpx !important;
+  border-radius: 18rpx !important;
+}
+
+.phone-shell.detail-page .quality-grid,
+.phone-shell.detail-page .receipt-mini {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+}
+
+.phone-shell.detail-page .quality-card textarea {
+  width: 100% !important;
+  min-height: 132rpx !important;
+  margin-top: 18rpx !important;
+  padding: 18rpx !important;
+  border: 1rpx solid #d9e9e3 !important;
+  border-radius: 22rpx !important;
+  background: #f7fbf8 !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page .receipt-gallery {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+  margin-bottom: 18rpx !important;
+}
+
+.phone-shell.detail-page .receipt-photo {
+  width: 100% !important;
+  height: 132rpx !important;
+}
+
+.phone-shell.detail-page .detail-floating-action {
+  padding: 10rpx !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1rpx solid rgba(205, 231, 222, 0.96) !important;
+  border-radius: 36rpx !important;
+  box-shadow: 0 -12rpx 28rpx rgba(17, 85, 76, 0.16) !important;
+  backdrop-filter: blur(14rpx) !important;
+}
+
+.phone-shell.detail-page .detail-floating-action .primary {
+  min-height: 84rpx !important;
+  border-radius: 28rpx !important;
+}
+
+/* Warehouse H5 final remaining density pass. Visual-only. */
+.phone-shell.workbench-page.manager-home-page {
+  padding-bottom: 188rpx !important;
+}
+
+.phone-shell.workbench-page .manager-top {
+  min-height: 292rpx !important;
+  padding: 16rpx 28rpx 24rpx !important;
+}
+
+.phone-shell.workbench-page .manager-top-title {
+  align-items: center !important;
+  gap: 14rpx !important;
+  margin-top: 12rpx !important;
+}
+
+.phone-shell.workbench-page .manager-home-hero {
+  margin-top: 20rpx !important;
+  padding: 18rpx !important;
+  border-radius: 28rpx !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.phone-shell.workbench-page .manager-avatar {
+  width: 72rpx !important;
+  height: 72rpx !important;
+  border-radius: 22rpx !important;
+  font-size: 30rpx !important;
+}
+
+.phone-shell.workbench-page .manager-user-name {
+  gap: 10rpx !important;
+  font-size: 28rpx !important;
+}
+
+.phone-shell.workbench-page .manager-role-chip {
+  min-height: 38rpx !important;
+  padding: 0 12rpx !important;
+  border-radius: 999rpx !important;
+  font-size: 20rpx !important;
+}
+
+.phone-shell.workbench-page .manager-home-actions {
+  width: calc(100% - 48rpx) !important;
+  margin: 24rpx 24rpx 0 !important;
+  padding: 0 !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 14rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.workbench-page .manager-action-card {
+  min-height: 108rpx !important;
+  padding: 16rpx 10rpx !important;
+  border-radius: 22rpx !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.055) !important;
+}
+
+.phone-shell.workbench-page .manager-action-icon {
+  width: 46rpx !important;
+  height: 46rpx !important;
+  margin-bottom: 8rpx !important;
+  border-radius: 16rpx !important;
+}
+
+.phone-shell.workbench-page .manager-action-icon svg {
+  width: 26rpx !important;
+  height: 26rpx !important;
+}
+
+.phone-shell.workbench-page .manager-action-card text {
+  display: block !important;
+  font-size: 21rpx !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+}
+
+.phone-shell.workbench-page .manager-status-overview {
+  width: calc(100% - 48rpx) !important;
+  margin: 24rpx 24rpx 0 !important;
+  padding: 24rpx !important;
+  border-radius: 28rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.workbench-page .manager-status-grid {
+  gap: 12rpx !important;
+  margin-top: 18rpx !important;
+}
+
+.phone-shell.workbench-page .manager-status-grid view {
+  min-height: 58rpx !important;
+  padding: 10rpx 14rpx !important;
+  border-radius: 18rpx !important;
+}
+
+.phone-shell.workbench-page .manager-status-grid text:first-child {
+  font-size: 21rpx !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell.workbench-page .manager-status-grid text:last-child {
+  font-size: 28rpx !important;
+  line-height: 1 !important;
+}
+
+.phone-shell.roles-page .role-matrix-list {
+  width: 100% !important;
+  margin: 0 !important;
+  gap: 14rpx !important;
+}
+
+.phone-shell.roles-page .role-matrix-card {
+  min-height: 92rpx !important;
+  padding: 16rpx !important;
+  border-radius: 22rpx !important;
+}
+
+.phone-shell.roles-page .role-matrix-head {
+  align-items: center !important;
+}
+
+.phone-shell.roles-page .role-title,
+.phone-shell.roles-page .role-tip {
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.roles-page .role-title {
+  font-size: 26rpx !important;
+  font-weight: 900 !important;
+}
+
+.phone-shell.roles-page .role-tip {
+  margin-top: 4rpx !important;
+  font-size: 21rpx !important;
+}
+
+.phone-shell.mine-page .driver-list {
+  width: calc(100% - 48rpx) !important;
+  margin: 0 24rpx !important;
+  gap: 18rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.mine-page .driver-stats-card {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 22rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-summary {
+  gap: 12rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-summary view {
+  min-height: 86rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-meta view {
+  padding: 12rpx 8rpx !important;
+  border-radius: 16rpx !important;
+  text-align: center !important;
+}
+
+.phone-shell.mine-page .warehouse-profile-card {
+  padding: 24rpx !important;
+}
+
+.phone-shell.mine-page .record-entry-card {
+  padding: 0 !important;
+}
+
+.phone-shell.mine-page .logout-btn {
+  width: 100% !important;
+  min-height: 72rpx !important;
+  border-radius: 24rpx !important;
+  font-size: 25rpx !important;
+}
+
+.phone-shell.mine-page .warehouse-receive-record-card,
+.phone-shell.mine-page .warehouse-pick-record-card {
+  padding: 22rpx !important;
+}
+
+.phone-shell.mine-page .warehouse-receive-record-tools {
+  grid-template-columns: minmax(0, 1fr) 132rpx 132rpx !important;
+}
+
+.phone-shell.mine-page .warehouse-record-filter {
+  min-height: 68rpx !important;
+  font-size: 20rpx !important;
+}
+
+.phone-shell.mine-page .warehouse-record-item {
+  padding: 16rpx !important;
+  border-radius: 22rpx !important;
+}
+
+.phone-shell.detail-page .driver-summary,
+.phone-shell.detail-page .station-card,
+.phone-shell.detail-page .driver-map-card,
+.phone-shell.detail-page .driver-map-stop,
+.phone-shell.detail-page .receipt-section,
+.phone-shell.detail-page .quality-card,
+.phone-shell.detail-page .task-basic-section,
+.phone-shell.detail-page .task-goods-section {
+  border-radius: 26rpx !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.055) !important;
+}
+
+.phone-shell.detail-page .driver-summary {
+  padding: 22rpx !important;
+}
+
+.phone-shell.detail-page .driver-mode-tabs {
+  gap: 10rpx !important;
+  margin: 0 0 18rpx !important;
+}
+
+.phone-shell.detail-page .driver-map-card {
+  padding: 20rpx !important;
+}
+
+.phone-shell.detail-page .driver-map-stops {
+  gap: 12rpx !important;
+}
+
+.phone-shell.detail-page .driver-map-stop {
+  padding: 16rpx !important;
+}
+
+.phone-shell.detail-page .station-card {
+  padding: 20rpx !important;
+}
+
+.phone-shell.detail-page .action-grid.compact {
+  gap: 10rpx !important;
+}
+
+.phone-shell.detail-page .action-grid.compact .plain,
+.phone-shell.detail-page .action-grid.compact .primary,
+.phone-shell.detail-page .action-grid.compact .danger {
+  min-height: 58rpx !important;
+  padding: 0 12rpx !important;
+  font-size: 21rpx !important;
+}
+
+.phone-shell.detail-page .purchase-form {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+}
+
+.phone-shell.detail-page .purchase-form > view,
+.phone-shell.detail-page .purchase-summary-strip {
+  padding: 16rpx !important;
+  border-radius: 20rpx !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d9e9e3 !important;
+}
+
+.phone-shell.detail-page .purchase-summary-strip {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12rpx !important;
+  margin: 16rpx 0 !important;
+}
+
+.phone-shell.detail-page .purchase-qty-stepper {
+  display: grid !important;
+  grid-template-columns: 58rpx minmax(0, 1fr) 58rpx !important;
+  gap: 8rpx !important;
+  margin-top: 10rpx !important;
+}
+
+.phone-shell.detail-page .purchase-qty-stepper button,
+.phone-shell.detail-page .purchase-qty-stepper input {
+  min-height: 56rpx !important;
+  border-radius: 16rpx !important;
+  font-size: 23rpx !important;
+}
+
+.phone-shell.detail-page .receipt-mini,
+.phone-shell.detail-page .quality-grid,
+.phone-shell.detail-page .quantity-confirm,
+.phone-shell.detail-page .detail-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.phone-shell.detail-page .receipt-stamp {
+  margin-top: 18rpx !important;
+  padding: 20rpx !important;
+  border-radius: 24rpx !important;
+}
+
+.phone-shell.detail-page .quality-card textarea {
+  min-height: 118rpx !important;
+  font-size: 23rpx !important;
+  line-height: 1.45 !important;
+}
+
+.phone-shell.detail-page .shortage-row input {
+  min-height: 56rpx !important;
+  border-radius: 16rpx !important;
+}
+
+.phone-shell.detail-page .location-actions .mini-btn {
+  min-height: 58rpx !important;
+}
+
+.phone-shell .warehouse-list-scope-tip,
+.phone-shell .warehouse-state-strip,
+.phone-shell .permission-list,
+.phone-shell .permission-line {
+  display: none !important;
+}
+
+/* warehouse H5 final follow-up convergence: visual-only leak fixes */
+.phone-shell.workbench-page.manager-home-page {
+  padding-bottom: 138rpx !important;
+}
+
+.phone-shell.workbench-page.manager-home-page .manager-home-actions {
+  width: calc(100% - 48rpx) !important;
+  margin: 20rpx 24rpx 0 !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+}
+
+.phone-shell.workbench-page.manager-home-page .manager-action-card {
+  min-height: 112rpx !important;
+  padding: 16rpx 10rpx !important;
+  border-radius: 22rpx !important;
+  border: 1rpx solid #dbece6 !important;
+  background: #ffffff !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.05) !important;
+}
+
+.phone-shell.workbench-page.manager-home-page .manager-action-icon {
+  width: 44rpx !important;
+  height: 44rpx !important;
+  margin: 0 auto 8rpx !important;
+  border-radius: 15rpx !important;
+}
+
+.phone-shell.workbench-page.manager-home-page .manager-status-overview,
+.phone-shell.workbench-page.manager-home-page .warehouse-section {
+  width: calc(100% - 48rpx) !important;
+  margin: 20rpx 24rpx 0 !important;
+  padding: 22rpx !important;
+  border-radius: 24rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+}
+
+.phone-shell.workbench-page.manager-home-page .manager-status-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+  margin-top: 16rpx !important;
+}
+
+.phone-shell.workbench-page.manager-home-page .manager-status-grid view {
+  min-height: 62rpx !important;
+  padding: 10rpx 14rpx !important;
+  border-radius: 16rpx !important;
+  background: #f6fbf8 !important;
+  border: 1rpx solid #e1eee8 !important;
+}
+
+.phone-shell.workbench-page.manager-home-page .manager-status-grid text:first-child {
+  font-size: 21rpx !important;
+}
+
+.phone-shell.workbench-page.manager-home-page .manager-status-grid text:last-child {
+  font-size: 30rpx !important;
+}
+
+.phone-shell.roles-page {
+  padding-bottom: 138rpx !important;
+}
+
+.phone-shell.roles-page .roles-current,
+.phone-shell.roles-page > .section {
+  width: calc(100% - 48rpx) !important;
+  margin: 20rpx 24rpx 0 !important;
+  padding: 22rpx !important;
+  border-radius: 24rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+}
+
+.phone-shell.roles-page .role-icon-lg {
+  width: 72rpx !important;
+  height: 72rpx !important;
+  border-radius: 22rpx !important;
+}
+
+.phone-shell.roles-page .role-icon-sm {
+  width: 52rpx !important;
+  height: 52rpx !important;
+  border-radius: 17rpx !important;
+}
+
+.phone-shell.roles-page .role-matrix-card {
+  min-height: 88rpx !important;
+  padding: 14rpx !important;
+  border-radius: 20rpx !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.roles-page .role-actions-strip {
+  display: none !important;
+}
+
+.phone-shell.inventory-page,
+.phone-shell.mine-page,
+.phone-shell.tasks-page,
+.phone-shell.detail-page {
+  padding-bottom: 138rpx !important;
+}
+
+.phone-shell.mine-page > .section,
+.phone-shell.inventory-page > .section,
+.phone-shell.inventory-page .inventory-summary,
+.phone-shell.inventory-page .inventory-filter,
+.phone-shell.inventory-page .inventory-list,
+.phone-shell.detail-page > .section {
+  width: calc(100% - 48rpx) !important;
+  margin-left: 24rpx !important;
+  margin-right: 24rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.mine-page .warehouse-profile-card,
+.phone-shell.inventory-page .manager-inventory-tools,
+.phone-shell.inventory-page .stocktake-panel,
+.phone-shell.inventory-page .inventory-summary,
+.phone-shell.inventory-page .inventory-card,
+.phone-shell.inventory-page > .section,
+.phone-shell.detail-page > .section {
+  border-radius: 24rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+}
+
+.phone-shell.mine-page .warehouse-profile-card,
+.phone-shell.inventory-page .manager-inventory-tools,
+.phone-shell.inventory-page .stocktake-panel,
+.phone-shell.detail-page > .section {
+  padding: 22rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-filter,
+.phone-shell.mine-page .warehouse-record-tools,
+.phone-shell.inventory-page .inventory-filter,
+.phone-shell.tasks-page .filter-bar,
+.phone-shell.tasks-page .receiver-filter-panel {
+  width: calc(100% - 48rpx) !important;
+  margin: 18rpx 24rpx 0 !important;
+  padding: 14rpx !important;
+  border-radius: 22rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  background: #ffffff !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.04) !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.mine-page .driver-stats-filter {
+  grid-template-columns: minmax(0, 1fr) 148rpx !important;
+}
+
+.phone-shell.mine-page .warehouse-record-tools {
+  gap: 10rpx !important;
+}
+
+.phone-shell.mine-page .warehouse-receive-record-tools {
+  grid-template-columns: minmax(0, 1fr) 118rpx 118rpx !important;
+}
+
+.phone-shell.mine-page .warehouse-record-search,
+.phone-shell.mine-page .warehouse-record-filter,
+.phone-shell.mine-page .search-box,
+.phone-shell.inventory-page .search-box,
+.phone-shell.inventory-page .filter-chip {
+  min-height: 60rpx !important;
+  border-radius: 18rpx !important;
+  font-size: 21rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-summary {
+  width: calc(100% - 48rpx) !important;
+  margin: 18rpx 24rpx 0 !important;
+  gap: 10rpx !important;
+}
+
+.phone-shell.mine-page .driver-stats-summary view,
+.phone-shell.mine-page .stat-grid view,
+.phone-shell.inventory-page .inventory-summary view,
+.phone-shell.inventory-page .inventory-counts view,
+.phone-shell.detail-page .detail-grid view,
+.phone-shell.detail-page .quantity-confirm view,
+.phone-shell.detail-page .receipt-mini view,
+.phone-shell.detail-page .quality-grid view {
+  border-radius: 16rpx !important;
+  background: #f6fbf8 !important;
+  border: 1rpx solid #e1eee8 !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.mine-page .driver-stats-summary view {
+  min-height: 78rpx !important;
+  padding: 12rpx 8rpx !important;
+}
+
+.phone-shell.mine-page .driver-list,
+.phone-shell.mine-page .warehouse-record-list {
+  width: calc(100% - 48rpx) !important;
+  margin: 18rpx 24rpx 0 !important;
+  padding: 0 !important;
+  gap: 14rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.mine-page .driver-stats-card,
+.phone-shell.mine-page .warehouse-record-item {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: 22rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+}
+
+.phone-shell.mine-page .warehouse-profile-link {
+  min-height: 78rpx !important;
+  padding: 0 18rpx !important;
+}
+
+.phone-shell.mine-page .warehouse-profile-link-icon {
+  width: 50rpx !important;
+  height: 50rpx !important;
+  border-radius: 16rpx !important;
+}
+
+.phone-shell.mine-page .logout-btn {
+  min-height: 70rpx !important;
+  border-radius: 22rpx !important;
+}
+
+.phone-shell.tasks-page .driver-tabs,
+.phone-shell.tasks-page .driver-mode-tabs {
+  width: calc(100% - 48rpx) !important;
+  margin: 18rpx 24rpx 0 !important;
+  padding: 8rpx !important;
+  border-radius: 20rpx !important;
+  background: #eef7f3 !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.tasks-page .driver-tabs button,
+.phone-shell.detail-page .driver-mode-tabs button {
+  min-height: 58rpx !important;
+  border-radius: 16rpx !important;
+  font-size: 22rpx !important;
+}
+
+.phone-shell.tasks-page .warehouse-order-list,
+.phone-shell.tasks-page .task-list,
+.phone-shell.tasks-page .receiver-task-list {
+  width: calc(100% - 48rpx) !important;
+  margin: 18rpx 24rpx 0 !important;
+  gap: 16rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.tasks-page .warehouse-task-card,
+.phone-shell.tasks-page .receiver-task-card,
+.phone-shell.tasks-page .driver-order-card {
+  border-radius: 24rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+}
+
+.phone-shell.detail-page .driver-summary,
+.phone-shell.detail-page .driver-map-card,
+.phone-shell.detail-page .driver-map-stop,
+.phone-shell.detail-page .station-card,
+.phone-shell.detail-page .receipt-section,
+.phone-shell.detail-page .quality-card,
+.phone-shell.detail-page .task-basic-section,
+.phone-shell.detail-page .task-goods-section {
+  border-radius: 24rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+}
+
+.phone-shell.detail-page .driver-grid,
+.phone-shell.detail-page .detail-grid,
+.phone-shell.detail-page .receipt-mini,
+.phone-shell.detail-page .quality-grid,
+.phone-shell.detail-page .quantity-confirm {
+  gap: 10rpx !important;
+}
+
+.phone-shell.detail-page .driver-grid view,
+.phone-shell.detail-page .detail-grid view,
+.phone-shell.detail-page .receipt-mini view,
+.phone-shell.detail-page .quality-grid view,
+.phone-shell.detail-page .quantity-confirm view {
+  min-height: 62rpx !important;
+  padding: 10rpx 12rpx !important;
+}
+
+.phone-shell.detail-page .driver-map-card-head,
+.phone-shell.detail-page .driver-card-head,
+.phone-shell.detail-page .task-head,
+.phone-shell.detail-page .section-head,
+.phone-shell.mine-page .driver-card-head,
+.phone-shell.mine-page .warehouse-record-title-row {
+  gap: 12rpx !important;
+}
+
+.phone-shell.detail-page .station-card,
+.phone-shell.detail-page .driver-map-stop {
+  padding: 16rpx !important;
+}
+
+.phone-shell.detail-page .action-row,
+.phone-shell.detail-page .action-grid.compact {
+  gap: 10rpx !important;
+  margin-top: 16rpx !important;
+}
+
+.phone-shell.detail-page .action-row button,
+.phone-shell.detail-page .action-grid.compact button,
+.phone-shell.detail-page .location-actions .mini-btn,
+.phone-shell.detail-page .full-btn {
+  min-height: 60rpx !important;
+  border-radius: 18rpx !important;
+  font-size: 22rpx !important;
+}
+
+.phone-shell.detail-page .purchase-form,
+.phone-shell.detail-page .receipt-mini,
+.phone-shell.detail-page .quality-grid,
+.phone-shell.detail-page .quantity-confirm,
+.phone-shell.detail-page .detail-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.phone-shell.detail-page .purchase-form > view,
+.phone-shell.detail-page .purchase-summary-strip,
+.phone-shell.detail-page .search-box.standalone {
+  min-height: 66rpx !important;
+  border-radius: 18rpx !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #dcece5 !important;
+}
+
+.phone-shell.detail-page .purchase-summary-strip {
+  margin: 14rpx 0 !important;
+  padding: 14rpx 16rpx !important;
+}
+
+.phone-shell.detail-page .goods-card.compact-goods,
+.phone-shell.detail-page .task-goods-row,
+.phone-shell.detail-page .stocktake-row {
+  padding: 16rpx !important;
+  border-radius: 22rpx !important;
+  border: 1rpx solid #e0eee8 !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.detail-page .goods-img,
+.phone-shell.detail-page .task-goods-img,
+.phone-shell.detail-page .receipt-photo {
+  width: 76rpx !important;
+  height: 76rpx !important;
+  border-radius: 20rpx !important;
+  flex: 0 0 76rpx !important;
+}
+
+.phone-shell.detail-page .purchase-qty-stepper {
+  grid-template-columns: 54rpx minmax(0, 1fr) 54rpx !important;
+  gap: 8rpx !important;
+}
+
+.phone-shell.detail-page .purchase-qty-stepper button,
+.phone-shell.detail-page .purchase-qty-stepper input,
+.phone-shell.detail-page .qty-editor button,
+.phone-shell.detail-page .qty-editor input,
+.phone-shell.detail-page .shortage-row input {
+  min-height: 54rpx !important;
+  border-radius: 16rpx !important;
+  font-size: 22rpx !important;
+}
+
+.phone-shell.detail-page .location-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10rpx !important;
+  margin-top: 12rpx !important;
+}
+
+.phone-shell.detail-page .shortage-list {
+  gap: 10rpx !important;
+  margin-top: 12rpx !important;
+}
+
+.phone-shell.detail-page .shortage-row {
+  grid-template-columns: minmax(0, 1fr) 92rpx !important;
+  gap: 10rpx !important;
+  padding: 12rpx !important;
+  border-radius: 18rpx !important;
+}
+
+.phone-shell.detail-page .quality-card textarea,
+.phone-shell.detail-page textarea {
+  min-height: 112rpx !important;
+  padding: 16rpx !important;
+  border-radius: 18rpx !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #dcece5 !important;
+}
+
+.phone-shell.detail-page .receipt-gallery {
+  gap: 12rpx !important;
+}
+
+.phone-shell.detail-page .receipt-stamp {
+  border-radius: 22rpx !important;
+  border: 1rpx dashed #7bb7a5 !important;
+}
+
+.phone-shell.inventory-page .manager-inventory-tools .quick-grid,
+.phone-shell.inventory-page .inventory-counts {
+  gap: 10rpx !important;
+}
+
+.phone-shell.inventory-page .quick-card {
+  min-height: 68rpx !important;
+  border-radius: 18rpx !important;
+  font-size: 22rpx !important;
+}
+
+.phone-shell.inventory-page .inventory-summary {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10rpx !important;
+  padding: 18rpx !important;
+}
+
+.phone-shell.inventory-page .inventory-card {
+  margin: 0 0 16rpx !important;
+  padding: 18rpx !important;
+}
+
+.phone-shell.inventory-page .inventory-list {
+  margin-top: 18rpx !important;
+}
+
+.phone-shell.inventory-page .stocktake-row {
+  gap: 12rpx !important;
+}
+
+.phone-shell.inventory-page .stocktake-check {
+  width: 48rpx !important;
+  height: 48rpx !important;
+  border-radius: 15rpx !important;
+}
+
+.phone-shell.inventory-page .stocktake-qty input {
+  min-height: 54rpx !important;
+  border-radius: 16rpx !important;
+}
+
+/* Buyer purchase detail: align with warehouse purchase prototype without changing actions. */
+.phone-shell.detail-page.purchase-detail-page {
+  padding-bottom: 228rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page > .receipt-section {
+  width: calc(100% - 48rpx) !important;
+  margin: 18rpx 24rpx 0 !important;
+  padding: 22rpx !important;
+  border-radius: 24rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-detail-section {
+  width: calc(100% - 48rpx) !important;
+  margin: 18rpx 24rpx 0 !important;
+  padding: 22rpx !important;
+  border-radius: 24rpx !important;
+  border: 1rpx solid #dcece5 !important;
+  background: #ffffff !important;
+  box-shadow: 0 4rpx 14rpx rgba(17, 85, 76, 0.045) !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-overview-section {
+  display: grid !important;
+  gap: 16rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-form {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-field {
+  display: grid !important;
+  gap: 8rpx !important;
+  min-width: 0 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-field > text {
+  color: #66847c !important;
+  font-size: 22rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-field > view,
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-field picker view {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 68rpx !important;
+  padding: 0 18rpx !important;
+  color: #173b3a !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d7ebe3 !important;
+  border-radius: 18rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-meta > text {
+  max-width: 100% !important;
+  min-height: 44rpx !important;
+  padding: 0 16rpx !important;
+  color: #117b6d !important;
+  background: #eef8f3 !important;
+  border: 1rpx solid rgba(17, 123, 109, 0.08) !important;
+  border-radius: 999rpx !important;
+  font-size: 21rpx !important;
+  font-weight: 900 !important;
+  line-height: 44rpx !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-kpi-strip {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-kpi-strip view {
+  display: grid !important;
+  gap: 4rpx !important;
+  min-height: 78rpx !important;
+  padding: 12rpx 8rpx !important;
+  text-align: center !important;
+  background: #f6fbf8 !important;
+  border: 1rpx solid #e1eee8 !important;
+  border-radius: 16rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-kpi-strip text:first-child {
+  color: #173b3a !important;
+  font-size: 30rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-kpi-strip text:last-child {
+  color: #66847c !important;
+  font-size: 20rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-kpi-strip .danger text:first-child {
+  color: #c53646 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-section-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12rpx !important;
+  margin-bottom: 18rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-search {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 112rpx !important;
+  gap: 12rpx !important;
+  margin-bottom: 16rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-search input,
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-search button {
+  min-height: 68rpx !important;
+  border-radius: 18rpx !important;
+  font-size: 23rpx !important;
+  font-weight: 900 !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-search input {
+  width: 100% !important;
+  padding: 0 18rpx !important;
+  color: #173b3a !important;
+  background: #f7fbf8 !important;
+  border: 1rpx solid #d7ebe3 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-search button {
+  color: #ffffff !important;
+  background: #173b3a !important;
+  border: 0 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-summary-strip {
+  min-height: 58rpx !important;
+  margin: 0 0 16rpx !important;
+  padding: 0 16rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12rpx !important;
+  color: #117b6d !important;
+  background: #eef8f3 !important;
+  border: 1rpx solid #d7ebe3 !important;
+  border-radius: 18rpx !important;
+  font-size: 22rpx !important;
+  font-weight: 900 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-list {
+  display: grid !important;
+  gap: 14rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-item {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 88rpx minmax(0, 1fr) !important;
+  gap: 14rpx !important;
+  align-items: start !important;
+  min-width: 0 !important;
+  padding: 18rpx !important;
+  background: #fbfdfb !important;
+  border: 1rpx solid #dceee7 !important;
+  border-radius: 22rpx !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-detail-img {
+  width: 88rpx !important;
+  height: 88rpx !important;
+  border-radius: 18rpx !important;
+  flex: 0 0 88rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-info {
+  display: grid !important;
+  gap: 8rpx !important;
+  min-width: 0 !important;
+  align-content: start !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-title-line {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 10rpx !important;
+  min-width: 0 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-title {
+  display: block !important;
+  min-width: 0 !important;
+  color: #173b3a !important;
+  font-size: 27rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.28 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-summary {
+  display: block !important;
+  min-width: 0 !important;
+  color: #66847c !important;
+  font-size: 22rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.38 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-tags > text {
+  max-width: 100% !important;
+  min-height: 42rpx !important;
+  padding: 0 14rpx !important;
+  color: #117b6d !important;
+  background: #eef8f3 !important;
+  border-radius: 999rpx !important;
+  font-size: 20rpx !important;
+  font-weight: 900 !important;
+  line-height: 42rpx !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-fields {
+  display: grid !important;
+  gap: 6rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-fields > text {
+  display: block !important;
+  min-width: 0 !important;
+  color: #66847c !important;
+  font-size: 21rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.34 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-fields > text > text {
+  margin-right: 8rpx !important;
+  color: #173b3a !important;
+  font-weight: 900 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .warehouse-purchase-selected-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  margin-top: 2rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-qty-stepper {
+  width: 188rpx !important;
+  display: grid !important;
+  grid-template-columns: 50rpx minmax(0, 1fr) 50rpx !important;
+  gap: 8rpx !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-qty-stepper button,
+.phone-shell.detail-page.purchase-detail-page .purchase-qty-stepper input {
+  min-height: 52rpx !important;
+  border-radius: 15rpx !important;
+  font-size: 22rpx !important;
+  font-weight: 900 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-qty-stepper button {
+  color: #117b6d !important;
+  background: #eef8f3 !important;
+  border: 1rpx solid #d7ebe3 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-qty-stepper input {
+  text-align: center !important;
+  color: #173b3a !important;
+  background: #ffffff !important;
+  border: 1rpx solid #d7ebe3 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-floating-action {
+  position: fixed !important;
+  left: max(24rpx, calc((100vw - 375px) / 2 + 16px)) !important;
+  right: max(24rpx, calc((100vw - 375px) / 2 + 16px)) !important;
+  bottom: calc(max(8rpx, env(safe-area-inset-bottom)) + 104rpx) !important;
+  z-index: 126 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.35fr) !important;
+  gap: 14rpx !important;
+  max-width: 343px !important;
+  margin: 0 auto !important;
+  padding: 14rpx !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1rpx solid rgba(205, 224, 217, 0.9) !important;
+  border-radius: 26rpx !important;
+  box-shadow: 0 14rpx 32rpx rgba(17, 85, 76, 0.12) !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-floating-action button {
+  min-height: 70rpx !important;
+  border-radius: 20rpx !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-floating-action .plain {
+  color: #117b6d !important;
+  background: #eef8f3 !important;
+  border: 1rpx solid #d7ebe3 !important;
+}
+
+.phone-shell.detail-page.purchase-detail-page .purchase-floating-action .primary {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #117b6d, #39a184) !important;
+  border: 0 !important;
+  box-shadow: 0 10rpx 22rpx rgba(17, 85, 76, 0.16) !important;
+}
+
+/* Warehouse bottom nav final sizing: larger icon/text and near full-width shell. */
+.phone-shell .warehouse-bottom {
+  left: max(8rpx, calc((100vw - 375px) / 2 + 8px)) !important;
+  right: max(8rpx, calc((100vw - 375px) / 2 + 8px)) !important;
+  bottom: max(12rpx, env(safe-area-inset-bottom)) !important;
+  gap: 8rpx !important;
+  width: auto !important;
+  max-width: 359px !important;
+  height: 122rpx !important;
+  max-height: 122rpx !important;
+  padding: 8rpx !important;
+  border-radius: 34rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell .warehouse-bottom.items-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.phone-shell .warehouse-bottom.items-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 6rpx !important;
+}
+
+.phone-shell .warehouse-nav-btn {
+  width: 100% !important;
+  height: 104rpx !important;
+  max-height: 104rpx !important;
+  gap: 6rpx !important;
+  padding: 0 4rpx !important;
+  border-radius: 28rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell .warehouse-bottom.items-4 .warehouse-nav-btn {
+  padding: 0 2rpx !important;
+}
+
+.phone-shell .warehouse-nav-icon {
+  width: 48rpx !important;
+  height: 44rpx !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.phone-shell .warehouse-nav-icon svg {
+  width: 36rpx !important;
+  height: 36rpx !important;
+  stroke-width: 2.5 !important;
+}
+
+.phone-shell .warehouse-nav-btn text,
+.phone-shell .warehouse-nav-btn uni-text,
+.phone-shell .warehouse-bottom text,
+.phone-shell .warehouse-bottom uni-text {
+  color: currentColor !important;
+  font-size: 26rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.08 !important;
+  white-space: nowrap !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
+
+.phone-shell .warehouse-bottom.items-4 .warehouse-nav-btn text,
+.phone-shell .warehouse-bottom.items-4 .warehouse-nav-btn uni-text {
+  font-size: 24rpx !important;
+  letter-spacing: 0 !important;
+}
+
+.phone-shell .warehouse-nav-btn.active {
+  background: #edf8f4 !important;
+  box-shadow: inset 0 0 0 1rpx rgba(17, 123, 109, 0.08) !important;
+}
+
+/* Final receiver task polish: bottom nav docked and buttons cleaned up. */
+.page.phone-shell,
+.phone-shell.tasks-page,
+.phone-shell.receiver-tasks-page,
+.phone-shell.inventory-page,
+.phone-shell.mine-page,
+.phone-shell.roles-page,
+.phone-shell.workbench-page {
+  padding-bottom: 136rpx !important;
+}
+
+.phone-shell .warehouse-bottom {
+  left: max(0px, calc((100vw - 375px) / 2)) !important;
+  right: max(0px, calc((100vw - 375px) / 2)) !important;
+  bottom: 0 !important;
+  width: auto !important;
+  max-width: 375px !important;
+  height: calc(112rpx + env(safe-area-inset-bottom)) !important;
+  max-height: none !important;
+  padding: 8rpx 14rpx calc(8rpx + env(safe-area-inset-bottom)) !important;
+  gap: 8rpx !important;
+  border: 1rpx solid rgba(205, 224, 217, 0.9) !important;
+  border-bottom: 0 !important;
+  border-radius: 24rpx 24rpx 0 0 !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 0 -6rpx 18rpx rgba(17, 85, 76, 0.08) !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell .warehouse-nav-btn {
+  height: 96rpx !important;
+  max-height: 96rpx !important;
+  border-radius: 20rpx !important;
+}
+
+.phone-shell .warehouse-nav-btn.active {
+  background: #e8f5ef !important;
+  box-shadow: inset 0 0 0 1rpx rgba(17, 123, 109, 0.12) !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-filter-panel {
+  padding: 10rpx !important;
+  border-radius: 26rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-row {
+  min-height: 60rpx !important;
+  padding: 0 16rpx !important;
+  border-radius: 22rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-picker {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  min-width: 116rpx !important;
+  height: 44rpx !important;
+  padding: 0 30rpx 0 22rpx !important;
+  justify-content: center !important;
+  border-radius: 999rpx !important;
+  color: #0f766b !important;
+  background: #e8f5ef !important;
+  border: 1rpx solid #bfe0d2 !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-picker text:first-child,
+.phone-shell.receiver-tasks-page .receiver-status-picker uni-text:first-child {
+  color: #0f766b !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-arrow {
+  width: 0 !important;
+  height: 0 !important;
+  margin-left: 8rpx !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  border-left: 6rpx solid transparent !important;
+  border-right: 6rpx solid transparent !important;
+  border-top: 8rpx solid #0f766b !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-filter-row {
+  grid-template-columns: 65fr 35fr !important;
+  gap: 10rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-search-box,
+.phone-shell.receiver-tasks-page .receiver-date-chip {
+  min-height: 66rpx !important;
+  border-radius: 18rpx !important;
+  border: 1rpx solid #cfe4dc !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-date-chip {
+  justify-content: center !important;
+  padding: 0 16rpx !important;
+  color: #ffffff !important;
+  background: #0f8f7d !important;
+  border-color: #0f8f7d !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-date-chip svg {
+  width: 26rpx !important;
+  height: 26rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-date-chip text,
+.phone-shell.receiver-tasks-page .receiver-date-chip uni-text {
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12rpx !important;
+  margin-top: 22rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-detail-btn,
+.phone-shell.receiver-tasks-page .receiver-primary-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8rpx !important;
+  min-width: 112rpx !important;
+  min-height: 62rpx !important;
+  height: 62rpx !important;
+  padding: 0 22rpx !important;
+  border: 0 !important;
+  border-radius: 999rpx !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  box-shadow: 0 8rpx 16rpx rgba(17, 85, 76, 0.12) !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-detail-btn {
+  color: #ffffff !important;
+  background: #087f73 !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-primary-btn {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #0f8f7d, #18a085) !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-detail-btn text:first-child,
+.phone-shell.receiver-tasks-page .receiver-detail-btn uni-text:first-child,
+.phone-shell.receiver-tasks-page .receiver-primary-btn text:first-child,
+.phone-shell.receiver-tasks-page .receiver-primary-btn uni-text:first-child {
+  display: none !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-detail-btn::before,
+.phone-shell.receiver-tasks-page .receiver-primary-btn::before {
+  content: "";
+  display: block;
+  width: 24rpx;
+  height: 24rpx;
+  flex: 0 0 24rpx;
+  background: currentColor;
+}
+
+.phone-shell.receiver-tasks-page .receiver-detail-btn::before {
+  mask:
+    linear-gradient(#000 0 0) 0 3rpx / 24rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 0 10rpx / 24rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 0 17rpx / 24rpx 3rpx no-repeat;
+}
+
+.phone-shell.receiver-tasks-page .receiver-primary-btn::before {
+  mask: polygon(8% 52%, 18% 42%, 42% 66%, 82% 18%, 94% 28%, 43% 86%);
+}
+
+/* Final combined receiver order layout, filter size, back button, and action icons. */
+.phone-shell.receiver-tasks-page .receiver-filter-panel,
+.phone-shell.receiver-tasks-page .receiver-task-list {
+  width: calc(100% - 24px) !important;
+  margin-right: 12px !important;
+  margin-left: 12px !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-filter-panel {
+  padding: 10rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-task-card {
+  width: 100% !important;
+  padding: 24rpx 26rpx !important;
+  border-radius: 22rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-stats {
+  gap: 10rpx !important;
+  margin-top: 18rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-stats view {
+  min-height: 62rpx !important;
+  padding: 14rpx 16rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-meta {
+  gap: 12rpx !important;
+  margin-top: 16rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-label text,
+.phone-shell.receiver-tasks-page .receiver-status-label uni-text {
+  color: #061f1d !important;
+  font-size: 29rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-picker {
+  min-width: 142rpx !important;
+  height: 48rpx !important;
+  padding: 0 34rpx 0 24rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-picker text:first-child,
+.phone-shell.receiver-tasks-page .receiver-status-picker uni-text:first-child {
+  font-size: 27rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-arrow {
+  border-left-width: 7rpx !important;
+  border-right-width: 7rpx !important;
+  border-top-width: 9rpx !important;
+}
+
+.phone-shell .back-btn,
+.phone-shell .record-back {
+  position: absolute !important;
+  left: 24rpx !important;
+  top: 18rpx !important;
+  z-index: 20 !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 72rpx !important;
+  height: 72rpx !important;
+  min-width: 72rpx !important;
+  min-height: 72rpx !important;
+  padding: 0 !important;
+  color: transparent !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1rpx solid rgba(255, 255, 255, 0.26) !important;
+  border-radius: 999rpx !important;
+  box-shadow: 0 8rpx 18rpx rgba(5, 45, 41, 0.12) !important;
+  line-height: 1 !important;
+  overflow: hidden !important;
+}
+
+.phone-shell .back-btn::before,
+.phone-shell .record-back::before {
+  content: "";
+  width: 22rpx;
+  height: 22rpx;
+  border-left: 5rpx solid currentColor;
+  border-bottom: 5rpx solid currentColor;
+  transform: translateX(3rpx) rotate(45deg);
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+.phone-shell.roles-page .back-btn,
+.phone-shell.mine-page .record-back {
+  top: 22rpx !important;
+  background: rgba(17, 123, 109, 0.1) !important;
+  border-color: rgba(17, 123, 109, 0.12) !important;
+  box-shadow: 0 8rpx 18rpx rgba(17, 85, 76, 0.08) !important;
+}
+
+.phone-shell.roles-page .back-btn::before,
+.phone-shell.mine-page .record-back::before {
+  color: #117b6d;
+}
+
+.phone-shell.detail-page .detail-top .status-row,
+.phone-shell.roles-page .warehouse-top .status-row,
+.phone-shell.mine-page .warehouse-top .status-row {
+  position: relative !important;
+  padding-left: 88rpx !important;
+  min-height: 72rpx !important;
+}
+
+.phone-shell .back-btn,
+.phone-shell .record-back {
+  position: fixed !important;
+  left: max(12px, calc((100vw - 375px) / 2 + 12px)) !important;
+  top: max(10px, env(safe-area-inset-top)) !important;
+}
+
+.phone-shell .receiver-detail-btn::before,
+.phone-shell .receiver-primary-btn::before,
+.phone-shell .warehouse-action-btn::before {
+  content: "" !important;
+  display: block !important;
+  width: 28rpx !important;
+  height: 28rpx !important;
+  flex: 0 0 28rpx !important;
+  background: currentColor !important;
+  mask: none !important;
+  -webkit-mask: none !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
+
+.phone-shell .warehouse-action-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10rpx !important;
+}
+
+.phone-shell .receiver-detail-btn text:first-child,
+.phone-shell .receiver-detail-btn uni-text:first-child,
+.phone-shell .receiver-primary-btn text:first-child,
+.phone-shell .receiver-primary-btn uni-text:first-child {
+  display: none !important;
+}
+
+.phone-shell .action-detail::before {
+  mask:
+    linear-gradient(#000 0 0) 0 2rpx / 28rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 0 12rpx / 28rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 0 22rpx / 18rpx 4rpx no-repeat !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 2rpx / 28rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 0 12rpx / 28rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 0 22rpx / 18rpx 4rpx no-repeat !important;
+}
+
+.phone-shell .action-accept::before {
+  mask:
+    radial-gradient(circle at 50% 50%, transparent 0 6rpx, #000 6.5rpx 10rpx, transparent 10.5rpx) 2rpx 2rpx / 24rpx 24rpx no-repeat,
+    linear-gradient(#000 0 0) 12rpx 0 / 4rpx 28rpx no-repeat,
+    linear-gradient(#000 0 0) 0 12rpx / 28rpx 4rpx no-repeat !important;
+  -webkit-mask:
+    radial-gradient(circle at 50% 50%, transparent 0 6rpx, #000 6.5rpx 10rpx, transparent 10.5rpx) 2rpx 2rpx / 24rpx 24rpx no-repeat,
+    linear-gradient(#000 0 0) 12rpx 0 / 4rpx 28rpx no-repeat,
+    linear-gradient(#000 0 0) 0 12rpx / 28rpx 4rpx no-repeat !important;
+}
+
+.phone-shell .action-scan::before {
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 10rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 0 0 / 4rpx 10rpx no-repeat,
+    linear-gradient(#000 0 0) 18rpx 0 / 10rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 24rpx 0 / 4rpx 10rpx no-repeat,
+    linear-gradient(#000 0 0) 0 24rpx / 10rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 0 18rpx / 4rpx 10rpx no-repeat,
+    linear-gradient(#000 0 0) 18rpx 24rpx / 10rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 24rpx 18rpx / 4rpx 10rpx no-repeat,
+    linear-gradient(#000 0 0) 7rpx 12rpx / 14rpx 4rpx no-repeat !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0 / 10rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 0 0 / 4rpx 10rpx no-repeat,
+    linear-gradient(#000 0 0) 18rpx 0 / 10rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 24rpx 0 / 4rpx 10rpx no-repeat,
+    linear-gradient(#000 0 0) 0 24rpx / 10rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 0 18rpx / 4rpx 10rpx no-repeat,
+    linear-gradient(#000 0 0) 18rpx 24rpx / 10rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 24rpx 18rpx / 4rpx 10rpx no-repeat,
+    linear-gradient(#000 0 0) 7rpx 12rpx / 14rpx 4rpx no-repeat !important;
+}
+
+.phone-shell .action-confirm::before {
+  mask: none !important;
+  -webkit-mask: none !important;
+  clip-path: polygon(6% 51%, 18% 39%, 42% 63%, 80% 15%, 94% 27%, 43% 88%) !important;
+  -webkit-clip-path: polygon(6% 51%, 18% 39%, 42% 63%, 80% 15%, 94% 27%, 43% 88%) !important;
+}
+
+.phone-shell .action-quality::before,
+.phone-shell .action-default::before {
+  mask:
+    linear-gradient(#000 0 0) 12rpx 0 / 4rpx 22rpx no-repeat,
+    linear-gradient(#000 0 0) 7rpx 5rpx / 14rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 4rpx 22rpx / 20rpx 4rpx no-repeat !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 12rpx 0 / 4rpx 22rpx no-repeat,
+    linear-gradient(#000 0 0) 7rpx 5rpx / 14rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 4rpx 22rpx / 20rpx 4rpx no-repeat !important;
+}
+
+/* Receiver pending detail: match the provided goods-detail prototype. */
+.phone-shell.detail-page.receiver-pending-detail-page {
+  background: #eef7f2 !important;
+  padding-bottom: 206rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-top {
+  min-height: 104rpx !important;
+  padding: 16rpx 18rpx 22rpx !important;
+  border-radius: 0 !important;
+  background: #0b766b !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-top .status-row {
+  min-height: 66rpx !important;
+  margin: 0 !important;
+  padding-left: 74rpx !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-top .status-row > text,
+.phone-shell.receiver-pending-detail-page .detail-top .status-row > uni-text {
+  color: #062523 !important;
+  font-size: 34rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .back-btn {
+  top: 54rpx !important;
+  left: max(20rpx, calc((100vw - 375px) / 2 + 20rpx)) !important;
+  width: 66rpx !important;
+  height: 66rpx !important;
+  min-width: 66rpx !important;
+  min-height: 66rpx !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-title-row {
+  margin: 0 !important;
+  min-height: 0 !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-title-row > view {
+  display: none !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-title-row .status-pill {
+  position: absolute !important;
+  right: 20rpx !important;
+  top: 54rpx !important;
+  min-height: 64rpx !important;
+  padding: 0 24rpx !important;
+  color: #a97500 !important;
+  background: #fff2c9 !important;
+  border: 0 !important;
+  border-radius: 999rpx !important;
+  font-size: 24rpx !important;
+  line-height: 64rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page > .task-basic-section,
+.phone-shell.receiver-pending-detail-page > .task-goods-section {
+  width: calc(100% - 36rpx) !important;
+  margin: 18rpx 18rpx 0 !important;
+  padding: 26rpx 14rpx 20rpx !important;
+  border: 1rpx solid #d4e7dd !important;
+  border-radius: 22rpx !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-basic-section .section-head,
+.phone-shell.receiver-pending-detail-page .task-goods-section .section-head {
+  margin: 0 0 18rpx !important;
+  padding: 0 0 16rpx !important;
+  border-bottom: 1rpx solid #e3eee8 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .section-title {
+  color: #061f1d !important;
+  font-size: 32rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list {
+  display: grid !important;
+  gap: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list > view {
+  display: grid !important;
+  grid-template-columns: 146rpx minmax(0, 1fr) !important;
+  gap: 16rpx !important;
+  align-items: center !important;
+  min-height: 52rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list text,
+.phone-shell.receiver-pending-detail-page .pending-basic-list uni-text {
+  color: #061f1d !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list text:last-child,
+.phone-shell.receiver-pending-detail-page .pending-basic-list uni-text:last-child {
+  text-align: right !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-section {
+  padding-bottom: 10rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-list {
+  gap: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-row {
+  display: grid !important;
+  grid-template-columns: 78rpx minmax(0, 1fr) 92rpx !important;
+  gap: 12rpx !important;
+  align-items: start !important;
+  padding: 16rpx 0 !important;
+  border: 0 !important;
+  border-bottom: 1rpx solid #e3eee8 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-row:last-child {
+  border-bottom: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-img {
+  width: 78rpx !important;
+  height: 78rpx !important;
+  border-radius: 12rpx !important;
+  box-shadow: 0 6rpx 12rpx rgba(5, 45, 41, 0.12) !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-main {
+  gap: 5rpx !important;
+  padding: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-title {
+  color: #061f1d !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.22 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-line {
+  color: #244946 !important;
+  font-size: 22rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-barcode {
+  margin-top: 6rpx !important;
+  color: #061f1d !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty {
+  align-self: end !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8rpx !important;
+  padding: 64rpx 0 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty view {
+  gap: 1rpx !important;
+  text-align: right !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty text:first-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty uni-text:first-child {
+  color: #31534f !important;
+  font-size: 19rpx !important;
+  font-weight: 800 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty text:last-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty uni-text:last-child {
+  color: #061f1d !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-editor,
+.phone-shell.receiver-pending-detail-page .task-goods-actions,
+.phone-shell.receiver-pending-detail-page .task-goods-shortage,
+.phone-shell.receiver-pending-detail-page .quality-card {
+  display: none !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action {
+  left: max(24rpx, calc((100vw - 375px) / 2 + 24rpx)) !important;
+  right: max(24rpx, calc((100vw - 375px) / 2 + 24rpx)) !important;
+  bottom: calc(88rpx + env(safe-area-inset-bottom)) !important;
+  max-width: 351px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action .primary {
+  width: 100% !important;
+  height: 72rpx !important;
+  min-height: 72rpx !important;
+  border-radius: 18rpx !important;
+  background: #14927f !important;
+  box-shadow: 0 10rpx 22rpx rgba(5, 91, 81, 0.16) !important;
+  font-size: 27rpx !important;
+}
+
+/* Receiver pending detail final alignment: header, cards, and dock-safe accept button. */
+.phone-shell.detail-page.receiver-pending-detail-page {
+  padding-bottom: 280rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-top {
+  min-height: 146rpx !important;
+  padding: 0 18px 18rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-top .status-row {
+  min-height: 96rpx !important;
+  padding: 30rpx 96rpx 0 92rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-top .status-row > text,
+.phone-shell.receiver-pending-detail-page .detail-top .status-row > uni-text {
+  color: #ffffff !important;
+  font-size: 34rpx !important;
+  text-shadow: 0 2rpx 8rpx rgba(4, 49, 45, 0.16) !important;
+}
+
+.phone-shell.receiver-pending-detail-page .back-btn {
+  top: 24rpx !important;
+  left: max(18px, calc((100vw - 375px) / 2 + 18px)) !important;
+  width: 68rpx !important;
+  height: 68rpx !important;
+  min-width: 68rpx !important;
+  min-height: 68rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-title-row {
+  position: absolute !important;
+  inset: 0 18px auto 18px !important;
+  height: 118rpx !important;
+  pointer-events: none !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-title-row .status-pill {
+  right: 18px !important;
+  top: 30rpx !important;
+  min-height: 56rpx !important;
+  padding: 0 24rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+  line-height: 56rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page > .task-basic-section,
+.phone-shell.receiver-pending-detail-page > .task-goods-section {
+  width: calc(100% - 36px) !important;
+  margin: 16px 18px 0 !important;
+  padding: 24rpx 18rpx 18rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list > view {
+  grid-template-columns: 132rpx minmax(0, 1fr) !important;
+  min-height: 56rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list text,
+.phone-shell.receiver-pending-detail-page .pending-basic-list uni-text {
+  font-size: 26rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-row {
+  grid-template-columns: 82rpx minmax(0, 1fr) 98rpx !important;
+  gap: 14rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-img {
+  width: 82rpx !important;
+  height: 82rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action {
+  left: max(18px, calc((100vw - 375px) / 2 + 18px)) !important;
+  right: max(18px, calc((100vw - 375px) / 2 + 18px)) !important;
+  bottom: calc(128rpx + env(safe-area-inset-bottom)) !important;
+  max-width: 339px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action .primary {
+  height: 78rpx !important;
+  min-height: 78rpx !important;
+  border-radius: 20rpx !important;
+  font-size: 29rpx !important;
+}
+
+/* Receiver task status picker: keep long status text on one line. */
+.phone-shell.receiver-tasks-page .receiver-status-picker {
+  width: 232rpx !important;
+  min-width: 232rpx !important;
+  max-width: 232rpx !important;
+  height: 52rpx !important;
+  padding: 0 34rpx 0 22rpx !important;
+  box-sizing: border-box !important;
+  flex-wrap: nowrap !important;
+  overflow: hidden !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-picker text:first-child,
+.phone-shell.receiver-tasks-page .receiver-status-picker uni-text:first-child {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 166rpx !important;
+  overflow: hidden !important;
+  color: #0f766b !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-status-arrow {
+  flex: 0 0 auto !important;
+}
+
+/* Receiver pending detail: final prototype alignment. */
+.phone-shell.detail-page.receiver-pending-detail-page {
+  position: relative !important;
+  min-height: 100vh !important;
+  padding: 0 0 236rpx !important;
+  background: #eef7f2 !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-top {
+  position: relative !important;
+  min-height: 212rpx !important;
+  padding: 16rpx 14rpx 28rpx !important;
+  background: linear-gradient(135deg, #0c625b 0%, #168b78 100%) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-status {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 42rpx !important;
+  margin: 0 34rpx 16rpx !important;
+  color: #ffffff !important;
+  font-size: 30rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-titlebar {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: 70rpx !important;
+  padding: 0 94rpx 0 100rpx !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-title {
+  display: block !important;
+  min-width: 0 !important;
+  color: #061f1d !important;
+  font-size: 34rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-titlebar .back-btn {
+  position: absolute !important;
+  left: 16rpx !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 68rpx !important;
+  height: 68rpx !important;
+  min-width: 68rpx !important;
+  min-height: 68rpx !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  border: 0 !important;
+  border-radius: 999rpx !important;
+  box-shadow: none !important;
+  font-size: 46rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-titlebar .status-pill {
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  min-width: 88rpx !important;
+  min-height: 58rpx !important;
+  padding: 0 20rpx !important;
+  color: #a35f00 !important;
+  background: #fff0c7 !important;
+  border: 0 !important;
+  border-radius: 999rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 900 !important;
+  line-height: 58rpx !important;
+  text-align: center !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page > .task-basic-section,
+.phone-shell.receiver-pending-detail-page > .task-goods-section {
+  width: calc(100% - 28rpx) !important;
+  margin: 24rpx 14rpx 0 !important;
+  padding: 24rpx 26rpx 20rpx !important;
+  background: #ffffff !important;
+  border: 1rpx solid #d3e6dd !important;
+  border-radius: 24rpx !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page > .task-basic-section {
+  margin-top: 28rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-basic-section .section-head,
+.phone-shell.receiver-pending-detail-page .task-goods-section .section-head {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 52rpx !important;
+  margin: 0 0 18rpx !important;
+  padding: 0 0 18rpx !important;
+  border-bottom: 1rpx solid #e2eee8 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .section-title {
+  color: #041d1b !important;
+  font-size: 32rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list {
+  display: grid !important;
+  gap: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list > view {
+  display: grid !important;
+  grid-template-columns: 150rpx minmax(0, 1fr) !important;
+  gap: 16rpx !important;
+  align-items: center !important;
+  min-height: 64rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list text,
+.phone-shell.receiver-pending-detail-page .pending-basic-list uni-text {
+  display: block !important;
+  min-width: 0 !important;
+  color: #041d1b !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list text:last-child,
+.phone-shell.receiver-pending-detail-page .pending-basic-list uni-text:last-child {
+  text-align: right !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-section {
+  padding-bottom: 8rpx !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-list {
+  display: grid !important;
+  gap: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-row {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 76rpx minmax(0, 1fr) 92rpx !important;
+  gap: 14rpx !important;
+  align-items: start !important;
+  min-width: 0 !important;
+  padding: 18rpx 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1rpx solid #e2eee8 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-row:last-child {
+  border-bottom: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-img {
+  width: 76rpx !important;
+  height: 76rpx !important;
+  min-width: 76rpx !important;
+  min-height: 76rpx !important;
+  border-radius: 12rpx !important;
+  box-shadow: 0 8rpx 18rpx rgba(5, 45, 41, 0.14) !important;
+  font-size: 0 !important;
+  overflow: hidden !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-img::before {
+  content: "" !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  background:
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.86) 0 10%, transparent 11%),
+    radial-gradient(circle at 68% 38%, rgba(255, 255, 255, 0.78) 0 12%, transparent 13%),
+    radial-gradient(circle at 44% 72%, rgba(255, 255, 255, 0.72) 0 11%, transparent 12%),
+    linear-gradient(135deg, #d95b43 0%, #f7c8a5 46%, #5a8d64 100%) !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-main {
+  display: grid !important;
+  gap: 5rpx !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  align-content: start !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-title {
+  display: block !important;
+  min-width: 0 !important;
+  color: #041d1b !important;
+  font-size: 26rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.18 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-line {
+  display: block !important;
+  min-width: 0 !important;
+  color: #244a46 !important;
+  font-size: 22rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-barcode {
+  display: block !important;
+  min-width: 0 !important;
+  margin-top: 5rpx !important;
+  color: #041d1b !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.16 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty {
+  align-self: end !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8rpx !important;
+  min-width: 0 !important;
+  padding: 64rpx 0 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty view {
+  display: grid !important;
+  gap: 0 !important;
+  min-width: 0 !important;
+  text-align: right !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty text:first-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty uni-text:first-child {
+  color: #31534f !important;
+  font-size: 19rpx !important;
+  font-weight: 800 !important;
+  line-height: 1.05 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty text:last-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty uni-text:last-child {
+  color: #041d1b !important;
+  font-size: 25rpx !important;
+  font-weight: 900 !important;
+  line-height: 1.08 !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-editor,
+.phone-shell.receiver-pending-detail-page .task-goods-actions,
+.phone-shell.receiver-pending-detail-page .task-goods-shortage,
+.phone-shell.receiver-pending-detail-page .quality-card {
+  display: none !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action {
+  position: fixed !important;
+  left: max(20rpx, calc((100vw - 375px) / 2 + 20rpx)) !important;
+  right: max(20rpx, calc((100vw - 375px) / 2 + 20rpx)) !important;
+  bottom: calc(104rpx + env(safe-area-inset-bottom)) !important;
+  z-index: 128 !important;
+  max-width: 335px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action .primary {
+  width: 100% !important;
+  height: 78rpx !important;
+  min-height: 78rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10rpx !important;
+  color: #ffffff !important;
+  background: #14927f !important;
+  border: 0 !important;
+  border-radius: 18rpx !important;
+  box-shadow: none !important;
+  font-size: 27rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action .primary::before {
+  width: 24rpx !important;
+  height: 24rpx !important;
+  background: currentColor !important;
+  mask:
+    linear-gradient(#000 0 0) 5rpx 12rpx / 6rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 10rpx 8rpx / 4rpx 12rpx no-repeat,
+    linear-gradient(#000 0 0) 13rpx 5rpx / 10rpx 4rpx no-repeat !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 5rpx 12rpx / 6rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 10rpx 8rpx / 4rpx 12rpx no-repeat,
+    linear-gradient(#000 0 0) 13rpx 5rpx / 10rpx 4rpx no-repeat !important;
+}
+
+/* Receiver pending detail: remove native nav gap and match goods rows to the screenshot. */
+.phone-shell.receiver-pending-detail-page .receiver-pending-top {
+  min-height: 106px !important;
+  padding: 12px 14px 18px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-status {
+  height: 24px !important;
+  margin: 0 28px 12px !important;
+  font-size: 17px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-titlebar {
+  min-height: 54px !important;
+  padding: 0 86px 0 50px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-title {
+  font-size: 20px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-titlebar .back-btn {
+  left: 0 !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  color: transparent !important;
+  font-size: 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-titlebar .back-btn::before {
+  content: "" !important;
+  display: block !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-left: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  transform: rotate(45deg) !important;
+}
+
+.phone-shell.receiver-pending-detail-page .receiver-pending-titlebar .status-pill {
+  min-width: 60px !important;
+  min-height: 32px !important;
+  padding: 0 14px !important;
+  font-size: 13px !important;
+  line-height: 32px !important;
+}
+
+.phone-shell.receiver-pending-detail-page > .task-basic-section,
+.phone-shell.receiver-pending-detail-page > .task-goods-section {
+  width: calc(100% - 28px) !important;
+  margin: 14px 14px 0 !important;
+  padding: 16px 14px 14px !important;
+  border-radius: 13px !important;
+}
+
+.phone-shell.receiver-pending-detail-page > .task-basic-section {
+  margin-top: 14px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-basic-section .section-head,
+.phone-shell.receiver-pending-detail-page .task-goods-section .section-head {
+  min-height: 34px !important;
+  margin-bottom: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .section-title {
+  font-size: 18px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list > view {
+  grid-template-columns: 82px minmax(0, 1fr) !important;
+  min-height: 32px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .pending-basic-list text,
+.phone-shell.receiver-pending-detail-page .pending-basic-list uni-text {
+  font-size: 14px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-row {
+  grid-template-columns: 76px minmax(0, 1fr) 64px !important;
+  gap: 10px !important;
+  padding: 12px 0 !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-img {
+  width: 76px !important;
+  height: 76px !important;
+  min-width: 76px !important;
+  min-height: 76px !important;
+  border-radius: 10px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-title {
+  font-size: 15px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-line {
+  font-size: 13px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-barcode {
+  font-size: 14px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty {
+  align-self: end !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 4px !important;
+  min-width: 64px !important;
+  padding-top: 38px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty view {
+  display: grid !important;
+  grid-template-columns: 24px minmax(0, 1fr) !important;
+  align-items: baseline !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+  text-align: right !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty text:first-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty uni-text:first-child {
+  display: block !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .task-goods-qty text:last-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty uni-text:last-child {
+  display: block !important;
+  min-width: 0 !important;
+  font-size: 15px !important;
+  line-height: 1.05 !important;
+  overflow: visible !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action {
+  left: max(20px, calc((100vw - 375px) / 2 + 20px)) !important;
+  right: max(20px, calc((100vw - 375px) / 2 + 20px)) !important;
+  bottom: calc(92px + env(safe-area-inset-bottom)) !important;
+  max-width: 335px !important;
+}
+
+.phone-shell.receiver-pending-detail-page .detail-floating-action .primary {
+  height: 48px !important;
+  min-height: 48px !important;
+  border-radius: 12px !important;
+  font-size: 16px !important;
+}
+
+.phone-shell.detail-page.receiver-pending-detail-page {
+  padding-bottom: 170px !important;
+}
+
+/* Detail content action buttons: align icon and text to the left. */
+.phone-shell.detail-page .action-row button,
+.phone-shell.detail-page .action-grid.compact button,
+.phone-shell.detail-page .location-actions .mini-btn,
+.phone-shell.detail-page .full-btn,
+.phone-shell.detail-page .purchase-floating-action button,
+.phone-shell.detail-page .detail-floating-action .primary,
+.phone-shell.detail-page .warehouse-purchase-search button,
+.phone-shell.detail-page .area-card {
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+.phone-shell.detail-page .warehouse-action-btn,
+.phone-shell.detail-page .receiver-detail-btn,
+.phone-shell.detail-page .receiver-primary-btn {
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+.phone-shell.detail-page .action-row,
+.phone-shell.detail-page .action-grid.compact,
+.phone-shell.detail-page .location-actions,
+.phone-shell.detail-page .purchase-floating-action,
+.phone-shell.detail-page .detail-floating-action {
+  justify-items: stretch !important;
+  text-align: left !important;
+}
+
+.phone-shell.detail-page .area-card {
+  align-items: flex-start !important;
+}
+
+.phone-shell.detail-page .purchase-qty-stepper button,
+.phone-shell.detail-page .qty-editor button,
+.phone-shell.detail-page .back-btn,
+.phone-shell.detail-page .warehouse-nav-btn {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* Final detail-page button alignment. Business buttons align content left;
+   navigation, back buttons, steppers and tab-like controls stay centered. */
+.phone-shell.detail-page button.primary,
+.phone-shell.detail-page button.plain,
+.phone-shell.detail-page button.soft-danger,
+.phone-shell.detail-page .warehouse-action-btn,
+.phone-shell.detail-page .receiver-detail-btn,
+.phone-shell.detail-page .receiver-primary-btn,
+.phone-shell.detail-page .location-actions .mini-btn,
+.phone-shell.detail-page .warehouse-purchase-search button,
+.phone-shell.detail-page .area-card {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10rpx !important;
+  text-align: left !important;
+}
+
+.phone-shell.detail-page .full-btn,
+.phone-shell.detail-page .detail-floating-action .primary,
+.phone-shell.detail-page .purchase-floating-action button {
+  justify-content: flex-start !important;
+  padding-left: 28rpx !important;
+  padding-right: 28rpx !important;
+}
+
+.phone-shell.detail-page .purchase-floating-action,
+.phone-shell.detail-page .detail-floating-action,
+.phone-shell.detail-page .action-row,
+.phone-shell.detail-page .action-grid.compact,
+.phone-shell.detail-page .location-actions {
+  justify-items: stretch !important;
+  text-align: left !important;
+}
+
+.phone-shell.detail-page .purchase-qty-stepper button,
+.phone-shell.detail-page .qty-editor button,
+.phone-shell.detail-page .back-btn,
+.phone-shell.detail-page .warehouse-nav-btn,
+.phone-shell.detail-page .driver-mode-tabs button,
+.phone-shell.detail-page .driver-tabs button {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* Task detail goods list: match the provided compact goods-card layout. */
+.phone-shell.detail-page .task-goods-section,
+.phone-shell.receiver-pending-detail-page > .task-goods-section {
+  width: calc(100% - 28px) !important;
+  margin: 14px 14px 0 !important;
+  padding: 14px 14px 12px !important;
+  background: #ffffff !important;
+  border: 1px solid #d7e8df !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page .task-goods-section .section-head,
+.phone-shell.receiver-pending-detail-page .task-goods-section .section-head {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 22px !important;
+  margin: 0 0 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.phone-shell.detail-page .task-goods-section .section-title,
+.phone-shell.receiver-pending-detail-page .task-goods-section .section-title {
+  color: #041d1b !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+}
+
+.phone-shell.detail-page .task-goods-list,
+.phone-shell.receiver-pending-detail-page .task-goods-list {
+  display: grid !important;
+  gap: 0 !important;
+  margin: 0 !important;
+}
+
+.phone-shell.detail-page .task-goods-row,
+.phone-shell.receiver-pending-detail-page .task-goods-row {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 76px minmax(0, 1fr) 78px !important;
+  gap: 10px !important;
+  align-items: start !important;
+  min-width: 0 !important;
+  padding: 12px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid #dfeee7 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page .task-goods-row:last-child,
+.phone-shell.receiver-pending-detail-page .task-goods-row:last-child {
+  border-bottom: 0 !important;
+  padding-bottom: 10px !important;
+}
+
+.phone-shell.detail-page .task-goods-img,
+.phone-shell.receiver-pending-detail-page .task-goods-img {
+  position: relative !important;
+  display: block !important;
+  width: 76px !important;
+  height: 76px !important;
+  min-width: 76px !important;
+  min-height: 76px !important;
+  overflow: hidden !important;
+  color: transparent !important;
+  background: linear-gradient(135deg, #d95b43 0%, #f7c8a5 48%, #5a8d64 100%) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 16px rgba(5, 45, 41, 0.12) !important;
+  font-size: 0 !important;
+}
+
+.phone-shell.detail-page .task-goods-img::before,
+.phone-shell.receiver-pending-detail-page .task-goods-img::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  background:
+    radial-gradient(circle at 28% 30%, rgba(255, 255, 255, 0.88) 0 10%, transparent 11%),
+    radial-gradient(circle at 64% 36%, rgba(255, 255, 255, 0.72) 0 12%, transparent 13%),
+    radial-gradient(circle at 44% 72%, rgba(255, 255, 255, 0.66) 0 10%, transparent 11%),
+    linear-gradient(135deg, rgba(12, 68, 62, 0.06), rgba(255, 255, 255, 0.18)) !important;
+  border-radius: inherit !important;
+}
+
+.phone-shell.detail-page .task-goods-main,
+.phone-shell.receiver-pending-detail-page .task-goods-main {
+  display: grid !important;
+  align-content: start !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+}
+
+.phone-shell.detail-page .task-goods-title,
+.phone-shell.receiver-pending-detail-page .task-goods-title {
+  display: block !important;
+  min-width: 0 !important;
+  color: #041d1b !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  line-height: 1.18 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-line,
+.phone-shell.receiver-pending-detail-page .task-goods-line {
+  display: block !important;
+  min-width: 0 !important;
+  color: #244a46 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-barcode,
+.phone-shell.receiver-pending-detail-page .task-goods-barcode {
+  display: block !important;
+  min-width: 0 !important;
+  margin-top: 6px !important;
+  color: #041d1b !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-qty,
+.phone-shell.receiver-pending-detail-page .task-goods-qty {
+  align-self: end !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  min-width: 78px !important;
+  padding: 42px 0 0 !important;
+  box-sizing: border-box !important;
+}
+
+.phone-shell.detail-page .task-goods-qty view,
+.phone-shell.receiver-pending-detail-page .task-goods-qty view {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+  gap: 1px !important;
+  min-width: 34px !important;
+  text-align: right !important;
+}
+
+.phone-shell.detail-page .task-goods-qty text:first-child,
+.phone-shell.detail-page .task-goods-qty uni-text:first-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty text:first-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty uni-text:first-child {
+  display: block !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  color: #31534f !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-qty text:last-child,
+.phone-shell.detail-page .task-goods-qty uni-text:last-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty text:last-child,
+.phone-shell.receiver-pending-detail-page .task-goods-qty uni-text:last-child {
+  display: block !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  color: #041d1b !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  line-height: 1.05 !important;
+  overflow: visible !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.detail-page .task-goods-editor,
+.phone-shell.detail-page .task-goods-actions,
+.phone-shell.detail-page .task-goods-shortage {
+  grid-column: 2 / -1 !important;
+  margin-top: 10px !important;
+}
+
+/* Login role selector: polish the collapsed current-role pill. */
+.phone-shell.login-page .login-role-collapsed {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  position: relative !important;
+  gap: 0 !important;
+  width: 100% !important;
+  min-height: 72rpx !important;
+}
+
+.phone-shell.login-page .login-role-collapsed .section-title {
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+}
+
+.phone-shell.login-page .login-current-role {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  min-width: 148rpx !important;
+  min-height: 64rpx !important;
+  padding: 0 30rpx 0 52rpx !important;
+  color: #0d7669 !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(229, 247, 240, 0.92)),
+    #e8f8f2 !important;
+  border: 1rpx solid rgba(23, 166, 139, 0.28) !important;
+  border-radius: 999rpx !important;
+  box-shadow:
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.95),
+    0 8rpx 18rpx rgba(17, 123, 109, 0.1) !important;
+  font-size: 30rpx !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.phone-shell.login-page .login-current-role::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 22rpx !important;
+  top: 50% !important;
+  width: 16rpx !important;
+  height: 16rpx !important;
+  background: #16a085 !important;
+  border: 4rpx solid rgba(255, 255, 255, 0.95) !important;
+  border-radius: 999rpx !important;
+  box-shadow: 0 0 0 1rpx rgba(17, 123, 109, 0.18) !important;
+  transform: translateY(-50%) !important;
+}
+
+.phone-shell.login-page .login-current-role text:first-child,
+.phone-shell.login-page .login-current-role uni-text:first-child {
+  display: block !important;
+  max-width: 112rpx !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.phone-shell.login-page .login-current-arrow {
+  display: none !important;
+}
+
+.phone-shell.login-page .login-current-arrow::before {
+  display: none !important;
+}
+
+.phone-shell.login-page .role-panel.open .login-current-role {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(216, 243, 233, 0.96)),
+    #def5ec !important;
+  border-color: rgba(17, 123, 109, 0.32) !important;
+}
+
+.phone-shell.login-page .role-panel.open .login-current-arrow {
+  display: none !important;
+}
+
+/* Receiver order list action icons: final scoped replacement. */
+.phone-shell.receiver-tasks-page .receiver-card-actions .receiver-detail-btn,
+.phone-shell.receiver-tasks-page .receiver-card-actions .receiver-primary-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10rpx !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-actions .receiver-detail-btn > text:first-child,
+.phone-shell.receiver-tasks-page .receiver-card-actions .receiver-detail-btn > uni-text:first-child,
+.phone-shell.receiver-tasks-page .receiver-card-actions .receiver-primary-btn > text:first-child,
+.phone-shell.receiver-tasks-page .receiver-card-actions .receiver-primary-btn > uni-text:first-child {
+  display: none !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-actions .receiver-detail-btn::before,
+.phone-shell.receiver-tasks-page .receiver-card-actions .receiver-primary-btn::before {
+  content: "" !important;
+  display: block !important;
+  flex: 0 0 28rpx !important;
+  width: 28rpx !important;
+  height: 28rpx !important;
+  background: currentColor !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-actions .action-detail::before {
+  mask:
+    linear-gradient(#000 0 0) 3rpx 2rpx / 19rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 3rpx 2rpx / 3rpx 24rpx no-repeat,
+    linear-gradient(#000 0 0) 3rpx 23rpx / 22rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 22rpx 8rpx / 3rpx 18rpx no-repeat,
+    linear-gradient(#000 0 0) 19rpx 2rpx / 3rpx 9rpx no-repeat,
+    linear-gradient(#000 0 0) 19rpx 8rpx / 6rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 11rpx / 13rpx 2rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 16rpx / 13rpx 2rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 21rpx / 9rpx 2rpx no-repeat !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 3rpx 2rpx / 19rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 3rpx 2rpx / 3rpx 24rpx no-repeat,
+    linear-gradient(#000 0 0) 3rpx 23rpx / 22rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 22rpx 8rpx / 3rpx 18rpx no-repeat,
+    linear-gradient(#000 0 0) 19rpx 2rpx / 3rpx 9rpx no-repeat,
+    linear-gradient(#000 0 0) 19rpx 8rpx / 6rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 11rpx / 13rpx 2rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 16rpx / 13rpx 2rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 21rpx / 9rpx 2rpx no-repeat !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-actions .action-accept::before {
+  mask:
+    linear-gradient(#000 0 0) 4rpx 19rpx / 20rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 4rpx 15rpx / 4rpx 8rpx no-repeat,
+    linear-gradient(#000 0 0) 20rpx 15rpx / 4rpx 8rpx no-repeat,
+    linear-gradient(#000 0 0) 13rpx 4rpx / 3rpx 12rpx no-repeat,
+    linear-gradient(#000 0 0) 9rpx 11rpx / 10rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 9rpx / 4rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 16rpx 9rpx / 4rpx 4rpx no-repeat !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 4rpx 19rpx / 20rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 4rpx 15rpx / 4rpx 8rpx no-repeat,
+    linear-gradient(#000 0 0) 20rpx 15rpx / 4rpx 8rpx no-repeat,
+    linear-gradient(#000 0 0) 13rpx 4rpx / 3rpx 12rpx no-repeat,
+    linear-gradient(#000 0 0) 9rpx 11rpx / 10rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 9rpx / 4rpx 4rpx no-repeat,
+    linear-gradient(#000 0 0) 16rpx 9rpx / 4rpx 4rpx no-repeat !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-actions .action-confirm::before {
+  mask:
+    linear-gradient(#000 0 0) 5rpx 11rpx / 18rpx 12rpx no-repeat,
+    linear-gradient(#000 0 0) 7rpx 8rpx / 14rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 5rpx 11rpx / 3rpx 12rpx no-repeat,
+    linear-gradient(#000 0 0) 20rpx 11rpx / 3rpx 12rpx no-repeat,
+    linear-gradient(135deg, transparent 0 40%, #000 41% 59%, transparent 60%) 8rpx 2rpx / 12rpx 8rpx no-repeat,
+    linear-gradient(135deg, transparent 0 43%, #000 44% 58%, transparent 59%) 7rpx 15rpx / 8rpx 7rpx no-repeat,
+    linear-gradient(135deg, transparent 0 43%, #000 44% 58%, transparent 59%) 13rpx 10rpx / 12rpx 12rpx no-repeat !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 5rpx 11rpx / 18rpx 12rpx no-repeat,
+    linear-gradient(#000 0 0) 7rpx 8rpx / 14rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 5rpx 11rpx / 3rpx 12rpx no-repeat,
+    linear-gradient(#000 0 0) 20rpx 11rpx / 3rpx 12rpx no-repeat,
+    linear-gradient(135deg, transparent 0 40%, #000 41% 59%, transparent 60%) 8rpx 2rpx / 12rpx 8rpx no-repeat,
+    linear-gradient(135deg, transparent 0 43%, #000 44% 58%, transparent 59%) 7rpx 15rpx / 8rpx 7rpx no-repeat,
+    linear-gradient(135deg, transparent 0 43%, #000 44% 58%, transparent 59%) 13rpx 10rpx / 12rpx 12rpx no-repeat !important;
+}
+
+.phone-shell.receiver-tasks-page .receiver-card-actions .action-default::before {
+  mask:
+    linear-gradient(#000 0 0) 5rpx 5rpx / 18rpx 18rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 11rpx / 12rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 13rpx 8rpx / 3rpx 12rpx no-repeat !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 5rpx 5rpx / 18rpx 18rpx no-repeat,
+    linear-gradient(#000 0 0) 8rpx 11rpx / 12rpx 3rpx no-repeat,
+    linear-gradient(#000 0 0) 13rpx 8rpx / 3rpx 12rpx no-repeat !important;
+}

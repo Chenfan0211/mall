@@ -2,6 +2,7 @@ package com.mall.station.service;
 
 import com.mall.api.operation.dto.ExceptionRecordDTO;
 import com.mall.api.station.vo.StationArrivalConfirmVO;
+import com.mall.api.station.vo.StationExceptionSubmitVO;
 import com.mall.api.station.vo.StationPickupConfirmVO;
 import com.mall.api.station.dto.StationWorkbenchDTO;
 import com.mall.api.station.vo.StationDeliveryQueryVO;
@@ -43,4 +44,6 @@ public interface StationOrderService {
     ReturnHandoverDTO getReturnHandover(Long id);
 
     PageResult<ExceptionRecordDTO> pageExceptions(StationDeliveryQueryVO query);
+
+    ExceptionRecordDTO submitException(StationExceptionSubmitVO request);
 }

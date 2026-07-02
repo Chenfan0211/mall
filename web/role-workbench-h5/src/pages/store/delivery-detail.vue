@@ -103,6 +103,7 @@ const id = ref<number>();
 const loading = ref(false);
 const error = ref('');
 const record = ref<DeliveryStationDTO | null>(null);
+const returnQuery = ref('');
 
 const statusText = computed(() => record.value ? deliveryStatusText(record.value.status) : '等待处理');
 const stationText = computed(() => profile.value.entity || `自提点 #${record.value?.stationId || '-'}`);
@@ -123,7 +124,12 @@ const actionLine = computed(() => {
 });
 
 onLoad((query) => {
-    const value = Number(query?.id);
+    const routeQuery = {
+        ...h5HashQuery(),
+        ...normalizeQuery(query)
+    };
+    returnQuery.value = buildReturnQuery(routeQuery);
+    const value = Number(routeQuery.id);
     if (value) {
         id.value = value;
         load();
@@ -169,7 +175,50 @@ function formatDateTime(value?: string) {
 }
 
 function back() {
-    goPage('/pages/store/index');
+    goPage(`/pages/store/index${returnQuery.value ? `?${returnQuery.value}` : ''}`);
+}
+
+function buildReturnQuery(query?: Record<string, unknown>) {
+    return ['tab', 'keyword', 'date', 'onlyShortage']
+        .map((key) => {
+            const value = Array.isArray(query?.[key]) ? query?.[key][0] : query?.[key];
+            const text = safeDecode(String(value ?? ''));
+            return text ? `${key}=${encodeURIComponent(text)}` : '';
+        })
+        .filter(Boolean)
+        .join('&');
+}
+
+function normalizeQuery(query?: Record<string, unknown>) {
+    const result: Record<string, string> = {};
+    Object.entries(query || {}).forEach(([key, value]) => {
+        result[key] = safeDecode(Array.isArray(value) ? String(value[0] || '') : String(value ?? ''));
+    });
+    return result;
+}
+
+function h5HashQuery() {
+    const result: Record<string, string> = {};
+    const hash = typeof location === 'undefined' ? '' : location.hash || '';
+    const queryText = hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : '';
+    if (!queryText) return result;
+    new URLSearchParams(queryText).forEach((value, key) => {
+        result[key] = safeDecode(value);
+    });
+    return result;
+}
+
+function safeDecode(value: string) {
+    let text = value;
+    for (let i = 0; i < 2; i += 1) {
+        if (!/%[0-9A-Fa-f]{2}/.test(text)) break;
+        try {
+            text = decodeURIComponent(text);
+        } catch (err) {
+            break;
+        }
+    }
+    return text;
 }
 </script>
 

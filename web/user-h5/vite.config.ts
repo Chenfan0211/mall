@@ -4,7 +4,7 @@ import uni from '@dcloudio/vite-plugin-uni';
 import { defineConfig } from 'vite';
 
 const uniPlugin = typeof uni === 'function' ? uni : uni.default;
-const USER_H5_API_TARGET = process.env.VITE_USER_H5_PROXY_TARGET || 'http://192.168.28.211';
+const USER_H5_API_TARGET = process.env.VITE_USER_H5_PROXY_TARGET || 'http://192.168.28.242';
 
 const devFallbackProducts = [
     {
@@ -161,6 +161,132 @@ const devFallbackProducts = [
     }
 ];
 
+const devFallbackHomeCategories = [
+    { categoryId: 750001, categoryName: '水果鲜食', imageUrl: '/static/user-home/shop-home.jpg', sortNo: 10 },
+    { categoryId: 750002, categoryName: '蔬菜豆制', imageUrl: '/static/user-home/shop-category.jpg', sortNo: 20 },
+    { categoryId: 810001, categoryName: '海鲜水产', imageUrl: '/static/user-home/shop-seafood.jpg', sortNo: 30 },
+    { categoryId: 810002, categoryName: '熟食卤味', imageUrl: '/static/user-home/shop-cooked.jpg', sortNo: 40 },
+    { categoryId: 810003, categoryName: '肉禽蛋品', imageUrl: '/static/user-home/shop-meat.jpg', sortNo: 50 },
+    { categoryId: 810004, categoryName: '休闲零食', imageUrl: '/static/user-home/shop-list.jpg', sortNo: 60 },
+    { categoryId: 810005, categoryName: '早餐烘焙', imageUrl: '/static/user-home/shop-bakery.jpg', sortNo: 70 },
+    { categoryId: 810006, categoryName: '粮油调味', imageUrl: '/static/user-home/shop-grain.jpg', sortNo: 80 }
+];
+
+const devFallbackCategories = [
+    {
+        id: 750001,
+        categoryName: '水果鲜食',
+        categoryCode: 'FRONT_FRUIT',
+        imageUrl: '/static/user-home/shop-home.jpg',
+        parentId: 0,
+        sortNo: 10,
+        status: 1,
+        children: [
+            { id: 816001, categoryName: '柑橘橙柚', categoryCode: 'FRONT_FRUIT_CITRUS', parentId: 750001, sortNo: 101, status: 1 },
+            { id: 816002, categoryName: '莓果葡萄', categoryCode: 'FRONT_FRUIT_BERRY_GRAPE', parentId: 750001, sortNo: 102, status: 1 },
+            { id: 816003, categoryName: '苹果梨桃', categoryCode: 'FRONT_FRUIT_APPLE_PEAR', parentId: 750001, sortNo: 103, status: 1 }
+        ]
+    },
+    {
+        id: 750002,
+        categoryName: '蔬菜豆制',
+        categoryCode: 'FRONT_VEGETABLE',
+        imageUrl: '/static/user-home/shop-category.jpg',
+        parentId: 0,
+        sortNo: 20,
+        status: 1,
+        children: [
+            { id: 816011, categoryName: '叶菜菌菇', categoryCode: 'FRONT_VEG_LEAF_MUSHROOM', parentId: 750002, sortNo: 111, status: 1 },
+            { id: 816012, categoryName: '茄果根茎', categoryCode: 'FRONT_VEG_ROOT_MELON', parentId: 750002, sortNo: 112, status: 1 },
+            { id: 816013, categoryName: '豆制净菜', categoryCode: 'FRONT_VEG_TOFU_CLEAN', parentId: 750002, sortNo: 113, status: 1 }
+        ]
+    },
+    {
+        id: 810001,
+        categoryName: '海鲜水产',
+        categoryCode: 'FRONT_SEAFOOD',
+        imageUrl: '/static/user-home/shop-seafood.jpg',
+        parentId: 0,
+        sortNo: 30,
+        status: 1,
+        children: [
+            { id: 816021, categoryName: '鱼虾贝类', categoryCode: 'FRONT_SEAFOOD_FISH_SHRIMP', parentId: 810001, sortNo: 121, status: 1 },
+            { id: 816022, categoryName: '海鲜半成品', categoryCode: 'FRONT_SEAFOOD_PREPARED', parentId: 810001, sortNo: 122, status: 1 },
+            { id: 816023, categoryName: '即食海味', categoryCode: 'FRONT_SEAFOOD_READY', parentId: 810001, sortNo: 123, status: 1 }
+        ]
+    },
+    {
+        id: 810002,
+        categoryName: '熟食卤味',
+        categoryCode: 'FRONT_COOKED',
+        imageUrl: '/static/user-home/shop-cooked.jpg',
+        parentId: 0,
+        sortNo: 40,
+        status: 1,
+        children: [
+            { id: 816031, categoryName: '卤味熟食', categoryCode: 'FRONT_COOKED_BRAISED', parentId: 810002, sortNo: 131, status: 1 },
+            { id: 816032, categoryName: '烤肠肉食', categoryCode: 'FRONT_COOKED_ROASTED', parentId: 810002, sortNo: 132, status: 1 },
+            { id: 816033, categoryName: '豆干小菜', categoryCode: 'FRONT_COOKED_TOFU_SIDE', parentId: 810002, sortNo: 133, status: 1 }
+        ]
+    },
+    {
+        id: 810003,
+        categoryName: '肉禽蛋品',
+        categoryCode: 'FRONT_MEAT',
+        imageUrl: '/static/user-home/shop-meat.jpg',
+        parentId: 0,
+        sortNo: 50,
+        status: 1,
+        children: [
+            { id: 816041, categoryName: '猪牛羊肉', categoryCode: 'FRONT_MEAT_PORK_BEEF', parentId: 810003, sortNo: 141, status: 1 },
+            { id: 816042, categoryName: '禽肉蛋品', categoryCode: 'FRONT_MEAT_POULTRY_EGG', parentId: 810003, sortNo: 142, status: 1 },
+            { id: 816043, categoryName: '调理肉品', categoryCode: 'FRONT_MEAT_PREPARED', parentId: 810003, sortNo: 143, status: 1 }
+        ]
+    },
+    {
+        id: 810004,
+        categoryName: '休闲零食',
+        categoryCode: 'FRONT_SNACK',
+        imageUrl: '/static/user-home/shop-list.jpg',
+        parentId: 0,
+        sortNo: 60,
+        status: 1,
+        children: [
+            { id: 816051, categoryName: '坚果果干', categoryCode: 'FRONT_SNACK_NUT_FRUIT', parentId: 810004, sortNo: 151, status: 1 },
+            { id: 816052, categoryName: '糕点饼干', categoryCode: 'FRONT_SNACK_BAKED', parentId: 810004, sortNo: 152, status: 1 },
+            { id: 816053, categoryName: '膨化零食', categoryCode: 'FRONT_SNACK_CRISPY', parentId: 810004, sortNo: 153, status: 1 }
+        ]
+    },
+    {
+        id: 810005,
+        categoryName: '早餐烘焙',
+        categoryCode: 'FRONT_BREAKFAST',
+        imageUrl: '/static/user-home/shop-bakery.jpg',
+        parentId: 0,
+        sortNo: 70,
+        status: 1,
+        children: [
+            { id: 816061, categoryName: '面包烘焙', categoryCode: 'FRONT_BREAKFAST_BAKERY', parentId: 810005, sortNo: 161, status: 1 },
+            { id: 816062, categoryName: '早餐主食', categoryCode: 'FRONT_BREAKFAST_STAPLE', parentId: 810005, sortNo: 162, status: 1 },
+            { id: 816063, categoryName: '乳品饮品', categoryCode: 'FRONT_BREAKFAST_DAIRY', parentId: 810005, sortNo: 163, status: 1 }
+        ]
+    },
+    {
+        id: 810006,
+        categoryName: '粮油调味',
+        categoryCode: 'FRONT_GRAIN',
+        imageUrl: '/static/user-home/shop-grain.jpg',
+        parentId: 0,
+        sortNo: 80,
+        status: 1,
+        children: [
+            { id: 816071, categoryName: '米面杂粮', categoryCode: 'FRONT_GRAIN_RICE_FLOUR', parentId: 810006, sortNo: 171, status: 1 },
+            { id: 816072, categoryName: '食用油品', categoryCode: 'FRONT_GRAIN_OIL', parentId: 810006, sortNo: 172, status: 1 },
+            { id: 816073, categoryName: '调味酱料', categoryCode: 'FRONT_GRAIN_SEASONING', parentId: 810006, sortNo: 173, status: 1 }
+        ]
+    }
+];
+
 function writeDevFallback(req: IncomingMessage, res: ServerResponse) {
     if (res.headersSent || res.destroyed) {
         return;
@@ -290,17 +416,7 @@ function writeDevFallback(req: IncomingMessage, res: ServerResponse) {
         });
     } else if (url.includes('/api/user/home/assets') || url.includes('/user/home/assets')) {
         body = ok({
-            categories: [
-                { categoryId: 1, categoryName: '水果', imageUrl: '/static/user-home/cat-fruit.svg', sortNo: 1 },
-                { categoryId: 2, categoryName: '蔬菜百', imageUrl: '/static/user-home/cat-veg.svg', sortNo: 2 },
-                { categoryId: 3, categoryName: '海鲜', imageUrl: '/static/user-home/cat-seafood.svg', sortNo: 3 },
-                { categoryId: 4, categoryName: '熟食', imageUrl: '/static/user-home/cat-cooked.svg', sortNo: 4 },
-                { categoryId: 5, categoryName: '肉禽蛋', imageUrl: '/static/user-home/cat-meat.svg', sortNo: 5 },
-                { categoryId: 6, categoryName: '零食', imageUrl: '/static/user-home/cat-snack.svg', sortNo: 6 },
-                { categoryId: 7, categoryName: '早餐', imageUrl: '/static/user-home/cat-breakfast.svg', sortNo: 7 },
-                { categoryId: 8, categoryName: '乳品', imageUrl: '/static/user-home/cat-dairy.svg', sortNo: 8 },
-                { categoryId: 9, categoryName: '粮油', imageUrl: '/static/user-home/cat-grain.svg', sortNo: 9 }
-            ],
+            categories: devFallbackHomeCategories,
             banners: [],
             promos: []
         });
@@ -311,18 +427,8 @@ function writeDevFallback(req: IncomingMessage, res: ServerResponse) {
         });
     } else if (url.includes('/api/user/products/categories') || url.includes('/user/products/categories')) {
         body = ok({
-            total: 10,
-            list: [
-                { id: 1, categoryName: '水果', imageUrl: '/static/user-home/cat-fruit.svg', parentId: 0, level: 1, sortNo: 1, status: 1 },
-                { id: 2, categoryName: '蔬菜百', imageUrl: '/static/user-home/cat-veg.svg', parentId: 0, level: 1, sortNo: 2, status: 1 },
-                { id: 3, categoryName: '海鲜', imageUrl: '/static/user-home/cat-seafood.svg', parentId: 0, level: 1, sortNo: 3, status: 1 },
-                { id: 4, categoryName: '熟食', imageUrl: '/static/user-home/cat-cooked.svg', parentId: 0, level: 1, sortNo: 4, status: 1 },
-                { id: 5, categoryName: '肉禽蛋', imageUrl: '/static/user-home/cat-meat.svg', parentId: 0, level: 1, sortNo: 5, status: 1 },
-                { id: 6, categoryName: '零食', imageUrl: '/static/user-home/cat-snack.svg', parentId: 0, level: 1, sortNo: 6, status: 1 },
-                { id: 7, categoryName: '早餐', imageUrl: '/static/user-home/cat-breakfast.svg', parentId: 0, level: 1, sortNo: 7, status: 1 },
-                { id: 8, categoryName: '乳品', imageUrl: '/static/user-home/cat-dairy.svg', parentId: 0, level: 1, sortNo: 8, status: 1 },
-                { id: 9, categoryName: '粮油', imageUrl: '/static/user-home/cat-grain.svg', parentId: 0, level: 1, sortNo: 9, status: 1 }
-            ]
+            total: devFallbackCategories.length,
+            list: devFallbackCategories
         });
     } else if (url.includes('/api/user/products') || url.includes('/user/products')) {
         body = ok({

@@ -4,6 +4,8 @@ import com.mall.api.product.dto.CategoryDTO;
 import com.mall.api.user.dto.UserCommentDTO;
 import com.mall.api.user.dto.UserProductCardDTO;
 import com.mall.api.user.dto.UserProductDetailDTO;
+import com.mall.api.user.dto.UserProductPurchaseRecordDTO;
+import com.mall.api.user.dto.UserProductReviewStatsDTO;
 import com.mall.api.user.vo.UserProductQueryVO;
 import com.mall.common.page.PageResult;
 
@@ -17,5 +19,9 @@ public interface UserProductService {
 
     UserProductDetailDTO getProductDetail(Long id, UserProductQueryVO query);
 
+    UserProductReviewStatsDTO getReviewStats(Long id, UserProductQueryVO query);
+
     PageResult<UserCommentDTO> pageComments(UserProductQueryVO query);
+
+    PageResult<UserProductPurchaseRecordDTO> pagePurchaseRecords(Long id, UserProductQueryVO query);
 }

@@ -59,7 +59,7 @@
             <view class="role-product-send-list">
               <view v-for="item in filteredSupplierProducts" :key="item.key" class="role-product-send-card" :class="{ selected: supplierDraftQty(item.key) > 0 }">
                 <view class="role-sales-main">
-                  <view class="role-sales-img"><RoleProductThumb :label="item.title" /></view>
+                  <view class="role-sales-img"><RoleProductThumb :label="item.title" :src="item.image" /></view>
                   <view>
                     <view class="role-sales-title">
                       <text class="role-sales-name">{{ item.title }}</text>
@@ -122,7 +122,7 @@
               v-for="tab in tabs"
               :key="tab.value"
               :class="{ active: activeTab === tab.value }"
-              @click="activeTab = tab.value"
+              @click="setActiveTab(tab.value)"
             >
               {{ tab.label }}
             </button>
@@ -144,10 +144,6 @@
             <button v-else class="role-filter-clear" @click="clearKeyword">清空</button>
           </view>
 
-          <view v-if="roleType === 'station' && activeTab === 'arrival'" class="role-delivery-toggle">
-            <button :class="{ active: !onlyShortageDelivery }" @click="onlyShortageDelivery = false">全部商品</button>
-            <button :class="{ active: onlyShortageDelivery }" @click="onlyShortageDelivery = true">只看缺货</button>
-          </view>
         </view>
 
         <view class="role-delivery-stats role-delivery-stats-compact">
@@ -158,12 +154,8 @@
         </view>
 
           <view v-if="activeTab === 'arrival'" class="role-arrival-actions">
+            <button class="role-shortage-filter" :class="{ active: onlyShortageDelivery }" @click="onlyShortageDelivery = !onlyShortageDelivery">只看缺货</button>
             <button class="role-shortage-entry" @click="open('/pages/store/notify-preview')">发送到货通知</button>
-            <button class="role-shortage-entry" @click="openStationShortage()">标记异常</button>
-          </view>
-          <view v-if="activeTab === 'arrival' && firstConfirmableStation" class="role-arrival-confirm-strip">
-            <text>到站记录 #{{ firstConfirmableStation.id }} 待确认</text>
-            <button class="role-arrival-confirm-btn" @click="confirmArrival(firstConfirmableStation.id)">确认到货</button>
           </view>
 
           <view class="role-section">
@@ -183,7 +175,7 @@
                 @click="openDeliveryProduct(item)"
               >
                 <view class="role-delivery-product-main">
-                  <view class="role-delivery-img"><RoleProductThumb :label="item.title" /></view>
+                  <view class="role-delivery-img"><RoleProductThumb :label="item.title" :src="item.image" variant="delivery" /></view>
                   <view>
                     <view class="role-delivery-title-row">
                       <text class="role-delivery-title">{{ item.title }}</text>
@@ -212,7 +204,7 @@
                 </view>
                 <view class="role-order-actions">
                   <button class="role-action-btn soft" @click.stop="openDeliveryProduct(item)">查看用户</button>
-                  <button v-if="item.firstStationId" class="role-action-btn soft" @click.stop="open(`/pages/store/delivery-detail?id=${item.firstStationId}`)">到站记录</button>
+                  <button v-if="item.firstStationId" class="role-action-btn soft" @click.stop="openDeliveryDetail(item.firstStationId)">到站记录</button>
                 </view>
               </view>
               <view v-if="filteredDeliveryProducts.length === 0" class="role-empty inline-empty">
@@ -226,17 +218,10 @@
                 v-for="item in filteredReturns"
                 :key="item.id"
                 class="role-return-card"
-                @click="open(`/pages/store/return-detail?id=${item.id}`)"
+                @click="openReturnDetail(item.id)"
               >
                 <view class="role-return-main">
-                  <view class="role-delivery-img role-return-img" aria-hidden="true">
-                    <svg viewBox="0 0 36 36" fill="none">
-                      <path d="M10.5 11.5h12.8c3.6 0 6.5 2.9 6.5 6.5s-2.9 6.5-6.5 6.5H12" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M14 7.8 8.5 13.3 14 18.8" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M8.8 13.3h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-                      <path d="M13 24.5h8.2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-                    </svg>
-                  </view>
+                  <view class="role-delivery-img role-return-img" aria-hidden="true"><RoleProductThumb variant="return" /></view>
                   <view>
                     <text class="role-delivery-title">{{ item.returnNo || `退货 #${item.id}` }}</text>
                     <text class="role-delivery-desc">配送单 #{{ item.deliveryId || '-' }} · 仓库 #{{ item.warehouseId || '-' }}</text>
@@ -280,9 +265,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { onShow } from '@dcloudio/uni-app';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 import {
-    confirmStationArrival,
     pageDeliveryStations,
     pageExceptions,
     pageReturnHandovers,
@@ -315,6 +299,7 @@ interface SupplierProductRow {
     key: string;
     title: string;
     spec: string;
+    image: string;
     initial: string;
     status: string;
     purchaseQty: number;
@@ -332,6 +317,7 @@ interface DeliveryProductRow {
     key: string;
     title: string;
     spec: string;
+    image: string;
     initial: string;
     expected: number;
     actual: number;
@@ -362,6 +348,7 @@ const stationItems = ref<StationOrderItemDTO[]>([]);
 const purchases = ref<SupplierPurchaseDTO[]>([]);
 const supplierItems = ref<SupplierPurchaseItemDTO[]>([]);
 const supplierDeliveries = ref<SupplierDeliveryDTO[]>([]);
+const initialStoreQuery = ref<Record<string, string>>({});
 
 const tabs = computed(() => roleType.value === 'supplier'
     ? [
@@ -414,7 +401,7 @@ const filteredDeliveryStations = computed(() => {
     });
 });
 
-const firstConfirmableStation = computed(() => filteredDeliveryStations.value.find(canConfirmArrival));
+const firstConfirmableStation = computed(() => filteredDeliveryStations.value.find((item) => ![30, 40].includes(Number(item.status || 0))));
 
 const deliveryProducts = computed<DeliveryProductRow[]>(() => {
     const stationHint = firstConfirmableStation.value || filteredDeliveryStations.value[0];
@@ -428,6 +415,7 @@ const deliveryProducts = computed<DeliveryProductRow[]>(() => {
         orders: Set<string>;
         users: Set<string>;
         searchParts: string[];
+        image: string;
     }>();
 
     stationItems.value.forEach((item) => {
@@ -443,8 +431,10 @@ const deliveryProducts = computed<DeliveryProductRow[]>(() => {
             actual: 0,
             orders: new Set<string>(),
             users: new Set<string>(),
-            searchParts: []
+            searchParts: [],
+            image: itemImage(item)
         };
+        if (!row.image) row.image = itemImage(item);
         const qty = Number(item.qty || 0);
         row.expected += qty;
         row.actual += deliveryActualQty(item);
@@ -472,6 +462,7 @@ const deliveryProducts = computed<DeliveryProductRow[]>(() => {
             key: item.key,
             title: item.title,
             spec: item.spec,
+            image: item.image,
             initial: item.title.slice(0, 1) || '商',
             expected: item.expected,
             actual: item.actual,
@@ -569,6 +560,7 @@ const supplierProducts = computed<SupplierProductRow[]>(() => {
         latestTime: string;
         status: string;
         searchText: string[];
+        image: string;
     }>();
 
     supplierItems.value.forEach((item) => {
@@ -589,8 +581,10 @@ const supplierProducts = computed<SupplierProductRow[]>(() => {
             warehouses: new Set<string>(),
             latestTime: '-',
             status: supplierItemStatusText(undefined),
-            searchText: []
+            searchText: [],
+            image: itemImage(item)
         };
+        if (!current.image) current.image = itemImage(item);
         current.purchaseQty += purchaseQty;
         current.amountValue += amount;
         if (price > 0) current.prices.push(price);
@@ -619,6 +613,7 @@ const supplierProducts = computed<SupplierProductRow[]>(() => {
             key: item.key,
             title: item.title,
             spec: item.spec,
+            image: item.image,
             initial: item.title.slice(0, 1) || '商',
             status: item.status,
             purchaseQty: item.purchaseQty,
@@ -719,13 +714,34 @@ const stationPanelSubTitle = computed(() => {
 });
 
 watch(roleType, (value) => {
-    activeTab.value = value === 'supplier' ? 'purchase' : 'arrival';
-    keyword.value = '';
-    activeDate.value = 'all';
-    onlyShortageDelivery.value = false;
+    if (Object.keys(initialStoreQuery.value).length > 0) {
+        applyStoreQuery(initialStoreQuery.value);
+        initialStoreQuery.value = {};
+        return;
+    }
+    resetStoreState(value);
 }, { immediate: true });
 
-onShow(load);
+onLoad((query) => {
+    initialStoreQuery.value = {
+        ...h5HashQuery(),
+        ...normalizeQuery(query)
+    };
+    if (Object.keys(initialStoreQuery.value).length > 0) {
+        applyStoreQuery(initialStoreQuery.value);
+        initialStoreQuery.value = {};
+    }
+});
+
+onShow(() => {
+    const query = h5HashQuery();
+    if (Object.keys(query).length > 0) {
+        applyStoreQuery(query);
+    } else {
+        resetStoreState(roleType.value);
+    }
+    load();
+});
 
 async function load() {
     loading.value = true;
@@ -764,6 +780,10 @@ async function load() {
 
 function open(url: string) {
     goPage(url);
+}
+
+function setActiveTab(value: ActiveTab) {
+    activeTab.value = value;
 }
 
 function supplierDraftQty(key: string) {
@@ -807,6 +827,13 @@ function clearKeyword() {
     onlyShortageDelivery.value = false;
 }
 
+function resetStoreState(value: string) {
+    activeTab.value = value === 'supplier' ? 'purchase' : 'arrival';
+    keyword.value = '';
+    activeDate.value = 'all';
+    onlyShortageDelivery.value = false;
+}
+
 function normalize(value: string) {
     return String(value || '').trim().toLowerCase();
 }
@@ -824,6 +851,10 @@ function isLaterTime(value?: string, current?: string) {
 
 function formatAmount(value: number) {
     return Number(value || 0).toFixed(2);
+}
+
+function itemImage(item: StationOrderItemDTO | SupplierPurchaseItemDTO) {
+    return item.productImage || item.imageUrl || item.thumbUrl || item.picUrl || '';
 }
 
 function supplierItemStatusText(status?: number) {
@@ -972,30 +1003,89 @@ function roleStatusClass(status: string) {
 }
 
 function openDeliveryProduct(item: DeliveryProductRow) {
-    open(`/pages/store/delivery-product?key=${encodeURIComponent(item.key)}`);
+    open(`/pages/store/delivery-product?key=${encodeURIComponent(item.key)}&${storeReturnQuery('arrival')}`);
+}
+
+function openDeliveryDetail(id: number) {
+    open(`/pages/store/delivery-detail?id=${id}&${storeReturnQuery('arrival')}`);
+}
+
+function openReturnDetail(id?: number) {
+    if (!id) return;
+    open(`/pages/store/return-detail?id=${id}&${storeReturnQuery('returns')}`);
 }
 
 function openStationShortage(item?: DeliveryProductRow) {
     const target = item || filteredDeliveryProducts.value.find((row) => row.lack > 0) || filteredDeliveryProducts.value[0];
-    const query = target ? `?key=${encodeURIComponent(target.key)}` : '';
+    const query = target ? `?key=${encodeURIComponent(target.key)}&${storeReturnQuery('arrival')}` : `?${storeReturnQuery('arrival')}`;
     open(`/pages/store/shortage${query}`);
 }
 
-function canConfirmArrival(item: DeliveryStationDTO) {
-    return ![30, 40].includes(Number(item.status || 0));
+function storeReturnQuery(tab: ActiveTab = activeTab.value) {
+    const params = [
+        ['tab', tab],
+        ['keyword', keyword.value],
+        ['date', activeDate.value],
+        ['onlyShortage', onlyShortageDelivery.value ? '1' : '0']
+    ];
+    return params
+        .filter(([, value]) => value !== undefined && value !== null && String(value) !== '')
+        .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
+        .join('&');
 }
 
-async function confirmArrival(id: number) {
-    const ok = await confirmAction(`确认配送记录 #${id} 已到货？`, '确认到货');
-    if (!ok) return;
-    try {
-        await confirmStationArrival(id, {});
-        showRoleToast('到货确认成功');
-        load();
-    } catch (err) {
-        showRoleToast(friendlyErrorMessage(err, '到货确认失败'));
+function normalizeQuery(query?: Record<string, unknown>) {
+    const result: Record<string, string> = {};
+    Object.entries(query || {}).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            result[key] = safeDecode(String(value[0] || ''));
+            return;
+        }
+        result[key] = safeDecode(String(value ?? ''));
+    });
+    return result;
+}
+
+function applyStoreQuery(query: Record<string, string>) {
+    const tab = query.tab as ActiveTab;
+    if (tab && tabs.value.some((item) => item.value === tab)) {
+        activeTab.value = tab;
+    }
+    if (Object.prototype.hasOwnProperty.call(query, 'keyword')) {
+        keyword.value = query.keyword || '';
+    }
+    if (Object.prototype.hasOwnProperty.call(query, 'date')) {
+        activeDate.value = query.date || 'all';
+    }
+    if (Object.prototype.hasOwnProperty.call(query, 'onlyShortage')) {
+        onlyShortageDelivery.value = query.onlyShortage === '1' || query.onlyShortage === 'true';
     }
 }
+
+function h5HashQuery() {
+    const result: Record<string, string> = {};
+    const hash = typeof location === 'undefined' ? '' : location.hash || '';
+    const queryText = hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : '';
+    if (!queryText) return result;
+    new URLSearchParams(queryText).forEach((value, key) => {
+        result[key] = safeDecode(value);
+    });
+    return result;
+}
+
+function safeDecode(value: string) {
+    let text = value;
+    for (let i = 0; i < 2; i += 1) {
+        if (!/%[0-9A-Fa-f]{2}/.test(text)) break;
+        try {
+            text = decodeURIComponent(text);
+        } catch (err) {
+            break;
+        }
+    }
+    return text;
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -1139,23 +1229,31 @@ async function confirmArrival(id: number) {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8rpx;
-  margin-bottom: 16rpx;
-  padding: 8rpx;
-  background: rgba(255, 248, 242, 0.92);
-  border: 1rpx solid #f1d8ca;
-  border-radius: 40rpx;
-  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.95), 0 20rpx 44rpx rgba(81, 48, 27, 0.07);
+  margin-bottom: 18rpx;
+  padding: 10rpx;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1rpx solid rgba(240, 214, 197, 0.78);
+  border-radius: 32rpx;
+  box-shadow: 0 14rpx 30rpx rgba(81, 48, 27, 0.06), inset 0 1rpx 0 rgba(255, 255, 255, 0.98);
 }
 
 .role-delivery-tabs button,
 .role-delivery-tabs uni-button,
 .role-delivery-tabs :deep(uni-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 64rpx;
-  color: #8d6a57;
+  margin-left: 0;
+  margin-right: 0;
+  color: #8a5f4a;
   background: transparent;
   border-radius: 999rpx;
-  font-size: 24rpx;
+  font-size: 26rpx;
   font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: center;
 }
 
 .role-delivery-tabs button.active,
@@ -1163,13 +1261,12 @@ async function confirmArrival(id: number) {
 .role-delivery-tabs :deep(uni-button.active) {
   color: #ffffff;
   background: linear-gradient(135deg, #e85d3f 0%, #f17b45 100%);
-  box-shadow: 0 16rpx 32rpx rgba(232, 93, 63, 0.24), inset 0 1rpx 0 rgba(255, 255, 255, 0.24);
-  transform: translateY(-2rpx);
+  box-shadow: 0 12rpx 24rpx rgba(232, 93, 63, 0.22), inset 0 1rpx 0 rgba(255, 255, 255, 0.26);
 }
 
 .role-delivery-query-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 224rpx;
+  grid-template-columns: minmax(0, 1fr) 292rpx;
   gap: 14rpx;
   align-items: center;
 }
@@ -1211,10 +1308,19 @@ async function confirmArrival(id: number) {
   justify-content: flex-start;
   gap: 10rpx;
   min-height: 78rpx;
-  padding: 0 54rpx 0 16rpx;
+  min-width: 0;
+  padding: 0 56rpx 0 18rpx;
   color: #2f241f;
-  font-size: 24rpx;
+  font-size: 26rpx;
   font-weight: 900;
+  white-space: nowrap;
+}
+
+.role-date-trigger text:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .role-date-trigger::before {
@@ -1253,35 +1359,6 @@ async function confirmArrival(id: number) {
   font-size: 22rpx;
   font-weight: 900;
   line-height: 1;
-}
-
-.role-delivery-toggle {
-  display: flex;
-  gap: 12rpx;
-  margin-top: 16rpx;
-  overflow-x: auto;
-}
-
-.role-delivery-toggle button,
-.role-delivery-toggle uni-button,
-.role-delivery-toggle :deep(uni-button) {
-  flex: 0 0 auto;
-  min-height: 58rpx;
-  padding: 0 24rpx;
-  color: #8d6a57;
-  background: #fffdfb;
-  border: 1rpx solid #efc8b7;
-  border-radius: 999rpx;
-  font-size: 24rpx;
-  font-weight: 900;
-}
-
-.role-delivery-toggle button.active,
-.role-delivery-toggle uni-button.active,
-.role-delivery-toggle :deep(uni-button.active) {
-  color: #ffffff;
-  background: #e85d3f;
-  border-color: #e85d3f;
 }
 
 .role-filter-clear,
@@ -1537,87 +1614,82 @@ uni-button.role-product-select,
 }
 
 .role-arrival-actions {
+  flex-wrap: nowrap;
   justify-content: flex-start;
-  margin-bottom: 16rpx;
-}
-
-.role-arrival-confirm-strip {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16rpx;
-  margin: -4rpx 0 16rpx;
-  padding: 14rpx 18rpx;
-  color: #9a725d;
-  background: rgba(255, 253, 251, 0.78);
-  border: 1rpx dashed #efc8b7;
-  border-radius: 22rpx;
-  font-size: 22rpx;
-  line-height: 1.45;
-}
-
-.role-arrival-confirm-strip text {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.role-arrival-confirm-btn,
-uni-button.role-arrival-confirm-btn,
-:deep(uni-button.role-arrival-confirm-btn) {
-  flex: 0 0 auto;
-  min-height: 48rpx;
-  padding: 0 18rpx;
-  color: #b85a2f;
-  background: #fff3ea;
-  border: 1rpx solid #f0d6c5;
-  border-radius: 999rpx;
-  font-size: 22rpx;
-  font-weight: 900;
-  white-space: nowrap;
+  margin: 0 0 18rpx;
+  overflow-x: auto;
 }
 
 .product-short-tip {
   margin: 18rpx 0 0;
 }
 
+.role-shortage-filter,
+uni-button.role-shortage-filter,
+:deep(uni-button.role-shortage-filter),
 .role-shortage-entry,
 uni-button.role-shortage-entry,
 :deep(uni-button.role-shortage-entry) {
+  margin-left: 0;
+  margin-right: 0;
   min-height: 56rpx;
-  padding: 0 18rpx;
-  color: #ffffff;
-  background: #e85d3f;
+  padding: 0 22rpx;
   border-radius: 999rpx;
-  font-size: 22rpx;
+  font-size: 24rpx;
   font-weight: 900;
   white-space: nowrap;
 }
 
+.role-shortage-filter,
+uni-button.role-shortage-filter,
+:deep(uni-button.role-shortage-filter) {
+  color: #b85a2f;
+  background: #fff3ea;
+  border: 1rpx solid #f0d6c5;
+}
+
+.role-shortage-filter.active,
+uni-button.role-shortage-filter.active,
+:deep(uni-button.role-shortage-filter.active) {
+  color: #ffffff;
+  background: #e85d3f;
+  border-color: #e85d3f;
+  box-shadow: 0 12rpx 24rpx rgba(232, 93, 63, 0.18);
+}
+
+.role-shortage-entry,
+uni-button.role-shortage-entry,
+:deep(uni-button.role-shortage-entry) {
+  color: #ffffff;
+  background: #e85d3f;
+}
+
 .role-delivery-list {
   display: grid;
-  gap: 20rpx;
+  gap: 18rpx;
 }
 
 .role-delivery-product,
 .role-return-card {
-  padding: 24rpx;
-  background: #fff8f3;
-  border: 1rpx solid #f4ddd0;
-  border-radius: 32rpx;
+  padding: 26rpx;
+  background: #fffdfb;
+  border: 1rpx solid #f1d8ca;
+  border-radius: 30rpx;
+  box-shadow: 0 18rpx 38rpx rgba(77, 42, 21, 0.06);
 }
 
 .role-delivery-product.short {
-  background: #fff7f1;
+  background: linear-gradient(180deg, #fff9f4 0%, #fffdfb 100%);
   border-color: #efc8b7;
+  box-shadow: 0 20rpx 42rpx rgba(232, 93, 63, 0.1);
 }
 
 .role-delivery-product-main,
 .role-return-main {
   display: grid;
-  grid-template-columns: 92rpx minmax(0, 1fr);
-  gap: 18rpx;
+  grid-template-columns: 100rpx minmax(0, 1fr);
+  gap: 20rpx;
   align-items: start;
 }
 
@@ -1626,18 +1698,19 @@ uni-button.role-shortage-entry,
   align-items: flex-start;
   justify-content: space-between;
   gap: 14rpx;
+  min-width: 0;
 }
 
 .role-delivery-img {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 92rpx;
-  height: 92rpx;
+  width: 100rpx;
+  height: 100rpx;
   color: #d94b34;
   background: linear-gradient(135deg, #fff3ea 0%, #fffaf6 100%);
   border: 1rpx solid #f2d6c4;
-  border-radius: 24rpx;
+  border-radius: 22rpx;
   font-size: 30rpx;
   font-weight: 900;
 }
@@ -1646,20 +1719,11 @@ uni-button.role-shortage-entry,
   color: #d94b34;
 }
 
-.role-return-img svg {
-  width: 52rpx;
-  height: 52rpx;
-}
-
-.role-return-img path {
-  vector-effect: non-scaling-stroke;
-}
-
 .role-delivery-title {
   display: block;
   overflow: hidden;
   color: #2d241f;
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 900;
   line-height: 1.35;
   text-overflow: ellipsis;
@@ -1670,15 +1734,15 @@ uni-button.role-shortage-entry,
   display: block;
   margin-top: 8rpx;
   color: #8b6a57;
-  font-size: 24rpx;
+  font-size: 26rpx;
   line-height: 1.45;
 }
 
 .role-delivery-counts,
 .role-return-qtys {
   display: grid;
-  gap: 12rpx;
-  margin-top: 16rpx;
+  gap: 10rpx;
+  margin-top: 18rpx;
 }
 
 .role-delivery-counts {
@@ -1691,11 +1755,12 @@ uni-button.role-shortage-entry,
 
 .role-delivery-counts view,
 .role-return-qtys view {
-  padding: 12rpx;
+  padding: 14rpx 12rpx;
   color: #8b6a57;
-  background: #fffaf6;
+  background: #fff7f1;
+  border: 1rpx solid #f5e0d4;
   border-radius: 18rpx;
-  font-size: 22rpx;
+  font-size: 24rpx;
 }
 
 .role-delivery-counts text:first-child,
@@ -1721,13 +1786,13 @@ uni-button.role-shortage-entry,
   align-items: center;
   margin-top: 14rpx;
   color: #8b6a57;
-  font-size: 22rpx;
+  font-size: 24rpx;
 }
 
 .role-return-order {
   margin-top: 12rpx;
   color: #8b6a57;
-  font-size: 22rpx;
+  font-size: 24rpx;
   line-height: 1.45;
 }
 
@@ -1739,7 +1804,7 @@ uni-button.role-shortage-entry,
   min-height: 48rpx;
   padding: 0 18rpx;
   border-radius: 999rpx;
-  font-size: 22rpx;
+  font-size: 24rpx;
   font-weight: 900;
   white-space: nowrap;
 }
@@ -1773,17 +1838,23 @@ uni-button.role-shortage-entry,
   flex-wrap: wrap;
   gap: 12rpx;
   align-items: center;
-  margin-top: 18rpx;
+  justify-content: flex-start;
+  margin-top: 20rpx;
 }
 
 .role-action-btn,
 uni-button.role-action-btn,
 :deep(uni-button.role-action-btn) {
+  flex: 0 0 auto;
+  margin-left: 0;
+  margin-right: 0;
   min-height: 58rpx;
   padding: 0 24rpx;
   border-radius: 999rpx;
   font-size: 24rpx;
   font-weight: 900;
+  text-align: left;
+  justify-content: flex-start;
 }
 
 .role-action-btn.primary,

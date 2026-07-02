@@ -6,6 +6,7 @@ import com.mall.api.operation.dto.ExceptionRecordDTO;
 import com.mall.api.station.dto.StationWorkbenchDTO;
 import com.mall.api.station.vo.StationArrivalConfirmVO;
 import com.mall.api.station.vo.StationDeliveryQueryVO;
+import com.mall.api.station.vo.StationExceptionSubmitVO;
 import com.mall.api.station.vo.StationOrderQueryVO;
 import com.mall.api.station.vo.StationPickupConfirmVO;
 import com.mall.api.station.vo.StationWorkbenchQueryVO;
@@ -46,6 +47,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -65,6 +67,8 @@ public class StationOrderServiceImpl extends StationReadSupport implements Stati
     private static final Long OPERATOR_ROLE_WORKBENCH = 5L;
     private static final Long EXCEPTION_WAIT = 10L;
     private static final Long EXCEPTION_DOING = 20L;
+    private static final Long EXCEPTION_TYPE_SHORTAGE = 10L;
+    private static final Long EXCEPTION_PRIORITY_NORMAL = 2L;
     private static final Long ACCOUNT_SUBJECT_STATION = 2L;
     private static final Long ACCOUNT_SUBJECT_LEADER = 3L;
     private static final Long COMMISSION_SUBJECT_STATION = 1L;
@@ -320,6 +324,43 @@ public class StationOrderServiceImpl extends StationReadSupport implements Stati
         return toPage(safeQuery, exceptionRecordMapper, wrapper, stationConvert::toExceptionRecordDTO);
     }
 
+    @Override
+    @Transactional
+    public ExceptionRecordDTO submitException(final StationExceptionSubmitVO request) {
+        if (request == null) {
+            throw new BusinessException(CommonErrorCode.PARAM_ERROR, "异常提交参数不能为空");
+        }
+        if (request.getStationId() == null && request.getLeaderId() == null) {
+            throw new BusinessException(CommonErrorCode.PARAM_ERROR, "自提点或团长不能为空");
+        }
+        if (CollectionUtils.isEmpty(request.getItems())) {
+            throw new BusinessException(CommonErrorCode.PARAM_ERROR, "异常明细不能为空");
+        }
+        final List<StationExceptionSubmitVO.Item> validItems = request.getItems().stream()
+                .filter(item -> item != null && item.getQty() != null && item.getQty() > 0)
+                .toList();
+        if (validItems.isEmpty()) {
+            throw new BusinessException(CommonErrorCode.PARAM_ERROR, "异常数量必须大于0");
+        }
+        final long totalQty = validItems.stream().mapToLong(StationExceptionSubmitVO.Item::getQty).sum();
+        final LocalDateTime now = LocalDateTime.now();
+        final OpExceptionRecord record = new OpExceptionRecord();
+        record.setExceptionNo("EX" + IdWorker.getIdStr());
+        record.setExceptionType(EXCEPTION_TYPE_SHORTAGE);
+        record.setPriority(EXCEPTION_PRIORITY_NORMAL);
+        record.setSourceModule("role-workbench-h5");
+        record.setSourceBizType("station:exception");
+        record.setSourceBizNo(resolveExceptionSourceBizNo(request, validItems));
+        record.setStationId(request.getStationId());
+        record.setOwnerAccountId(request.getLeaderId());
+        record.setStatus(EXCEPTION_WAIT);
+        record.setTitle(buildExceptionTitle(request, totalQty));
+        record.setDescription(buildExceptionDescription(request, validItems, totalQty));
+        prepareCreate(record, IdWorker.getId(), now);
+        exceptionRecordMapper.insert(record);
+        return stationConvert.toExceptionRecordDTO(record);
+    }
+
     private Long countOrderItems(
             final StationWorkbenchQueryVO query,
             final LocalDate expectedPickupDate,
@@ -443,6 +484,42 @@ public class StationOrderServiceImpl extends StationReadSupport implements Stati
 
     private Long safeQty(final Long qty) {
         return qty == null ? 0L : qty;
+    }
+
+    private String resolveExceptionSourceBizNo(
+            final StationExceptionSubmitVO request,
+            final List<StationExceptionSubmitVO.Item> validItems) {
+        if (request.getSkuId() != null) {
+            return "SKU#" + request.getSkuId();
+        }
+        if (request.getProductId() != null) {
+            return "PRODUCT#" + request.getProductId();
+        }
+        return validItems.get(0).getOrderNo() == null ? "ORDER_ITEM#" + validItems.get(0).getOrderItemId()
+                : validItems.get(0).getOrderNo();
+    }
+
+    private String buildExceptionTitle(final StationExceptionSubmitVO request, final long totalQty) {
+        final String productName = StringUtils.hasText(request.getProductName()) ? request.getProductName() : "配送商品";
+        final String skuName = StringUtils.hasText(request.getSkuName()) ? request.getSkuName() : "";
+        final String spec = StringUtils.hasText(skuName) ? " · " + skuName : "";
+        final String type = StringUtils.hasText(request.getExceptionType()) ? request.getExceptionType() : "少件";
+        return productName + spec + " " + type + totalQty + "件";
+    }
+
+    private String buildExceptionDescription(
+            final StationExceptionSubmitVO request,
+            final List<StationExceptionSubmitVO.Item> validItems,
+            final long totalQty) {
+        final String detail = validItems.stream()
+                .map(item -> {
+                    final String orderNo = StringUtils.hasText(item.getOrderNo()) ? item.getOrderNo()
+                            : "订单商品#" + item.getOrderItemId();
+                    return orderNo + "：" + item.getQty() + "件";
+                })
+                .collect(Collectors.joining("；"));
+        final String type = StringUtils.hasText(request.getExceptionType()) ? request.getExceptionType() : "少件";
+        return "角色工作台上报" + type + "，合计" + totalQty + "件。明细：" + detail;
     }
 
     private Long resolvePickupQty(

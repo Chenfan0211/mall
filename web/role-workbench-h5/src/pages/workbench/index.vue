@@ -27,7 +27,7 @@
       <template v-else>
         <view class="role-kpis workbench-kpis">
           <button v-for="item in metrics" :key="item.label" class="role-kpi" :class="{ 'money-kpi': item.label === '今日佣金' }" @click="open(item.page)">
-            <text class="value">{{ item.value }}</text>
+            <text class="value" :class="item.valueClass">{{ item.value }}</text>
             <text class="label">{{ item.label }}</text>
           </button>
         </view>
@@ -89,7 +89,7 @@
 import { computed, ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
 import { getLeaderDetail, getStationDetail, getSupplierWorkbenchSummary, getWorkbenchSummary, type SupplierWorkbenchDTO, type StationWorkbenchDTO } from '@/api/station';
-import { currentProfile, currentRole, currentSession, getRequiredRoleQuery, goPage, stationQuickItems, supplierQuickItems, type RoleMetric, type RoleItem } from '@/stores/role';
+import { currentProfile, currentRole, currentSession, getRequiredRoleQuery, goPage, setCurrentEntityName, stationQuickItems, supplierQuickItems, type RoleMetric, type RoleItem } from '@/stores/role';
 import { friendlyErrorMessage } from '@/utils/request';
 import RoleBottomNav from '@/components/RoleBottomNav.vue';
 
@@ -107,16 +107,16 @@ const metrics = computed<RoleMetric[]>(() => {
     if (roleType.value === 'supplier') {
         const data = supplierSummary.value || {};
         return [
-            { value: String(data.waitAuditPurchaseCount ?? 0), label: '待审核采购', page: '/pages/store/supplier-purchase' },
-            { value: String(data.waitDeliveryPurchaseCount ?? 0), label: '待送货采购', page: '/pages/store/supplier-purchase' },
-        { value: String(data.deliveringOrderCount ?? 0), label: '配送中', page: '/pages/orders/index' }
+            metricItem(String(data.waitAuditPurchaseCount ?? 0), '待审核采购', '/pages/store/supplier-purchase'),
+            metricItem(String(data.waitDeliveryPurchaseCount ?? 0), '待送货采购', '/pages/store/supplier-purchase'),
+            metricItem(String(data.deliveringOrderCount ?? 0), '配送中', '/pages/orders/index')
         ];
     }
     const data = stationSummary.value || {};
     return [
-        { value: String(data.todayOrderCount ?? 0), label: '今日订单', page: '/pages/orders/index' },
-        { value: String(data.waitPickupCount ?? 0), label: '待自提', page: '/pages/orders/index' },
-        { value: `¥${data.availableAmount ?? '0.00'}`, label: '今日佣金', page: '/pages/mine/index' }
+        metricItem(String(data.todayOrderCount ?? 0), '今日订单', '/pages/orders/index'),
+        metricItem(String(data.waitPickupCount ?? 0), '待自提', '/pages/orders/index'),
+        metricItem(`¥${data.availableAmount ?? '0.00'}`, '今日佣金', '/pages/mine/index')
     ];
 });
 
@@ -163,6 +163,25 @@ function open(url: string) {
     goPage(url);
 }
 
+function metricItem(value: string, label: string, page: string): RoleMetric {
+    return {
+        value,
+        label,
+        page,
+        valueClass: metricValueClass(value)
+    };
+}
+
+function metricValueClass(value: string) {
+    const text = String(value || '').replace(/\s/g, '');
+    const digitLength = text.replace(/\D/g, '').length;
+    const visibleLength = text.length;
+    if (digitLength >= 7 || visibleLength >= 8) return 'metric-value-7';
+    if (digitLength >= 6 || visibleLength >= 7) return 'metric-value-6';
+    if (digitLength >= 5 || visibleLength >= 6) return 'metric-value-5';
+    return '';
+}
+
 async function loadStationEntityName(query: { stationId?: number; leaderId?: number }) {
     entityName.value = profile.value.entity;
     try {
@@ -170,11 +189,13 @@ async function loadStationEntityName(query: { stationId?: number; leaderId?: num
         if (shouldShowLeader && query.leaderId) {
             const leader = await getLeaderDetail(Number(query.leaderId));
             entityName.value = leader.leaderName || profile.value.entity;
+            setCurrentEntityName(entityName.value);
             return;
         }
         if (query.stationId) {
             const station = await getStationDetail(Number(query.stationId));
             entityName.value = station.stationName || station.contactName || profile.value.entity;
+            setCurrentEntityName(entityName.value);
         }
     } catch {
         entityName.value = profile.value.entity;
@@ -205,7 +226,7 @@ function taskUnit(desc: string) {
 .role-work-title-main {
   display: block;
   color: #ffffff;
-  font-size: 44rpx;
+  font-size: 40rpx;
   font-weight: 900;
   line-height: 1.2;
 }
@@ -224,55 +245,78 @@ function taskUnit(desc: string) {
 .workbench-kpis .role-kpi {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   width: 100%;
   min-width: 0;
-  min-height: 148rpx;
-  padding: 22rpx 16rpx 18rpx;
+  min-height: 150rpx;
+  padding: 20rpx 6rpx 18rpx;
   border-radius: 24rpx;
-  text-align: left;
+  text-align: center;
   box-shadow: 0 18rpx 40rpx rgba(217, 75, 52, 0.18);
 }
 
 .workbench-kpis .role-kpi.money-kpi {
-  padding-right: 2rpx;
-  padding-left: 2rpx;
+  padding-right: 8rpx;
+  padding-left: 8rpx;
 }
 
 .workbench-kpis .role-kpi .value,
 .workbench-kpis .role-kpi .value :deep(span) {
-  overflow: hidden;
-  font-family: "Arial Black", Arial, "Microsoft YaHei", sans-serif;
+  display: block;
+  font-family: "Arial Narrow", "DIN Alternate", Arial, "Microsoft YaHei", sans-serif;
+  overflow: visible;
   max-width: 100%;
-  font-size: 30px;
+  font-size: 30px !important;
   font-weight: 900;
   line-height: 1;
-  text-overflow: ellipsis;
+  text-align: center;
+  text-overflow: clip;
   white-space: nowrap;
 }
 
 .workbench-kpis .role-kpi:not(.money-kpi) .value,
 .workbench-kpis .role-kpi:not(.money-kpi) .value :deep(span) {
-  font-size: 30px;
+  font-size: 30px !important;
   line-height: 1;
 }
 
 .workbench-kpis .role-kpi.money-kpi .value,
 .workbench-kpis .role-kpi.money-kpi .value :deep(span) {
   font-family: "Arial Narrow", Arial, "Microsoft YaHei", sans-serif;
-  font-size: 30px;
+  font-size: 30px !important;
+  letter-spacing: 0;
+}
+
+.workbench-kpis .role-kpi .value.metric-value-5,
+.workbench-kpis .role-kpi .value.metric-value-5 :deep(span) {
+  font-size: 27px !important;
+}
+
+.workbench-kpis .role-kpi .value.metric-value-6,
+.workbench-kpis .role-kpi .value.metric-value-6 :deep(span) {
+  font-size: 24px !important;
+}
+
+.workbench-kpis .role-kpi .value.metric-value-7,
+.workbench-kpis .role-kpi .value.metric-value-7 :deep(span) {
+  font-size: 21px !important;
+  letter-spacing: -0.5px;
 }
 
 .workbench-kpis .role-kpi .label {
+  display: block;
+  width: 100%;
   margin-top: 10rpx;
+  text-align: center;
 }
 
 .workbench-kpis .role-kpi .label,
 .workbench-kpis .role-kpi .label :deep(span) {
-  font-size: 30rpx;
+  font-size: 28rpx !important;
   font-weight: 900;
   line-height: 1.12;
+  text-align: center;
 }
 
 .retry-btn {
@@ -288,7 +332,7 @@ function taskUnit(desc: string) {
 }
 
 .role-section .title {
-  font-size: 42rpx;
+  font-size: 36rpx;
   line-height: 1.15;
 }
 
@@ -314,7 +358,7 @@ function taskUnit(desc: string) {
 .role-task .task-title {
   flex-shrink: 0;
   color: #2e211a;
-  font-size: 38rpx;
+  font-size: 34rpx;
   font-weight: 900;
   line-height: 1.25;
 }
@@ -335,7 +379,7 @@ function taskUnit(desc: string) {
 .role-task .task-count {
   color: #d94b34;
   font-family: "Arial Black", Arial, "Microsoft YaHei", sans-serif;
-  font-size: 42rpx;
+  font-size: 36rpx;
   font-weight: 900;
   line-height: 1;
 }

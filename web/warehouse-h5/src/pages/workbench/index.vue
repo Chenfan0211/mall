@@ -90,11 +90,11 @@
           </view>
           <view v-if="role === 'receiver'" class="receiver-todo-summary">
             <button v-for="item in receiverTodoSummary" :key="item.label" class="receiver-todo-card" @click="openReceiverSummary(item)">
-              <view class="receiver-todo-main">
-                <text class="receiver-todo-label">{{ item.label }}</text>
-                <text class="receiver-todo-desc">{{ item.value }} 单{{ item.desc }}</text>
-              </view>
-              <text class="receiver-todo-action">{{ receiverTodoActionText(item.label) }}</text>
+              <text class="receiver-todo-label">{{ item.label }}</text>
+              <text class="receiver-todo-desc">
+                <text class="receiver-todo-count">{{ item.value }}</text>
+                <text>{{ receiverTodoSummaryText(item) }}</text>
+              </text>
             </button>
           </view>
           <view v-else class="warehouse-task-list">
@@ -173,6 +173,7 @@ import {
     getCurrentRole,
     getRoleProfile,
     loadWarehouseDashboard,
+    setPendingReceiverStatusFilter,
     setPendingTarget,
     type RoleProfile,
     type WarehouseActionTarget,
@@ -229,19 +230,18 @@ function openDriverOrder(orderId: string) {
 }
 
 function openReceiverSummary(item: ReceiverTodoSummary) {
-    const task = getDashboardTaskForTarget(item.target);
-    setPendingTarget(item.target, task?.id);
-    if (task?.id) {
-        uni.navigateTo({ url: `/pages/tasks/detail?id=${task.id}&mode=${item.target}` });
-        return;
-    }
-    uni.switchTab({ url: '/pages/tasks/index' });
+    setPendingReceiverStatusFilter(item.statusFilter);
+    setPendingTarget(item.statusFilter || item.target);
+    uni.switchTab({
+        url: '/pages/tasks/index',
+        success() {
+            uni.$emit('warehouse:receiverStatusFilter', item.statusFilter);
+        }
+    });
 }
 
-function receiverTodoActionText(label: ReceiverTodoSummary['label']) {
-    if (label === '待接单') return '接单';
-    if (label === '待扫码') return '扫码';
-    return '收货';
+function receiverTodoSummaryText(item: ReceiverTodoSummary) {
+    return ` 单${item.desc}`;
 }
 
 function goKpi(target: string) {

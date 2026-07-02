@@ -1,6 +1,6 @@
 param(
     [string]$ReleaseZip = "",
-    [string]$DeployHost = "192.168.28.211",
+    [string]$DeployHost = "192.168.28.242",
     [string]$DeployUser = "root",
     [int]$SshPort = 22,
     [string]$NginxContainer = "mall-nginx",

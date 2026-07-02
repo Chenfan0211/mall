@@ -15,6 +15,7 @@ import com.mall.user.entity.OrdCart;
 import com.mall.user.entity.OrdOrder;
 import com.mall.user.entity.OrdOrderItem;
 import com.mall.user.entity.PrdCategory;
+import com.mall.user.entity.PrdProduct;
 import com.mall.user.entity.SalePublishPeriod;
 import com.mall.user.entity.SalePublishSku;
 import com.mall.user.entity.SysFileAsset;
@@ -24,14 +25,17 @@ import com.mall.user.mapper.OrdCartMapper;
 import com.mall.user.mapper.OrdOrderItemMapper;
 import com.mall.user.mapper.OrdOrderMapper;
 import com.mall.user.mapper.PrdCategoryMapper;
+import com.mall.user.mapper.PrdProductMapper;
 import com.mall.user.mapper.SalePublishPeriodMapper;
 import com.mall.user.mapper.SalePublishSkuMapper;
 import com.mall.user.mapper.SysFileAssetMapper;
 import com.mall.user.mapper.UsrUserMapper;
 import com.mall.user.service.UserHomeService;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -45,6 +49,8 @@ public class UserHomeServiceImpl implements UserHomeService {
     private static final Long USER_NORMAL = 1L;
     private static final Long PERIOD_ONLINE = 20L;
     private static final Long PUBLISH_SKU_ENABLE = 1L;
+    private static final Long PRODUCT_AUDIT_PASS = 20L;
+    private static final Long PRODUCT_ON_SALE = 1L;
     private static final Long CART_VALID = 1L;
     private static final Long TRADE_WAIT_PAY = 10L;
     private static final Long FULFILL_WAIT_PICKUP = 60L;
@@ -59,6 +65,7 @@ public class UserHomeServiceImpl implements UserHomeService {
 
     private final UsrUserMapper userMapper;
     private final PrdCategoryMapper categoryMapper;
+    private final PrdProductMapper productMapper;
     private final SysFileAssetMapper fileAssetMapper;
     private final SalePublishPeriodMapper periodMapper;
     private final SalePublishSkuMapper publishSkuMapper;
@@ -70,6 +77,7 @@ public class UserHomeServiceImpl implements UserHomeService {
     public UserHomeServiceImpl(
             final UsrUserMapper userMapper,
             final PrdCategoryMapper categoryMapper,
+            final PrdProductMapper productMapper,
             final SysFileAssetMapper fileAssetMapper,
             final SalePublishPeriodMapper periodMapper,
             final SalePublishSkuMapper publishSkuMapper,
@@ -79,6 +87,7 @@ public class UserHomeServiceImpl implements UserHomeService {
             final MsgRecordMapper msgRecordMapper) {
         this.userMapper = userMapper;
         this.categoryMapper = categoryMapper;
+        this.productMapper = productMapper;
         this.fileAssetMapper = fileAssetMapper;
         this.periodMapper = periodMapper;
         this.publishSkuMapper = publishSkuMapper;
@@ -125,23 +134,37 @@ public class UserHomeServiceImpl implements UserHomeService {
 
     @Override
     public UserHomeAssetDTO getHomeAssets(final UserHomeAssetQueryVO query) {
+        final UserHomeAssetQueryVO safeQuery = query == null ? new UserHomeAssetQueryVO() : query;
         final UserHomeAssetDTO result = new UserHomeAssetDTO();
-        result.setCategories(buildCategoryAssets());
+        result.setCategories(buildCategoryAssets(safeQuery));
         result.setBanners(buildBanners());
         result.setPromos(buildPromos());
         return result;
     }
 
-    private List<UserHomeCategoryAssetDTO> buildCategoryAssets() {
-        final List<PrdCategory> categories = categoryMapper.selectList(new LambdaQueryWrapper<PrdCategory>()
+    private List<UserHomeCategoryAssetDTO> buildCategoryAssets(final UserHomeAssetQueryVO query) {
+        final Set<Long> onlineCategoryIds = listOnlineCategoryIds(query.getCityId());
+        if (onlineCategoryIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final List<PrdCategory> allCategories = categoryMapper.selectList(new LambdaQueryWrapper<PrdCategory>()
                 .eq(PrdCategory::getCategoryType, CATEGORY_FRONT)
                 .eq(PrdCategory::getStatus, ENABLED)
                 .orderByAsc(PrdCategory::getSortNo)
-                .orderByDesc(PrdCategory::getId));
+                .orderByAsc(PrdCategory::getId));
+        final Map<Long, PrdCategory> categoryMap = allCategories.stream()
+                .collect(Collectors.toMap(PrdCategory::getId, Function.identity(), (left, right) -> left));
+        final Set<Long> onlineRootIds = onlineCategoryIds.stream()
+                .map(categoryId -> rootCategoryId(categoryMap, categoryId))
+                .filter(id -> id != null && categoryMap.containsKey(id))
+                .collect(Collectors.toSet());
         final Map<String, SysFileAsset> iconMap = listActiveAssets(BIZ_CATEGORY_ICON).stream()
                 .filter(item -> item.getBizNo() != null && item.getFileUrl() != null)
                 .collect(Collectors.toMap(SysFileAsset::getBizNo, Function.identity(), (left, right) -> left));
-        return categories.stream().map(item -> {
+        return allCategories.stream()
+                .filter(item -> onlineRootIds.contains(item.getId()))
+                .filter(item -> item.getParentId() == null || item.getParentId() == 0L)
+                .map(item -> {
             final UserHomeCategoryAssetDTO asset = new UserHomeCategoryAssetDTO();
             asset.setCategoryId(item.getId());
             asset.setCategoryCode(item.getCategoryCode());
@@ -218,25 +241,65 @@ public class UserHomeServiceImpl implements UserHomeService {
                 .orderByDesc(SysFileAsset::getId));
     }
 
+    private Set<Long> listOnlineCategoryIds(final Long cityId) {
+        final List<Long> periodIds = listOnlinePeriodIds(cityId);
+        if (periodIds.isEmpty()) {
+            return Collections.emptySet();
+        }
+        final List<SalePublishSku> publishSkus = publishSkuMapper.selectList(new LambdaQueryWrapper<SalePublishSku>()
+                .in(SalePublishSku::getPeriodId, periodIds)
+                .eq(SalePublishSku::getStatus, PUBLISH_SKU_ENABLE));
+        final Set<Long> productIds = publishSkus.stream()
+                .filter(this::hasAvailableStock)
+                .map(SalePublishSku::getProductId)
+                .collect(Collectors.toSet());
+        if (productIds.isEmpty()) {
+            return Collections.emptySet();
+        }
+        return productMapper.selectBatchIds(productIds).stream()
+                .filter(product -> PRODUCT_AUDIT_PASS.equals(product.getAuditStatus()))
+                .filter(product -> PRODUCT_ON_SALE.equals(product.getSaleStatus()))
+                .filter(product -> product.getFrontCategoryId() != null)
+                .map(PrdProduct::getFrontCategoryId)
+                .collect(Collectors.toSet());
+    }
+
+    private Long rootCategoryId(final Map<Long, PrdCategory> categoryMap, final Long categoryId) {
+        final PrdCategory category = categoryMap.get(categoryId);
+        if (category == null) {
+            return categoryId;
+        }
+        final Long parentId = category.getParentId();
+        if (parentId == null || parentId == 0L) {
+            return category.getId();
+        }
+        return categoryMap.containsKey(parentId) ? parentId : category.getId();
+    }
+
     private String assetUrl(final SysFileAsset asset) {
         return asset == null ? null : asset.getFileUrl();
     }
 
     private Long countOnlineProducts(final Long cityId) {
-        final List<Long> periodIds = periodMapper.selectList(new LambdaQueryWrapper<SalePublishPeriod>()
-                        .eq(cityId != null, SalePublishPeriod::getCityId, cityId)
-                        .eq(SalePublishPeriod::getStatus, PERIOD_ONLINE)
-                        .le(SalePublishPeriod::getSaleStartTime, LocalDateTime.now())
-                        .ge(SalePublishPeriod::getActualCutoffTime, LocalDateTime.now()))
-                .stream()
-                .map(SalePublishPeriod::getId)
-                .toList();
+        final List<Long> periodIds = listOnlinePeriodIds(cityId);
         if (periodIds.isEmpty()) {
             return 0L;
         }
         return publishSkuMapper.selectCount(new LambdaQueryWrapper<SalePublishSku>()
                 .in(SalePublishSku::getPeriodId, periodIds)
                 .eq(SalePublishSku::getStatus, PUBLISH_SKU_ENABLE));
+    }
+
+    private List<Long> listOnlinePeriodIds(final Long cityId) {
+        final LocalDateTime now = LocalDateTime.now();
+        return periodMapper.selectList(new LambdaQueryWrapper<SalePublishPeriod>()
+                        .eq(cityId != null, SalePublishPeriod::getCityId, cityId)
+                        .eq(SalePublishPeriod::getStatus, PERIOD_ONLINE)
+                        .le(SalePublishPeriod::getSaleStartTime, now)
+                        .ge(SalePublishPeriod::getActualCutoffTime, now))
+                .stream()
+                .map(SalePublishPeriod::getId)
+                .toList();
     }
 
     private Long countCartItems(final Long userId, final Long cityId, final Long stationId) {
@@ -272,5 +335,13 @@ public class UserHomeServiceImpl implements UserHomeService {
                 .eq(MsgRecord::getReceiverType, MSG_RECEIVER_USER)
                 .eq(MsgRecord::getReceiverId, userId)
                 .eq(MsgRecord::getReadStatus, MSG_UNREAD));
+    }
+
+    private boolean hasAvailableStock(final SalePublishSku sku) {
+        return zeroIfNull(sku.getPlannedStockQty()) > zeroIfNull(sku.getSoldQty()) + zeroIfNull(sku.getLockedQty());
+    }
+
+    private Long zeroIfNull(final Long value) {
+        return value == null ? 0L : value;
     }
 }

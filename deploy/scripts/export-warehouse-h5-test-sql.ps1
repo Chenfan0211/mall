@@ -44,7 +44,7 @@ for ($i = $start + 1; $i -lt $lines.Count; $i++) {
 
 $block = @(
     "-- Warehouse H5 test data exported from $SqlFile"
-    "-- Import this after the base schema/data when validating http://192.168.28.211/warehouse/"
+    "-- Import this after the base schema/data when validating http://192.168.28.242/warehouse/"
     "SET NAMES utf8mb4;"
     "SET FOREIGN_KEY_CHECKS = 0;"
     ""

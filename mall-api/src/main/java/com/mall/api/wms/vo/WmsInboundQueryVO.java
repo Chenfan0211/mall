@@ -1,6 +1,7 @@
 package com.mall.api.wms.vo;
 
 import com.mall.common.page.PageQuery;
+import java.time.LocalDate;
 
 public class WmsInboundQueryVO extends PageQuery {
 
@@ -14,6 +15,7 @@ public class WmsInboundQueryVO extends PageQuery {
     private Long qualityStatus;
     private Long qualityResult;
     private Long status;
+    private LocalDate createDate;
 
     public String getKeyword() {
         return keyword;
@@ -93,5 +95,13 @@ public class WmsInboundQueryVO extends PageQuery {
 
     public void setStatus(final Long status) {
         this.status = status;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(final LocalDate createDate) {
+        this.createDate = createDate;
     }
 }

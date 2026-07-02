@@ -40,3 +40,10 @@
 | 2026-06-30 | 初始化 | wms_warehouse, wms_zone, wms_location, wms_driver, wms_line, wms_line_station, wms_inbound_order, wms_inbound_item, wms_receive_record, wms_quality_file, wms_putaway_task, wms_inventory, wms_inventory_lock, wms_inventory_log, wms_wave_batch, wms_pick_task, wms_pick_item, wms_loading_order, wms_loading_item, wms_outbound_order, wms_delivery_order, wms_delivery_station, wms_driver_sign_record, wms_return_handover, wms_stocktake_order, wms_operation_log | codex | 补强仓配 H5 每页至少 6 条联调数据，新增 H5_MORE 前缀样例覆盖入库、上架、库存、拣货、装车、配送、回仓、盘点和操作日志列表 |
 | 2026-06-30 | 改表 | mall 全部单列 BIGINT 主键业务表 | codex | 执行 `Sql/auto-increment-primary-keys-20260630.sql`，将 103 张业务表 `id` 主键改为 `AUTO_INCREMENT`，中间件字符串主键表保持不变 |
 | 2026-06-30 | 修正 | mall 全部自增主键 id 注释 | codex | 执行 `Sql/fix-auto-increment-id-comments-20260630.sql`，将自增改造中受客户端字符集影响的 `id` 注释恢复为 `主键` |
+| 2026-07-01 | 初始化 | sys_file_asset, prd_product, prd_sku, sale_publish_period, sale_publish_sku | codex | 补齐用户端 H5 首页活动图接口资源和活动页商品列表联调数据，覆盖鲜果、今日上新和早餐烘焙活动编码 |
+| 2026-07-01 | 初始化 | prd_category, sys_file_asset, prd_product, prd_sku, sale_publish_period, sale_publish_sku | codex | 补齐用户端 H5 首页与分类页接口数据，新增 6 个前台分类和每类 10 个广州在线团期可售商品 |
+| 2026-07-01 | 修正 | sys_file_asset | codex | 将用户端 H5 分类图标、首页 Banner 和促销活动图资源统一由 SVG 调整为现有 JPG 图片，并补齐水果/蔬菜前台分类图标幂等数据 |
+| 2026-07-01 | 初始化/修正 | prd_product, prd_sku, sale_publish_period, sale_publish_sku | codex | 补齐用户端 H5 水果/蔬菜分类可售商品，并为 8 个前台分类补充多规格 SKU 与在线团期发布数据，支持多规格加购联调 |
+| 2026-07-01 | 初始化/修正 | prd_category, prd_product | codex | 补齐用户端 H5 前台二级类目数据，并将 H5 演示商品归类到二级类目，支持分类页一级汇总和二级筛选联调 |
+| 2026-07-01 | 初始化/修正 | sys_file_asset, prd_product, prd_sku, sale_publish_period, sale_publish_sku | codex | 补齐用户端 H5 运营活动页活动图和可售商品数据，支持 HOME_MAIN、ORCHARD_DIRECT、TODAY_NEW、BREAKFAST_BAKERY 活动列表联调 |
+| 2026-07-01 | 初始化/修正 | prd_product, prd_sku, sale_publish_period, sale_publish_sku | codex | 补齐用户端 H5 旧详情商品 ID 610001 的可售多规格数据，兼容历史兜底商品和直接访问详情接口 |

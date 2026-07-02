@@ -1,5 +1,5 @@
 param(
-    [string]$Url = "http://192.168.28.211/warehouse/",
+    [string]$Url = "http://192.168.28.242/warehouse/",
     [int]$DebugPort = 9333
 )
 

@@ -8,7 +8,7 @@ export type WarehouseRequestOptions = UniApp.RequestOptions & {
     silent?: boolean;
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://192.168.28.211/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://192.168.28.242/api';
 const TOKEN_KEY = 'mall_warehouse_h5_token';
 
 export function getToken() {

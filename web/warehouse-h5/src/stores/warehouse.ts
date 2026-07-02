@@ -263,6 +263,7 @@ export interface ReceiverTodoSummary {
     value: number;
     desc: string;
     target: 'receiveArea' | 'receiveScan';
+    statusFilter: '待接单' | '待收货' | '待确认收货';
 }
 
 export interface WarehouseDashboard {
@@ -304,6 +305,7 @@ const API_DRIVER_CACHE_KEY = 'mall_warehouse_h5_api_driver_cache';
 const PENDING_TASK_KEY = 'mall_warehouse_h5_pending_task';
 const PENDING_ACTION_KEY = 'mall_warehouse_h5_pending_action';
 const PENDING_TARGET_KEY = 'mall_warehouse_h5_pending_target';
+const RECEIVER_STATUS_FILTER_KEY = 'mall_warehouse_h5_receiver_status_filter';
 
 const roleMap: Record<string, WarehouseRole> = {
     receiver: 'receiver',
@@ -801,6 +803,7 @@ function toneSortWeight(tone: StatusTone) {
 export function setPendingTarget(target: WarehouseActionTarget | string, taskId?: string) {
     uni.setStorageSync(PENDING_TARGET_KEY, target);
     if (taskId) uni.setStorageSync(PENDING_TASK_KEY, taskId);
+    else uni.removeStorageSync(PENDING_TASK_KEY);
 }
 
 export function consumePendingTarget() {
@@ -809,6 +812,16 @@ export function consumePendingTarget() {
     uni.removeStorageSync(PENDING_TARGET_KEY);
     uni.removeStorageSync(PENDING_TASK_KEY);
     return { target, taskId };
+}
+
+export function setPendingReceiverStatusFilter(status: ReceiverTodoSummary['statusFilter']) {
+    uni.setStorageSync(RECEIVER_STATUS_FILTER_KEY, status);
+}
+
+export function consumePendingReceiverStatusFilter() {
+    const status = uni.getStorageSync(RECEIVER_STATUS_FILTER_KEY) as ReceiverTodoSummary['statusFilter'] | '';
+    uni.removeStorageSync(RECEIVER_STATUS_FILTER_KEY);
+    return status;
 }
 
 export function getRoleMetrics(role: WarehouseRole): WorkMetric[] {
@@ -889,8 +902,7 @@ async function loadDashboardFromApi(role: WarehouseRole, mock: WarehouseDashboar
     const options = { silent: true };
 
     if (role === 'receiver') {
-        const inbound = await loadAllInboundOrders(options);
-        if (!pageHasRows(inbound)) return null;
+        const inbound = await loadAllInboundOrders(options, { createDate: todayDateString() });
         const inboundItemsResult = await loadReceiverInboundItems(inbound.list, options);
         if (!inboundItemsResult.ok) return null;
         const receiverItems = inboundItemsResult.itemsMap;
@@ -1034,11 +1046,27 @@ function pageTotal(page: { total?: number; list?: unknown[] }) {
     return Number.isFinite(total) ? total : (page.list || []).length;
 }
 
-async function loadAllInboundOrders(options: { silent: boolean }) {
-    return loadAllPages((pageNum, pageSize) => pageInboundOrders({ pageNum, pageSize }, options));
+function todayDateString() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+async function loadAllInboundOrders(options: { silent: boolean }, query: Record<string, string | number | undefined> = {}) {
+    return loadAllPages((pageNum, pageSize) => pageInboundOrders({ ...query, pageNum, pageSize }, options));
 }
 
 async function loadReceiverInboundItems(inboundOrders: InboundOrderDTO[], options: { silent: boolean }) {
+    if (inboundOrders.length === 0) {
+        return { itemsMap: new Map<number, InboundItemDTO[]>(), ok: true };
+    }
+    const inboundItemsResult = await loadInboundItemsForOrders(inboundOrders, options);
+    if (inboundItemsResult.failedCount === 0) {
+        return { itemsMap: inboundItemsResult.itemsMap, ok: true };
+    }
+
     const allItemsResult = await loadAllInboundItems(options);
     if (allItemsResult.ok) {
         return {
@@ -1046,12 +1074,7 @@ async function loadReceiverInboundItems(inboundOrders: InboundOrderDTO[], option
             ok: true
         };
     }
-
-    const inboundItemsResult = await loadInboundItemsForOrders(inboundOrders, options);
-    if (inboundItemsResult.failedCount > 0) {
-        return { itemsMap: inboundItemsResult.itemsMap, ok: false };
-    }
-    return { itemsMap: inboundItemsResult.itemsMap, ok: true };
+    return { itemsMap: inboundItemsResult.itemsMap, ok: false };
 }
 
 async function loadInboundItemsForOrders(inboundOrders: InboundOrderDTO[], options: { silent: boolean }) {
@@ -1186,26 +1209,30 @@ function buildTodosFromTasks(role: WarehouseRole, tasks: WarehouseTask[], fallba
 }
 
 function buildReceiverTodoSummary(tasks: WarehouseTask[]): ReceiverTodoSummary[] {
-    return [
+    const summary: ReceiverTodoSummary[] = [
         {
             label: '待接单',
             value: tasks.filter((row) => row.status === '待接单').length,
             desc: '等待收货员接单',
-            target: 'receiveArea'
+            target: 'receiveArea',
+            statusFilter: '待接单'
         },
         {
             label: '待扫码',
             value: tasks.filter((row) => row.status === '待收货').length,
-            desc: '待扫码库位/商品',
-            target: 'receiveScan'
+            desc: '等待扫码库位/商品',
+            target: 'receiveScan',
+            statusFilter: '待收货'
         },
         {
             label: '待收货',
             value: tasks.filter((row) => /收货中|待确认收货/.test(row.status)).length,
             desc: '收货中待确认',
-            target: 'receiveScan'
+            target: 'receiveScan',
+            statusFilter: '待确认收货'
         }
     ];
+    return summary.filter((item) => item.value > 0);
 }
 
 function buildDriverTodos(driverOrders: WarehouseDriverOrder[], returnOrders: WarehouseReturnOrder[]) {

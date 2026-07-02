@@ -37,6 +37,7 @@ export interface UserCategoryDTO {
     level?: number;
     sortNo?: number;
     status: number;
+    children?: UserCategoryDTO[];
 }
 
 export interface UserHomeCategoryAssetDTO {
@@ -90,6 +91,10 @@ export interface UserProductCardDTO {
     soldQty: number;
     lockedQty: number;
     availableQty: number;
+    skuCount?: number;
+    availableSkuCount?: number;
+    minSalePrice?: string | number;
+    maxSalePrice?: string | number;
     deliveryDate?: string;
     saleEndTime?: string;
 }
@@ -120,6 +125,28 @@ export interface UserProductDetailDTO {
     skus: UserProductSkuDTO[];
     favoriteFlag: number;
     commentCount: number;
+}
+
+export interface UserProductReviewTagDTO {
+    label: string;
+    count: number;
+}
+
+export interface UserProductReviewStatsDTO {
+    commentCount: number;
+    goodRatePercent: string | number;
+    imageReviewCount: number;
+    recentSoldQty: number;
+    recentRepurchaseUserCount: number;
+    tags: UserProductReviewTagDTO[];
+}
+
+export interface UserProductPurchaseRecordDTO {
+    userName: string;
+    productName: string;
+    skuName: string;
+    qty: number;
+    createTime?: string;
 }
 
 export interface UserCommentDTO {
@@ -253,7 +280,7 @@ export interface UserReturnRecordDTO {
     createTime?: string;
 }
 
-type QueryValue = string | number | undefined;
+type QueryValue = string | number | boolean | undefined;
 type PayloadValue = string | number | number[] | undefined;
 type ApiOptions = {
     silent?: boolean;
@@ -298,6 +325,17 @@ export function pageActivityProducts(activityCode: string, query: Record<string,
 
 export function getProductDetail(id: number, query: Record<string, QueryValue>, options: ApiOptions = {}) {
     return request<UserProductDetailDTO>(`/user/products/${id}?${buildSearch(query)}`, options);
+}
+
+export function getProductReviewStats(id: number, query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<UserProductReviewStatsDTO>(`/user/products/${id}/review-stats?${buildSearch(query)}`, options);
+}
+
+export function pageProductPurchaseRecords(id: number, query: Record<string, QueryValue>, options: ApiOptions = {}) {
+    return request<PageResult<UserProductPurchaseRecordDTO>>(
+        `/user/products/${id}/purchase-records?${buildSearch(query)}`,
+        options
+    );
 }
 
 export function pageComments(query: Record<string, QueryValue>, options: ApiOptions = {}) {

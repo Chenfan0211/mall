@@ -71,7 +71,7 @@
             <view class="role-sales-list">
               <view v-for="item in filteredProducts" :key="item.key" class="role-sales-card">
                 <view class="role-sales-main readonly">
-                  <view class="role-sales-img"><RoleProductThumb :label="item.title" /></view>
+                  <view class="role-sales-img"><RoleProductThumb :label="item.title" :src="item.image" /></view>
                   <view>
                     <view class="role-sales-title">
                       <text class="role-sales-name">{{ item.title }}</text>
@@ -111,6 +111,7 @@
         </view>
         <view class="role-service-grid">
           <button v-for="item in services" :key="item.title" class="role-service-card" @click="open(item.page)">
+            <view class="role-service-img"><RoleProductThumb :label="item.title" variant="service" /></view>
             <text class="role-service-title">{{ item.title }}</text>
           </button>
         </view>
@@ -136,6 +137,7 @@ interface ProductRow {
     key: string;
     title: string;
     spec: string;
+    image: string;
     status: string;
     purchaseQty: number;
     amountValue: number;
@@ -170,6 +172,7 @@ const products = computed<ProductRow[]>(() => {
         amountValue: number;
         prices: number[];
         searchText: string[];
+        image: string;
     }>();
 
     supplierItems.value.forEach((item) => {
@@ -187,8 +190,10 @@ const products = computed<ProductRow[]>(() => {
             purchaseQty: 0,
             amountValue: 0,
             prices: [],
-            searchText: []
+            searchText: [],
+            image: itemImage(item)
         };
+        if (!row.image) row.image = itemImage(item);
         row.purchaseQty += qty;
         row.amountValue += amount;
         if (price > 0) row.prices.push(price);
@@ -205,6 +210,7 @@ const products = computed<ProductRow[]>(() => {
             key: item.key,
             title: item.title,
             spec: item.spec,
+            image: item.image,
             status: item.status,
             purchaseQty: item.purchaseQty,
             amountValue: item.amountValue,
@@ -274,6 +280,10 @@ function supplierItemStatusText(status?: number) {
 function formatAmount(value: number) {
     return Number.isFinite(value) ? value.toFixed(2) : '0.00';
 }
+
+function itemImage(item: SupplierPurchaseItemDTO) {
+    return item.productImage || item.imageUrl || item.thumbUrl || item.picUrl || '';
+}
 </script>
 
 <style lang="scss" scoped>
@@ -333,6 +343,7 @@ function formatAmount(value: number) {
 uni-button.role-service-card {
   display: grid;
   align-content: start;
+  gap: 14rpx;
   min-height: 156rpx;
   padding: 22rpx;
   color: #2d241f;
@@ -340,6 +351,14 @@ uni-button.role-service-card {
   border: 1rpx solid #f4ddd0;
   border-radius: 26rpx;
   text-align: left;
+}
+
+.role-service-img {
+  width: 72rpx;
+  height: 72rpx;
+  overflow: hidden;
+  border: 1rpx solid #f2d6c4;
+  border-radius: 22rpx;
 }
 
 .role-service-title {

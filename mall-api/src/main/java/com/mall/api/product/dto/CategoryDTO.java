@@ -1,6 +1,8 @@
 package com.mall.api.product.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryDTO {
 
@@ -13,6 +15,7 @@ public class CategoryDTO {
     private Long sortNo;
     private Long status;
     private LocalDateTime createTime;
+    private List<CategoryDTO> children = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -84,5 +87,13 @@ public class CategoryDTO {
 
     public void setCreateTime(final LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public List<CategoryDTO> getChildren() {
+        return children;
+    }
+
+    public void setChildren(final List<CategoryDTO> children) {
+        this.children = children == null ? new ArrayList<>() : children;
     }
 }

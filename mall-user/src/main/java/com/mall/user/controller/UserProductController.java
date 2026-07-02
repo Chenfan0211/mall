@@ -4,6 +4,8 @@ import com.mall.api.product.dto.CategoryDTO;
 import com.mall.api.user.dto.UserCommentDTO;
 import com.mall.api.user.dto.UserProductCardDTO;
 import com.mall.api.user.dto.UserProductDetailDTO;
+import com.mall.api.user.dto.UserProductPurchaseRecordDTO;
+import com.mall.api.user.dto.UserProductReviewStatsDTO;
 import com.mall.api.user.vo.UserProductQueryVO;
 import com.mall.common.page.PageResult;
 import com.mall.common.result.Result;
@@ -41,6 +43,20 @@ public class UserProductController {
             @PathVariable final Long id,
             @Valid final UserProductQueryVO query) {
         return Result.success(userProductService.getProductDetail(id, query));
+    }
+
+    @GetMapping("/{id}/review-stats")
+    public Result<UserProductReviewStatsDTO> getReviewStats(
+            @PathVariable final Long id,
+            @Valid final UserProductQueryVO query) {
+        return Result.success(userProductService.getReviewStats(id, query));
+    }
+
+    @GetMapping("/{id}/purchase-records")
+    public Result<PageResult<UserProductPurchaseRecordDTO>> pagePurchaseRecords(
+            @PathVariable final Long id,
+            @Valid final UserProductQueryVO query) {
+        return Result.success(userProductService.pagePurchaseRecords(id, query));
     }
 
     @GetMapping("/comments")

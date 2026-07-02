@@ -270,7 +270,7 @@ function orderItems(item: OrderView): LocalOrderItem[] {
 }
 
 function orderItemImage(item: LocalOrderItem) {
-    return item.image || findFallbackProduct(item.productId).mainImageUrl || '/static/user-home/product-fresh.svg';
+    return item.image || findFallbackProduct(item.productId).mainImageUrl || '/static/user-home/shop-home.jpg';
 }
 
 function backgroundImageStyle(url?: string) {

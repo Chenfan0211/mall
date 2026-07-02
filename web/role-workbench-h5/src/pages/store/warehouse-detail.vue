@@ -51,7 +51,7 @@
         <view class="role-product-list">
           <view v-for="item in productSummaries" :key="item.key" class="role-product-summary-card">
             <view class="role-product-summary-main">
-              <view class="role-product-summary-img"><RoleProductThumb :label="item.title" /></view>
+              <view class="role-product-summary-img"><RoleProductThumb :label="item.title" :src="item.image" variant="delivery" /></view>
               <view>
                 <text class="role-product-title">{{ item.title }}</text>
                 <text class="role-product-desc">{{ item.spec }}</text>
@@ -84,7 +84,7 @@
         <view class="role-task-list">
           <view v-for="item in deliveries" :key="item.id" class="role-task">
             <view>
-              <text>{{ item.deliveryNo || `送货单 #${item.id}` }}</text>
+              <text class="role-order-code">{{ item.deliveryNo || `送货单 #${item.id}` }}</text>
               <text>仓库 #{{ item.warehouseId || '-' }} · {{ item.deliveryDate || item.createTime || '-' }}</text>
             </view>
             <text class="role-status" :class="deliveryStatusClass(item.status)">{{ deliveryStatusText(item.status) }}</text>
@@ -113,6 +113,7 @@ interface ProductSummary {
     key: string;
     title: string;
     spec: string;
+    image: string;
     qty: number;
     amountValue: number;
     amount: string;
@@ -147,11 +148,13 @@ const productSummaries = computed<ProductSummary[]>(() => {
             key,
             title,
             spec,
+            image: itemImage(item),
             qty: 0,
             amountValue: 0,
             amount: moneyText('0.00'),
             deliveryCount
         };
+        if (!current.image) current.image = itemImage(item);
         current.qty += supplierItemQty(item);
         current.amountValue += supplierItemAmount(item);
         current.amount = moneyText(current.amountValue.toFixed(2));
@@ -213,6 +216,10 @@ function supplierItemAmount(item: SupplierPurchaseItemDTO) {
     const directAmount = Number(item.amount || 0);
     if (directAmount) return directAmount;
     return Number(item.purchasePrice || 0) * supplierItemQty(item);
+}
+
+function itemImage(item: SupplierPurchaseItemDTO) {
+    return item.productImage || item.imageUrl || item.thumbUrl || item.picUrl || '';
 }
 
 function deliveryStatusClass(status?: number) {

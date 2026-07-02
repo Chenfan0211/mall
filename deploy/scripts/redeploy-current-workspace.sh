@@ -4,7 +4,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${REPO_ROOT}"
 
-DEPLOY_HOST="${DEPLOY_HOST:-192.168.28.211}"
+DEPLOY_HOST="${DEPLOY_HOST:-192.168.28.242}"
 DEPLOY_USER="${DEPLOY_USER:-root}"
 SSH_PORT="${SSH_PORT:-22}"
 MALL_DEPLOY_ROOT="${MALL_DEPLOY_ROOT:-/opt/mall-deploy}"
@@ -135,6 +135,23 @@ fi
 rm -f "${env_backup}" || true
 chmod +x "${source_dir}"/deploy/scripts/*.sh 2>/dev/null || true
 chmod +x "${source_dir}"/deploy/nginx/docker-entrypoint.d/*.sh 2>/dev/null || true
+
+for schema_name in 10-nacos.sql 11-xxl-job.sql; do
+  target_schema="${source_dir}/deploy/docker/mysql/init/${schema_name}"
+  if [ ! -f "${target_schema}" ]; then
+    previous_schema="$(
+      find "${backup_root}" -path "*/deploy/docker/mysql/init/${schema_name}" -type f -size +0c \
+        -printf '%T@ %p\n' 2>/dev/null \
+        | sort -rn \
+        | awk 'NR==1 {sub(/^[^ ]+ /, ""); print}'
+    )"
+    if [ -n "${previous_schema}" ]; then
+      mkdir -p "$(dirname "${target_schema}")"
+      cp "${previous_schema}" "${target_schema}"
+      echo "Restored ${schema_name} from ${previous_schema}"
+    fi
+  fi
+done
 
 cd "${source_dir}"
 

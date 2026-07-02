@@ -87,7 +87,7 @@ Defaults:
 
 | Variable | Default |
 | --- | --- |
-| `DEPLOY_HOST` | `192.168.28.211` |
+| `DEPLOY_HOST` | `192.168.28.242` |
 | `DEPLOY_USER` | `root` |
 | `SSH_PORT` | `22` |
 | `MALL_DEPLOY_ROOT` | `/opt/mall-deploy` |
@@ -95,7 +95,7 @@ Defaults:
 Example override:
 
 ```bash
-DEPLOY_HOST=192.168.28.211 DEPLOY_USER=root bash deploy/scripts/redeploy-current-workspace.sh
+DEPLOY_HOST=192.168.28.242 DEPLOY_USER=root bash deploy/scripts/redeploy-current-workspace.sh
 ```
 
 The script preserves the existing server-side `/opt/mall-deploy/source/deploy/.env`. It does not store or pass
@@ -148,7 +148,7 @@ Reports are written to `/opt/mall-deploy/logs/deploy-diagnose-YYYYMMDD-HHMMSS.lo
 Use this flow when only `web/warehouse-h5` changed and the server already has the Docker Compose stack running.
 
 ```bash
-DEPLOY_HOST=192.168.28.211 DEPLOY_USER=root bash deploy/scripts/deploy-warehouse-h5.sh
+DEPLOY_HOST=192.168.28.242 DEPLOY_USER=root bash deploy/scripts/deploy-warehouse-h5.sh
 ```
 
 The script builds the H5 bundle with `VITE_PUBLIC_BASE=/warehouse/`, uploads it, replaces
@@ -172,7 +172,7 @@ labels, horizontal overflow, and console/runtime errors.
 
 The smoke check verifies:
 
-- `http://192.168.28.211/warehouse/` serves the latest warehouse H5 bundle.
+- `http://192.168.28.242/warehouse/` serves the latest warehouse H5 bundle.
 - unauthenticated `/api/wms/*` requests return `401/403`.
 - `POST /api/auth/password-login` succeeds for `test_wms_receiver / Test@123456`.
 - all six Warehouse H5 role accounts can log in with `Test@123456`:

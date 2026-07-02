@@ -72,7 +72,7 @@
             <view v-for="item in rows" :key="item.id" class="role-user-buy-row">
               <view>
                 <text>{{ item.pickupName || '提货人未返回' }} {{ item.pickupMobile || '' }}</text>
-                <text>{{ item.orderNoText }} · 购买 {{ item.qty || 0 }} 件 · {{ formatDateText(item.expectedPickupDate || '-') }}</text>
+                <text><text class="role-order-code-inline">{{ item.orderNoText }}</text> · 购买 {{ item.qty || 0 }} 件 · {{ formatDateText(item.expectedPickupDate || '-') }}</text>
               </view>
               <text>x{{ item.qty || 0 }}</text>
             </view>
@@ -122,6 +122,7 @@ const loading = ref(false);
 const error = ref('');
 const rows = ref<DeliveryUserRow[]>([]);
 const summary = ref<DeliverySummary | null>(null);
+const returnQuery = ref('');
 
 const summaryText = computed(() => {
     if (!summary.value) return '暂无商品配送数据';
@@ -129,7 +130,12 @@ const summaryText = computed(() => {
 });
 
 onLoad((query) => {
-    key.value = decodeURIComponent(String(query?.key || ''));
+    const routeQuery = {
+        ...h5HashQuery(),
+        ...normalizeQuery(query)
+    };
+    key.value = safeDecode(routeQuery.key || '');
+    returnQuery.value = buildReturnQuery(routeQuery);
     load();
 });
 
@@ -215,12 +221,59 @@ function formatDateText(value?: string) {
 }
 
 function openShortage() {
-    const query = key.value ? `?key=${encodeURIComponent(key.value)}` : '';
+    const params = [
+        key.value ? `key=${encodeURIComponent(key.value)}` : '',
+        returnQuery.value
+    ].filter(Boolean).join('&');
+    const query = params ? `?${params}` : '';
     goPage(`/pages/store/shortage${query}`);
 }
 
 function back() {
-    goPage('/pages/store/index');
+    goPage(`/pages/store/index${returnQuery.value ? `?${returnQuery.value}` : ''}`);
+}
+
+function buildReturnQuery(query?: Record<string, unknown>) {
+    return ['tab', 'keyword', 'date', 'onlyShortage']
+        .map((key) => {
+            const value = Array.isArray(query?.[key]) ? query?.[key][0] : query?.[key];
+            const text = safeDecode(String(value ?? ''));
+            return text ? `${key}=${encodeURIComponent(text)}` : '';
+        })
+        .filter(Boolean)
+        .join('&');
+}
+
+function normalizeQuery(query?: Record<string, unknown>) {
+    const result: Record<string, string> = {};
+    Object.entries(query || {}).forEach(([key, value]) => {
+        result[key] = safeDecode(Array.isArray(value) ? String(value[0] || '') : String(value ?? ''));
+    });
+    return result;
+}
+
+function h5HashQuery() {
+    const result: Record<string, string> = {};
+    const hash = typeof location === 'undefined' ? '' : location.hash || '';
+    const queryText = hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : '';
+    if (!queryText) return result;
+    new URLSearchParams(queryText).forEach((value, key) => {
+        result[key] = safeDecode(value);
+    });
+    return result;
+}
+
+function safeDecode(value: string) {
+    let text = value;
+    for (let i = 0; i < 2; i += 1) {
+        if (!/%[0-9A-Fa-f]{2}/.test(text)) break;
+        try {
+            text = decodeURIComponent(text);
+        } catch (err) {
+            break;
+        }
+    }
+    return text;
 }
 </script>
 

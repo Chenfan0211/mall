@@ -21,6 +21,10 @@ public class UserProductCardDTO {
     private Long soldQty;
     private Long lockedQty;
     private Long availableQty;
+    private Long skuCount;
+    private Long availableSkuCount;
+    private BigDecimal minSalePrice;
+    private BigDecimal maxSalePrice;
     private LocalDate deliveryDate;
     private LocalDateTime saleEndTime;
 
@@ -142,6 +146,38 @@ public class UserProductCardDTO {
 
     public void setAvailableQty(final Long availableQty) {
         this.availableQty = availableQty;
+    }
+
+    public Long getSkuCount() {
+        return skuCount;
+    }
+
+    public void setSkuCount(final Long skuCount) {
+        this.skuCount = skuCount;
+    }
+
+    public Long getAvailableSkuCount() {
+        return availableSkuCount;
+    }
+
+    public void setAvailableSkuCount(final Long availableSkuCount) {
+        this.availableSkuCount = availableSkuCount;
+    }
+
+    public BigDecimal getMinSalePrice() {
+        return minSalePrice;
+    }
+
+    public void setMinSalePrice(final BigDecimal minSalePrice) {
+        this.minSalePrice = minSalePrice;
+    }
+
+    public BigDecimal getMaxSalePrice() {
+        return maxSalePrice;
+    }
+
+    public void setMaxSalePrice(final BigDecimal maxSalePrice) {
+        this.maxSalePrice = maxSalePrice;
     }
 
     public LocalDate getDeliveryDate() {
